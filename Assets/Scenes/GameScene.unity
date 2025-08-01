@@ -256,127 +256,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!21 &617183806
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Universal Render Pipeline/Lit
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap:
-    RenderType: Opaque
-  disabledShaderPasses:
-  - MOTIONVECTORS
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _BaseMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _BumpMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailAlbedoMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailMask:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailNormalMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _EmissionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _OcclusionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _ParallaxMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SpecGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _AddPrecomputedVelocity: 0
-    - _AlphaClip: 0
-    - _AlphaToMask: 0
-    - _Blend: 0
-    - _BlendModePreserveSpecular: 1
-    - _BumpScale: 1
-    - _ClearCoatMask: 0
-    - _ClearCoatSmoothness: 0
-    - _Cull: 2
-    - _Cutoff: 0.5
-    - _DetailAlbedoMapScale: 1
-    - _DetailNormalMapScale: 1
-    - _DstBlend: 0
-    - _DstBlendAlpha: 0
-    - _EnvironmentReflections: 1
-    - _GlossMapScale: 0
-    - _Glossiness: 0
-    - _GlossyReflections: 0
-    - _Metallic: 0
-    - _OcclusionStrength: 1
-    - _Parallax: 0.005
-    - _QueueOffset: 0
-    - _ReceiveShadows: 1
-    - _Smoothness: 0.5
-    - _SmoothnessTextureChannel: 0
-    - _SpecularHighlights: 1
-    - _SrcBlend: 1
-    - _SrcBlendAlpha: 1
-    - _Surface: 0
-    - _WorkflowMode: 1
-    - _ZWrite: 1
-    m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-  m_BuildTextureStacks: []
-  m_AllowLocking: 1
 --- !u!1 &1164340286
 GameObject:
   m_ObjectHideFlags: 0
@@ -721,13 +600,13 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 1, z: 0}
   _radiuses: []
-  _radius: 0.1
+  _radius: 0.2
   _pointColors: []
   _twists: []
   _edgeCount: 4
   _calculateTangents: 0
   _invertMesh: 0
-  _normalMode: 1
+  _normalMode: 0
   _caps: 3
   _postprocessContinously: 1
   _uvRect:
@@ -754,7 +633,7 @@ MonoBehaviour:
   _radiusesFoldout: 0
   _colorsFoldout: 0
   _twistsFoldout: 0
-  _uvFoldout: 0
+  _uvFoldout: 1
 --- !u!23 &1699980785
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -778,7 +657,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 617183806}
+  - {fileID: 2100000, guid: 37b5a67b527225d4c90972bd2cb612ee, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -871,10 +750,10 @@ Mesh:
     topology: 0
     baseVertex: 0
     firstVertex: 0
-    vertexCount: 28
+    vertexCount: 22
     localAABB:
       m_Center: {x: 0, y: 0.5, z: 0}
-      m_Extent: {x: 0.1, y: 0.5, z: 0.1}
+      m_Extent: {x: 0.2, y: 0.5, z: 0.2}
   m_Shapes:
     vertices: []
     shapes: []
@@ -891,10 +770,10 @@ Mesh:
   m_KeepVertices: 1
   m_KeepIndices: 1
   m_IndexFormat: 0
-  m_IndexBuffer: 00000300010003000200010004000700050007000600050008000b0009000b000a0009000c000f000d000f000e000d00100015001100110015001200120015001300130015001400160017001b00170018001b00180019001b0019001a001b00
+  m_IndexBuffer: 0000010006000000060005000100020007000100070006000200030008000200080007000300040009000300090008000a000f000b000b000f000c000c000f000d000d000f000e00100011001500110012001500120013001500130014001500
   m_VertexData:
     serializedVersion: 3
-    m_VertexCount: 28
+    m_VertexCount: 22
     m_Channels:
     - stream: 0
       offset: 0
@@ -952,8 +831,8 @@ Mesh:
       offset: 0
       format: 0
       dimension: 0
-    m_DataSize: 896
-    _typelessdata: 0000000000000000cdcccc3df404353f00000080f304353f0000000000000000000000000000803fcdcccc3df404353f00000080f304353f0000803f00000000cdcccc3d0000803ff23096b1f404353f00000080f304353f0000803f0000803ecdcccc3d00000000f23096b1f404353f00000080f304353f000000000000803ecdcccc3d00000000f23096b1f204353f00000000f40435bf000000000000803ecdcccc3d0000803ff23096b1f204353f00000000f40435bf0000803f0000803ef23016b20000803fcdccccbdf204353f00000000f40435bf0000803f0000003ff23016b200000000cdccccbdf204353f00000000f40435bf000000000000003ff23016b200000000cdccccbdf40435bf00000000f30435bf000000000000003ff23016b20000803fcdccccbdf40435bf00000000f30435bf0000803f0000003fcdccccbd0000803ff2e4a330f40435bf00000000f30435bf0000803f0000403fcdccccbd00000000f2e4a330f40435bf00000000f30435bf000000000000403fcdccccbd00000000f2e4a330f30435bf00000000f304353f000000000000403fcdccccbd0000803ff2e4a330f30435bf00000000f304353f0000803f0000403f000000000000803fcdcccc3df30435bf00000000f304353f0000803f0000803f0000000000000000cdcccc3df30435bf00000000f304353f000000000000803f0000000000000000cdcccc3d00000000000080bf000000000000003f00000000cdcccc3d00000000f23096b100000000000080bf000000000000803f0000003ff23016b200000000cdccccbd00000000000080bf00000000ffffff3e0000803fcdccccbd00000000f2e4a33000000000000080bf00000000000000000000003f0000000000000000cdcccc3d00000000000080bf000000000000003f0000000000000000000000000000000000000000000080bf000000000000003f0000003f000000000000803fcdcccc3d000000000000803f000000000000003f00000000cdcccc3d0000803ff23096b1000000000000803f00000000000000000000003ff23016b20000803fcdccccbd000000000000803f000000000100003f0000803fcdccccbd0000803ff2e4a330000000000000803f000000000000803f0000003f000000000000803fcdcccc3d000000000000803f000000000000003f00000000000000000000803f00000000000000000000803f000000000000003f0000003f
+    m_DataSize: 704
+    _typelessdata: 0000000000000000cdcc4c3e00000000000000000000803f0000000000000000cdcc4c3e00000000f23016b20000803f000000002ebd3bb3000000000000803ef23096b200000000cdcc4cbe2ebdbbb300000000000080bf000000000000003fcdcc4cbe00000000f2e42331000080bf000000002ede4c32000000000000403f0000000000000000cdcc4c3e00000000000000000000803f000000000000803f000000000000803fcdcc4c3e00000000000000000000803f0000803f00000000cdcc4c3e0000803ff23016b20000803f000000002ebd3bb30000803f0000803ef23096b20000803fcdcc4cbe2ebdbbb300000000000080bf0000803f0000003fcdcc4cbe0000803ff2e42331000080bf000000002ede4c320000803f0000403f000000000000803fcdcc4c3e00000000000000000000803f0000803f0000803f0000000000000000cdcc4c3e00000000000080bf000000000000003f00000000cdcc4c3e00000000f23016b200000000000080bf000000000000803f0000003ff23096b200000000cdcc4cbe00000000000080bf00000000ffffff3e0000803fcdcc4cbe00000000f2e4233100000000000080bf00000000000000000000003f0000000000000000cdcc4c3e00000000000080bf000000000000003f0000000000000000000000000000000000000000000080bf000000000000003f0000003f000000000000803fcdcc4c3e000000000000803f000000000000003f00000000cdcc4c3e0000803ff23016b2000000000000803f00000000000000000000003ff23096b20000803fcdcc4cbe000000000000803f000000000100003f0000803fcdcc4cbe0000803ff2e42331000000000000803f000000000000803f0000003f000000000000803fcdcc4c3e000000000000803f000000000000003f00000000000000000000803f00000000000000000000803f000000000000003f0000003f
   m_CompressedMesh:
     m_Vertices:
       m_NumItems: 0
@@ -1007,8 +886,8 @@ Mesh:
       m_BitSize: 0
     m_UVInfo: 0
   m_LocalAABB:
-    m_Center: {x: 0, y: 0.5, z: 0}
-    m_Extent: {x: 0.1, y: 0.6, z: 0.1}
+    m_Center: {x: 0, y: 0.50000006, z: 0}
+    m_Extent: {x: 0.2, y: 0.70000005, z: 0.2}
   m_MeshUsageFlags: 0
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 

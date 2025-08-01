@@ -42,7 +42,7 @@ namespace Geckout
                 _positions[i] = _segments[i].position;
             }
 
-            _renderer.points = SmoothSnake(_positions.ToList(), 0.2f, 10).ToArray();
+            _renderer.points = SmoothSnake(_positions.ToList(), 0.2f, 3).ToArray();
         }
 
         List<Vector3> SmoothSnake(List<Vector3> points, float radius, int iterations)
