@@ -88,3 +88,5 @@ Assets/Plugins/Android/FirebaseCrashlytics.androidlib/res/
 
 # Prevent global .gitignore from affecting this project
 !*.dll
+.vscode/
+.vsconfig
