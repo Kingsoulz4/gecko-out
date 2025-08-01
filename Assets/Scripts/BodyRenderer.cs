@@ -26,6 +26,7 @@ namespace Geckout
                 _positions[i] = _segments[i].position;
             }
 
+            _renderer.uvRect = new Rect(0, 0, head.Segments.Count, 1);
             _renderer.points = _positions;
         }
 
