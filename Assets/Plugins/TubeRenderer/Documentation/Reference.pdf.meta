@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cc0a3391fcbbd4b678720c84b314d401
+timeCreated: 1454089477
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3281
+  packageName: TubeRenderer
+  packageVersion: 1.9.4
+  assetPath: Assets/TubeRenderer/Documentation/Reference.pdf
+  uploadId: 396393

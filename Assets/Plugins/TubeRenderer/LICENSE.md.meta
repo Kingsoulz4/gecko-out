@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0f08e22619fe7478db6e821f5157c69d
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3281
+  packageName: TubeRenderer
+  packageVersion: 1.9.4
+  assetPath: Assets/TubeRenderer/LICENSE.md
+  uploadId: 396393

@@ -13,7 +13,8 @@ public class SnakeController : MonoBehaviour
     private List<Transform> segments = new List<Transform>();
     private List<Vector3> targetPositions = new List<Vector3>();
     private Vector3 currentDirection = Vector3.forward; // default hướng lên
-
+    
+    public List<Transform> Segments => segments;
     void Start()
     {
         // Đầu rắn

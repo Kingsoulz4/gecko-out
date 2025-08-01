@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 0791e95b0de39c6429bf28ba146aee16
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3281
+  packageName: TubeRenderer
+  packageVersion: 1.9.4
+  assetPath: Assets/TubeRenderer/Runtime/Internals/RenderPipelineHelpers.cs
+  uploadId: 396393

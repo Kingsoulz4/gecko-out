@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 1ac3a81ea44ea49498f9e81f60778888
+timeCreated: 1441712849
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 3281
+  packageName: TubeRenderer
+  packageVersion: 1.9.4
+  assetPath: Assets/TubeRenderer/Runtime/Internals/Resources/StandardVertexColor.shader
+  uploadId: 396393
