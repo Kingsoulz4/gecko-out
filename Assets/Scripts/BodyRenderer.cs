@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Geckout
@@ -40,7 +41,47 @@ namespace Geckout
             {
                 _positions[i] = _segments[i].position;
             }
-            _renderer.points = _positions;
+
+            _renderer.points = SmoothSnake(_positions.ToList(), 0.2f, 10).ToArray();
+        }
+
+        List<Vector3> SmoothSnake(List<Vector3> points, float radius, int iterations)
+        {
+            List<Vector3> result = new List<Vector3>(points);
+
+            for (int iter = 0; iter < iterations; iter++)
+            {
+                List<Vector3> newPoints = new List<Vector3>();
+                if (result.Count < 2) return result;
+
+                newPoints.Add(result[0]); // Keep the first point
+
+                for (int i = 0; i < result.Count - 1; i++)
+                {
+                    Vector3 p0 = result[i];
+                    Vector3 p1 = result[i + 1];
+
+                    // Calculate points in XZ plane, keep Y as linear interpolation
+                    Vector3 Q = new Vector3(
+                        0.75f * p0.x + 0.25f * p1.x,
+                        Mathf.Lerp(p0.y, p1.y, 0.25f),
+                        0.75f * p0.z + 0.25f * p1.z
+                    );
+                    Vector3 R = new Vector3(
+                        0.25f * p0.x + 0.75f * p1.x,
+                        Mathf.Lerp(p0.y, p1.y, 0.75f),
+                        0.25f * p0.z + 0.75f * p1.z
+                    );
+
+                    newPoints.Add(Q);
+                    newPoints.Add(R);
+                }
+
+                newPoints.Add(result[result.Count - 1]); // Keep the last point
+                result = newPoints;
+            }
+
+            return result;
         }
     }
 }

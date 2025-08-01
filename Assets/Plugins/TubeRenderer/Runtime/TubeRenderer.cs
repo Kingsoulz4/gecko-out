@@ -80,7 +80,7 @@ public class TubeRenderer : MonoBehaviour
 	bool _dirtyColors = true;
 
 	const float tau = Mathf.PI * 2;
-	const int meshVertexCountLimit = 65000;
+	const int meshVertexCountLimit = 130000;
 	const string logPrepend = "<b>[" + nameof( TubeRenderer ) + "]</b> ";
 
 
