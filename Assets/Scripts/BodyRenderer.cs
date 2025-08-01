@@ -32,6 +32,7 @@ namespace Geckout
 
         private void Update()
         {
+            if(_positions == null) return;
             if (head.Segments.Count != _positions.Length)
             {
                 _positions = new Vector3[head.Segments.Count - 1];
