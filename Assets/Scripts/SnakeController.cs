@@ -17,16 +17,20 @@ public class SnakeController : MonoBehaviour
     [Header("Collision Settings")]
     public LayerMask wallLayer;
 
+    [Header("Raycast Settings")]
+    public LayerMask groundLayer;
+    public List<Transform> Segments => segments;
+
+
     private List<Transform> segments = new List<Transform>();
     private List<Vector3> targetPositions = new List<Vector3>();
     private Vector3 currentDirection = Vector3.forward;
-    public List<Transform> Segments => segments;
 
-    // Trượt
+    private Vector3? lastTouchTile = null;
     private Vector3 lastSlideDirection = Vector3.zero;
-    private float slideDuration = 0.3f;
-    private float slideTimer = 0f;
-    private bool isSliding = false;
+    private bool shouldSlide = false;
+    private bool hasSlid = false;
+    private bool isClickingOnSnake = false;
 
     void Start()
     {
@@ -51,18 +55,12 @@ public class SnakeController : MonoBehaviour
             HandleInput();
             moveTimer = moveCooldown;
 
-            if (isSliding)
+            if (shouldSlide && !isClickingOnSnake && !hasSlid)
             {
-                slideTimer -= moveCooldown;
-                if (slideTimer > 0f)
-                {
-                    TrySlideStep();
-                }
+                if (TrySlideStep())
+                    hasSlid = true;
                 else
-                {
-                    isSliding = false;
                     lastSlideDirection = Vector3.zero;
-                }
             }
         }
 
@@ -74,19 +72,41 @@ public class SnakeController : MonoBehaviour
 #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_ANDROID || UNITY_IOS
         if (Input.GetMouseButton(0))
         {
+            isClickingOnSnake = false;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                if (hit.collider.CompareTag("Snake"))
+                {
+                    isClickingOnSnake = true;
+                    lastSlideDirection = Vector3.zero;
+                    shouldSlide = false;
+                    return;
+                }
+
+                if ((groundLayer.value & (1 << hit.collider.gameObject.layer)) == 0)
+                    return;
+            }
+            else return;
+
             Vector3 target = GetMouseTilePosition();
+            if (lastTouchTile.HasValue && Vector3.Distance(lastTouchTile.Value, target) < 0.01f)
+                return;
+
+            lastTouchTile = target;
 
             float distToHead = Vector3.Distance(target, targetPositions[0]);
-            float distToTail = Vector3.Distance(target, targetPositions[targetPositions.Count - 1]);
+            float distToTail = Vector3.Distance(target, targetPositions[^1]);
 
             if (distToHead < distToTail)
             {
-                Vector3 nextStep = GetNextStepTowards(targetPositions[0], target);
-                if (!IsOccupied(nextStep, 0) && !IsWall(nextStep) && (targetPositions.Count <= 1 || nextStep != targetPositions[1]))
+                Vector3 next = GetNextStepTowards(targetPositions[0], target);
+                if (!IsOccupied(next, 0) && !IsWall(next) && (targetPositions.Count <= 1 || next != targetPositions[1]))
                 {
-                    MoveHeadTo(nextStep);
-                    lastSlideDirection = (nextStep - targetPositions[0]).normalized;
-                    isSliding = false;
+                    MoveHeadTo(next);
+                    lastSlideDirection = (next - targetPositions[0]).normalized;
+                    shouldSlide = false;
                 }
                 else
                 {
@@ -96,12 +116,12 @@ public class SnakeController : MonoBehaviour
             else
             {
                 int last = targetPositions.Count - 1;
-                Vector3 nextStep = GetNextStepTowards(targetPositions[last], target);
-                if (!IsOccupied(nextStep, last) && !IsWall(nextStep) && (targetPositions.Count <= 1 || nextStep != targetPositions[last - 1]))
+                Vector3 next = GetNextStepTowards(targetPositions[last], target);
+                if (!IsOccupied(next, last) && !IsWall(next) && (targetPositions.Count <= 1 || next != targetPositions[last - 1]))
                 {
-                    MoveTailTo(nextStep);
-                    lastSlideDirection = (targetPositions[last] - nextStep).normalized;
-                    isSliding = false;
+                    MoveTailTo(next);
+                    lastSlideDirection = (targetPositions[last] - next).normalized;
+                    shouldSlide = false;
                 }
                 else
                 {
@@ -111,28 +131,27 @@ public class SnakeController : MonoBehaviour
         }
         else
         {
-            if (!isSliding && lastSlideDirection != Vector3.zero)
+            lastTouchTile = null;
+            isClickingOnSnake = false;
+
+            if (lastSlideDirection != Vector3.zero)
             {
-                isSliding = true;
-                slideTimer = slideDuration;
+                shouldSlide = true;
+                hasSlid = false;
             }
         }
 #endif
     }
 
-    void TrySlideStep()
+    bool TrySlideStep()
     {
         Vector3 next = targetPositions[0] + lastSlideDirection * tileSize;
-
         if (!IsOccupied(next, 0) && !IsWall(next))
         {
             MoveHeadTo(next);
+            return true;
         }
-        else
-        {
-            isSliding = false;
-            lastSlideDirection = Vector3.zero;
-        }
+        return false;
     }
 
     Vector3 GetMouseTilePosition()
@@ -143,9 +162,9 @@ public class SnakeController : MonoBehaviour
         Plane plane = new Plane(Vector3.up, Vector3.zero);
         if (plane.Raycast(ray, out float enter))
         {
-            Vector3 worldPoint = ray.GetPoint(enter);
-            float x = Mathf.Round(worldPoint.x / tileSize) * tileSize;
-            float z = Mathf.Round(worldPoint.z / tileSize) * tileSize;
+            Vector3 point = ray.GetPoint(enter);
+            float x = Mathf.Round(point.x / tileSize) * tileSize;
+            float z = Mathf.Round(point.z / tileSize) * tileSize;
             return new Vector3(x, transform.position.y, z);
         }
         return transform.position;
@@ -171,20 +190,20 @@ public class SnakeController : MonoBehaviour
     {
         Vector3 head = targetPositions[0];
 
-        Vector3[] directions = new Vector3[]
+        Vector3[] dirs =
         {
             new Vector3(currentDirection.z, 0, -currentDirection.x),
             new Vector3(-currentDirection.z, 0, currentDirection.x)
         };
 
-        foreach (var dir in directions)
+        foreach (var dir in dirs)
         {
             Vector3 next = head + dir * tileSize;
             if (!IsOccupied(next, 0) && !IsWall(next))
             {
                 MoveHeadTo(next);
                 lastSlideDirection = dir.normalized;
-                isSliding = false;
+                shouldSlide = false;
                 return;
             }
         }
@@ -196,20 +215,20 @@ public class SnakeController : MonoBehaviour
         Vector3 tail = targetPositions[last];
         Vector3 backDir = (tail - targetPositions[last - 1]).normalized;
 
-        Vector3[] directions = new Vector3[]
+        Vector3[] dirs =
         {
             new Vector3(backDir.z, 0, -backDir.x),
             new Vector3(-backDir.z, 0, backDir.x)
         };
 
-        foreach (var dir in directions)
+        foreach (var dir in dirs)
         {
             Vector3 next = tail + dir * tileSize;
             if (!IsOccupied(next, last) && !IsWall(next))
             {
                 MoveTailTo(next);
                 lastSlideDirection = -dir.normalized;
-                isSliding = false;
+                shouldSlide = false;
                 return;
             }
         }
@@ -220,80 +239,80 @@ public class SnakeController : MonoBehaviour
         return Physics.CheckBox(pos, Vector3.one * tileSize * 0.4f, Quaternion.identity, wallLayer);
     }
 
-    void MoveHeadTo(Vector3 targetPos)
+    void MoveHeadTo(Vector3 target)
     {
-        Vector3 dir = targetPos - targetPositions[0];
+        Vector3 dir = target - targetPositions[0];
         if (dir.sqrMagnitude < 0.01f) return;
 
         currentDirection = dir.normalized;
-        ShiftPositionsForward(targetPos);
+        ShiftPositionsForward(target);
     }
 
-    void MoveTailTo(Vector3 targetPos)
+    void MoveTailTo(Vector3 target)
     {
-        Vector3 dir = targetPos - targetPositions[targetPositions.Count - 1];
+        Vector3 dir = target - targetPositions[^1];
         if (dir.sqrMagnitude < 0.01f) return;
 
-        ShiftPositionsBackward(targetPos);
+        ShiftPositionsBackward(target);
     }
 
     bool IsOccupied(Vector3 pos, int ignoreIndex = -1)
     {
-        float thresholdSqr = 0.001f;
+        float threshold = 0.001f;
         for (int i = 0; i < targetPositions.Count; i++)
         {
             if (i == ignoreIndex) continue;
-            if ((targetPositions[i] - pos).sqrMagnitude < thresholdSqr)
+            if ((targetPositions[i] - pos).sqrMagnitude < threshold)
                 return true;
         }
         return false;
     }
 
-    void ShiftPositionsForward(Vector3 newHeadPos)
+    void ShiftPositionsForward(Vector3 newHead)
     {
         for (int i = targetPositions.Count - 1; i > 0; i--)
-        {
             targetPositions[i] = targetPositions[i - 1];
-        }
-        targetPositions[0] = newHeadPos;
+        targetPositions[0] = newHead;
     }
 
-    void ShiftPositionsBackward(Vector3 newTailPos)
+    void ShiftPositionsBackward(Vector3 newTail)
     {
         for (int i = 0; i < targetPositions.Count - 1; i++)
-        {
             targetPositions[i] = targetPositions[i + 1];
-        }
-        targetPositions[targetPositions.Count - 1] = newTailPos;
+        targetPositions[^1] = newTail;
     }
 
     void MoveSegmentsSmoothly()
     {
-        float speed = 30f;
+        float headSpeed = 10f;
+        float bodySpeed = 8f;
 
         for (int i = 0; i < segments.Count; i++)
         {
             Vector3 target = targetPositions[i];
-            segments[i].position = Vector3.MoveTowards(segments[i].position, target, speed * Time.deltaTime);
+            Transform segment = segments[i];
+            float speed = (i == 0) ? headSpeed : bodySpeed;
+
+            segment.position = Vector3.Lerp(segment.position, target, Time.deltaTime * speed);
 
             if (i == 0)
             {
                 if (currentDirection != Vector3.zero)
-                    segments[0].rotation = Quaternion.LookRotation(currentDirection);
+                    segment.rotation = Quaternion.Lerp(segment.rotation, Quaternion.LookRotation(currentDirection), Time.deltaTime * 10f);
             }
             else
             {
-                Vector3 dir = target - segments[i].position;
+                Vector3 dir = target - segment.position;
                 if (dir != Vector3.zero)
-                    segments[i].forward = Vector3.Lerp(segments[i].forward, dir.normalized, Time.deltaTime * 10f);
+                    segment.forward = Vector3.Lerp(segment.forward, dir.normalized, Time.deltaTime * 10f);
             }
         }
     }
 
     public void AddBodySegment()
     {
-        Transform tail = segments[segments.Count - 1];
-        Vector3 dir = (tail.position - segments[segments.Count - 2].position).normalized;
+        Transform tail = segments[^1];
+        Vector3 dir = (tail.position - segments[^2].position).normalized;
         Vector3 newPos = tail.position + dir * tileSize;
 
         GameObject newSeg = Instantiate(bodySegmentPrefab, newPos, Quaternion.identity);
