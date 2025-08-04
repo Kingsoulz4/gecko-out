@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class SnakeControllerTest : MonoBehaviour
+public class GeckoControllerTest : MonoBehaviour
 {
     [Header("Movement Settings")]
     public float tileSize = 1f;

@@ -10,43 +10,36 @@ namespace Geckout
     public class BodyRenderer : MonoBehaviour
     {
         private TubeRenderer _renderer;
-        [SerializeField] private SnakeController head;
-        List<Transform> _segments;
+        [Range(1, 5)] [SerializeField] private int smoothIterations = 3;
+        List<GeckoSegment> _segments;
         Vector3[] _positions;
 
-        private IEnumerator Start()
+        public void Initialize(List<GeckoSegment> segments)
         {
             _renderer = GetComponent<TubeRenderer>();
-            yield return null;
-            _segments = head.Segments;
+            _segments = segments;
             _positions = new Vector3[_segments.Count];
 
             for (int i = 0; i < _segments.Count; i++)
             {
-                _positions[i] = _segments[i].position;
+                _positions[i] = _segments[i].transform.position;
             }
 
-            _renderer.uvRect = new Rect(0, 0, head.Segments.Count, 1);
+            _renderer.uvRect = new Rect(0, 0, segments.Count, 1);
             _renderer.points = _positions;
         }
 
         private void Update()
         {
-            if (head.Segments.Count != _positions.Length)
-            {
-                _positions = new Vector3[head.Segments.Count - 1];
-                _segments = head.Segments;
-            }
-
             for (int i = 0; i < _segments.Count; i++)
             {
-                _positions[i] = _segments[i].position;
+                _positions[i] = _segments[i].transform.position;
             }
 
-            _renderer.points = SmoothSnake(_positions.ToList(), 0.2f, 3).ToArray();
+            _renderer.points = SmoothSnake(_positions.ToList(), smoothIterations).ToArray();
         }
 
-        List<Vector3> SmoothSnake(List<Vector3> points, float radius, int iterations)
+        List<Vector3> SmoothSnake(List<Vector3> points, int iterations)
         {
             List<Vector3> result = new List<Vector3>(points);
 
