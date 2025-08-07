@@ -98,5 +98,29 @@ namespace Geckout
                 }
             }
         }
+
+        public static bool[] GetCurrentMapState()
+        {
+            bool[] mapState = new bool[_instance.tiles.Length];
+            for(int x = 0; x < _instance._mapSize.x; x++)
+            {
+                for (int y = 0; y < _instance._mapSize.y; y++)
+                {
+                    if (TryGetTileAt(x, y, out GameTile tile))
+                    {
+                        mapState[x + y * _instance._mapSize.y] = !tile.IsOccupied;
+                    }
+                }
+            }
+            return mapState;
+        }
+        
+        public static void ApplyFuncToAllTiles(Action<GameTile> action)
+        {
+            foreach (var tile in _instance.tiles)
+            {
+                action(tile);
+            }
+        }
     }
 }

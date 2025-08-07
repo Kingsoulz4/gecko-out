@@ -1,12 +1,15 @@
+using System.Collections;
 using System.Collections.Generic;
+using Geckout.Generals;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Geckout
 {
-    public class GameTile : MonoBehaviour, IPointerClickHandler
+    public class GameTile : MonoBehaviour, IPointerEnterHandler
     {
-        public bool IsOccupied { get; private set; }
+        [SerializeField] private Renderer tileRenderer;
+        [SerializeField] public bool IsOccupied;
         public Vector2Int Coordinate { get; private set; }
 
         private void Start()
@@ -19,6 +22,7 @@ namespace Geckout
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            GameEvents.OnTileSelected?.Invoke(this);
         }
 
         public void SetCoordinate(int x, int y)
@@ -48,6 +52,16 @@ namespace Geckout
             }
 
             return results.ToArray();
+        }
+
+        public void ChangeColor(Color color)
+        {
+            tileRenderer.material.color = color;
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            GameEvents.OnTileSelected?.Invoke(this);
         }
     }
 }

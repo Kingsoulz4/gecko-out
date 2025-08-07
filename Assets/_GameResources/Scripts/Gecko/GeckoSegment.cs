@@ -1,27 +1,35 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Geckout
 {
     public class GeckoSegment : MonoBehaviour
     {
-        private GeckoSegment prevSegment;
-        private GeckoSegment nextSegment;
+        public GeckoSegment PrevSegment { private set; get; }
+        public GeckoSegment NextSegment { private set; get; }
 
         public Vector2Int Coordinate { private set; get; }
-
+        public Vector2Int MoveDirection { private set; get; }
+        private GameTile _currentTile;
 
         public void Setup(GeckoSegment prev, GeckoSegment next)
         {
-            prevSegment = prev;
-            nextSegment = next;
+            PrevSegment = prev;
+            NextSegment = next;
+        }
+
+        public void ReleaseCurrentTile()
+        {
+            _currentTile.SetOccupied(false);
         }
 
         public void SetCoordinate(Vector2Int coordinate)
         {
             if (GameMap.TryGetTileAt(coordinate, out var tile))
             {
+                _currentTile = tile;
                 Coordinate = coordinate;
-                tile.SetOccupied(true);
+                _currentTile.SetOccupied(true);
                 transform.position = tile.transform.position;
             }
             else
@@ -36,32 +44,30 @@ namespace Geckout
             GameMap.TryGetTileAt(Coordinate, out var currentTile);
             if (GameMap.TryGetTileAt(targetCoordinate, out var targetTile))
             {
-                // transform.position = Vector3.Lerp(currentTile.transform.position, tile.transform.position, ratio);
-                
+                MoveDirection = targetTile.Coordinate - currentTile.Coordinate;
                 var startPosition = currentTile.transform.position;
                 var endPosition = targetTile.transform.position;
-                
-                // Calculate the direction and normalize it
-                var direction = (endPosition - startPosition).normalized;
-
-                // Calculate the fixed distance
-                var fixedDistance = Vector3.Distance(startPosition, endPosition);
-
-                // Interpolate using the fixed distance
-                transform.position = startPosition + direction * (fixedDistance * ratio);
+                transform.position = Vector3.Lerp(startPosition, endPosition, ratio);
             }
+        }
+
+        float GetRation(float ratio)
+        {
+            //Check if MoveDirection
+
+            return ratio;
         }
 
         private Vector2Int GetTargetCoordinate(bool isMoveForward)
         {
-            if (isMoveForward && prevSegment != null)
+            if (isMoveForward && PrevSegment != null)
             {
-                return prevSegment.Coordinate;
+                return PrevSegment.Coordinate;
             }
 
-            if (!isMoveForward && nextSegment != null)
+            if (!isMoveForward && NextSegment != null)
             {
-                return nextSegment.Coordinate;
+                return NextSegment.Coordinate;
             }
 
             return Coordinate;
