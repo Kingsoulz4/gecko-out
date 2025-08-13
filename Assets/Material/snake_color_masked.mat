@@ -8,91 +8,145 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: snake_color_masked
-  m_Shader: {fileID: 4800000, guid: 5983129bcf777964290cfad55692ccd3, type: 3}
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 6
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties:
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-      _SampleTexture2D_0404900be81844c29e4f4b30147a19e6_Texture_1_Texture2D:
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_0404900be81844c29e4f4b30147a19e6_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 177bb7fbaeb9714418f27df83e8582b9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-      _SampleTexture2D_2847af27a92e46d1b74d8d4e9fc2904a_Texture_1_Texture2D:
+    - _SampleTexture2D_2847af27a92e46d1b74d8d4e9fc2904a_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 3fd5c22a49011474c9a13352423403e7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-      _SampleTexture2D_d05c646e6db747569d7dd7d4fc3d7da8_Texture_1_Texture2D:
+    - _SampleTexture2D_d05c646e6db747569d7dd7d4fc3d7da8_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: acbad8207df5e9c439a3cfbf081d5122, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-      _SampleTexture2D_f6b764d982fc47a292aaeee73cb851f3_Texture_1_Texture2D:
+    - _SampleTexture2D_f6b764d982fc47a292aaeee73cb851f3_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 3fd5c22a49011474c9a13352423403e7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-      _SampleTexture2D_f7021fbe8bb94c58888bc6f29bb8edcf_Texture_1_Texture2D:
+    - _SampleTexture2D_f7021fbe8bb94c58888bc6f29bb8edcf_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 177bb7fbaeb9714418f27df83e8582b9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-      _Texture2D:
+    - _Texture2D:
         m_Texture: {fileID: 2800000, guid: 8e999495ba1f02e46afde34d98e7b473, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-      unity_Lightmaps:
+    - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-      unity_LightmapsInd:
+    - unity_LightmapsInd:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-      unity_ShadowMasks:
+    - unity_ShadowMasks:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Ints: {}
+    m_Ints: []
     m_Floats:
-      _AlphaClip1: 10
-      _AlphaClip2: -10
-      _DirtFlowSpeed: 0.2
-      _DirtMaskSlider1: -0.1
-      _DirtMaskSlider2: -0.1
-      _DirtyLength: 555
-      _Displacement: 0
-      _DissolveSize: 4
-      _EdgeSize: 0.54
-      _InnerThickness: 0.1
-      _Length: 5
-      _NormalStrength: 0.008
-      _QueueControl: 0
-      _QueueOffset: 0
-      _Rope_Color_Shadow: 0.397
-      _Rope_Shadow: 0.509
-      _Rotate: 0
-      _StepPosition: 0.35
-      _ThirdColorLenght: 0.15
-      _Uv: 0.12
+    - _AlphaClip1: 10
+    - _AlphaClip2: -10
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _DetailNormalMapScale: 1
+    - _DirtFlowSpeed: 0.2
+    - _DirtMaskSlider1: -0.1
+    - _DirtMaskSlider2: -0.1
+    - _DirtyLength: 555
+    - _Displacement: 0
+    - _DissolveSize: 4
+    - _DstBlend: 0
+    - _EdgeSize: 0.54
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _InnerThickness: 0.1
+    - _Length: 5
+    - _Metallic: 0
+    - _Mode: 0
+    - _NormalStrength: 0.008
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _Rope_Color_Shadow: 0.397
+    - _Rope_Shadow: 0.509
+    - _Rotate: 0
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _StepPosition: 0.35
+    - _ThirdColorLenght: 0.15
+    - _UVSec: 0
+    - _Uv: 0.12
+    - _ZWrite: 1
     m_Colors:
-      _Center: {r: 0, g: 0, b: 0, a: 0}
-      _DirtColor1: {r: 0.4745098, g: 0.34509805, b: 0.105882354, a: 1}
-      _DirtColor2: {r: 0.3962264, g: 0.20265217, b: 0.12522249, a: 1}
-      _DirtTiling: {r: 1.4, g: 2.5, b: 0, a: 0}
-      _Rope_Color: {r: 0.9433962, g: 0.8792642, b: 0.16464934, a: 0}
-      _Rope_Detail_1_Color: {r: 0.79607844, g: 0.827451, b: 0.85882354, a: 0}
-      _Rope_Detail_2_Color: {r: 1, g: 1, b: 1, a: 0}
-      _Rope_Shadow: {r: 0.7830189, g: 0.59225154, b: 0.21791564, a: 0}
-      _Second_Detail_Color_1: {r: 0.79607844, g: 0.827451, b: 0.85882354, a: 0}
-      _Second_Detail_Color_2: {r: 1, g: 1, b: 1, a: 0}
-      _Third_Detail_Color_1: {r: 0.79607844, g: 0.827451, b: 0.85882354, a: 0}
-      _Third_Detail_Color_2: {r: 1, g: 1, b: 1, a: 0}
-      _Tiling: {r: -1, g: 5.5, b: 0, a: 0}
+    - _Center: {r: 0, g: 0, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DirtColor1: {r: 0.4745098, g: 0.34509805, b: 0.105882354, a: 1}
+    - _DirtColor2: {r: 0.3962264, g: 0.20265217, b: 0.12522249, a: 1}
+    - _DirtTiling: {r: 1.4, g: 2.5, b: 0, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Rope_Color: {r: 0.9433962, g: 0.8792642, b: 0.16464934, a: 0}
+    - _Rope_Detail_1_Color: {r: 0.79607844, g: 0.827451, b: 0.85882354, a: 0}
+    - _Rope_Detail_2_Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Rope_Shadow: {r: 0.7830189, g: 0.59225154, b: 0.21791564, a: 0}
+    - _Second_Detail_Color_1: {r: 0.79607844, g: 0.827451, b: 0.85882354, a: 0}
+    - _Second_Detail_Color_2: {r: 1, g: 1, b: 1, a: 0}
+    - _Third_Detail_Color_1: {r: 0.79607844, g: 0.827451, b: 0.85882354, a: 0}
+    - _Third_Detail_Color_2: {r: 1, g: 1, b: 1, a: 0}
+    - _Tiling: {r: -1, g: 5.5, b: 0, a: 0}
   m_BuildTextureStacks: []

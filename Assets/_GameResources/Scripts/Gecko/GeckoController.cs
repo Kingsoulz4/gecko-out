@@ -72,7 +72,7 @@ namespace Geckout
             Vector2Int delta = GetDeltaMovement();
             if (delta != Vector2Int.zero)
             {
-                MoveHead(delta);
+                StartCoroutine(MoveHead(delta));
             }
 
             // MoveHead(deltaMovement, mockRatio);
