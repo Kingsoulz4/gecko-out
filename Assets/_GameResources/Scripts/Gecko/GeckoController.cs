@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +13,13 @@ namespace Geckout
         [SerializeField] private int length = 4;
         [SerializeField] private GeckoSegment headPrefab;
         [SerializeField] private float moveTime = 0.2f; // Time to move one segment
+        [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1); // Curve cho chuyển động mượt
         private GeckoSegment _head, _tail;
         public List<GeckoSegment> Segments { private set; get; }
         BodyRenderer _bodyRenderer;
 
         [SerializeField] private Vector2Int deltaMovement;
-        [Range(0, 1f)] [SerializeField] private float mockRatio;
+        [Range(0, 1f)][SerializeField] private float mockRatio;
         bool isMoving = false;
 
         private void Start()
@@ -47,7 +48,7 @@ namespace Geckout
             {
                 var currentSegment = Segments[i];
                 GeckoSegment prevSegment = Segments[i - 1];
-                GeckoSegment nextSegment = Segments[i];
+                GeckoSegment nextSegment = Segments[i + 1]; // Fix: should be i+1, not i
                 currentSegment.Setup(prevSegment, nextSegment);
             }
 
@@ -58,8 +59,6 @@ namespace Geckout
                 var coordinate = new Vector2Int(0, GameMap.MapSize.y - i - 1);
                 Segments[i].SetCoordinate(coordinate);
             }
-
-            // GameEvents.OnTileSelected += HandleTileSelected;
         }
 
         private void OnDestroy()
@@ -74,50 +73,14 @@ namespace Geckout
             {
                 StartCoroutine(MoveHead(delta));
             }
-
-            // MoveHead(deltaMovement, mockRatio);
         }
-
-        // private void MoveHead(Vector2Int delta, float ratio)
-        // {
-        //     Vector2Int newHeadCoordinate = _head.Coordinate + delta;
-        //     bool isMoveForward = !(Segments[1].Coordinate == newHeadCoordinate);
-        //     GameMap.TryGetTileAt(_head.Coordinate, out var headTile);
-        //     if (GameMap.TryGetTileAt(newHeadCoordinate, out var tile))
-        //     {
-        //         Vector3 startPosition = headTile.transform.position;
-        //         Vector3 targetPosition = tile.transform.position;
-        //
-        //         float elapsedTime = 0f;
-        //         _head.transform.position = Vector3.Lerp(startPosition, targetPosition, ratio);
-        //         for (int i = 1; i < Segments.Count; i++)
-        //         {
-        //             Segments[i].Move(isMoveForward, ratio);
-        //         }
-        //
-        //         if (ratio >= 1f)
-        //         {
-        //             // Ensure final position is set
-        //             for (int i = Segments.Count - 1; i >= 1; i--)
-        //             {
-        //                 Segments[i].SetCoordinate(Segments[i - 1].Coordinate);
-        //             }
-        //
-        //             _head.SetCoordinate(newHeadCoordinate);
-        //         }
-        //     }
-        //     else
-        //     {
-        //         Debug.LogWarning("Invalid move: " + newHeadCoordinate);
-        //     }
-        // }
 
         IEnumerator MoveHead(Vector2Int delta)
         {
             Vector2Int newHeadCoordinate = _head.Coordinate + delta;
-            
+
             var tailDirection = _tail.Coordinate - _tail.PrevSegment.Coordinate;
-            
+
             Vector2Int newTailCoordinate = _tail.Coordinate + tailDirection;
             bool isMoveForward = !(Segments[1].Coordinate == newHeadCoordinate);
             if (isMoveForward)
@@ -136,7 +99,7 @@ namespace Geckout
                 else
                 {
                     var orthorgonalVectors = GetOrthogonalUnitVectors(tailDirection);
-                    
+
                     foreach (var orthogonalVector in orthorgonalVectors)
                     {
                         var newTailPosition = _tail.Coordinate + orthogonalVector;
@@ -163,19 +126,44 @@ namespace Geckout
             }
         }
 
-        IEnumerator MoveHeadToPosition(Vector2Int newCoordinate, Vector2 newWorldPosition)
+        // Chỉ thay thế phương thức MoveHeadToPosition trong GeckoController.cs
+
+        IEnumerator MoveHeadToPosition(Vector2Int newCoordinate, Vector3 newWorldPosition)
         {
             isMoving = true;
             GameMap.TryGetTileAt(_head.Coordinate, out var headTile);
             Vector3 startPosition = headTile.transform.position;
             Vector3 targetPosition = newWorldPosition;
 
+            // Tính hướng di chuyển để kiểm tra góc rẽ
+            Vector2Int moveDirection = newCoordinate - _head.Coordinate;
+            bool isCornerTurn = IsCornerTurn(moveDirection);
+
+            // Reset tất cả segments về vị trí ban đầu trước khi bắt đầu di chuyển
+            for (int i = 1; i < Segments.Count; i++)
+            {
+                Segments[i].Move(true, 0f); // Reset về ratio = 0
+            }
+
             float elapsedTime = 0f;
             while (elapsedTime < moveTime)
             {
                 elapsedTime += Time.deltaTime;
-                float ratio = Mathf.Clamp01(elapsedTime / moveTime);
+                float t = Mathf.Clamp01(elapsedTime / moveTime);
+
+                // Sử dụng animation curve cho chuyển động mượt mà
+                float ratio = movementCurve.Evaluate(t);
+
+                // Áp dụng smoothing đặc biệt cho góc rẽ
+                if (isCornerTurn)
+                {
+                    ratio = ApplyCornerSmoothing(ratio);
+                }
+
+                // Di chuyển head
                 _head.transform.position = Vector3.Lerp(startPosition, targetPosition, ratio);
+
+                // Di chuyển body segments với cùng ratio
                 for (int i = 1; i < Segments.Count; i++)
                 {
                     Segments[i].Move(true, ratio);
@@ -184,13 +172,20 @@ namespace Geckout
                 yield return null;
             }
 
+            // Đảm bảo tất cả segments đều ở vị trí cuối
+            _head.transform.position = targetPosition;
+            for (int i = 1; i < Segments.Count; i++)
+            {
+                Segments[i].Move(true, 1f);
+            }
+
+            // Cleanup logic - giải phóng tiles cũ
             for (int i = Segments.Count - 1; i >= 0; i--)
             {
                 Segments[i].ReleaseCurrentTile();
             }
 
-
-            // Ensure final position is set
+            // Cập nhật coordinates
             for (int i = Segments.Count - 1; i >= 1; i--)
             {
                 Segments[i].SetCoordinate(Segments[i - 1].Coordinate);
@@ -200,19 +195,43 @@ namespace Geckout
             isMoving = false;
         }
 
-        IEnumerator MoveTailToPosition(Vector2Int newCoordinate, Vector2 newWorldPosition)
+        // Tương tự cho MoveTailToPosition
+        IEnumerator MoveTailToPosition(Vector2Int newCoordinate, Vector3 newWorldPosition)
         {
             isMoving = true;
             GameMap.TryGetTileAt(_tail.Coordinate, out var tailTile);
             Vector3 startPosition = tailTile.transform.position;
             Vector3 targetPosition = newWorldPosition;
 
+            // Tính hướng di chuyển để kiểm tra góc rẽ
+            Vector2Int moveDirection = newCoordinate - _tail.Coordinate;
+            bool isCornerTurn = IsCornerTurn(moveDirection);
+
+            // Reset tất cả segments về vị trí ban đầu
+            for (int i = Segments.Count - 2; i >= 0; i--)
+            {
+                Segments[i].Move(false, 0f);
+            }
+
             float elapsedTime = 0f;
             while (elapsedTime < moveTime)
             {
                 elapsedTime += Time.deltaTime;
-                float ratio = Mathf.Clamp01(elapsedTime / moveTime);
+                float t = Mathf.Clamp01(elapsedTime / moveTime);
+
+                // Sử dụng animation curve cho chuyển động mượt mà
+                float ratio = movementCurve.Evaluate(t);
+
+                // Áp dụng smoothing đặc biệt cho góc rẽ
+                if (isCornerTurn)
+                {
+                    ratio = ApplyCornerSmoothing(ratio);
+                }
+
+                // Di chuyển tail
                 _tail.transform.position = Vector3.Lerp(startPosition, targetPosition, ratio);
+
+                // Di chuyển body segments
                 for (int i = Segments.Count - 2; i >= 0; i--)
                 {
                     Segments[i].Move(false, ratio);
@@ -221,13 +240,19 @@ namespace Geckout
                 yield return null;
             }
 
+            // Đảm bảo tất cả segments đều ở vị trí cuối
+            _tail.transform.position = targetPosition;
+            for (int i = Segments.Count - 2; i >= 0; i--)
+            {
+                Segments[i].Move(false, 1f);
+            }
+
+            // Cleanup logic
             for (int i = Segments.Count - 1; i >= 0; i--)
             {
                 Segments[i].ReleaseCurrentTile();
             }
 
-
-            // Ensure final position is set
             for (int i = 0; i < Segments.Count - 1; i++)
             {
                 Segments[i].SetCoordinate(Segments[i + 1].Coordinate);
@@ -235,6 +260,30 @@ namespace Geckout
 
             _tail.SetCoordinate(newCoordinate);
             isMoving = false;
+        }
+        private bool IsCornerTurn(Vector2Int currentDirection)
+        {
+            // Logic để kiểm tra góc rẽ dựa vào lịch sử di chuyển
+            // Có thể mở rộng thêm logic phức tạp hơn
+            return true; // Tạm thời return true để áp dụng smoothing cho tất cả chuyển động
+        }
+
+        // Áp dụng smoothing đặc biệt cho góc rẽ
+        private float ApplyCornerSmoothing(float ratio)
+        {
+            // Sử dụng SmoothStep để tạo chuyển động mượt mà hơn
+            return Mathf.SmoothStep(0f, 1f, ratio);
+        }
+
+        // Easing functions bổ sung
+        private float EaseInOutCubic(float t)
+        {
+            return t < 0.5f ? 4f * t * t * t : 1f - Mathf.Pow(-2f * t + 2f, 3f) / 2f;
+        }
+
+        private float EaseInOutQuad(float t)
+        {
+            return t < 0.5f ? 2f * t * t : 1f - Mathf.Pow(-2f * t + 2f, 2f) / 2f;
         }
 
         private Vector2Int GetDeltaMovement()
@@ -276,10 +325,7 @@ namespace Geckout
             }
 
             if (isMoving) return;
-            // GameMap.ApplyFuncToAllTiles(t =>
-            // {
-            //     t.ChangeColor(Color.white);
-            // });
+
             _currentTargetTile = target;
             var mapSize = GameMap.MapSize;
             var mapStates = GameMap.GetCurrentMapState();
@@ -288,13 +334,6 @@ namespace Geckout
             var grid = new ASGrid(mapSize.x, mapSize.y, mapStates);
             var pathFinder = new ASPathFinding(grid);
             _targetChanged = false;
-
-
-            // pathFinder.FindPath(_head.Coordinate, target.Coordinate,
-            //     result => { StartCoroutine(StartFollowPathFromHead(result.Select(t => t.Position).ToArray())); });
-
-            // pathFinder.FindPath(_tail.Coordinate, target.Coordinate,
-            //     result => { StartCoroutine(StartFollowPathFromTail(result.Select(t => t.Position).ToArray())); });
         }
 
         IEnumerator StartFollowPathFromHead(Vector2Int[] targets)
@@ -305,20 +344,6 @@ namespace Geckout
                 Vector2Int target = targets[i];
                 var delta = target - _head.Coordinate;
                 yield return MoveHead(delta);
-                // if (GameMap.TryGetTileAt(target, out var tile))
-                // {
-                //     yield return MoveHeadToPosition(target, tile.transform.position);
-                //     if (_targetChanged)
-                //     {
-                //         isMoving = false;
-                //         HandleTileSelected(_currentTargetTile);
-                //         yield break; // Stop moving if target changed
-                //     }
-                // }
-                // else
-                // {
-                //     Debug.LogWarning("Invalid target: " + target);
-                // }
             }
 
             isMoving = false;
@@ -348,7 +373,7 @@ namespace Geckout
 
             isMoving = false;
         }
-        
+
         public List<Vector2Int> GetOrthogonalUnitVectors(Vector2Int input)
         {
             var unitVectors = new List<Vector2Int>
