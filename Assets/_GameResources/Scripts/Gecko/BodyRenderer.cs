@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,329 +10,244 @@ namespace Geckout
     public class BodyRenderer : MonoBehaviour
     {
         private TubeRenderer _renderer;
-        [Range(1, 5)][SerializeField] private int smoothIterations = 3;
-        [Range(0.1f, 1f)][SerializeField] private float cornerSmoothness = 0.5f;
-        [Range(2, 10)][SerializeField] private int subdivisionPerSegment = 3;
-        [Range(0.1f, 0.8f)][SerializeField] private float bulgeAmount = 0.3f;
-        [Range(30f, 150f)][SerializeField] private float minAngleForBulge = 60f;
 
-        // Thêm parameter để kiểm soát việc giữ nguyên góc cua
-        [Range(0, 3)][SerializeField] private int preserveCornerSegments = 2; // Số segment từ góc cua để giữ nguyên
-        [SerializeField] private bool enableCornerPreservation = true; // Toggle để bật/tắt tính năng
+        [SerializeField] private bool forceSharpCorners = true;
+        [SerializeField] private float cornerDuplicationDistance = 0.01f; // Khoảng cách duplicate corner points
+        [SerializeField] private float cornerThreshold = 0.85f; // Ngưỡng để phát hiện góc (dot product)
+        [SerializeField] private bool debugMode = true;
 
         List<GeckoSegment> _segments;
-        Vector3[] _originalPositions;
-        List<Vector3> _subdivisionPoints;
-        List<bool> _isCornerSegment; // Đánh dấu segment nào là góc cua
+        Vector3[] _segmentPositions;
 
         public void Initialize(List<GeckoSegment> segments)
         {
             _renderer = GetComponent<TubeRenderer>();
             _segments = segments;
-            _originalPositions = new Vector3[_segments.Count];
-            _subdivisionPoints = new List<Vector3>();
-            _isCornerSegment = new List<bool>();
+            _segmentPositions = new Vector3[_segments.Count];
 
-            UpdateOriginalPositions();
-            int totalPoints = CalculateTotalSubdivisionPoints();
-            _renderer.uvRect = new Rect(0, 0, totalPoints, 1);
+            // Cấu hình TubeRenderer để có góc sắc nhất có thể
+            ConfigureTubeRendererForSharpCorners();
 
-            UpdateSubdivisionPoints();
-            _renderer.points = _subdivisionPoints.ToArray();
+            UpdateSegmentPositions();
+            UpdateRenderer();
+        }
+
+        private void ConfigureTubeRendererForSharpCorners()
+        {
+            if (_renderer == null) return;
+
+            // Cách 1: Sử dụng NormalMode.Hard để tạo góc cứng
+            _renderer.normalMode = TubeRenderer.NormalMode.Hard;
+
+            // Cách 2: Giảm edgeCount để giảm smoothing
+            _renderer.edgeCount = Mathf.Max(4, _renderer.edgeCount); // Tối thiểu 4 cạnh
+
+            // Cách 3: Tắt postprocess nếu có
+            _renderer.postprocessContinously = false;
+
+            if (debugMode)
+            {
+                Debug.Log($"TubeRenderer configured: NormalMode={_renderer.normalMode}, EdgeCount={_renderer.edgeCount}");
+            }
         }
 
         private void Update()
         {
-            UpdateOriginalPositions();
-            DetectCornerSegments(); // Phát hiện góc cua
-            UpdateSubdivisionPoints();
-            _renderer.points = SmoothSnakeWithCornerPreservation(_subdivisionPoints).ToArray();
+            UpdateSegmentPositions();
+            UpdateRenderer();
         }
 
-        private void UpdateOriginalPositions()
+        private void UpdateSegmentPositions()
         {
             for (int i = 0; i < _segments.Count; i++)
             {
-                _originalPositions[i] = _segments[i].transform.position;
+                _segmentPositions[i] = _segments[i].transform.position;
             }
         }
 
-        // Phát hiện segment nào đang ở góc cua
-        private void DetectCornerSegments()
+        private void UpdateRenderer()
         {
-            _isCornerSegment.Clear();
-
-            for (int i = 0; i < _segments.Count; i++)
+            if (forceSharpCorners)
             {
-                bool isCorner = false;
-
-                if (i > 0 && i < _segments.Count - 1)
-                {
-                    Vector3 dir1 = (_originalPositions[i] - _originalPositions[i - 1]).normalized;
-                    Vector3 dir2 = (_originalPositions[i + 1] - _originalPositions[i]).normalized;
-                    float angle = Vector3.Angle(dir1, dir2);
-
-                    // Nếu góc lệch đáng kể từ 180 độ (đường thẳng) thì đây là góc cua
-                    isCorner = angle < 170f && angle > 10f;
-                }
-
-                _isCornerSegment.Add(isCorner);
-            }
-        }
-
-        private int CalculateTotalSubdivisionPoints()
-        {
-            return (_segments.Count - 1) * subdivisionPerSegment + 1;
-        }
-
-        private void UpdateSubdivisionPoints()
-        {
-            _subdivisionPoints.Clear();
-
-            for (int i = 0; i < _segments.Count - 1; i++)
-            {
-                Vector3 currentPos = _originalPositions[i];
-                Vector3 nextPos = _originalPositions[i + 1];
-
-                for (int j = 0; j < subdivisionPerSegment; j++)
-                {
-                    float t = j / (float)subdivisionPerSegment;
-                    Vector3 subdivisionPoint = Vector3.Lerp(currentPos, nextPos, t);
-                    _subdivisionPoints.Add(subdivisionPoint);
-                }
-            }
-
-            _subdivisionPoints.Add(_originalPositions[_originalPositions.Length - 1]);
-        }
-
-        // Thuật toán smoothing với tính năng bảo toàn góc cua
-        List<Vector3> SmoothSnakeWithCornerPreservation(List<Vector3> points)
-        {
-            if (points.Count < 3) return points;
-            if (!enableCornerPreservation) return SmoothSnakeWithSubdivision(points);
-
-            List<Vector3> smoothedPoints = new List<Vector3>();
-            smoothedPoints.Add(points[0]); // Giữ nguyên điểm đầu
-
-            for (int i = 1; i < points.Count - 1; i++)
-            {
-                Vector3 prev = points[i - 1];
-                Vector3 current = points[i];
-                Vector3 next = points[i + 1];
-
-                bool isMainSegmentPoint = (i % subdivisionPerSegment == 0);
-
-                if (isMainSegmentPoint)
-                {
-                    int segmentIndex = i / subdivisionPerSegment;
-
-                    // Kiểm tra xem segment này có nằm trong vùng góc cua cần bảo toàn không
-                    bool shouldPreserveCorner = ShouldPreserveCornerAtSegment(segmentIndex);
-
-                    if (shouldPreserveCorner)
-                    {
-                        // Giữ nguyên vị trí gốc cho góc cua
-                        smoothedPoints.Add(current);
-                    }
-                    else
-                    {
-                        // Áp dụng smoothing bình thường
-                        Vector3 smoothedPoint = ApplyAdvancedSmoothing(prev, current, next, i, points);
-                        smoothedPoints.Add(smoothedPoint);
-                    }
-                }
-                else
-                {
-                    // Subdivision points - kiểm tra xem có nằm gần góc cua không
-                    int nearestSegmentIndex = Mathf.RoundToInt(i / (float)subdivisionPerSegment);
-                    bool nearCorner = ShouldPreserveCornerAtSegment(nearestSegmentIndex);
-
-                    if (nearCorner)
-                    {
-                        // Áp dụng smoothing rất nhẹ hoặc không smoothing
-                        smoothedPoints.Add(current);
-                    }
-                    else
-                    {
-                        // Smoothing bình thường
-                        Vector3 smoothedPoint = ApplyLightSmoothing(prev, current, next);
-                        smoothedPoints.Add(smoothedPoint);
-                    }
-                }
-            }
-
-            smoothedPoints.Add(points[points.Count - 1]); // Giữ nguyên điểm cuối
-            return smoothedPoints;
-        }
-
-        // Kiểm tra xem segment tại index có nên được bảo toàn góc cua không
-        private bool ShouldPreserveCornerAtSegment(int segmentIndex)
-        {
-            if (segmentIndex < 0 || segmentIndex >= _isCornerSegment.Count)
-                return false;
-
-            // Kiểm tra segment hiện tại và các segment xung quanh
-            for (int offset = -preserveCornerSegments; offset <= preserveCornerSegments; offset++)
-            {
-                int checkIndex = segmentIndex + offset;
-                if (checkIndex >= 0 && checkIndex < _isCornerSegment.Count)
-                {
-                    if (_isCornerSegment[checkIndex])
-                    {
-                        return true; // Nằm trong vùng ảnh hưởng của góc cua
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        private Vector3 ApplyAdvancedSmoothing(Vector3 prev, Vector3 current, Vector3 next, int index, List<Vector3> allPoints)
-        {
-            Vector3 dir1 = (current - prev).normalized;
-            Vector3 dir2 = (next - current).normalized;
-            float angle = Vector3.Angle(dir1, dir2);
-
-            if (angle > minAngleForBulge && angle < 150f)
-            {
-                return CreateBulgePoint(prev, current, next, angle);
+                // PHƯƠNG PHÁP MỚI: Tạo points với micro-segments tại góc
+                List<Vector3> sharpPoints = CreateMicroSegmentCorners();
+                _renderer.points = sharpPoints.ToArray();
             }
             else
             {
-                return (prev + current * 2 + next) * 0.25f;
-            }
-        }
-
-        private Vector3 ApplyLightSmoothing(Vector3 prev, Vector3 current, Vector3 next)
-        {
-            return Vector3.Lerp(current, (prev + next) * 0.5f, 0.3f);
-        }
-
-        private Vector3 CreateBulgePoint(Vector3 prev, Vector3 current, Vector3 next, float angle)
-        {
-            Vector3 dir1 = (current - prev).normalized;
-            Vector3 dir2 = (next - current).normalized;
-            Vector3 bisector = (dir1 + dir2).normalized;
-            Vector3 outwardNormal = Vector3.Cross(bisector, Vector3.up).normalized;
-
-            if (outwardNormal.magnitude < 0.1f)
-            {
-                outwardNormal = new Vector3(-bisector.z, 0, bisector.x).normalized;
+                _renderer.points = _segmentPositions;
             }
 
-            float dynamicBulge = bulgeAmount * Mathf.Lerp(0.5f, 1f, (180f - angle) / 120f);
-            return current + outwardNormal * dynamicBulge;
+            _renderer.uvRect = new Rect(0, 0, _renderer.points.Length, 1);
         }
 
-        // Thuật toán smoothing cũ để fallback
-        List<Vector3> SmoothSnakeWithSubdivision(List<Vector3> points)
+        // PHƯƠNG PHÁP MỚI: Tạo micro-segments tại góc để force sharp corners
+        private List<Vector3> CreateMicroSegmentCorners()
         {
-            if (points.Count < 3) return points;
+            List<Vector3> result = new List<Vector3>();
 
-            List<Vector3> smoothedPoints = new List<Vector3>();
-            smoothedPoints.Add(points[0]);
-
-            for (int i = 1; i < points.Count - 1; i++)
+            if (_segmentPositions.Length < 3)
             {
-                Vector3 prev = points[i - 1];
-                Vector3 current = points[i];
-                Vector3 next = points[i + 1];
+                return _segmentPositions.ToList();
+            }
 
-                bool isMainSegmentPoint = (i % subdivisionPerSegment == 0);
+            // Thêm điểm đầu
+            result.Add(_segmentPositions[0]);
 
-                if (isMainSegmentPoint)
+            for (int i = 1; i < _segmentPositions.Length - 1; i++)
+            {
+                Vector3 prev = _segmentPositions[i - 1];
+                Vector3 current = _segmentPositions[i];
+                Vector3 next = _segmentPositions[i + 1];
+
+                // Tính hướng
+                Vector3 dirToPrev = (prev - current).normalized;
+                Vector3 dirToNext = (next - current).normalized;
+
+                // Kiểm tra góc
+                float dotProduct = Vector3.Dot(-dirToPrev, dirToNext);
+
+                if (dotProduct < cornerThreshold) // Đây là góc cua
                 {
-                    Vector3 smoothedPoint = ApplyAdvancedSmoothing(prev, current, next, i, points);
-                    smoothedPoints.Add(smoothedPoint);
+                    // Tạo 2 điểm rất gần góc để force sharp corner
+                    Vector3 preCorner = current + dirToPrev * cornerDuplicationDistance;
+                    Vector3 postCorner = current + dirToNext * cornerDuplicationDistance;
+
+                    result.Add(preCorner);
+                    result.Add(current);  // Điểm góc chính
+                    result.Add(postCorner);
                 }
                 else
                 {
-                    Vector3 smoothedPoint = ApplyLightSmoothing(prev, current, next);
-                    smoothedPoints.Add(smoothedPoint);
+                    // Đường thẳng - chỉ thêm điểm bình thường
+                    result.Add(current);
                 }
             }
 
-            smoothedPoints.Add(points[points.Count - 1]);
-            return smoothedPoints;
-        }
+            // Thêm điểm cuối
+            result.Add(_segmentPositions[_segmentPositions.Length - 1]);
 
-        // Catmull-Rom methods (giữ nguyên như cũ)
-        private List<Vector3> SmoothWithCatmullRom(List<Vector3> points)
-        {
-            if (points.Count < 4) return points;
-
-            List<Vector3> smoothedPoints = new List<Vector3>();
-            smoothedPoints.Add(points[0]);
-
-            for (int i = 1; i < points.Count - 2; i++)
+            if (debugMode)
             {
-                Vector3 p0 = points[i - 1];
-                Vector3 p1 = points[i];
-                Vector3 p2 = points[i + 1];
-                Vector3 p3 = points[i + 2];
-
-                int steps = 4;
-                for (int step = 0; step < steps; step++)
-                {
-                    float t = step / (float)steps;
-                    Vector3 point = CatmullRomInterpolate(p0, p1, p2, p3, t);
-                    smoothedPoints.Add(point);
-                }
+                Debug.Log($"Sharp corners: {_segmentPositions.Length} -> {result.Count} points");
             }
 
-            smoothedPoints.Add(points[points.Count - 1]);
-            return smoothedPoints;
+            return result;
         }
 
-        Vector3 CatmullRomInterpolate(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
+        // PHƯƠNG PHÁP BỔ SUNG: Override TubeRenderer bằng custom mesh
+        public void UseCustomMesh()
         {
-            float t2 = t * t;
-            float t3 = t2 * t;
+            // Tạo custom mesh với góc sắc nét
+            var customMesh = CreateSharpCornerMesh();
+            GetComponent<MeshFilter>().mesh = customMesh;
 
-            return 0.5f * (
-                2f * p1 +
-                (-p0 + p2) * t +
-                (2f * p0 - 5f * p1 + 4f * p2 - p3) * t2 +
-                (-p0 + 3f * p1 - 3f * p2 + p3) * t3
-            );
+            // Tắt TubeRenderer
+            _renderer.enabled = false;
         }
 
-        // Debug visualization
+        private Mesh CreateSharpCornerMesh()
+        {
+            // Implement custom mesh generation với góc sắc nét
+            // Điều này cho phép kiểm soát hoàn toàn hình dạng
+
+            Mesh mesh = new Mesh();
+
+            // TODO: Implement custom mesh generation
+            // - Tạo vertices dọc theo path
+            // - Tạo normals vuông góc với segment
+            // - Tạo triangles với góc sắc nét
+
+            return mesh;
+        }
+
         private void OnDrawGizmos()
         {
-            if (_subdivisionPoints == null || _subdivisionPoints.Count == 0) return;
+            if (_segmentPositions == null) return;
 
-            // Vẽ subdivision points
-            Gizmos.color = Color.yellow;
-            for (int i = 0; i < _subdivisionPoints.Count; i++)
+            // Vẽ segment positions gốc (RED)
+            Gizmos.color = Color.red;
+            for (int i = 0; i < _segmentPositions.Length; i++)
             {
-                Gizmos.DrawWireSphere(_subdivisionPoints[i], 0.05f);
+                Gizmos.DrawWireSphere(_segmentPositions[i], 0.15f);
+            }
 
-                // Highlight main segment points
-                if (i % subdivisionPerSegment == 0)
+            // Vẽ đường nối segments (YELLOW - should be sharp)
+            Gizmos.color = Color.yellow;
+            for (int i = 0; i < _segmentPositions.Length - 1; i++)
+            {
+                Gizmos.DrawLine(_segmentPositions[i], _segmentPositions[i + 1]);
+            }
+
+            // Vẽ renderer points (GREEN)
+            if (_renderer != null && _renderer.points != null)
+            {
+                Gizmos.color = Color.green;
+                var rendererPoints = _renderer.points;
+
+                for (int i = 0; i < rendererPoints.Length; i++)
                 {
-                    int segmentIndex = i / subdivisionPerSegment;
+                    Gizmos.DrawWireSphere(rendererPoints[i], 0.08f);
+                }
 
-                    // Màu khác nhau cho corner segments
-                    if (segmentIndex < _isCornerSegment.Count && _isCornerSegment[segmentIndex])
-                    {
-                        Gizmos.color = Color.red; // Góc cua
-                        Gizmos.DrawWireSphere(_subdivisionPoints[i], 0.12f);
-                    }
-                    else if (ShouldPreserveCornerAtSegment(segmentIndex))
-                    {
-                        Gizmos.color = Color.yellow; // Vùng ảnh hưởng góc cua
-                        Gizmos.DrawWireSphere(_subdivisionPoints[i], 0.10f);
-                    }
-                    else
-                    {
-                        Gizmos.color = Color.green; // Segment bình thường
-                        Gizmos.DrawWireSphere(_subdivisionPoints[i], 0.08f);
-                    }
+                // Vẽ đường nối renderer points (CYAN)
+                Gizmos.color = Color.cyan;
+                for (int i = 0; i < rendererPoints.Length - 1; i++)
+                {
+                    Gizmos.DrawLine(rendererPoints[i], rendererPoints[i + 1]);
+                }
+            }
 
-                    Gizmos.color = Color.yellow;
+            // Vẽ góc detection
+            if (forceSharpCorners && _segmentPositions.Length >= 3)
+            {
+                Gizmos.color = Color.magenta;
+                for (int i = 1; i < _segmentPositions.Length - 1; i++)
+                {
+                    Vector3 prev = _segmentPositions[i - 1];
+                    Vector3 current = _segmentPositions[i];
+                    Vector3 next = _segmentPositions[i + 1];
+
+                    Vector3 dirToPrev = (prev - current).normalized;
+                    Vector3 dirToNext = (next - current).normalized;
+                    float dot = Vector3.Dot(-dirToPrev, dirToNext);
+
+                    if (dot < cornerThreshold)
+                    {
+                        // Vẽ góc được detect
+                        Gizmos.DrawWireCube(current, Vector3.one * 0.3f);
+                    }
                 }
             }
         }
     }
 }
+
+// GIẢI PHÁP 2: Custom TubeRenderer Settings
+// Thêm vào class TubeRenderer (nếu có thể modify)
+/*
+public class CustomTubeRenderer : TubeRenderer 
+{
+    [SerializeField] private bool forceSharpCorners = true;
+    [SerializeField] private float sharpnessThreshold = 0.9f;
+    
+    protected override void ProcessPoints(Vector3[] inputPoints)
+    {
+        if (!forceSharpCorners)
+        {
+            base.ProcessPoints(inputPoints);
+            return;
+        }
+        
+        // Custom processing để giữ góc sắc nét
+        var processedPoints = CreateSharpCornerPoints(inputPoints);
+        base.ProcessPoints(processedPoints);
+    }
+    
+    private Vector3[] CreateSharpCornerPoints(Vector3[] original)
+    {
+        // Logic tạo sharp corners
+        return original; // Placeholder
+    }
+}
+*/
