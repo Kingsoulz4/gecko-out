@@ -8,63 +8,113 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ui_water
-  m_Shader: {fileID: 4800000, guid: fd320dccba2691d4092194d26416184f, type: 3}
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 6
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties:
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-      _DistortionTexture:
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DistortionTexture:
         m_Texture: {fileID: 2800000, guid: f7a6c08378e09a547975a01fe833e4c7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-      _MainTex:
-        m_Texture: {fileID: 2800000, guid: 63905661f30e7fe4390d0e5326f51dc0, type: 3}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-      _MainTex_1:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex_1:
         m_Texture: {fileID: 2800000, guid: 7037e31ce01e60a459acc8addac518ce, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-      unity_Lightmaps:
+    - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-      unity_LightmapsInd:
+    - _OcclusionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-      unity_ShadowMasks:
+    - _ParallaxMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Ints: {}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
-      _Density: 61.88
-      _Distortion_Speed: 0.012
-      _Distortion_Strength: 72.4
-      _Distortion_Tiling: 0.0267
-      _Edge_Thickness: 0
-      _Foam_Additive: 0
-      _Glow_Brightness: 0
-      _QueueControl: 0
-      _QueueOffset: 0
-      _Speed: 0.044
-      _Speed_Secondary: 0.051
+    - _BumpScale: 1
+    - _Cutoff: 0.5
+    - _Density: 61.88
+    - _DetailNormalMapScale: 1
+    - _Distortion_Speed: 0.012
+    - _Distortion_Strength: 72.4
+    - _Distortion_Tiling: 0.0267
+    - _DstBlend: 0
+    - _Edge_Thickness: 0
+    - _Foam_Additive: 0
+    - _GlossMapScale: 1
+    - _Glossiness: 0.5
+    - _GlossyReflections: 1
+    - _Glow_Brightness: 0
+    - _Metallic: 0
+    - _Mode: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _Speed: 0.044
+    - _Speed_Secondary: 0.051
+    - _SrcBlend: 1
+    - _UVSec: 0
+    - _ZWrite: 1
     m_Colors:
-      _Speed: {r: 0, g: -0.75, b: 0, a: 0}
-      _Tiling: {r: 1, g: 1, b: 0, a: 0}
-      _Tiling_Secondary: {r: 1, g: 1, b: 0, a: 0}
-      _WaterColor: {r: 0.03921567, g: 0.662673, b: 0.9607843, a: 1}
-      _WaterColor_1: {r: 0, g: 0.110574864, b: 0.1981132, a: 0}
-      _Water_Texture_Color: {r: 5.131332, g: 3.9937253, b: 3.9937253, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Speed: {r: 0, g: -0.75, b: 0, a: 0}
+    - _Tiling: {r: 1, g: 1, b: 0, a: 0}
+    - _Tiling_Secondary: {r: 1, g: 1, b: 0, a: 0}
+    - _WaterColor: {r: 0.03921567, g: 0.662673, b: 0.9607843, a: 1}
+    - _WaterColor_1: {r: 0, g: 0.110574864, b: 0.1981132, a: 0}
+    - _Water_Texture_Color: {r: 5.131332, g: 3.9937253, b: 3.9937253, a: 1}
   m_BuildTextureStacks: []
