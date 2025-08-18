@@ -12,13 +12,21 @@ namespace Geckout
 
         [Header("Sharp Corner Settings")]
         [SerializeField] private bool forceSharpCorners = true;
-        [SerializeField] private int pointsPerSegment = 5; // Tăng số điểm mỗi segment
+        [SerializeField] private int pointsPerSegment = 8; // Tăng số điểm mỗi segment
+        [SerializeField] private float cornerSharpness = 0.1f; // Độ sắc nét của góc (0 = sắc nhất)
+        [SerializeField] private bool useGridAlignment = true; // Sử dụng grid alignment
+
+        [Header("Advanced Corner Control")]
+        [SerializeField] private float minCornerDistance = 0.5f; // Khoảng cách tối thiểu cho góc
+        [SerializeField] private bool enforceRightAngles = true; // Bắt buộc góc vuông
 
         [Header("Debug")]
         [SerializeField] private bool debugMode = true;
+        [SerializeField] private bool showCornerDetection = true;
 
         List<GeckoSegment> _segments;
         Vector3[] _segmentPositions;
+        List<Vector3> _processedPoints;
 
         public void Initialize(List<GeckoSegment> segments)
         {
@@ -35,9 +43,11 @@ namespace Geckout
         {
             if (_renderer == null) return;
 
+            // Cấu hình TubeRenderer để tạo góc sắc nét
             _renderer.normalMode = TubeRenderer.NormalMode.Hard;
-            _renderer.edgeCount = Mathf.Max(4, _renderer.edgeCount);
+            _renderer.edgeCount = Mathf.Max(6, _renderer.edgeCount);
             _renderer.postprocessContinously = false;
+            _renderer.calculateTangents = false; // Tắt tangent calculation để tăng performance
 
             if (debugMode)
             {
@@ -63,19 +73,28 @@ namespace Geckout
         {
             if (forceSharpCorners)
             {
-                List<Vector3> rectangularPath = CreateRectangularPath();
-                _renderer.points = rectangularPath.ToArray();
+                if (useGridAlignment)
+                {
+                    _processedPoints = CreatePerfectRightAngleCorners();
+                }
+                else
+                {
+                    _processedPoints = CreateEnhancedRectangularPath();
+                }
+
+                _renderer.points = _processedPoints.ToArray();
             }
             else
             {
                 _renderer.points = _segmentPositions;
             }
 
-            _renderer.uvRect = new Rect(0, 0, _renderer.points.Length, 1);
+            // Cấu hình UV mapping để tránh stretching
+            _renderer.uvRect = new Rect(0, 0, _renderer.points.Length * 0.1f, 1);
         }
 
-        // PHƯƠNG PHÁP MỚI: Tạo đường đi hoàn toàn vuông góc
-        private List<Vector3> CreateRectangularPath()
+        // PHƯƠNG PHÁP MỚI: Tạo góc vuông hoàn hảo với kiểm soát chính xác
+        private List<Vector3> CreatePerfectRightAngleCorners()
         {
             List<Vector3> result = new List<Vector3>();
 
@@ -84,6 +103,7 @@ namespace Geckout
                 return _segmentPositions.ToList();
             }
 
+            // Thêm điểm đầu tiên
             result.Add(_segmentPositions[0]);
 
             for (int i = 0; i < _segmentPositions.Length - 1; i++)
@@ -91,103 +111,96 @@ namespace Geckout
                 Vector3 current = _segmentPositions[i];
                 Vector3 next = _segmentPositions[i + 1];
 
-                // Tạo đường vuông góc giữa 2 điểm
-                List<Vector3> rectangularSegment = CreateRectangularSegment(current, next, i);
+                Vector3 delta = next - current;
 
-                // Thêm các điểm (bỏ qua điểm đầu để tránh duplicate)
-                for (int j = 1; j < rectangularSegment.Count; j++)
+                // Kiểm tra xem có phải góc cua không
+                bool isCorner = Mathf.Abs(delta.x) > 0.01f && Mathf.Abs(delta.z) > 0.01f;
+
+                if (isCorner && enforceRightAngles)
                 {
-                    result.Add(rectangularSegment[j]);
+                    // Tạo góc vuông hoàn hảo
+                    CreatePerfectLShape(result, current, next, i);
+                }
+                else
+                {
+                    // Đường thẳng với subdivision
+                    CreateStraightSegment(result, current, next);
                 }
             }
 
             if (debugMode)
             {
-                Debug.Log($"Rectangular path: {_segmentPositions.Length} segments -> {result.Count} points");
+                Debug.Log($"Perfect right angle path: {_segmentPositions.Length} segments -> {result.Count} points");
+                LogCornerAnalysis();
             }
 
             return result;
         }
 
-        // Tạo segment vuông góc giữa 2 điểm
-        private List<Vector3> CreateRectangularSegment(Vector3 start, Vector3 end, int segmentIndex)
+        // Tạo hình chữ L hoàn hảo
+        private void CreatePerfectLShape(List<Vector3> points, Vector3 start, Vector3 end, int segmentIndex)
         {
-            List<Vector3> points = new List<Vector3>();
-            points.Add(start);
-
             Vector3 delta = end - start;
 
-            // Phân tích chuyển động thành X và Z riêng biệt
-            float deltaX = delta.x;
-            float deltaZ = delta.z;
-            float deltaY = delta.y; // Giữ nguyên Y
+            // Quyết định hướng cua dựa trên segment index hoặc logic khác
+            bool goXFirst = DetermineCornerDirection(delta, segmentIndex);
 
-            // TH1: Chuyển động theo 1 trục duy nhất (đường thẳng)
-            if (Mathf.Abs(deltaX) < 0.01f || Mathf.Abs(deltaZ) < 0.01f)
+            Vector3 cornerPoint;
+            if (goXFirst)
             {
-                // Đường thẳng - subdivision bình thường
-                for (int i = 1; i < pointsPerSegment; i++)
-                {
-                    float t = (float)i / pointsPerSegment;
-                    points.Add(Vector3.Lerp(start, end, t));
-                }
+                // Di chuyển X trước, sau đó Z
+                cornerPoint = new Vector3(end.x, start.y + delta.y * 0.5f, start.z);
             }
-            // TH2: Chuyển động theo cả 2 trục (góc cua)
             else
             {
-                // Tạo góc vuông: đi theo 1 trục trước, sau đó trục kia
-
-                // Quyết định đi trục nào trước (có thể tùy chỉnh logic này)
-                bool goXFirst = Mathf.Abs(deltaX) >= Mathf.Abs(deltaZ);
-
-                if (goXFirst)
-                {
-                    // Đi X trước, sau đó Z
-                    Vector3 cornerPoint = new Vector3(end.x, start.y + deltaY * 0.5f, start.z);
-
-                    // Subdivision từ start đến corner
-                    int halfPoints = pointsPerSegment / 2;
-                    for (int i = 1; i <= halfPoints; i++)
-                    {
-                        float t = (float)i / halfPoints;
-                        points.Add(Vector3.Lerp(start, cornerPoint, t));
-                    }
-
-                    // Subdivision từ corner đến end
-                    for (int i = 1; i < pointsPerSegment - halfPoints; i++)
-                    {
-                        float t = (float)i / (pointsPerSegment - halfPoints);
-                        points.Add(Vector3.Lerp(cornerPoint, end, t));
-                    }
-                }
-                else
-                {
-                    // Đi Z trước, sau đó X
-                    Vector3 cornerPoint = new Vector3(start.x, start.y + deltaY * 0.5f, end.z);
-
-                    // Subdivision từ start đến corner
-                    int halfPoints = pointsPerSegment / 2;
-                    for (int i = 1; i <= halfPoints; i++)
-                    {
-                        float t = (float)i / halfPoints;
-                        points.Add(Vector3.Lerp(start, cornerPoint, t));
-                    }
-
-                    // Subdivision từ corner đến end
-                    for (int i = 1; i < pointsPerSegment - halfPoints; i++)
-                    {
-                        float t = (float)i / (pointsPerSegment - halfPoints);
-                        points.Add(Vector3.Lerp(cornerPoint, end, t));
-                    }
-                }
+                // Di chuyển Z trước, sau đó X  
+                cornerPoint = new Vector3(start.x, start.y + delta.y * 0.5f, end.z);
             }
 
-            points.Add(end);
-            return points;
+            // Đảm bảo khoảng cách tối thiểu
+            if (Vector3.Distance(start, cornerPoint) < minCornerDistance)
+            {
+                Vector3 direction = (cornerPoint - start).normalized;
+                cornerPoint = start + direction * minCornerDistance;
+            }
+
+            // Tạo đoạn thẳng đầu tiên (start -> corner)
+            CreateStraightSegment(points, start, cornerPoint, pointsPerSegment / 2);
+
+            // Tạo đoạn thẳng thứ hai (corner -> end)
+            CreateStraightSegment(points, cornerPoint, end, pointsPerSegment - pointsPerSegment / 2);
         }
 
-        // PHƯƠNG PHÁP THAY THẾ: Sử dụng grid-aligned path
-        private List<Vector3> CreateGridAlignedPath()
+        // Quyết định hướng cua
+        private bool DetermineCornerDirection(Vector3 delta, int segmentIndex)
+        {
+            // Có thể sử dụng nhiều chiến lược khác nhau:
+
+            // 1. Dựa trên độ lớn của chuyển động
+            if (Mathf.Abs(delta.x) != Mathf.Abs(delta.z))
+            {
+                return Mathf.Abs(delta.x) > Mathf.Abs(delta.z);
+            }
+
+            // 2. Alternating pattern
+            return segmentIndex % 2 == 0;
+        }
+
+        // Tạo đoạn thẳng với subdivision
+        private void CreateStraightSegment(List<Vector3> points, Vector3 start, Vector3 end, int subdivisions = -1)
+        {
+            if (subdivisions == -1) subdivisions = pointsPerSegment;
+
+            for (int i = 1; i <= subdivisions; i++)
+            {
+                float t = (float)i / subdivisions;
+                Vector3 point = Vector3.Lerp(start, end, t);
+                points.Add(point);
+            }
+        }
+
+        // PHƯƠNG PHÁP NÂNG CAO: Enhanced rectangular path với kiểm soát chi tiết
+        private List<Vector3> CreateEnhancedRectangularPath()
         {
             List<Vector3> result = new List<Vector3>();
 
@@ -203,45 +216,179 @@ namespace Geckout
                 Vector3 current = _segmentPositions[i];
                 Vector3 next = _segmentPositions[i + 1];
 
-                // Tạo path grid-aligned (chỉ di chuyển theo 1 trục tại 1 thời điểm)
+                CreateEnhancedSegment(result, current, next, i);
+            }
+
+            return result;
+        }
+
+        private void CreateEnhancedSegment(List<Vector3> points, Vector3 start, Vector3 end, int segmentIndex)
+        {
+            Vector3 delta = end - start;
+
+            // Kiểm tra xem có phải góc cua không
+            bool isCorner = Mathf.Abs(delta.x) > 0.01f && Mathf.Abs(delta.z) > 0.01f;
+
+            if (isCorner)
+            {
+                // Tạo góc vuông với kiểm soát độ sắc nét
+                CreateControlledLCorner(points, start, end, segmentIndex);
+            }
+            else
+            {
+                // Đường thẳng
+                CreateStraightSegment(points, start, end);
+            }
+        }
+
+        private void CreateControlledLCorner(List<Vector3> points, Vector3 start, Vector3 end, int segmentIndex)
+        {
+            Vector3 delta = end - start;
+            bool goXFirst = DetermineCornerDirection(delta, segmentIndex);
+
+            Vector3 cornerPoint;
+            if (goXFirst)
+            {
+                cornerPoint = new Vector3(end.x, start.y + delta.y * 0.5f, start.z);
+            }
+            else
+            {
+                cornerPoint = new Vector3(start.x, start.y + delta.y * 0.5f, end.z);
+            }
+
+            // Áp dụng corner sharpness
+            if (cornerSharpness > 0)
+            {
+                Vector3 adjustedCorner = ApplyCornerSharpness(start, cornerPoint, end, cornerSharpness);
+                cornerPoint = adjustedCorner;
+            }
+
+            // Subdivision cho từng đoạn
+            int firstSegmentPoints = pointsPerSegment / 2;
+            int secondSegmentPoints = pointsPerSegment - firstSegmentPoints;
+
+            // Đoạn đầu: start -> corner
+            for (int i = 1; i <= firstSegmentPoints; i++)
+            {
+                float t = (float)i / firstSegmentPoints;
+                points.Add(Vector3.Lerp(start, cornerPoint, t));
+            }
+
+            // Đoạn thứ hai: corner -> end
+            for (int i = 1; i <= secondSegmentPoints; i++)
+            {
+                float t = (float)i / secondSegmentPoints;
+                points.Add(Vector3.Lerp(cornerPoint, end, t));
+            }
+        }
+
+        // Áp dụng độ sắc nét cho góc
+        private Vector3 ApplyCornerSharpness(Vector3 start, Vector3 corner, Vector3 end, float sharpness)
+        {
+            if (sharpness <= 0) return corner;
+
+            // Tính toán điểm "mềm hóa" góc
+            Vector3 toCornerFromStart = (corner - start).normalized;
+            Vector3 toEndFromCorner = (end - corner).normalized;
+
+            Vector3 bisector = (toCornerFromStart + toEndFromCorner).normalized;
+
+            // Điều chỉnh corner point dựa trên sharpness
+            float offset = Vector3.Distance(start, corner) * sharpness * 0.1f;
+            return corner + bisector * offset;
+        }
+
+        // Phân tích và log thông tin góc cua
+        private void LogCornerAnalysis()
+        {
+            for (int i = 0; i < _segmentPositions.Length - 1; i++)
+            {
+                Vector3 delta = _segmentPositions[i + 1] - _segmentPositions[i];
+                bool isCorner = Mathf.Abs(delta.x) > 0.01f && Mathf.Abs(delta.z) > 0.01f;
+
+                if (isCorner)
+                {
+                    Debug.Log($"Corner detected at segment {i}: delta={delta}, angle≈90°");
+                }
+            }
+        }
+
+        // PHƯƠNG PHÁP THAY THẾ: Grid-aligned với TubeRenderer optimization
+        private List<Vector3> CreateTubeOptimizedPath()
+        {
+            List<Vector3> result = new List<Vector3>();
+
+            if (_segmentPositions.Length < 2)
+            {
+                return _segmentPositions.ToList();
+            }
+
+            result.Add(_segmentPositions[0]);
+
+            for (int i = 0; i < _segmentPositions.Length - 1; i++)
+            {
+                Vector3 current = _segmentPositions[i];
+                Vector3 next = _segmentPositions[i + 1];
                 Vector3 delta = next - current;
 
-                // Nếu có chuyển động theo cả X và Z, tạo góc vuông
+                // Kiểm tra góc cua
                 if (Mathf.Abs(delta.x) > 0.01f && Mathf.Abs(delta.z) > 0.01f)
                 {
-                    // Tạo điểm trung gian để tạo góc L
-                    Vector3 intermediatePoint;
-
-                    // Chọn hướng di chuyển dựa vào độ lớn
-                    if (Mathf.Abs(delta.x) >= Mathf.Abs(delta.z))
-                    {
-                        // Di chuyển X trước
-                        intermediatePoint = new Vector3(next.x, current.y, current.z);
-                    }
-                    else
-                    {
-                        // Di chuyển Z trước  
-                        intermediatePoint = new Vector3(current.x, current.y, next.z);
-                    }
-
-                    // Thêm điểm trung gian với subdivision
-                    AddSubdividedSegment(result, current, intermediatePoint);
-                    AddSubdividedSegment(result, intermediatePoint, next);
+                    // Tạo nhiều điểm trước góc để "ép" TubeRenderer tạo góc vuông
+                    CreateDenseCornerPoints(result, current, next, i);
                 }
                 else
                 {
-                    // Đường thẳng
-                    AddSubdividedSegment(result, current, next);
+                    // Đường thẳng với mật độ điểm cao
+                    CreateDenseStraightSegment(result, current, next);
                 }
             }
 
             return result;
         }
 
-        // Thêm segment với subdivision
-        private void AddSubdividedSegment(List<Vector3> points, Vector3 start, Vector3 end)
+        // Tạo nhiều điểm dày đặc cho góc cua để ép TubeRenderer
+        private void CreateDenseCornerPoints(List<Vector3> points, Vector3 start, Vector3 end, int segmentIndex)
         {
-            // Bỏ qua điểm start nếu đã có trong list
+            Vector3 delta = end - start;
+            bool goXFirst = DetermineCornerDirection(delta, segmentIndex);
+
+            Vector3 cornerPoint;
+            if (goXFirst)
+            {
+                cornerPoint = new Vector3(end.x, start.y + delta.y * 0.5f, start.z);
+            }
+            else
+            {
+                cornerPoint = new Vector3(start.x, start.y + delta.y * 0.5f, end.z);
+            }
+
+            // Tạo nhiều điểm dày đặc cho đoạn đầu
+            int densePoints = pointsPerSegment * 2; // Gấp đôi mật độ cho góc
+
+            // Đoạn 1: start -> corner (90% điểm)
+            int firstSegmentPoints = (int)(densePoints * 0.45f);
+            for (int i = 1; i <= firstSegmentPoints; i++)
+            {
+                float t = (float)i / firstSegmentPoints;
+                points.Add(Vector3.Lerp(start, cornerPoint, t));
+            }
+
+            // Thêm điểm corner chính xác
+            points.Add(cornerPoint);
+
+            // Đoạn 2: corner -> end (90% điểm còn lại)
+            int secondSegmentPoints = (int)(densePoints * 0.45f);
+            for (int i = 1; i <= secondSegmentPoints; i++)
+            {
+                float t = (float)i / secondSegmentPoints;
+                points.Add(Vector3.Lerp(cornerPoint, end, t));
+            }
+        }
+
+        // Tạo đoạn thẳng với mật độ cao
+        private void CreateDenseStraightSegment(List<Vector3> points, Vector3 start, Vector3 end)
+        {
             for (int i = 1; i <= pointsPerSegment; i++)
             {
                 float t = (float)i / pointsPerSegment;
@@ -249,77 +396,151 @@ namespace Geckout
             }
         }
 
+        // Override TubeRenderer behavior để force sharp corners
+        private void ForceTubeRendererSharpCorners()
+        {
+            if (_renderer == null || _processedPoints == null) return;
+
+            // Tạo custom radius array để control góc cua
+            float[] customRadiuses = new float[_processedPoints.Count];
+
+            for (int i = 0; i < _processedPoints.Count; i++)
+            {
+                // Giảm radius tại các điểm góc để tạo góc sắc nét hơn
+                if (IsCornerPoint(i))
+                {
+                    customRadiuses[i] = _renderer.radius * (1f - cornerSharpness);
+                }
+                else
+                {
+                    customRadiuses[i] = _renderer.radius;
+                }
+            }
+
+            _renderer.radiuses = customRadiuses;
+        }
+
+        // Kiểm tra xem điểm có phải là góc không
+        private bool IsCornerPoint(int pointIndex)
+        {
+            if (_processedPoints == null || pointIndex <= 0 || pointIndex >= _processedPoints.Count - 1)
+                return false;
+
+            Vector3 prev = _processedPoints[pointIndex - 1];
+            Vector3 current = _processedPoints[pointIndex];
+            Vector3 next = _processedPoints[pointIndex + 1];
+
+            Vector3 dir1 = (current - prev).normalized;
+            Vector3 dir2 = (next - current).normalized;
+
+            // Kiểm tra góc giữa 2 hướng
+            float angle = Vector3.Angle(dir1, dir2);
+            return angle > 45f; // Nếu góc > 45°, coi là corner
+        }
+
         private void OnDrawGizmos()
         {
             if (_segmentPositions == null) return;
 
-            // Vẽ segment positions gốc (RED) - lớn hơn
+            // Vẽ segment positions gốc (RED)
             Gizmos.color = Color.red;
             for (int i = 0; i < _segmentPositions.Length; i++)
             {
-                Gizmos.DrawWireSphere(_segmentPositions[i], 0.2f);
+                Gizmos.DrawWireSphere(_segmentPositions[i], 0.15f);
 #if UNITY_EDITOR
-                UnityEditor.Handles.Label(_segmentPositions[i] + Vector3.up * 0.3f, i.ToString());
+                UnityEditor.Handles.Label(_segmentPositions[i] + Vector3.up * 0.3f, $"S{i}");
 #endif
             }
 
-            // Vẽ đường nối segments gốc (YELLOW) - đây là đường chéo hiện tại
+            // Vẽ đường nối segments gốc (YELLOW) - đường chéo
             Gizmos.color = Color.yellow;
             for (int i = 0; i < _segmentPositions.Length - 1; i++)
             {
                 Gizmos.DrawLine(_segmentPositions[i], _segmentPositions[i + 1]);
             }
 
-            // Vẽ renderer points sau khi xử lý (GREEN)
-            if (_renderer != null && _renderer.points != null)
+            // Vẽ processed points (GREEN) - điểm sau xử lý
+            if (_processedPoints != null)
             {
                 Gizmos.color = Color.green;
+                for (int i = 0; i < _processedPoints.Count; i++)
+                {
+                    float size = IsCornerPoint(i) ? 0.08f : 0.04f;
+                    Gizmos.DrawWireSphere(_processedPoints[i], size);
+                }
+
+                // Vẽ đường nối processed points (CYAN) - phải là góc vuông
+                Gizmos.color = Color.cyan;
+                for (int i = 0; i < _processedPoints.Count - 1; i++)
+                {
+                    Gizmos.DrawLine(_processedPoints[i], _processedPoints[i + 1]);
+                }
+            }
+
+            // Vẽ renderer points nếu khác với processed points (MAGENTA)
+            if (_renderer != null && _renderer.points != null && _renderer.points != _processedPoints?.ToArray())
+            {
+                Gizmos.color = Color.magenta;
                 var rendererPoints = _renderer.points;
 
                 for (int i = 0; i < rendererPoints.Length; i++)
                 {
-                    Gizmos.DrawWireSphere(rendererPoints[i], 0.05f);
-                }
-
-                // Vẽ đường nối renderer points (CYAN) - đây PHẢI là góc vuông
-                Gizmos.color = Color.cyan;
-                for (int i = 0; i < rendererPoints.Length - 1; i++)
-                {
-                    Gizmos.DrawLine(rendererPoints[i], rendererPoints[i + 1]);
+                    Gizmos.DrawWireSphere(rendererPoints[i], 0.03f);
                 }
             }
 
-            // Vẽ dự kiến path vuông góc (WHITE)
-            if (forceSharpCorners && _segmentPositions.Length >= 2)
+            // Debug corner detection
+            if (showCornerDetection && _segmentPositions.Length >= 2)
             {
                 Gizmos.color = Color.white;
-                var rectangularPath = CreateGridAlignedPath();
-
-                for (int i = 0; i < rectangularPath.Count - 1; i++)
+                for (int i = 0; i < _segmentPositions.Length - 1; i++)
                 {
-                    Gizmos.DrawLine(rectangularPath[i], rectangularPath[i + 1]);
+                    Vector3 delta = _segmentPositions[i + 1] - _segmentPositions[i];
+                    bool isCorner = Mathf.Abs(delta.x) > 0.01f && Mathf.Abs(delta.z) > 0.01f;
+
+                    if (isCorner)
+                    {
+                        Vector3 midPoint = (_segmentPositions[i] + _segmentPositions[i + 1]) * 0.5f;
+                        Gizmos.DrawWireCube(midPoint, Vector3.one * 0.1f);
+                    }
                 }
             }
         }
 
-        [ContextMenu("Switch to Grid Aligned Method")]
-        public void SwitchToGridAligned()
-        {
-            // Thay đổi phương thức tạo điểm
-            UpdateRenderer();
-        }
-
-        [ContextMenu("Test Grid Aligned Path")]
-        public void TestGridAlignedPath()
+        [ContextMenu("Test Perfect Right Angles")]
+        public void TestPerfectRightAngles()
         {
             if (_segmentPositions == null) return;
 
-            var gridPath = CreateGridAlignedPath();
-            Debug.Log($"Grid aligned path: {gridPath.Count} points");
+            var perfectPath = CreatePerfectRightAngleCorners();
+            Debug.Log($"Perfect right angle path: {perfectPath.Count} points");
 
-            for (int i = 0; i < gridPath.Count; i++)
+            for (int i = 0; i < perfectPath.Count; i++)
             {
-                Debug.Log($"Point {i}: {gridPath[i]}");
+                Debug.Log($"Point {i}: {perfectPath[i]}");
+            }
+        }
+
+        [ContextMenu("Force Sharp Corners")]
+        public void ForceSharpCorners()
+        {
+            forceSharpCorners = true;
+            ConfigureTubeRendererForSharpCorners();
+            ForceTubeRendererSharpCorners();
+            UpdateRenderer();
+        }
+
+        [ContextMenu("Analyze Current Path")]
+        public void AnalyzeCurrentPath()
+        {
+            if (_segmentPositions == null) return;
+
+            Debug.Log("=== PATH ANALYSIS ===");
+            for (int i = 0; i < _segmentPositions.Length - 1; i++)
+            {
+                Vector3 delta = _segmentPositions[i + 1] - _segmentPositions[i];
+                string type = (Mathf.Abs(delta.x) > 0.01f && Mathf.Abs(delta.z) > 0.01f) ? "CORNER" : "STRAIGHT";
+                Debug.Log($"Segment {i}->{i + 1}: {type}, Delta: {delta}");
             }
         }
     }
