@@ -129,21 +129,10 @@ namespace Geckout
 
             if (debugMode)
             {
-                Debug.Log($"Sharp corners: {_segmentPositions.Length} -> {result.Count} points");
+                //Debug.Log($"Sharp corners: {_segmentPositions.Length} -> {result.Count} points");
             }
 
             return result;
-        }
-
-        // PHƯƠNG PHÁP BỔ SUNG: Override TubeRenderer bằng custom mesh
-        public void UseCustomMesh()
-        {
-            // Tạo custom mesh với góc sắc nét
-            var customMesh = CreateSharpCornerMesh();
-            GetComponent<MeshFilter>().mesh = customMesh;
-
-            // Tắt TubeRenderer
-            _renderer.enabled = false;
         }
 
         private Mesh CreateSharpCornerMesh()
@@ -222,32 +211,3 @@ namespace Geckout
         }
     }
 }
-
-// GIẢI PHÁP 2: Custom TubeRenderer Settings
-// Thêm vào class TubeRenderer (nếu có thể modify)
-/*
-public class CustomTubeRenderer : TubeRenderer 
-{
-    [SerializeField] private bool forceSharpCorners = true;
-    [SerializeField] private float sharpnessThreshold = 0.9f;
-    
-    protected override void ProcessPoints(Vector3[] inputPoints)
-    {
-        if (!forceSharpCorners)
-        {
-            base.ProcessPoints(inputPoints);
-            return;
-        }
-        
-        // Custom processing để giữ góc sắc nét
-        var processedPoints = CreateSharpCornerPoints(inputPoints);
-        base.ProcessPoints(processedPoints);
-    }
-    
-    private Vector3[] CreateSharpCornerPoints(Vector3[] original)
-    {
-        // Logic tạo sharp corners
-        return original; // Placeholder
-    }
-}
-*/
