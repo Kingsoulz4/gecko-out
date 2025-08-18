@@ -13,9 +13,6 @@ namespace Geckout
         [Header("Sharp Corner Settings")]
         [SerializeField] private bool forceSharpCorners = true;
         [SerializeField] private int pointsPerSegment = 5; // Tăng số điểm mỗi segment
-        [SerializeField] private float cornerDistance = 0.3f; // Khoảng cách từ góc để tạo L-shape
-        [SerializeField] private int cornerExtraPoints = 3; // Số điểm bổ sung tại góc
-        [SerializeField] private float cornerThreshold = 0.85f;
 
         [Header("Debug")]
         [SerializeField] private bool debugMode = true;
