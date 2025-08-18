@@ -401,9 +401,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forceSharpCorners: 1
   pointsPerSegment: 3
-  cornerRadius: 0.1
-  cornerThreshold: 0.2
+  cornerSharpness: 0.1
+  useGridAlignment: 1
+  minCornerDistance: 0.5
+  enforceRightAngles: 1
   debugMode: 1
+  showCornerDetection: 1
 --- !u!114 &1022657192
 MonoBehaviour:
   m_ObjectHideFlags: 0
