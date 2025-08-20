@@ -336,44 +336,6 @@ namespace Geckout
             _targetChanged = false;
         }
 
-        IEnumerator StartFollowPathFromHead(Vector2Int[] targets)
-        {
-            isMoving = true;
-            for (int i = 0; i < targets.Length; i++)
-            {
-                Vector2Int target = targets[i];
-                var delta = target - _head.Coordinate;
-                yield return MoveHead(delta);
-            }
-
-            isMoving = false;
-        }
-
-        IEnumerator StartFollowPathFromTail(Vector2Int[] targets)
-        {
-            isMoving = true;
-            for (int i = 0; i < targets.Length; i++)
-            {
-                Vector2Int target = targets[i];
-                if (GameMap.TryGetTileAt(target, out var tile))
-                {
-                    yield return MoveTailToPosition(target, tile.transform.position);
-                    if (_targetChanged)
-                    {
-                        isMoving = false;
-                        HandleTileSelected(_currentTargetTile);
-                        yield break; // Stop moving if target changed
-                    }
-                }
-                else
-                {
-                    Debug.LogWarning("Invalid target: " + target);
-                }
-            }
-
-            isMoving = false;
-        }
-
         public List<Vector2Int> GetOrthogonalUnitVectors(Vector2Int input)
         {
             var unitVectors = new List<Vector2Int>
