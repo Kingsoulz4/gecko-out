@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Dreamteck.Splines;
+using Geckout.Generals;
+using Geckout.PathFinding;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Geckout.Generals;
-using Geckout.PathFinding;
 using UnityEngine;
 
 namespace Geckout
@@ -16,6 +17,8 @@ namespace Geckout
         [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1); // Curve cho chuyển động mượt
         private GeckoSegment _head, _tail;
         public List<GeckoSegment> Segments { private set; get; }
+        public bool IsMoving { get => isMoving;}
+
         BodyRenderer _bodyRenderer;
 
         [SerializeField] private Vector2Int deltaMovement;
@@ -52,13 +55,15 @@ namespace Geckout
                 currentSegment.Setup(prevSegment, nextSegment);
             }
 
-            _bodyRenderer.Initialize(Segments);
 
             for (int i = 0; i < Segments.Count; i++)
             {
                 var coordinate = new Vector2Int(0, GameMap.MapSize.y - i - 1);
                 Segments[i].SetCoordinate(coordinate);
             }
+
+            _bodyRenderer.Initialize(Segments);
+
         }
 
         private void OnDestroy()
@@ -74,7 +79,7 @@ namespace Geckout
                 StartCoroutine(MoveHead(delta));
             }
         }
-
+       
         IEnumerator MoveHead(Vector2Int delta)
         {
             Vector2Int newHeadCoordinate = _head.Coordinate + delta;
@@ -275,17 +280,6 @@ namespace Geckout
             return Mathf.SmoothStep(0f, 1f, ratio);
         }
 
-        // Easing functions bổ sung
-        private float EaseInOutCubic(float t)
-        {
-            return t < 0.5f ? 4f * t * t * t : 1f - Mathf.Pow(-2f * t + 2f, 3f) / 2f;
-        }
-
-        private float EaseInOutQuad(float t)
-        {
-            return t < 0.5f ? 2f * t * t : 1f - Mathf.Pow(-2f * t + 2f, 2f) / 2f;
-        }
-
         private Vector2Int GetDeltaMovement()
         {
             Vector2Int delta = Vector2Int.zero;
@@ -309,31 +303,6 @@ namespace Geckout
             }
 
             return delta;
-        }
-
-        GameTile _currentTargetTile;
-        bool _targetChanged = false;
-
-        private void HandleTileSelected(GameTile target)
-        {
-            if (target == null) return;
-            if (target.IsOccupied) return;
-            if (target != _currentTargetTile)
-            {
-                _targetChanged = true;
-                _currentTargetTile = target;
-            }
-
-            if (isMoving) return;
-
-            _currentTargetTile = target;
-            var mapSize = GameMap.MapSize;
-            var mapStates = GameMap.GetCurrentMapState();
-            var headIndex = _head.Coordinate.x + _head.Coordinate.y * mapSize.x;
-            mapStates[headIndex] = true;
-            var grid = new ASGrid(mapSize.x, mapSize.y, mapStates);
-            var pathFinder = new ASPathFinding(grid);
-            _targetChanged = false;
         }
 
         public List<Vector2Int> GetOrthogonalUnitVectors(Vector2Int input)
