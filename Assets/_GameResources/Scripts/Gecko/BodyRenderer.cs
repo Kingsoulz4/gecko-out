@@ -16,12 +16,6 @@ namespace Geckout
         private List<GeckoSegment> _segments;
         private Vector3[] _lastPositions; // Cache để check thay đổi
 
-        private void Awake()
-        {
-            _spline = GetComponent<SplineComputer>();
-            _tubeGenerator = GetComponent<TubeGenerator>();
-        }
-
         public void Initialize(List<GeckoSegment> segments)
         {
             _segments = segments;
