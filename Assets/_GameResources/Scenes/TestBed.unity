@@ -388,8 +388,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   outerSmoothness: 0.7
   cornerRadius: 0.3
-  deltaMovement: {x: 0, y: 0}
-  mockRatio: 0
 --- !u!114 &1022657191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,7 +400,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d3ff4dcaf762f94790715cad8c97d0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spline: {fileID: 1022657196}
   tubeRadius: 0.8
+  _tubeGenerator: {fileID: 1022657195}
 --- !u!23 &1022657193
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -452,7 +452,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1022657188}
-  m_Mesh: {fileID: 2092280465}
+  m_Mesh: {fileID: 1209110695}
 --- !u!114 &1022657195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -717,53 +717,7 @@ MonoBehaviour:
     size: 1
     percent: 1
   _nodes: []
---- !u!1 &2060455394
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2060455395}
-  - component: {fileID: 2060455396}
-  m_Layer: 0
-  m_Name: GameMap
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2060455395
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2060455394}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2060455396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2060455394}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2649a9fd1e37ccc44a52b5bc1d79c278, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelData: {fileID: 11400000, guid: 1a6d6be294198734b899aabecd610ebd, type: 2}
-  tilePrefab: {fileID: 6968164639324100578, guid: 64902bb9b287b9b47b2ffeba74bcd986, type: 3}
---- !u!43 &2092280465
+--- !u!43 &1209110695
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -928,6 +882,52 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &2060455394
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2060455395}
+  - component: {fileID: 2060455396}
+  m_Layer: 0
+  m_Name: GameMap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2060455395
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060455394}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2060455396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060455394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2649a9fd1e37ccc44a52b5bc1d79c278, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelData: {fileID: 11400000, guid: 1a6d6be294198734b899aabecd610ebd, type: 2}
+  tilePrefab: {fileID: 6968164639324100578, guid: 64902bb9b287b9b47b2ffeba74bcd986, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
