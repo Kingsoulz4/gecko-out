@@ -69,6 +69,7 @@ namespace Geckout
                 }
 
                 SplinePoint sp = new SplinePoint(localPos);
+                sp.normal = Vector3.forward;
                 splinePoints[i] = sp;
             }
 
