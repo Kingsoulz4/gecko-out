@@ -22,10 +22,8 @@ namespace Geckout
         private Vector2Int _currentTurnDirection;
 
         // Hybrid corner settings
-        [Header("Hybrid Corner Settings")]
-        [SerializeField] private float outerSmoothness = 0.7f; // Độ mượt của outer curve
-        [SerializeField] private float cornerRadius = 0.3f;    // Bán kính curve outer
-        [SerializeField] private bool debugCorners = false;    // Debug visualization
+         private float outerSmoothness = 0.7f; // Độ mượt của outer curve
+         private float cornerRadius = 0.3f;    // Bán kính curve outer
 
         // Movement state
         private bool _isMovementPrepared = false;
@@ -125,11 +123,6 @@ namespace Geckout
                 _targetCoordinate = targetCoordinate;
 
                 _previousMoveDirection = newDirection;
-
-                if (debugCorners && _isTurning)
-                {
-                    Debug.Log($"Segment {name} turning from {_previousMoveDirection} to {newDirection}");
-                }
             }
             else
             {
@@ -288,7 +281,7 @@ namespace Geckout
         // Debug visualization
         private void OnDrawGizmos()
         {
-            if (!debugCorners || !_isInMovement) return;
+            if (_isInMovement) return;
 
             // Vẽ start và target
             Gizmos.color = Color.green;

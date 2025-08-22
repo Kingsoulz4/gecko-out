@@ -66,11 +66,6 @@ namespace Geckout
 
         }
 
-        private void OnDestroy()
-        {
-            // GameEvents.OnTileSelected -= HandleTileSelected;
-        }
-
         private void Update()
         {
             Vector2Int delta = GetDeltaMovement();
