@@ -22,12 +22,18 @@ namespace Geckout
         private Vector2Int _currentTurnDirection;
 
         // Hybrid corner settings
-         private float outerSmoothness = 0.7f; // Độ mượt của outer curve
-         private float cornerRadius = 0.3f;    // Bán kính curve outer
+         private float outerSmoothness = 0f; // Độ mượt của outer curve
+         private float cornerRadius = 0f;    // Bán kính curve outer
 
         // Movement state
         private bool _isMovementPrepared = false;
         private bool _isInMovement = false;
+
+        public void SetCorner(float outerSmoothness, float cornerRadius)
+        {
+            this.outerSmoothness = outerSmoothness;
+            this.cornerRadius = cornerRadius;
+        }
 
         public void Setup(GeckoSegment prev, GeckoSegment next)
         {

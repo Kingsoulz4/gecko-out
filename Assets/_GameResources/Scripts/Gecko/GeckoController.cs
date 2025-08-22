@@ -15,14 +15,15 @@ namespace Geckout
         [SerializeField] private GeckoSegment headPrefab;
         [SerializeField] private float moveTime = 0.2f; // Time to move one segment
         [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1); // Curve cho chuyển động mượt
+        [SerializeField] private float outerSmoothness = 0.7f; // Độ mượt của outer curve
+        [SerializeField] private float cornerRadius = 0.3f;    // Bán kính curve outer
+
         private GeckoSegment _head, _tail;
         public List<GeckoSegment> Segments { private set; get; }
         public bool IsMoving { get => isMoving;}
 
         BodyRenderer _bodyRenderer;
 
-        [SerializeField] private Vector2Int deltaMovement;
-        [Range(0, 1f)][SerializeField] private float mockRatio;
         bool isMoving = false;
 
         private void Start()
@@ -53,6 +54,7 @@ namespace Geckout
                 GeckoSegment prevSegment = Segments[i - 1];
                 GeckoSegment nextSegment = Segments[i + 1]; // Fix: should be i+1, not i
                 currentSegment.Setup(prevSegment, nextSegment);
+                currentSegment.SetCorner(outerSmoothness, cornerRadius);
             }
 
 
