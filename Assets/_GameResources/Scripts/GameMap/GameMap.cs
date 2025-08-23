@@ -105,7 +105,7 @@ namespace Geckout
                 {
                     if (TryGetTileAt(x, y, out GameTile tile))
                     {
-                        mapState[x + y * _instance._mapSize.y] = !tile.IsOccupied;
+                        mapState[x + y * _instance._mapSize.x] = !tile.IsOccupied;
                     }
                 }
             }

@@ -13,7 +13,7 @@ namespace Geckout
         [SerializeField] private bool enableDebugLogs = true;
         [SerializeField] private float pathUpdateInterval = 0.2f; // Cập nhật path mỗi 0.2s khi drag
 
-        private GeckoController targetGecko;
+        private BodyController targetGecko;
         private bool isDragging = false;
         private bool isDraggingFromHead = false;
         private Vector2Int lastTargetTile = Vector2Int.one * -1;
@@ -141,7 +141,7 @@ namespace Geckout
             lastTargetTile = Vector2Int.one * -1;
         }
 
-        void StartDragging(GeckoController gecko, bool fromHead)
+        void StartDragging(BodyController gecko, bool fromHead)
         {
             targetGecko = gecko;
             isDragging = true;
@@ -231,13 +231,13 @@ namespace Geckout
             return null;
         }
 
-        GeckoController GetGeckoByMouse(Vector2 screenPosition)
+        BodyController GetGeckoByMouse(Vector2 screenPosition)
         {
             Ray ray = gameCamera.ScreenPointToRay(screenPosition);
 
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, segmentLayer))
             {
-                GeckoSegment segment = hit.collider.transform.parent.GetComponent<GeckoSegment>();
+                Segment segment = hit.collider.transform.parent.GetComponent<Segment>();
                 if (segment != null)
                 {
                     return segment.Controller;

@@ -2,11 +2,11 @@
 
 namespace Geckout
 {
-    public class OptimizedGridSampler : MonoBehaviour
+    public class OccupiedTileController : MonoBehaviour
     {
         [Header("Performance Settings")]
         [SerializeField] private float updateInterval = 0.05f; // 20 FPS, có thể cao hơn
-        [SerializeField] private GeckoController geckoController;
+        [SerializeField] private BodyController geckoController;
 
         private Vector2Int[] lastGridPositions;
         private GameTile[] currentOccupiedTiles;

@@ -7,17 +7,17 @@ using UnityEngine;
 
 namespace Geckout
 {
-    public class GeckoController : MonoBehaviour
+    public class BodyController : MonoBehaviour
     {
         [SerializeField] private int length = 4;
-        [SerializeField] private GeckoSegment headPrefab;
+        [SerializeField] private Segment headPrefab;
         [SerializeField] private float moveSpeed = 5f; // tốc độ di chuyển (units/giây)
         [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
         [SerializeField] private float outerSmoothness = 0.7f;
         [SerializeField] private float cornerRadius = 0.3f;
 
-        private GeckoSegment _head, _tail;
-        public List<GeckoSegment> Segments { private set; get; }
+        private Segment _head, _tail;
+        public List<Segment> Segments { private set; get; }
         public bool IsMoving { get => isMoving; }
 
         BodyRenderer _bodyRenderer;
@@ -38,7 +38,7 @@ namespace Geckout
         private void Start()
         {
             _bodyRenderer = GetComponent<BodyRenderer>();
-            Segments = new List<GeckoSegment>();
+            Segments = new List<Segment>();
             _head = Instantiate(headPrefab, transform);
             _head.name = "Head";
             _head.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
@@ -46,7 +46,7 @@ namespace Geckout
 
             for (int i = 1; i < length; i++)
             {
-                GeckoSegment segment = new GameObject("Segment_" + i).AddComponent<GeckoSegment>();
+                Segment segment = new GameObject("Segment_" + i).AddComponent<Segment>();
                 segment.transform.SetParent(transform);
                 segment.transform.localPosition = new Vector3(0, -i, 0);
                 Segments.Add(segment);
@@ -61,8 +61,8 @@ namespace Geckout
             for (int i = 1; i < Segments.Count - 1; i++)
             {
                 var currentSegment = Segments[i];
-                GeckoSegment prevSegment = Segments[i - 1];
-                GeckoSegment nextSegment = Segments[i + 1];
+                Segment prevSegment = Segments[i - 1];
+                Segment nextSegment = Segments[i + 1];
                 currentSegment.Setup(prevSegment, nextSegment);
                 currentSegment.SetController(this);
                 currentSegment.SetCorner(outerSmoothness, cornerRadius);

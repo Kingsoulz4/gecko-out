@@ -2,10 +2,10 @@
 
 namespace Geckout
 {
-    public class GeckoSegment : MonoBehaviour
+    public class Segment : MonoBehaviour
     {
-        public GeckoSegment PrevSegment { private set; get; }
-        public GeckoSegment NextSegment { private set; get; }
+        public Segment PrevSegment { private set; get; }
+        public Segment NextSegment { private set; get; }
         public Vector2Int Coordinate { private set; get; }
         public Vector2Int MoveDirection { private set; get; }
         private GameTile _currentTile;
@@ -26,9 +26,9 @@ namespace Geckout
 
         // Movement state
         private bool _isInMovement = false;
-        public GeckoController Controller { get; private set; }
+        public BodyController Controller { get; private set; }
 
-        public void SetController(GeckoController controller)
+        public void SetController(BodyController controller)
         {
             Controller = controller;
         }
@@ -38,7 +38,7 @@ namespace Geckout
             this.cornerRadius = cornerRadius;
         }
 
-        public void Setup(GeckoSegment prev, GeckoSegment next)
+        public void Setup(Segment prev, Segment next)
         {
             PrevSegment = prev;
             NextSegment = next;

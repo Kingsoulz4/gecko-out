@@ -13,10 +13,10 @@ namespace Geckout
         [SerializeField] private TubeGenerator _tubeGenerator;
 
 
-        private List<GeckoSegment> _segments;
+        private List<Segment> _segments;
         private Vector3[] _lastPositions; // Cache để check thay đổi
 
-        public void Initialize(List<GeckoSegment> segments)
+        public void Initialize(List<Segment> segments)
         {
             _segments = segments;
             _tubeGenerator.useSplineSize = false;
