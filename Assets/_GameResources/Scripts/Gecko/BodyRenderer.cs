@@ -89,7 +89,7 @@ namespace Geckout
             for (int i = 0; i < _segments.Count; i++)
             {
                 Vector3 currentPos = _segments[i].transform.position;
-                if (Vector3.Distance(currentPos, _lastPositions[i]) > 0.001f)
+                if (Vector3.Distance(currentPos, _lastPositions[i]) > 0.01f)
                 {
                     _lastPositions[i] = currentPos;
                     hasChanged = true;

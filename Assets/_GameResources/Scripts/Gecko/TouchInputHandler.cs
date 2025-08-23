@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using Geckout.PathFinding;
 using System.Collections.Generic;
@@ -10,14 +10,17 @@ namespace Geckout
         [SerializeField] private Camera gameCamera;
         [SerializeField] private LayerMask tileLayerMask = 1;
         [SerializeField] private bool enableDebugLogs = true;
+        [SerializeField] private float pathUpdateInterval = 0.2f; // Cập nhật path mỗi 0.2s khi drag
 
         private GeckoController targetGecko;
         private bool isDragging = false;
         private bool isDraggingFromHead = false;
         private Vector2Int lastTargetTile = Vector2Int.one * -1;
         private ASPathFinding pathfinder;
+        private float lastPathUpdateTime = 0f;
 
         private List<ASNode> currentPath;
+        private List<Vector2Int> smoothPath = new List<Vector2Int>();
 
         void Start()
         {
@@ -73,8 +76,8 @@ namespace Geckout
 
             if (gecko.IsMoving)
             {
-                DebugLog("Gecko is currently moving, ignoring input");
-                return;
+                DebugLog("Gecko is currently moving, but allowing path update");
+                // Không return nữa, cho phép cập nhật path khi đang di chuyển
             }
 
             Vector2Int headCoord = gecko.Segments[0].Coordinate;
@@ -107,12 +110,19 @@ namespace Geckout
 
             if (tileCoord.Value == lastTargetTile) return;
 
+            // Throttle path updates để tránh spam
+            if (Time.time - lastPathUpdateTime < pathUpdateInterval)
+            {
+                return;
+            }
+
             lastTargetTile = tileCoord.Value;
+            lastPathUpdateTime = Time.time;
+
             DebugLog($"Dragging to NEW target tile: {tileCoord.Value}");
 
-            // Cancel current movement and find new path
-            targetGecko.ClearMoveQueue();
-            FindAndExecutePath(tileCoord.Value);
+            // Find and set new smooth path
+            FindAndSetSmoothPath(tileCoord.Value);
         }
 
         void OnTouchEnd()
@@ -120,10 +130,18 @@ namespace Geckout
             if (isDragging)
             {
                 DebugLog("Drag ended");
+
+                // Nếu có path đang pending, execute nó
+                if (smoothPath != null && smoothPath.Count > 0)
+                {
+                    ExecuteSmoothPath(smoothPath);
+                }
             }
+
             isDragging = false;
             targetGecko = null;
             currentPath?.Clear();
+            smoothPath.Clear();
             lastTargetTile = Vector2Int.one * -1;
         }
 
@@ -143,7 +161,7 @@ namespace Geckout
             DebugLog($"Map size: {GameMap.MapSize}, total tiles: {mapState.Length}");
         }
 
-        void FindAndExecutePath(Vector2Int targetTile)
+        void FindAndSetSmoothPath(Vector2Int targetTile)
         {
             if (targetGecko == null || pathfinder == null) return;
 
@@ -160,10 +178,10 @@ namespace Geckout
             DebugLog($"Pathfinding from {startPos} to {targetTile}");
 
             pathfinder.Reset();
-            pathfinder.FindPath(startPos, targetTile, OnPathFound);
+            pathfinder.FindPath(startPos, targetTile, OnSmoothPathFound);
         }
 
-        void OnPathFound(List<ASNode> path)
+        void OnSmoothPathFound(List<ASNode> path)
         {
             if (path == null || path.Count == 0)
             {
@@ -172,80 +190,47 @@ namespace Geckout
             }
 
             DebugLog($"Path found with {path.Count} steps");
-            for (int i = 0; i < path.Count; i++)
+
+            // Convert to coordinate list
+            smoothPath.Clear();
+            foreach (var node in path)
             {
-                DebugLog($"  Step {i}: {path[i].Position}");
+                smoothPath.Add(node.Position);
+                DebugLog($"  Path point: {node.Position}");
             }
 
-            currentPath = path;
-
-            DebugLog("About to execute entire path...");
-            // Execute entire path instead of just first step
-            ExecuteEntirePath(path);
+            // Execute smooth continuous movement immediately
+            ExecuteSmoothPath(smoothPath);
         }
 
-        void ExecuteEntirePath(List<ASNode> path)
+        void ExecuteSmoothPath(List<Vector2Int> path)
         {
-            DebugLog("ExecuteEntirePath called");
-
-            if (targetGecko == null)
+            if (targetGecko == null || path == null || path.Count == 0)
             {
-                DebugLog("ERROR: targetGecko is null!");
+                DebugLog("Cannot execute path: invalid state");
                 return;
             }
 
-            // REMOVE the IsMoving check - allow path updates during movement
-            // if (targetGecko.IsMoving)
-            // {
-            //     DebugLog("WARNING: targetGecko is moving, skipping");
-            //     return;
-            // }
+            DebugLog($"Executing smooth path with {path.Count} points");
 
-            Vector2Int currentPos = isDraggingFromHead ?
-                targetGecko.Segments[0].Coordinate :
-                targetGecko.Segments[targetGecko.Segments.Count - 1].Coordinate;
+            // Clear any existing movement and set new continuous path
+            targetGecko.ClearPath();
+            targetGecko.SetMovementPath(path);
 
-            DebugLog($"Executing entire path from {currentPos}, dragging from: {(isDraggingFromHead ? "HEAD" : "TAIL")}");
-
-            // Always clear existing queue and add new moves
-            targetGecko.ClearMoveQueue();
-            DebugLog("Queue cleared");
-
-            Vector2Int lastPos = currentPos;
-            for (int i = 0; i < path.Count; i++)
-            {
-                Vector2Int delta = path[i].Position - lastPos;
-                DebugLog($"Queueing move {i}: {lastPos} + {delta} = {path[i].Position}");
-                targetGecko.QueueMove(delta);
-                lastPos = path[i].Position;
-            }
-
-            DebugLog($"Total {path.Count} moves queued");
+            DebugLog("Smooth path movement started");
         }
 
         Vector2Int? GetTileCoordinateFromScreen(Vector2 screenPosition)
         {
             Ray ray = gameCamera.ScreenPointToRay(screenPosition);
-            DebugLog($"Raycast from screen {screenPosition} to world ray: {ray.origin} dir: {ray.direction}");
 
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, tileLayerMask))
             {
-                DebugLog($"Raycast hit: {hit.collider.name} at {hit.point}");
-
                 GameTile tile = hit.collider.transform.parent.GetComponent<GameTile>();
                 if (tile != null)
                 {
-                    DebugLog($"Found tile at coordinate: {tile.Coordinate}");
                     return tile.Coordinate;
                 }
-                else
-                {
-                    DebugLog("Hit object's parent has no GameTile component");
-                }
-            }
-            else
-            {
-                DebugLog($"Raycast missed (LayerMask: {tileLayerMask})");
             }
 
             return null;
@@ -254,7 +239,6 @@ namespace Geckout
         GeckoController GetGeckoAtTile(Vector2Int coordinate)
         {
             GeckoController[] allGeckos = FindObjectsOfType<GeckoController>();
-            DebugLog($"Found {allGeckos.Length} geckos in scene");
 
             foreach (var gecko in allGeckos)
             {
@@ -262,13 +246,11 @@ namespace Geckout
                 {
                     if (segment.Coordinate == coordinate)
                     {
-                        DebugLog($"Found gecko at coordinate {coordinate}");
                         return gecko;
                     }
                 }
             }
 
-            DebugLog($"No gecko found at coordinate {coordinate}");
             return null;
         }
 
@@ -280,29 +262,38 @@ namespace Geckout
             }
         }
 
-        // Visual debug
+        // Visual debug - vẽ smooth path
         void OnDrawGizmos()
         {
-            if (currentPath != null && currentPath.Count > 0)
+            // Vẽ smooth path nếu có
+            if (smoothPath != null && smoothPath.Count > 0)
             {
-                Gizmos.color = Color.yellow;
-                for (int i = 0; i < currentPath.Count - 1; i++)
+                Gizmos.color = Color.green;
+
+                for (int i = 0; i < smoothPath.Count - 1; i++)
                 {
-                    Vector3 from = new Vector3(currentPath[i].Position.x, 0, currentPath[i].Position.y);
-                    Vector3 to = new Vector3(currentPath[i + 1].Position.x, 0, currentPath[i + 1].Position.y);
+                    Vector3 from = new Vector3(smoothPath[i].x, 0.1f, smoothPath[i].y);
+                    Vector3 to = new Vector3(smoothPath[i + 1].x, 0.1f, smoothPath[i + 1].y);
                     Gizmos.DrawLine(from, to);
+
+                    // Vẽ node
+                    Gizmos.DrawWireSphere(from, 0.2f);
+                }
+
+                // Vẽ node cuối
+                if (smoothPath.Count > 0)
+                {
+                    Vector3 last = new Vector3(smoothPath[smoothPath.Count - 1].x, 0.1f, smoothPath[smoothPath.Count - 1].y);
+                    Gizmos.DrawWireSphere(last, 0.2f);
                 }
             }
 
-            // Draw last touch position
-            if (isDragging)
+            // Draw current drag target
+            if (isDragging && lastTargetTile != Vector2Int.one * -1)
             {
-                Vector2Int pos = lastTargetTile;
-                if (pos != Vector2Int.one * -1)
-                {
-                    Gizmos.color = Color.red;
-                    Gizmos.DrawWireCube(new Vector3(pos.x, 0, pos.y), Vector3.one * 0.5f);
-                }
+                Gizmos.color = Color.red;
+                Vector3 targetPos = new Vector3(lastTargetTile.x, 0.1f, lastTargetTile.y);
+                Gizmos.DrawWireCube(targetPos, Vector3.one * 0.5f);
             }
         }
     }

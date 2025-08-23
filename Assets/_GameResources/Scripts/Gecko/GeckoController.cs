@@ -1,10 +1,8 @@
 ﻿using Dreamteck.Splines;
 using Geckout.Generals;
 using Geckout.PathFinding;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Geckout
@@ -13,7 +11,7 @@ namespace Geckout
     {
         [SerializeField] private int length = 4;
         [SerializeField] private GeckoSegment headPrefab;
-        [SerializeField] private float moveTime = 0.2f;
+        [SerializeField] private float moveSpeed = 5f; // tốc độ di chuyển (units/giây)
         [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
         [SerializeField] private float outerSmoothness = 0.7f;
         [SerializeField] private float cornerRadius = 0.3f;
@@ -25,9 +23,18 @@ namespace Geckout
         BodyRenderer _bodyRenderer;
         bool isMoving = false;
 
-        // Touch input integration
-        private Queue<Vector2Int> moveQueue = new Queue<Vector2Int>();
-        private bool useKeyboardInput = false; // Toggle for testing
+        // Path movement
+        private List<Vector2Int> currentPath = new List<Vector2Int>();
+        private Coroutine moveCoroutine;
+
+        // Khoảng cách giữa các segment (auto-calc)
+        private float segmentSpacing = 1f;
+
+        // ===== History buffer (tail -> ... -> head) =====
+        private LinkedList<Vector3> historyPoints = new LinkedList<Vector3>();
+        private float historyTotalLength = 0f;
+        private const float minSampleStep = 0.1f;     // bước tối thiểu thêm mẫu vào history
+        private const float extraHistoryPadding = 4f;  // đệm thêm sau tổng chiều dài thân
 
         private void Start()
         {
@@ -66,210 +73,290 @@ namespace Geckout
                 Segments[i].SetCoordinate(coordinate);
             }
 
+            // Auto-calc spacing từ khoảng cách head -> segment kế
+            if (Segments.Count > 1)
+            {
+                segmentSpacing = Vector3.Distance(
+                    Segments[0].transform.position,
+                    Segments[1].transform.position
+                );
+            }
+
+            // Seed history từ dáng hiện tại (tail -> head)
+            InitHistoryFromSegments();
+
             _bodyRenderer.Initialize(Segments);
         }
 
-        private void Update()
+        // Set path và bắt đầu di chuyển liên tục
+        public void SetMovementPath(List<Vector2Int> path)
         {
-            ProcessMoveQueue();
+            if (path == null || path.Count == 0) return;
+
+            if (moveCoroutine != null)
+            {
+                StopCoroutine(moveCoroutine);
+                moveCoroutine = null;
+            }
+
+            currentPath = new List<Vector2Int>(path);
+            moveCoroutine = StartCoroutine(FollowPathContinuous());
         }
 
+        public void ClearPath()
+        {
+            if (moveCoroutine != null)
+            {
+                StopCoroutine(moveCoroutine);
+                moveCoroutine = null;
+            }
+            currentPath.Clear();
+            isMoving = false;
+        }
+
+        IEnumerator FollowPathContinuous()
+        {
+            if (currentPath.Count == 0) yield break;
+
+            isMoving = true;
+
+            // World path: từ vị trí head hiện tại + các tile target
+            List<Vector3> worldPath = new List<Vector3> { _head.transform.position };
+            foreach (var coord in currentPath)
+            {
+                if (GameMap.TryGetTileAt(coord, out var tile))
+                {
+                    worldPath.Add(tile.transform.position);
+                }
+            }
+
+            yield return SmoothPathMovement_History(worldPath, currentPath);
+
+            isMoving = false;
+            currentPath.Clear();
+        }
+
+        // ========= Movement kiểu history =========
+        IEnumerator SmoothPathMovement_History(List<Vector3> worldPath, List<Vector2Int> coordPath)
+        {
+            if (worldPath.Count < 2) yield break;
+
+            // Chuẩn bị độ dài từng đoạn để lấy vị trí head theo distance
+            float totalPathLength = 0f;
+            List<float> segmentLengths = new List<float>();
+            for (int i = 0; i < worldPath.Count - 1; i++)
+            {
+                float length = Vector3.Distance(worldPath[i], worldPath[i + 1]);
+                segmentLengths.Add(length);
+                totalPathLength += length;
+            }
+
+            float headDistance = 0f;
+
+            // đặt head hiện tại để tránh jump
+            Vector3 lastHeadPos = _head.transform.position;
+
+            while (headDistance < totalPathLength)
+            {
+                // head di chuyển theo path
+                headDistance += moveSpeed * Time.deltaTime;
+                Vector3 headPos = GetPointAtDistanceOnWorldPath(worldPath, segmentLengths, headDistance);
+                if ((headPos - lastHeadPos).sqrMagnitude > (minSampleStep * minSampleStep))
+                {
+                    AddHeadSample(headPos);
+                    lastHeadPos = headPos;
+                }
+
+                // Cập nhật transform của từng segment dựa trên history
+                for (int segIdx = 0; segIdx < Segments.Count; segIdx++)
+                {
+                    float backDist = segIdx * segmentSpacing;
+                    Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
+                    Segments[segIdx].transform.position = pos;
+                }
+
+                yield return null;
+            }
+
+            // Bảo đảm head tới đúng cuối path + thêm mẫu cuối
+            Vector3 finalHead = worldPath[worldPath.Count - 1];
+            AddHeadSample(finalHead);
+
+            for (int segIdx = 0; segIdx < Segments.Count; segIdx++)
+            {
+                float backDist = segIdx * segmentSpacing;
+                Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
+                Segments[segIdx].transform.position = pos;
+            }
+
+            // Update lại coordinate theo tile (không teleport transform)
+            UpdateSegmentCoordinates(coordPath[coordPath.Count - 1]);
+        }
+
+        // Lấy điểm head theo distance dọc worldPath (có easing)
+        private Vector3 GetPointAtDistanceOnWorldPath(List<Vector3> path, List<float> segLens, float distance)
+        {
+            if (path.Count < 2) return path[0];
+            if (distance <= 0f) return path[0];
+
+            float total = 0f;
+            for (int i = 0; i < segLens.Count; i++)
+            {
+                float segLen = segLens[i];
+                if (total + segLen >= distance)
+                {
+                    float t = (distance - total) / segLen;
+                    t = movementCurve.Evaluate(Mathf.Clamp01(t));
+                    return Vector3.Lerp(path[i], path[i + 1], t);
+                }
+                total += segLen;
+            }
+            return path[path.Count - 1];
+        }
+
+        // ======= History helpers =======
+        private float RequiredHistoryLength()
+        {
+            return Mathf.Max(0f, (Segments.Count - 1) * segmentSpacing + extraHistoryPadding);
+        }
+
+        private void InitHistoryFromSegments()
+        {
+            historyPoints.Clear();
+            historyTotalLength = 0f;
+
+            // thêm tail đầu tiên
+            historyPoints.AddLast(Segments[Segments.Count - 1].transform.position);
+
+            // đi theo polyline từ tail -> head, thêm mẫu đều theo minSampleStep
+            for (int i = Segments.Count - 2; i >= 0; i--)
+            {
+                Vector3 from = historyPoints.Last.Value;
+                Vector3 to = Segments[i].transform.position;
+                AppendSegmentSamples(from, to);
+            }
+
+            TrimHistory(); // cắt bớt nếu dư
+        }
+
+        private void AppendSegmentSamples(Vector3 from, Vector3 to)
+        {
+            float segmentLen = Vector3.Distance(from, to);
+            if (segmentLen <= Mathf.Epsilon)
+            {
+                // nếu 2 điểm trùng, vẫn nên đảm bảo có to là điểm cuối
+                if ((historyPoints.Last.Value - to).sqrMagnitude > 1e-6f)
+                {
+                    historyTotalLength += Vector3.Distance(historyPoints.Last.Value, to);
+                    historyPoints.AddLast(to);
+                }
+                return;
+            }
+
+            // số mẫu chen thêm (mỗi bước ~minSampleStep)
+            int steps = Mathf.Max(1, Mathf.CeilToInt(segmentLen / minSampleStep));
+            for (int s = 1; s <= steps; s++)
+            {
+                float t = (float)s / steps;
+                Vector3 p = Vector3.Lerp(from, to, t);
+                float d = Vector3.Distance(historyPoints.Last.Value, p);
+                if (d > Mathf.Epsilon)
+                {
+                    historyTotalLength += d;
+                    historyPoints.AddLast(p);
+                }
+            }
+        }
+
+        private void AddHeadSample(Vector3 headPos)
+        {
+            if (historyPoints.Count == 0)
+            {
+                historyPoints.AddLast(headPos);
+                return;
+            }
+
+            float d = Vector3.Distance(historyPoints.Last.Value, headPos);
+            if (d < minSampleStep) return; // quá gần, bỏ qua để giảm nhiễu
+
+            historyPoints.AddLast(headPos);
+            historyTotalLength += d;
+
+            TrimHistory();
+        }
+
+        private void TrimHistory()
+        {
+            float need = RequiredHistoryLength();
+
+            // giữ đủ chiều dài để cover cả thân + padding
+            while (historyPoints.Count > 1 && historyTotalLength > need)
+            {
+                // bớt từ đầu (tail)
+                Vector3 first = historyPoints.First.Value;
+                Vector3 second = historyPoints.First.Next.Value;
+                float seg = Vector3.Distance(first, second);
+
+                historyPoints.RemoveFirst();
+                historyTotalLength -= seg;
+            }
+        }
+
+        private Vector3 GetHistoryPointAtDistanceBack(float backDistance)
+        {
+            // Đi lùi từ head (Last) về phía tail cho đến khi gom đủ backDistance
+            if (historyPoints.Count == 0) return Vector3.zero;
+            if (backDistance <= 0f) return historyPoints.Last.Value;
+
+            float remain = backDistance;
+            LinkedListNode<Vector3> bNode = historyPoints.Last;
+
+            while (bNode.Previous != null)
+            {
+                Vector3 b = bNode.Value;
+                Vector3 a = bNode.Previous.Value;
+                float seg = Vector3.Distance(a, b);
+
+                if (remain <= seg)
+                {
+                    float t = 1f - (remain / Mathf.Max(seg, 1e-6f));
+                    return Vector3.Lerp(a, b, t);
+                }
+
+                remain -= seg;
+                bNode = bNode.Previous;
+            }
+
+            // nếu vượt quá chiều dài history, trả về điểm đầu tiên (tail)
+            return historyPoints.First.Value;
+        }
+
+        // ====== Coordinate update: không teleport transform ======
+        void UpdateSegmentCoordinates(Vector2Int newHeadCoord)
+        {
+            for (int i = 0; i < Segments.Count; i++)
+            {
+                Segments[i].ReleaseCurrentTile();
+            }
+
+            _head.UpdateCoordinateOnly(newHeadCoord);
+            for (int i = 1; i < Segments.Count; i++)
+            {
+                Segments[i].UpdateCoordinateOnly(Segments[i - 1].Coordinate);
+            }
+        }
+
+        // Backward compatibility
         public void QueueMove(Vector2Int delta)
         {
-            moveQueue.Enqueue(delta);
-            Debug.Log($"[GeckoController] Move queued: {delta}, Total queue: {moveQueue.Count}");
+            Vector2Int targetCoord = _head.Coordinate + delta;
+            List<Vector2Int> path = new List<Vector2Int> { targetCoord };
+            SetMovementPath(path);
         }
 
         public void ClearMoveQueue()
         {
-            int oldCount = moveQueue.Count;
-            moveQueue.Clear();
-            Debug.Log($"[GeckoController] Queue cleared, was {oldCount} moves");
-        }
-
-        void ProcessMoveQueue()
-        {
-            if (!isMoving && moveQueue.Count > 0)
-            {
-                Vector2Int nextMove = moveQueue.Dequeue();
-                Debug.Log($"[GeckoController] Processing move: {nextMove}, Remaining: {moveQueue.Count}");
-                StartCoroutine(ExecuteMove(nextMove));
-            }
-        }
-
-        // Public wrapper for external access - trả về IEnumerator
-        public IEnumerator MoveHeadCoroutine(Vector2Int delta)
-        {
-            yield return ExecuteMove(delta);
-        }
-
-        // Alternative: Direct call without coroutine return
-        public void MoveHeadDirect(Vector2Int delta)
-        {
-            QueueMove(delta);
-        }
-
-        IEnumerator ExecuteMove(Vector2Int delta)
-        {
-            if (isMoving) yield break; // Prevent overlapping moves
-
-            Vector2Int newHeadCoordinate = _head.Coordinate + delta;
-            var tailDirection = _tail.Coordinate - _tail.PrevSegment.Coordinate;
-            Vector2Int newTailCoordinate = _tail.Coordinate + tailDirection;
-
-            bool isMoveForward = !(Segments[1].Coordinate == newHeadCoordinate);
-
-            if (isMoveForward)
-            {
-                if (GameMap.TryGetTileAt(newHeadCoordinate, out var tile))
-                {
-                    yield return MoveHeadToPosition(newHeadCoordinate, tile.transform.position);
-                }
-            }
-            else
-            {
-                if (GameMap.TryGetTileAt(newTailCoordinate, out var tile))
-                {
-                    yield return MoveTailToPosition(newTailCoordinate, tile.transform.position);
-                }
-                else
-                {
-                    var orthogonalVectors = GetOrthogonalUnitVectors(tailDirection);
-                    foreach (var orthogonalVector in orthogonalVectors)
-                    {
-                        var newTailPosition = _tail.Coordinate + orthogonalVector;
-                        if (GameMap.TryGetTileAt(newTailPosition, out var orthogonalTile))
-                        {
-                            yield return MoveTailToPosition(newTailPosition, orthogonalTile.transform.position);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        IEnumerator MoveHeadToPosition(Vector2Int newCoordinate, Vector3 newWorldPosition)
-        {
-            isMoving = true;
-            GameMap.TryGetTileAt(_head.Coordinate, out var headTile);
-            Vector3 startPosition = headTile.transform.position;
-            Vector3 targetPosition = newWorldPosition;
-
-            Vector2Int moveDirection = newCoordinate - _head.Coordinate;
-            bool isCornerTurn = IsCornerTurn(moveDirection);
-
-            for (int i = 1; i < Segments.Count; i++)
-            {
-                Segments[i].Move(true, 0f);
-            }
-
-            float elapsedTime = 0f;
-            while (elapsedTime < moveTime)
-            {
-                elapsedTime += Time.deltaTime;
-                float t = Mathf.Clamp01(elapsedTime / moveTime);
-                float ratio = movementCurve.Evaluate(t);
-
-                if (isCornerTurn)
-                {
-                    ratio = ApplyCornerSmoothing(ratio);
-                }
-
-                _head.transform.position = Vector3.Lerp(startPosition, targetPosition, ratio);
-
-                for (int i = 1; i < Segments.Count; i++)
-                {
-                    Segments[i].Move(true, ratio);
-                }
-
-                yield return null;
-            }
-
-            _head.transform.position = targetPosition;
-            for (int i = 1; i < Segments.Count; i++)
-            {
-                Segments[i].Move(true, 1f);
-            }
-
-            for (int i = Segments.Count - 1; i >= 0; i--)
-            {
-                Segments[i].ReleaseCurrentTile();
-            }
-
-            for (int i = Segments.Count - 1; i >= 1; i--)
-            {
-                Segments[i].SetCoordinate(Segments[i - 1].Coordinate);
-            }
-
-            _head.SetCoordinate(newCoordinate);
-            isMoving = false;
-        }
-
-        IEnumerator MoveTailToPosition(Vector2Int newCoordinate, Vector3 newWorldPosition)
-        {
-            isMoving = true;
-            GameMap.TryGetTileAt(_tail.Coordinate, out var tailTile);
-            Vector3 startPosition = tailTile.transform.position;
-            Vector3 targetPosition = newWorldPosition;
-
-            Vector2Int moveDirection = newCoordinate - _tail.Coordinate;
-            bool isCornerTurn = IsCornerTurn(moveDirection);
-
-            for (int i = Segments.Count - 2; i >= 0; i--)
-            {
-                Segments[i].Move(false, 0f);
-            }
-
-            float elapsedTime = 0f;
-            while (elapsedTime < moveTime)
-            {
-                elapsedTime += Time.deltaTime;
-                float t = Mathf.Clamp01(elapsedTime / moveTime);
-                float ratio = movementCurve.Evaluate(t);
-
-                if (isCornerTurn)
-                {
-                    ratio = ApplyCornerSmoothing(ratio);
-                }
-
-                _tail.transform.position = Vector3.Lerp(startPosition, targetPosition, ratio);
-
-                for (int i = Segments.Count - 2; i >= 0; i--)
-                {
-                    Segments[i].Move(false, ratio);
-                }
-
-                yield return null;
-            }
-
-            _tail.transform.position = targetPosition;
-            for (int i = Segments.Count - 2; i >= 0; i--)
-            {
-                Segments[i].Move(false, 1f);
-            }
-
-            for (int i = Segments.Count - 1; i >= 0; i--)
-            {
-                Segments[i].ReleaseCurrentTile();
-            }
-
-            for (int i = 0; i < Segments.Count - 1; i++)
-            {
-                Segments[i].SetCoordinate(Segments[i + 1].Coordinate);
-            }
-
-            _tail.SetCoordinate(newCoordinate);
-            isMoving = false;
-        }
-
-        private bool IsCornerTurn(Vector2Int currentDirection)
-        {
-            return true;
-        }
-
-        private float ApplyCornerSmoothing(float ratio)
-        {
-            return Mathf.SmoothStep(0f, 1f, ratio);
+            ClearPath();
         }
 
         public List<Vector2Int> GetOrthogonalUnitVectors(Vector2Int input)
@@ -290,16 +377,6 @@ namespace Geckout
                     result.Add(v);
             }
             return result;
-        }
-
-        // Public method to toggle input mode
-        public void SetInputMode(bool useKeyboard)
-        {
-            useKeyboardInput = useKeyboard;
-            if (!useKeyboard)
-            {
-                moveQueue.Clear();
-            }
         }
     }
 }
