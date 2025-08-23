@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3817927367149158144}
   - component: {fileID: 4737496285956541404}
   - component: {fileID: 5008373320036738480}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Display
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,9 +59,6 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -118,7 +115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6905907069750856322}
   - component: {fileID: 6968164639324100578}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: GameTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,3 +151,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileRenderer: {fileID: 4737496285956541404}
+  IsOccupied: 0
+  tileCollider: {fileID: 5008373320036738480}

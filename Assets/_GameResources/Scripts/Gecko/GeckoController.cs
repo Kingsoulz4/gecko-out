@@ -13,18 +13,21 @@ namespace Geckout
     {
         [SerializeField] private int length = 4;
         [SerializeField] private GeckoSegment headPrefab;
-        [SerializeField] private float moveTime = 0.2f; // Time to move one segment
-        [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1); // Curve cho chuyển động mượt
-        [SerializeField] private float outerSmoothness = 0.7f; // Độ mượt của outer curve
-        [SerializeField] private float cornerRadius = 0.3f;    // Bán kính curve outer
+        [SerializeField] private float moveTime = 0.2f;
+        [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+        [SerializeField] private float outerSmoothness = 0.7f;
+        [SerializeField] private float cornerRadius = 0.3f;
 
         private GeckoSegment _head, _tail;
         public List<GeckoSegment> Segments { private set; get; }
-        public bool IsMoving { get => isMoving;}
+        public bool IsMoving { get => isMoving; }
 
         BodyRenderer _bodyRenderer;
-
         bool isMoving = false;
+
+        // Touch input integration
+        private Queue<Vector2Int> moveQueue = new Queue<Vector2Int>();
+        private bool useKeyboardInput = false; // Toggle for testing
 
         private void Start()
         {
@@ -45,18 +48,17 @@ namespace Geckout
 
             _head = Segments[0];
             _tail = Segments[Segments.Count - 1];
-            _head.Setup(null, Segments[1]); // Head has no previous segment
-            _tail.Setup(Segments[Segments.Count - 2], null); // Tail has no next segment
+            _head.Setup(null, Segments[1]);
+            _tail.Setup(Segments[Segments.Count - 2], null);
 
             for (int i = 1; i < Segments.Count - 1; i++)
             {
                 var currentSegment = Segments[i];
                 GeckoSegment prevSegment = Segments[i - 1];
-                GeckoSegment nextSegment = Segments[i + 1]; // Fix: should be i+1, not i
+                GeckoSegment nextSegment = Segments[i + 1];
                 currentSegment.Setup(prevSegment, nextSegment);
                 currentSegment.SetCorner(outerSmoothness, cornerRadius);
             }
-
 
             for (int i = 0; i < Segments.Count; i++)
             {
@@ -65,26 +67,58 @@ namespace Geckout
             }
 
             _bodyRenderer.Initialize(Segments);
-
         }
 
         private void Update()
         {
-            Vector2Int delta = GetDeltaMovement();
-            if (delta != Vector2Int.zero)
+            ProcessMoveQueue();
+        }
+
+        public void QueueMove(Vector2Int delta)
+        {
+            moveQueue.Enqueue(delta);
+            Debug.Log($"[GeckoController] Move queued: {delta}, Total queue: {moveQueue.Count}");
+        }
+
+        public void ClearMoveQueue()
+        {
+            int oldCount = moveQueue.Count;
+            moveQueue.Clear();
+            Debug.Log($"[GeckoController] Queue cleared, was {oldCount} moves");
+        }
+
+        void ProcessMoveQueue()
+        {
+            if (!isMoving && moveQueue.Count > 0)
             {
-                StartCoroutine(MoveHead(delta));
+                Vector2Int nextMove = moveQueue.Dequeue();
+                Debug.Log($"[GeckoController] Processing move: {nextMove}, Remaining: {moveQueue.Count}");
+                StartCoroutine(ExecuteMove(nextMove));
             }
         }
-       
-        IEnumerator MoveHead(Vector2Int delta)
+
+        // Public wrapper for external access - trả về IEnumerator
+        public IEnumerator MoveHeadCoroutine(Vector2Int delta)
         {
+            yield return ExecuteMove(delta);
+        }
+
+        // Alternative: Direct call without coroutine return
+        public void MoveHeadDirect(Vector2Int delta)
+        {
+            QueueMove(delta);
+        }
+
+        IEnumerator ExecuteMove(Vector2Int delta)
+        {
+            if (isMoving) yield break; // Prevent overlapping moves
+
             Vector2Int newHeadCoordinate = _head.Coordinate + delta;
-
             var tailDirection = _tail.Coordinate - _tail.PrevSegment.Coordinate;
-
             Vector2Int newTailCoordinate = _tail.Coordinate + tailDirection;
+
             bool isMoveForward = !(Segments[1].Coordinate == newHeadCoordinate);
+
             if (isMoveForward)
             {
                 if (GameMap.TryGetTileAt(newHeadCoordinate, out var tile))
@@ -100,35 +134,19 @@ namespace Geckout
                 }
                 else
                 {
-                    var orthorgonalVectors = GetOrthogonalUnitVectors(tailDirection);
-
-                    foreach (var orthogonalVector in orthorgonalVectors)
+                    var orthogonalVectors = GetOrthogonalUnitVectors(tailDirection);
+                    foreach (var orthogonalVector in orthogonalVectors)
                     {
                         var newTailPosition = _tail.Coordinate + orthogonalVector;
                         if (GameMap.TryGetTileAt(newTailPosition, out var orthogonalTile))
                         {
                             yield return MoveTailToPosition(newTailPosition, orthogonalTile.transform.position);
-                            break; // Only move tail once
+                            break;
                         }
                     }
                 }
             }
         }
-
-        private void MoveTail(Vector2Int delta)
-        {
-            Vector2Int newTailPosition = _tail.Coordinate + delta;
-            if (GameMap.TryGetTileAt(newTailPosition, out var tile))
-            {
-                StartCoroutine(MoveTailToPosition(newTailPosition, tile.transform.position));
-            }
-            else
-            {
-                Debug.LogWarning("Invalid move: " + newTailPosition);
-            }
-        }
-
-        // Chỉ thay thế phương thức MoveHeadToPosition trong GeckoController.cs
 
         IEnumerator MoveHeadToPosition(Vector2Int newCoordinate, Vector3 newWorldPosition)
         {
@@ -137,14 +155,12 @@ namespace Geckout
             Vector3 startPosition = headTile.transform.position;
             Vector3 targetPosition = newWorldPosition;
 
-            // Tính hướng di chuyển để kiểm tra góc rẽ
             Vector2Int moveDirection = newCoordinate - _head.Coordinate;
             bool isCornerTurn = IsCornerTurn(moveDirection);
 
-            // Reset tất cả segments về vị trí ban đầu trước khi bắt đầu di chuyển
             for (int i = 1; i < Segments.Count; i++)
             {
-                Segments[i].Move(true, 0f); // Reset về ratio = 0
+                Segments[i].Move(true, 0f);
             }
 
             float elapsedTime = 0f;
@@ -152,20 +168,15 @@ namespace Geckout
             {
                 elapsedTime += Time.deltaTime;
                 float t = Mathf.Clamp01(elapsedTime / moveTime);
-
-                // Sử dụng animation curve cho chuyển động mượt mà
                 float ratio = movementCurve.Evaluate(t);
 
-                // Áp dụng smoothing đặc biệt cho góc rẽ
                 if (isCornerTurn)
                 {
                     ratio = ApplyCornerSmoothing(ratio);
                 }
 
-                // Di chuyển head
                 _head.transform.position = Vector3.Lerp(startPosition, targetPosition, ratio);
 
-                // Di chuyển body segments với cùng ratio
                 for (int i = 1; i < Segments.Count; i++)
                 {
                     Segments[i].Move(true, ratio);
@@ -174,20 +185,17 @@ namespace Geckout
                 yield return null;
             }
 
-            // Đảm bảo tất cả segments đều ở vị trí cuối
             _head.transform.position = targetPosition;
             for (int i = 1; i < Segments.Count; i++)
             {
                 Segments[i].Move(true, 1f);
             }
 
-            // Cleanup logic - giải phóng tiles cũ
             for (int i = Segments.Count - 1; i >= 0; i--)
             {
                 Segments[i].ReleaseCurrentTile();
             }
 
-            // Cập nhật coordinates
             for (int i = Segments.Count - 1; i >= 1; i--)
             {
                 Segments[i].SetCoordinate(Segments[i - 1].Coordinate);
@@ -197,7 +205,6 @@ namespace Geckout
             isMoving = false;
         }
 
-        // Tương tự cho MoveTailToPosition
         IEnumerator MoveTailToPosition(Vector2Int newCoordinate, Vector3 newWorldPosition)
         {
             isMoving = true;
@@ -205,11 +212,9 @@ namespace Geckout
             Vector3 startPosition = tailTile.transform.position;
             Vector3 targetPosition = newWorldPosition;
 
-            // Tính hướng di chuyển để kiểm tra góc rẽ
             Vector2Int moveDirection = newCoordinate - _tail.Coordinate;
             bool isCornerTurn = IsCornerTurn(moveDirection);
 
-            // Reset tất cả segments về vị trí ban đầu
             for (int i = Segments.Count - 2; i >= 0; i--)
             {
                 Segments[i].Move(false, 0f);
@@ -220,20 +225,15 @@ namespace Geckout
             {
                 elapsedTime += Time.deltaTime;
                 float t = Mathf.Clamp01(elapsedTime / moveTime);
-
-                // Sử dụng animation curve cho chuyển động mượt mà
                 float ratio = movementCurve.Evaluate(t);
 
-                // Áp dụng smoothing đặc biệt cho góc rẽ
                 if (isCornerTurn)
                 {
                     ratio = ApplyCornerSmoothing(ratio);
                 }
 
-                // Di chuyển tail
                 _tail.transform.position = Vector3.Lerp(startPosition, targetPosition, ratio);
 
-                // Di chuyển body segments
                 for (int i = Segments.Count - 2; i >= 0; i--)
                 {
                     Segments[i].Move(false, ratio);
@@ -242,14 +242,12 @@ namespace Geckout
                 yield return null;
             }
 
-            // Đảm bảo tất cả segments đều ở vị trí cuối
             _tail.transform.position = targetPosition;
             for (int i = Segments.Count - 2; i >= 0; i--)
             {
                 Segments[i].Move(false, 1f);
             }
 
-            // Cleanup logic
             for (int i = Segments.Count - 1; i >= 0; i--)
             {
                 Segments[i].ReleaseCurrentTile();
@@ -263,43 +261,15 @@ namespace Geckout
             _tail.SetCoordinate(newCoordinate);
             isMoving = false;
         }
+
         private bool IsCornerTurn(Vector2Int currentDirection)
         {
-            // Logic để kiểm tra góc rẽ dựa vào lịch sử di chuyển
-            // Có thể mở rộng thêm logic phức tạp hơn
-            return true; // Tạm thời return true để áp dụng smoothing cho tất cả chuyển động
+            return true;
         }
 
-        // Áp dụng smoothing đặc biệt cho góc rẽ
         private float ApplyCornerSmoothing(float ratio)
         {
-            // Sử dụng SmoothStep để tạo chuyển động mượt mà hơn
             return Mathf.SmoothStep(0f, 1f, ratio);
-        }
-
-        private Vector2Int GetDeltaMovement()
-        {
-            Vector2Int delta = Vector2Int.zero;
-            if (isMoving)
-                return delta;
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                delta = Vector2Int.up;
-            }
-            else if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                delta = Vector2Int.down;
-            }
-            else if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                delta = Vector2Int.left;
-            }
-            else if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                delta = Vector2Int.right;
-            }
-
-            return delta;
         }
 
         public List<Vector2Int> GetOrthogonalUnitVectors(Vector2Int input)
@@ -315,13 +285,21 @@ namespace Geckout
             var result = new List<Vector2Int>();
             foreach (var v in unitVectors)
             {
-                // Exclude input and its reverse
                 if (v == input || v == -input) continue;
-                // Check for orthogonality
                 if (Vector2.Dot(input, v) == 0)
                     result.Add(v);
             }
             return result;
+        }
+
+        // Public method to toggle input mode
+        public void SetInputMode(bool useKeyboard)
+        {
+            useKeyboardInput = useKeyboard;
+            if (!useKeyboard)
+            {
+                moveQueue.Clear();
+            }
         }
     }
 }
