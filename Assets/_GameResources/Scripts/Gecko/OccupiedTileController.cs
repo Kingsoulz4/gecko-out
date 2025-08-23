@@ -16,6 +16,8 @@ namespace Geckout
         private Vector2 gridOffset;
         private bool isInitialized = false;
 
+        public Vector2Int[] LastGridPositions { get => lastGridPositions;  }
+
         void Start()
         {
             InitializeGridSampler();

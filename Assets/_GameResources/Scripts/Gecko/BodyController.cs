@@ -15,12 +15,14 @@ namespace Geckout
         [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
         [SerializeField] private float outerSmoothness = 0.7f;
         [SerializeField] private float cornerRadius = 0.3f;
+        [SerializeField] private OccupiedTileController occupiedTileController;
+        [SerializeField] private BodyRenderer _bodyRenderer;
 
         private Segment _head, _tail;
         public List<Segment> Segments { private set; get; }
         public bool IsMoving { get => isMoving; }
+        public OccupiedTileController OccupiedTileController { get => occupiedTileController; set => occupiedTileController = value; }
 
-        BodyRenderer _bodyRenderer;
         bool isMoving = false;
 
         // Path movement
@@ -37,7 +39,6 @@ namespace Geckout
 
         private void Start()
         {
-            _bodyRenderer = GetComponent<BodyRenderer>();
             Segments = new List<Segment>();
             _head = Instantiate(headPrefab, transform);
             _head.name = "Head";

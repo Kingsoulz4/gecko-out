@@ -184,7 +184,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -389,6 +389,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   outerSmoothness: 0.7
   cornerRadius: 0.3
+  occupiedTileController: {fileID: 1022657197}
+  _bodyRenderer: {fileID: 1022657191}
 --- !u!114 &1022657191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,7 +455,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1022657188}
-  m_Mesh: {fileID: 1093771168}
+  m_Mesh: {fileID: 1146895629}
 --- !u!114 &1022657195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -732,7 +734,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   updateInterval: 0.05
   geckoController: {fileID: 1022657190}
---- !u!43 &1093771168
+--- !u!43 &1146895629
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
