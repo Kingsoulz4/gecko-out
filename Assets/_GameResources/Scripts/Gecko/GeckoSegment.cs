@@ -28,7 +28,12 @@ namespace Geckout
         // Movement state
         private bool _isMovementPrepared = false;
         private bool _isInMovement = false;
+        public GeckoController Controller { get; private set; }
 
+        public void SetController(GeckoController controller)
+        {
+            Controller = controller;
+        }
         public void SetCorner(float outerSmoothness, float cornerRadius)
         {
             this.outerSmoothness = outerSmoothness;

@@ -9,6 +9,7 @@ namespace Geckout
     {
         [SerializeField] private Camera gameCamera;
         [SerializeField] private LayerMask tileLayerMask = 1;
+        [SerializeField] private LayerMask segmentLayer = 7;
         [SerializeField] private bool enableDebugLogs = true;
         [SerializeField] private float pathUpdateInterval = 0.2f; // Cập nhật path mỗi 0.2s khi drag
 
@@ -67,7 +68,7 @@ namespace Geckout
 
             DebugLog($"Touch at tile coordinate: {tileCoord.Value}");
 
-            GeckoController gecko = GetGeckoAtTile(tileCoord.Value);
+            var gecko = GetGeckoByMouse(screenPosition);
             if (gecko == null)
             {
                 DebugLog("No gecko found at tile");
@@ -236,21 +237,18 @@ namespace Geckout
             return null;
         }
 
-        GeckoController GetGeckoAtTile(Vector2Int coordinate)
+        GeckoController GetGeckoByMouse(Vector2 screenPosition)
         {
-            GeckoController[] allGeckos = FindObjectsOfType<GeckoController>();
+            Ray ray = gameCamera.ScreenPointToRay(screenPosition);
 
-            foreach (var gecko in allGeckos)
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, segmentLayer))
             {
-                foreach (var segment in gecko.Segments)
+                GeckoSegment segment = hit.collider.transform.parent.GetComponent<GeckoSegment>();
+                if (segment != null)
                 {
-                    if (segment.Coordinate == coordinate)
-                    {
-                        return gecko;
-                    }
+                    return segment.Controller;
                 }
             }
-
             return null;
         }
 

@@ -54,8 +54,9 @@ namespace Geckout
             }
 
             _head = Segments[0];
-            _tail = Segments[Segments.Count - 1];
             _head.Setup(null, Segments[1]);
+            _head.SetController(this);
+            _tail = Segments[Segments.Count - 1];
             _tail.Setup(Segments[Segments.Count - 2], null);
 
             for (int i = 1; i < Segments.Count - 1; i++)
@@ -64,6 +65,7 @@ namespace Geckout
                 GeckoSegment prevSegment = Segments[i - 1];
                 GeckoSegment nextSegment = Segments[i + 1];
                 currentSegment.Setup(prevSegment, nextSegment);
+                currentSegment.SetController(this);
                 currentSegment.SetCorner(outerSmoothness, cornerRadius);
             }
 
