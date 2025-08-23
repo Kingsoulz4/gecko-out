@@ -2,6 +2,7 @@
 using UnityEngine.EventSystems;
 using Geckout.PathFinding;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Geckout
 {
@@ -100,7 +101,6 @@ namespace Geckout
         void OnTouchDrag(Vector2 screenPosition)
         {
             if (!isDragging) return;
-
             Vector2Int? tileCoord = GetTileCoordinateFromScreen(screenPosition);
             if (!tileCoord.HasValue) return;
 
@@ -224,7 +224,20 @@ namespace Geckout
                 GameTile tile = hit.collider.transform.parent.GetComponent<GameTile>();
                 if (tile != null)
                 {
+                    if (tile.IsOccupied && isDragging)
+                    {
+                        Debug.Log($"Tile at {tile.Coordinate} is occupied");
+                        return null;
+                    }
+                    else
+                    {
+                        Debug.Log($"Tile at {tile.Coordinate} is free");
+                    }
                     return tile.Coordinate;
+                }
+                else
+                {
+                    DebugLog("Raycast hit but no GameTile component found");
                 }
             }
 
