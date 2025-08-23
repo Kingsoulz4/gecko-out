@@ -197,7 +197,6 @@ namespace Geckout
             foreach (var node in path)
             {
                 smoothPath.Add(node.Position);
-                DebugLog($"  Path point: {node.Position}");
             }
 
             // Execute smooth continuous movement immediately

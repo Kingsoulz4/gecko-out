@@ -122,7 +122,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!43 &284411962
+--- !u!43 &628104180
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -490,6 +490,7 @@ GameObject:
   - component: {fileID: 1022657195}
   - component: {fileID: 1022657190}
   - component: {fileID: 1022657191}
+  - component: {fileID: 1022657197}
   m_Layer: 0
   m_Name: Gecko
   m_TagString: Untagged
@@ -617,7 +618,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1022657188}
-  m_Mesh: {fileID: 284411962}
+  m_Mesh: {fileID: 628104180}
 --- !u!114 &1022657195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -882,6 +883,20 @@ MonoBehaviour:
     size: 1
     percent: 1
   _nodes: []
+--- !u!114 &1022657197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1022657188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0a01bc272d4c68428db50eacb4a914a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  updateInterval: 0.05
+  geckoController: {fileID: 1022657190}
 --- !u!1 &1580965441
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,7 +933,7 @@ MonoBehaviour:
   segmentLayer:
     serializedVersion: 2
     m_Bits: 128
-  enableDebugLogs: 1
+  enableDebugLogs: 0
   pathUpdateInterval: 0.2
 --- !u!4 &1580965443
 Transform:

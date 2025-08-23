@@ -190,9 +190,6 @@ namespace Geckout
                 Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
                 Segments[segIdx].transform.position = pos;
             }
-
-            // Update lại coordinate theo tile (không teleport transform)
-            UpdateSegmentCoordinates(coordPath[coordPath.Count - 1]);
         }
 
         // Lấy điểm head theo distance dọc worldPath (có easing)
@@ -332,21 +329,5 @@ namespace Geckout
             // nếu vượt quá chiều dài history, trả về điểm đầu tiên (tail)
             return historyPoints.First.Value;
         }
-
-        // ====== Coordinate update: không teleport transform ======
-        void UpdateSegmentCoordinates(Vector2Int newHeadCoord)
-        {
-            for (int i = 0; i < Segments.Count; i++)
-            {
-                Segments[i].ReleaseCurrentTile();
-            }
-
-            _head.UpdateCoordinateOnly(newHeadCoord);
-            for (int i = 1; i < Segments.Count; i++)
-            {
-                Segments[i].UpdateCoordinateOnly(Segments[i - 1].Coordinate);
-            }
-        }
-
     }
 }
