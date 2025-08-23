@@ -47,7 +47,6 @@ namespace Geckout
                 if (GameMap.TryGetTileAt(new Vector2Int(0, 0), out GameTile testTile))
                 {
                     Vector3 testWorldPos = testTile.transform.position;
-                    Debug.Log($"Tile (0,0) is at world position: {testWorldPos}");
                     Debug.Log($"Expected calculation: (0,0) -> world = (0 - {gridOffset.x}, 0 - {gridOffset.y}) = ({-gridOffset.x}, {-gridOffset.y})");
 
                     // Verify reverse calculation
@@ -62,21 +61,17 @@ namespace Geckout
                 }
 
                 isInitialized = true;
-                Debug.Log($"GridSampler initialized for {segmentCount} segments");
 
                 // Force update ngay lần đầu
-                Debug.Log("Forcing initial update...");
                 UpdateAllSegmentPositions();
             });
         }
 
         void Update()
         {
-            Debug.Log($"Update called - initialized: {isInitialized}, time check: {Time.time - lastUpdateTime >= updateInterval}");
 
             if (!isInitialized)
             {
-                Debug.LogWarning("GridSampler not initialized yet!");
                 return;
             }
 
@@ -85,7 +80,6 @@ namespace Geckout
                 return; // Too early
             }
 
-            Debug.Log("Calling UpdateAllSegmentPositions...");
             UpdateAllSegmentPositions();
             lastUpdateTime = Time.time;
         }
@@ -93,19 +87,18 @@ namespace Geckout
         void UpdateAllSegmentPositions()
         {
             var segments = geckoController.Segments;
-            Debug.Log($"Updating {segments.Count} segments...");
 
             for (int i = 0; i < segments.Count; i++)
             {
                 Vector3 worldPos = segments[i].transform.position;
                 Vector2Int gridPos = WorldToGridPosition(worldPos);
 
-                Debug.Log($"Segment {i}: world {worldPos} -> grid {gridPos}, last: {lastGridPositions[i]}");
+                //Debug.Log($"Segment {i}: world {worldPos} -> grid {gridPos}, last: {lastGridPositions[i]}");
 
                 // Chỉ update khi thực sự di chuyển sang ô khác
                 if (gridPos != lastGridPositions[i])
                 {
-                    Debug.Log($"Position changed for segment {i}!");
+                    //Debug.Log($"Position changed for segment {i}!");
                     UpdateSegmentTile(i, gridPos);
                     lastGridPositions[i] = gridPos;
                 }
@@ -127,7 +120,7 @@ namespace Geckout
             );
 
             // Debug để kiểm tra
-            Debug.Log($"World XY({worldPos.x}, {worldPos.y}) + offset {gridOffset} = Grid {result}");
+            //Debug.Log($"World XY({worldPos.x}, {worldPos.y}) + offset {gridOffset} = Grid {result}");
 
             return result;
         }
@@ -136,24 +129,17 @@ namespace Geckout
         {
             var segment = geckoController.Segments[segmentIndex];
 
-            // Debug validation
-            Debug.Log($"Trying to update segment {segmentIndex} to grid {gridPos}");
 
-            // Release tile cũ
             if (currentOccupiedTiles[segmentIndex] != null)
             {
                 currentOccupiedTiles[segmentIndex].SetOccupied(false);
-                Debug.Log($"Released old tile for segment {segmentIndex}");
             }
 
-            // Tìm và set tile mới
             if (GameMap.TryGetTileAt(gridPos, out GameTile newTile))
             {
                 currentOccupiedTiles[segmentIndex] = newTile;
                 newTile.SetOccupied(true);
                 segment.UpdateCoordinateOnly(gridPos);
-
-                Debug.Log($"SUCCESS: Segment {segmentIndex} occupied tile at {gridPos}, tile occupied: {newTile.IsOccupied}");
             }
             else
             {
