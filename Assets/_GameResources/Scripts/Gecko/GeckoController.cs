@@ -348,37 +348,5 @@ namespace Geckout
             }
         }
 
-        // Backward compatibility
-        public void QueueMove(Vector2Int delta)
-        {
-            Vector2Int targetCoord = _head.Coordinate + delta;
-            List<Vector2Int> path = new List<Vector2Int> { targetCoord };
-            SetMovementPath(path);
-        }
-
-        public void ClearMoveQueue()
-        {
-            ClearPath();
-        }
-
-        public List<Vector2Int> GetOrthogonalUnitVectors(Vector2Int input)
-        {
-            var unitVectors = new List<Vector2Int>
-            {
-                new Vector2Int(1, 0),
-                new Vector2Int(0, 1),
-                new Vector2Int(-1, 0),
-                new Vector2Int(0, -1)
-            };
-
-            var result = new List<Vector2Int>();
-            foreach (var v in unitVectors)
-            {
-                if (v == input || v == -input) continue;
-                if (Vector2.Dot(input, v) == 0)
-                    result.Add(v);
-            }
-            return result;
-        }
     }
 }

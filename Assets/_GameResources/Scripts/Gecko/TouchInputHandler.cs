@@ -259,40 +259,5 @@ namespace Geckout
                 Debug.Log($"[TouchInput] {message}");
             }
         }
-
-        // Visual debug - vẽ smooth path
-        void OnDrawGizmos()
-        {
-            // Vẽ smooth path nếu có
-            if (smoothPath != null && smoothPath.Count > 0)
-            {
-                Gizmos.color = Color.green;
-
-                for (int i = 0; i < smoothPath.Count - 1; i++)
-                {
-                    Vector3 from = new Vector3(smoothPath[i].x, 0.1f, smoothPath[i].y);
-                    Vector3 to = new Vector3(smoothPath[i + 1].x, 0.1f, smoothPath[i + 1].y);
-                    Gizmos.DrawLine(from, to);
-
-                    // Vẽ node
-                    Gizmos.DrawWireSphere(from, 0.2f);
-                }
-
-                // Vẽ node cuối
-                if (smoothPath.Count > 0)
-                {
-                    Vector3 last = new Vector3(smoothPath[smoothPath.Count - 1].x, 0.1f, smoothPath[smoothPath.Count - 1].y);
-                    Gizmos.DrawWireSphere(last, 0.2f);
-                }
-            }
-
-            // Draw current drag target
-            if (isDragging && lastTargetTile != Vector2Int.one * -1)
-            {
-                Gizmos.color = Color.red;
-                Vector3 targetPos = new Vector3(lastTargetTile.x, 0.1f, lastTargetTile.y);
-                Gizmos.DrawWireCube(targetPos, Vector3.one * 0.5f);
-            }
-        }
     }
 }

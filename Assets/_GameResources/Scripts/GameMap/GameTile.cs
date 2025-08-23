@@ -101,14 +101,16 @@ namespace Geckout
         }
 
         // Debug visualization
-        private void OnDrawGizmosSelected()
+        private void OnDrawGizmos()
         {
-            Gizmos.color = IsOccupied ? Color.red : Color.green;
-            Gizmos.DrawWireCube(transform.position, Vector3.one * 0.9f);
-
+            if (IsOccupied)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireCube(transform.position, Vector3.one * 0.9f);
+            }
             // Draw coordinate text
             var style = new GUIStyle();
-            style.normal.textColor = Color.black;
+            style.normal.textColor = Color.white;
 #if UNITY_EDITOR
             UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f,
                 $"({Coordinate.x},{Coordinate.y})", style);
