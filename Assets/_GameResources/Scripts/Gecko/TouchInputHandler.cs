@@ -27,9 +27,6 @@ namespace Geckout
         {
             if (gameCamera == null)
                 gameCamera = Camera.main;
-
-            DebugLog("TouchInputHandler initialized");
-            DebugLog($"Camera: {gameCamera.name}, Orthographic: {gameCamera.orthographic}");
         }
 
         void Update()
@@ -41,7 +38,6 @@ namespace Geckout
         {
             if (Input.GetMouseButtonDown(0))
             {
-                DebugLog("Mouse button down");
                 OnTouchStart(Input.mousePosition);
             }
             else if (Input.GetMouseButton(0) && isDragging)
@@ -50,7 +46,6 @@ namespace Geckout
             }
             else if (Input.GetMouseButtonUp(0))
             {
-                DebugLog("Mouse button up");
                 OnTouchEnd();
             }
         }

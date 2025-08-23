@@ -10,19 +10,17 @@ namespace Geckout
     {
         [SerializeField] private Renderer tileRenderer;
         [SerializeField] public bool IsOccupied;
-        [SerializeField] private Collider tileCollider; // For raycast detection
+        [SerializeField] private Collider tileCollider; // For raycast
 
         public Vector2Int Coordinate { get; private set; }
 
         private void Start()
         {
-            // Ensure collider exists for touch detection
             if (tileCollider == null)
             {
                 tileCollider = GetComponent<Collider>();
                 if (tileCollider == null)
                 {
-                    // Add collider if none exists
                     var boxCollider = gameObject.AddComponent<BoxCollider>();
                     boxCollider.size = Vector3.one;
                     tileCollider = boxCollider;
@@ -88,19 +86,12 @@ namespace Geckout
             }
         }
 
-        // Check if this tile can be occupied by gecko
-        public bool CanBeOccupied()
-        {
-            return !IsOccupied;
-        }
-
         // Get world position for movement calculations
         public Vector3 GetWorldPosition()
         {
             return transform.position;
         }
 
-        // Debug visualization
         private void OnDrawGizmos()
         {
             if (IsOccupied)

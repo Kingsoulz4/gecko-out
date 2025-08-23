@@ -27,10 +27,9 @@ namespace Geckout
         private List<Vector2Int> currentPath = new List<Vector2Int>();
         private Coroutine moveCoroutine;
 
-        // Khoảng cách giữa các segment (auto-calc)
+        // Khoảng cách giữa các segment
         private float segmentSpacing = 1f;
 
-        // ===== History buffer (tail -> ... -> head) =====
         private LinkedList<Vector3> historyPoints = new LinkedList<Vector3>();
         private float historyTotalLength = 0f;
         private const float minSampleStep = 0.1f;     // bước tối thiểu thêm mẫu vào history
@@ -138,7 +137,7 @@ namespace Geckout
             currentPath.Clear();
         }
 
-        // ========= Movement kiểu history =========
+        //  Movement kiểu history
         IEnumerator SmoothPathMovement_History(List<Vector3> worldPath, List<Vector2Int> coordPath)
         {
             if (worldPath.Count < 2) yield break;
@@ -192,7 +191,7 @@ namespace Geckout
             }
         }
 
-        // Lấy điểm head theo distance dọc worldPath (có easing)
+        // Lấy điểm head theo distance dọc worldPath
         private Vector3 GetPointAtDistanceOnWorldPath(List<Vector3> path, List<float> segLens, float distance)
         {
             if (path.Count < 2) return path[0];
@@ -213,7 +212,6 @@ namespace Geckout
             return path[path.Count - 1];
         }
 
-        // ======= History helpers =======
         private float RequiredHistoryLength()
         {
             return Mathf.Max(0f, (Segments.Count - 1) * segmentSpacing + extraHistoryPadding);

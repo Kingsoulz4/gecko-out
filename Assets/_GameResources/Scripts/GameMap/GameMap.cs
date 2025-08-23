@@ -44,10 +44,7 @@ namespace Geckout
 
         public void Initialize(GameLevelData levelData)
         {
-            // Initialize the map based on levelData
-
             CreateContainers();
-
             SpawnAllTiles(levelData);
         }
 

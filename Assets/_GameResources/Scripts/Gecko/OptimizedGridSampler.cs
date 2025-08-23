@@ -2,7 +2,6 @@
 
 namespace Geckout
 {
-    // Attach vào GeckoController để handle tất cả segments
     public class OptimizedGridSampler : MonoBehaviour
     {
         [Header("Performance Settings")]
@@ -26,7 +25,6 @@ namespace Geckout
         {
             this.WaitUntil(() => geckoController != null, () =>
             {
-                Debug.Log("GameMap is initialized, proceeding with GridSampler initialization.");
                 if (geckoController?.Segments == null)
                 {
                     Debug.LogWarning("Cannot initialize - no segments!");
@@ -37,13 +35,12 @@ namespace Geckout
                 lastGridPositions = new Vector2Int[segmentCount];
                 currentOccupiedTiles = new GameTile[segmentCount];
 
-                // Tính offset từ GameMap (giống như trong SpawnAllTiles)
                 Vector2Int mapSize = GameMap.MapSize;
                 gridOffset = new Vector2(mapSize.x - 1, mapSize.y - 1) * 0.5f;
 
                 Debug.Log($"Map size: {mapSize}, calculated offset: {gridOffset}");
 
-                // Test với tile (0,0) để verify
+                // Test với tile (0,0)
                 if (GameMap.TryGetTileAt(new Vector2Int(0, 0), out GameTile testTile))
                 {
                     Vector3 testWorldPos = testTile.transform.position;
@@ -93,12 +90,9 @@ namespace Geckout
                 Vector3 worldPos = segments[i].transform.position;
                 Vector2Int gridPos = WorldToGridPosition(worldPos);
 
-                //Debug.Log($"Segment {i}: world {worldPos} -> grid {gridPos}, last: {lastGridPositions[i]}");
-
                 // Chỉ update khi thực sự di chuyển sang ô khác
                 if (gridPos != lastGridPositions[i])
                 {
-                    //Debug.Log($"Position changed for segment {i}!");
                     UpdateSegmentTile(i, gridPos);
                     lastGridPositions[i] = gridPos;
                 }
@@ -107,20 +101,13 @@ namespace Geckout
 
         Vector2Int WorldToGridPosition(Vector3 worldPos)
         {
-            // XY plane: X = horizontal, Y = vertical  
-            // Công thức inverse: world = grid - offset
-            // => grid = world + offset
-
             float gridX = worldPos.x + gridOffset.x;
-            float gridY = worldPos.y + gridOffset.y; // Y axis cho vertical
+            float gridY = worldPos.y + gridOffset.y; 
 
             Vector2Int result = new Vector2Int(
                 Mathf.RoundToInt(gridX),
                 Mathf.RoundToInt(gridY)
             );
-
-            // Debug để kiểm tra
-            //Debug.Log($"World XY({worldPos.x}, {worldPos.y}) + offset {gridOffset} = Grid {result}");
 
             return result;
         }
@@ -145,13 +132,9 @@ namespace Geckout
             {
                 currentOccupiedTiles[segmentIndex] = null;
                 Debug.LogWarning($"FAILED: No tile found at grid position {gridPos} for segment {segmentIndex}");
-
-                // Debug: List all available tiles
-                Debug.LogWarning($"Available map size: {GameMap.MapSize}");
             }
         }
 
-        // Cleanup khi destroy
         void OnDestroy()
         {
             if (currentOccupiedTiles == null) return;
