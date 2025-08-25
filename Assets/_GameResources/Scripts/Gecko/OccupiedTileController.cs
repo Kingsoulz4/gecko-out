@@ -101,7 +101,7 @@ namespace Geckout
             }
         }
 
-        Vector2Int WorldToGridPosition(Vector3 worldPos)
+        public Vector2Int WorldToGridPosition(Vector3 worldPos)
         {
             float gridX = worldPos.x + gridOffset.x;
             float gridY = worldPos.y + gridOffset.y; 

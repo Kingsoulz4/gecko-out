@@ -167,21 +167,34 @@ namespace Geckout
 
             if (startPos == targetTile) return;
 
-            DebugLog($"Pathfinding from {startPos} to {targetTile}");
-
-            // Lấy state HIỆN TẠI (đã bao gồm gecko tiles là occupied)
+            // Lấy map state hiện tại
             bool[] mapState = GameMap.GetCurrentMapState();
 
-            // CHỈ mở tile xuất phát để cho phép head/tail di chuyển
-            int startIndex = startPos.y * GameMap.MapSize.x + startPos.x;
-            mapState[startIndex] = true; // Chỉ tile này được phép làm điểm bắt đầu
+            // block tiles mà gecko đang chiếm
+            for (int i = 0; i < targetGecko.Segments.Count; i++)
+            {
+                // Lấy vị trí THỰC TẾ hiện tại của segment
+                Vector3 worldPos = targetGecko.Segments[i].transform.position;
+                Vector2Int gridPos = targetGecko.OccupiedTileController.WorldToGridPosition(worldPos);
 
-            // Tạo lại pathfinder với grid mới
+                int index = gridPos.y * GameMap.MapSize.x + gridPos.x;
+                if (index >= 0 && index < mapState.Length)
+                {
+                    mapState[index] = false; // Force block
+                }
+            }
+
+            // CHỈ mở tile xuất phát
+            int startIndex = startPos.y * GameMap.MapSize.x + startPos.x;
+            mapState[startIndex] = true;
+
+            // Tạo pathfinder với grid đã update
             ASGrid grid = new ASGrid(GameMap.MapSize.x, GameMap.MapSize.y, mapState);
             pathfinder = new ASPathFinding(grid);
 
             pathfinder.Reset();
             pathfinder.FindPath(startPos, targetTile, OnSmoothPathFound);
+            Debug.Log(targetTile);
         }
 
         void OnSmoothPathFound(List<ASNode> path)
