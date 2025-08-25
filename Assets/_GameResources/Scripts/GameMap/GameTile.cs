@@ -103,6 +103,7 @@ namespace Geckout
             var style = new GUIStyle();
             style.normal.textColor = Color.white;
 #if UNITY_EDITOR
+            if(GameMap.Instance.IsDebug)
             UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f,
                 $"({Coordinate.x},{Coordinate.y})", style);
 #endif

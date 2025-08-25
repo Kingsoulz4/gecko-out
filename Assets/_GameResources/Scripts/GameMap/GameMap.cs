@@ -5,16 +5,19 @@ using UnityEngine.Serialization;
 
 namespace Geckout
 {
-    public class GameMap : MonoBehaviour
+    public class GameMap : SingletonMono<GameMap>
     {
         private static GameMap _instance;
         [SerializeField] GameLevelData levelData;
         [SerializeField] private GameTile tilePrefab;
+        [SerializeField] private bool isDebug = false;
         private Transform _tilesContainer;
         private Transform _entitiesContainer;
         private GameTile[] tiles;
         private Vector2Int _mapSize;
         public static Vector2Int MapSize => _instance._mapSize;
+
+        public bool IsDebug { get => isDebug;}
 
         private void Awake()
         {
