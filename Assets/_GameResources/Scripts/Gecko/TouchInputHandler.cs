@@ -226,12 +226,12 @@ namespace Geckout
                 {
                     if (tile.IsOccupied && isDragging)
                     {
-                        Debug.Log($"Tile at {tile.Coordinate} is occupied");
+                        //Debug.Log($"Tile at {tile.Coordinate} is occupied");
                         return null;
                     }
                     else
                     {
-                        Debug.Log($"Tile at {tile.Coordinate} is free");
+                        //Debug.Log($"Tile at {tile.Coordinate} is free");
                     }
                     return tile.Coordinate;
                 }

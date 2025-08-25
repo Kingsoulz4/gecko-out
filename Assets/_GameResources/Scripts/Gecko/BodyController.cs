@@ -11,6 +11,7 @@ namespace Geckout
     {
         [SerializeField] private int length = 4;
         [SerializeField] private Segment headPrefab;
+        [SerializeField] private Segment segment;
         [SerializeField] private float moveSpeed = 5f; // tốc độ di chuyển (units/giây)
         [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
         [SerializeField] private float outerSmoothness = 0.7f;
@@ -47,7 +48,8 @@ namespace Geckout
 
             for (int i = 1; i < length; i++)
             {
-                Segment segment = new GameObject("Segment_" + i).AddComponent<Segment>();
+                Segment segment = Instantiate(this.segment);
+                segment.name = "Segment " + i;
                 segment.transform.SetParent(transform);
                 segment.transform.localPosition = new Vector3(0, -i, 0);
                 Segments.Add(segment);
