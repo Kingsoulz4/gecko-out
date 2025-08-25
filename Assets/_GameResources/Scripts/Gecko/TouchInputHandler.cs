@@ -184,7 +184,6 @@ namespace Geckout
 
             pathfinder.Reset();
             pathfinder.FindPath(startPos, targetTile, OnSmoothPathFound);
-            Debug.Log(targetTile);
         }
 
         void OnSmoothPathFound(List<ASNode> path)

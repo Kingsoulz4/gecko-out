@@ -47,17 +47,6 @@ namespace Geckout
 
                 SplinePoint sp = new SplinePoint(localPos);
                 sp.normal = Vector3.forward;
-
-                //// Adjust tangent mode for corners
-                //if (IsCorner(i))
-                //{
-                //    sp.type = SplinePoint.Type.Broken; // Allow independent control
-                //}
-                //else
-                //{
-                //    sp.type = SplinePoint.Type.SmoothFree;
-                //}
-
                 splinePoints[i] = sp;
             }
 
