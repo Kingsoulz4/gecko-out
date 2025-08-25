@@ -159,19 +159,26 @@ namespace Geckout
 
         void FindAndSetSmoothPath(Vector2Int targetTile)
         {
-            if (targetGecko == null || pathfinder == null) return;
+            if (targetGecko == null) return;
 
             Vector2Int startPos = isDraggingFromHead ?
                 targetGecko.Segments[0].Coordinate :
                 targetGecko.Segments[targetGecko.Segments.Count - 1].Coordinate;
 
-            if (startPos == targetTile)
-            {
-                DebugLog("Target is same as current position, skipping");
-                return;
-            }
+            if (startPos == targetTile) return;
 
             DebugLog($"Pathfinding from {startPos} to {targetTile}");
+
+            // Lấy state HIỆN TẠI (đã bao gồm gecko tiles là occupied)
+            bool[] mapState = GameMap.GetCurrentMapState();
+
+            // CHỈ mở tile xuất phát để cho phép head/tail di chuyển
+            int startIndex = startPos.y * GameMap.MapSize.x + startPos.x;
+            mapState[startIndex] = true; // Chỉ tile này được phép làm điểm bắt đầu
+
+            // Tạo lại pathfinder với grid mới
+            ASGrid grid = new ASGrid(GameMap.MapSize.x, GameMap.MapSize.y, mapState);
+            pathfinder = new ASPathFinding(grid);
 
             pathfinder.Reset();
             pathfinder.FindPath(startPos, targetTile, OnSmoothPathFound);
