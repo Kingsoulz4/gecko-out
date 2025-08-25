@@ -17,7 +17,7 @@ namespace Geckout
         [SerializeField] private float outerSmoothness = 0.7f;
         [SerializeField] private float cornerRadius = 0.3f;
         [SerializeField] private OccupiedTileController occupiedTileController;
-        [SerializeField] private BodyRenderer _bodyRenderer;
+        [SerializeField] private BodyRenderer _bodyRenderer;   // <— THÊM serialize field
 
         private Segment _head, _tail;
         public List<Segment> Segments { private set; get; }
@@ -89,7 +89,14 @@ namespace Geckout
             // Seed history từ dáng hiện tại (tail -> head)
             InitHistoryFromSegments();
 
-            _bodyRenderer.Initialize(Segments);
+            if (_bodyRenderer != null)
+            {
+                _bodyRenderer.Initialize(Segments);
+            }
+            else
+            {
+                Debug.LogWarning("BodyRenderer is not assigned on BodyController.");
+            }
         }
 
         // Set path và bắt đầu di chuyển liên tục

@@ -50,7 +50,18 @@ namespace Geckout
             CreateContainers();
             SpawnAllTiles(levelData);
         }
-
+        public static Vector3 GetTileWorldPosition(Vector2Int coord)
+        {
+            if (TryGetTileAt(coord, out var tile))
+            {
+                return tile.transform.position;
+            }
+            else
+            {
+                Debug.LogWarning($"No tile found at {coord}");
+                return Vector3.zero;
+            }
+        }
         public static bool TryGetTileAt(int x, int y, out GameTile result)
         {
             if (x < 0 || y < 0 || x >= _instance._mapSize.x || y >= _instance._mapSize.y)

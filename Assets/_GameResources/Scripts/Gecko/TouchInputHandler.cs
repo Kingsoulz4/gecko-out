@@ -26,6 +26,7 @@ namespace Geckout
 
         void Start()
         {
+            Application.targetFrameRate = 60;
             if (gameCamera == null)
                 gameCamera = Camera.main;
         }
@@ -123,17 +124,6 @@ namespace Geckout
 
         void OnTouchEnd()
         {
-            if (isDragging)
-            {
-                DebugLog("Drag ended");
-
-                // Nếu có path đang pending, execute nó
-                if (smoothPath != null && smoothPath.Count > 0)
-                {
-                    ExecuteSmoothPath(smoothPath);
-                }
-            }
-
             isDragging = false;
             targetGecko = null;
             currentPath?.Clear();
@@ -184,7 +174,7 @@ namespace Geckout
                 }
             }
 
-            // CHỈ mở tile xuất phát
+            // Chỉ mở tile xuất phát
             int startIndex = startPos.y * GameMap.MapSize.x + startPos.x;
             mapState[startIndex] = true;
 
@@ -227,13 +217,13 @@ namespace Geckout
             }
 
             DebugLog($"Executing smooth path with {path.Count} points");
-
-            // Clear any existing movement and set new continuous path
             targetGecko.ClearPath();
+            // PATCH: không cần ClearPath phức tạp nữa, chỉ set path
             targetGecko.SetMovementPath(path);
 
             DebugLog("Smooth path movement started");
         }
+
 
         Vector2Int? GetTileCoordinateFromScreen(Vector2 screenPosition)
         {
