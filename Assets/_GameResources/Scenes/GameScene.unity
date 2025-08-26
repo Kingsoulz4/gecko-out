@@ -360,11 +360,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 158e413efc2349c4a95e561309993f8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  length: 5
+  length: 10
   headPrefab: {fileID: 977039008493845289, guid: a442355917e79054d8f791998cf8e814, type: 3}
   segment: {fileID: 977039008493845289, guid: 1cad3011a7ab3f94b83b159e6b78c38d, type: 3}
   tailPrefab: {fileID: 977039008493845289, guid: 16b78289a1dd6e648b0990603f852fc7, type: 3}
-  moveSpeed: 1
+  moveSpeed: 6
   movementCurve:
     serializedVersion: 2
     m_Curve:
@@ -394,6 +394,8 @@ MonoBehaviour:
   occupiedTileController: {fileID: 1022657197}
   _bodyRenderer: {fileID: 1022657191}
   controlAnchor: 0
+  minSampleStep: 0.05
+  bodyLength: 4
 --- !u!114 &1022657191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,7 +460,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1022657188}
-  m_Mesh: {fileID: 1062706338}
+  m_Mesh: {fileID: 1270014790}
 --- !u!114 &1022657195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -561,7 +563,7 @@ MonoBehaviour:
   triggerGroups: []
   _spline:
     points: []
-    type: 0
+    type: 3
     linearAverageDirection: 1
     customValueInterpolation:
       serializedVersion: 2
@@ -602,7 +604,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   updateInterval: 0.03
   bodyController: {fileID: 1022657190}
---- !u!43 &1062706338
+--- !u!43 &1270014790
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

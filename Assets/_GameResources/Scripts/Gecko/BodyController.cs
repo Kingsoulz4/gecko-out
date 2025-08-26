@@ -28,6 +28,9 @@ namespace Geckout
         [SerializeField] private OccupiedTileController occupiedTileController;
         [SerializeField] private BodyRenderer _bodyRenderer;
         [SerializeField] private ControlAnchor controlAnchor = ControlAnchor.Head;
+        [SerializeField] private float minSampleStep = 0.025f;
+        [SerializeField] private float bodyLength = 5f; // nếu = 0 thì auto = (length - 1)
+
 
         private Segment _head, _tail;
         public List<Segment> Segments { private set; get; }
@@ -47,7 +50,6 @@ namespace Geckout
 
         private LinkedList<Vector3> historyPoints = new LinkedList<Vector3>();
         private float historyTotalLength = 0f;
-        private const float minSampleStep = 0.1f;
         private const float extraHistoryPadding = 4f;
 
         private void Start()
@@ -65,6 +67,7 @@ namespace Geckout
             {
                 Segment seg = Instantiate(this.segment, transform);
                 seg.name = "Segment " + i;
+                // Vị trí tạm, lát sẽ phân bố lại theo spacing
                 seg.transform.localPosition = new Vector3(0, -i, 0);
                 Segments.Add(seg);
             }
@@ -92,6 +95,24 @@ namespace Geckout
                 currentSegment.SetCorner(outerSmoothness, cornerRadius);
             }
 
+            // Tính spacing theo bodyLength
+            if (Segments.Count > 1)
+            {
+                // Nếu bodyLength chưa set, auto = (length - 1) (giữ hành vi cũ)
+                if (bodyLength <= 0f)
+                {
+                    bodyLength = length - 1;
+                }
+
+                segmentSpacing = bodyLength / (Segments.Count - 1);
+
+                // Phân bố lại vị trí cho đều
+                for (int i = 0; i < Segments.Count; i++)
+                {
+                    Segments[i].transform.localPosition = new Vector3(0, -i * segmentSpacing, 0);
+                }
+            }
+
             // Set coordinate ban đầu
             for (int i = 0; i < Segments.Count; i++)
             {
@@ -99,20 +120,12 @@ namespace Geckout
                 Segments[i].SetCoordinate(coordinate);
             }
 
-            // Auto-calc spacing
-            if (Segments.Count > 1)
-            {
-                segmentSpacing = Vector3.Distance(
-                    Segments[0].transform.position,
-                    Segments[1].transform.position
-                );
-            }
-
             InitHistoryFromSegments();
 
             if (_bodyRenderer != null)
                 _bodyRenderer.Initialize(Segments);
         }
+
 
         private List<Segment> GetOrderedSegments()
         {
