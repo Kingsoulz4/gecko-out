@@ -364,7 +364,7 @@ MonoBehaviour:
   headPrefab: {fileID: 977039008493845289, guid: a442355917e79054d8f791998cf8e814, type: 3}
   segment: {fileID: 977039008493845289, guid: 1cad3011a7ab3f94b83b159e6b78c38d, type: 3}
   tailPrefab: {fileID: 977039008493845289, guid: 16b78289a1dd6e648b0990603f852fc7, type: 3}
-  moveSpeed: 8
+  moveSpeed: 1
   movementCurve:
     serializedVersion: 2
     m_Curve:
@@ -458,7 +458,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1022657188}
-  m_Mesh: {fileID: 1514324328}
+  m_Mesh: {fileID: 1062706338}
 --- !u!114 &1022657195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -602,7 +602,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   updateInterval: 0.03
   bodyController: {fileID: 1022657190}
---- !u!43 &1514324328
+--- !u!43 &1062706338
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
