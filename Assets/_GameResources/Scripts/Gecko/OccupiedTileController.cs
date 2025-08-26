@@ -22,8 +22,7 @@ namespace Geckout
         void Start()
         {
             Init();
-            bodyController.OnStartMove += OnStartMoveHandle;
-            bodyController.OnEndMove += OnEndMoveHandle;
+            
         }
 
         private void OnStartMoveHandle()
@@ -39,6 +38,8 @@ namespace Geckout
         {
             this.WaitUntil(() => bodyController != null, () =>
             {
+                bodyController.OnStartMove += OnStartMoveHandle;
+                bodyController.OnEndMove += OnEndMoveHandle;
                 if (bodyController?.Segments == null)
                 {
                     Debug.LogWarning("Cannot initialize - no segments!");

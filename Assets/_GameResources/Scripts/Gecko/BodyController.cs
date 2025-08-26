@@ -29,7 +29,7 @@ namespace Geckout
         [SerializeField] private BodyRenderer _bodyRenderer;
         [SerializeField] private ControlAnchor controlAnchor = ControlAnchor.Head;
         [SerializeField] private float minSampleStep = 0.025f;
-        [SerializeField] private float bodyLength = 5f; // nếu = 0 thì auto = (length - 1)
+        [SerializeField] private int subLength = 1;
 
 
         private Segment _head, _tail;
@@ -56,29 +56,34 @@ namespace Geckout
         {
             Segments = new List<Segment>();
 
-            // Head
+            // ===== Tính toán tổng số segment =====
+            int totalSegments = length * subLength;
+            float unitSpacing = 1f / subLength;  // khoảng cách giữa các segment con
+            segmentSpacing = unitSpacing;
+            float totalBodyLength = length;      // chiều dài thật sự (theo world space)
+
+            // ===== Head =====
             _head = Instantiate(headPrefab, transform);
             _head.name = "Head";
             _head.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             Segments.Add(_head);
 
-            // Body segments
-            for (int i = 1; i < length - 1; i++)
+            // ===== Body segments =====
+            for (int i = 1; i < totalSegments - 1; i++)
             {
                 Segment seg = Instantiate(this.segment, transform);
                 seg.name = "Segment " + i;
-                // Vị trí tạm, lát sẽ phân bố lại theo spacing
-                seg.transform.localPosition = new Vector3(0, -i, 0);
+                seg.transform.localPosition = new Vector3(0, -i * unitSpacing, 0);
                 Segments.Add(seg);
             }
 
-            // Tail
+            // ===== Tail =====
             _tail = Instantiate(tailPrefab, transform);
             _tail.name = "Tail";
-            _tail.transform.localPosition = new Vector3(0, -(length - 1), 0);
+            _tail.transform.localPosition = new Vector3(0, -(totalSegments - 1) * unitSpacing, 0);
             Segments.Add(_tail);
 
-            // Setup neighbors
+            // ===== Setup neighbors =====
             _head.Setup(null, Segments[1]);
             _head.SetController(this);
 
@@ -95,36 +100,27 @@ namespace Geckout
                 currentSegment.SetCorner(outerSmoothness, cornerRadius);
             }
 
-            // Tính spacing theo bodyLength
-            if (Segments.Count > 1)
-            {
-                // Nếu bodyLength chưa set, auto = (length - 1) (giữ hành vi cũ)
-                if (bodyLength <= 0f)
-                {
-                    bodyLength = length - 1;
-                }
-
-                segmentSpacing = bodyLength / (Segments.Count - 1);
-
-                // Phân bố lại vị trí cho đều
-                for (int i = 0; i < Segments.Count; i++)
-                {
-                    Segments[i].transform.localPosition = new Vector3(0, -i * segmentSpacing, 0);
-                }
-            }
-
-            // Set coordinate ban đầu
+            // ===== Set coordinate ban đầu =====
             for (int i = 0; i < Segments.Count; i++)
             {
-                var coordinate = new Vector2Int(0, GameMap.MapSize.y - i - 1);
+                // unitIndex = segment thuộc về tile nào
+                int unitIndex = i / subLength;
+
+                var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
                 Segments[i].SetCoordinate(coordinate);
             }
 
+
+            // ===== Init history system =====
             InitHistoryFromSegments();
 
+            // ===== Initialize renderer =====
             if (_bodyRenderer != null)
                 _bodyRenderer.Initialize(Segments);
+
+            Debug.Log($"Body initialized: length={length}, subLength={subLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
         }
+
 
 
         private List<Segment> GetOrderedSegments()
