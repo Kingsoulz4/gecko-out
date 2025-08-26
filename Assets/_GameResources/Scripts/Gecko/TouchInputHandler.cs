@@ -14,7 +14,7 @@ namespace Geckout
         [SerializeField] private bool enableDebugLogs = true;
         [SerializeField] private float pathUpdateInterval = 0.2f; // Cập nhật path mỗi 0.2s khi drag
 
-        private BodyController targetGecko;
+        private BodyController bodyController;
         private bool isDragging = false;
         private bool isDraggingFromHead = false;
         private Vector2Int lastTargetTile = Vector2Int.one * -1;
@@ -65,7 +65,7 @@ namespace Geckout
 
             DebugLog($"Touch at tile coordinate: {tileCoord.Value}");
 
-            var gecko = GetGeckoByMouse(screenPosition);
+            var gecko = GetBodyControllerByMouse(screenPosition);
             if (gecko == null)
             {
                 DebugLog("No gecko found at tile");
@@ -125,7 +125,7 @@ namespace Geckout
         void OnTouchEnd()
         {
             isDragging = false;
-            targetGecko = null;
+            bodyController = null;
             currentPath?.Clear();
             smoothPath.Clear();
             lastTargetTile = Vector2Int.one * -1;
@@ -133,10 +133,11 @@ namespace Geckout
 
         void StartDragging(BodyController gecko, bool fromHead)
         {
-            targetGecko = gecko;
+            bodyController = gecko;
             isDragging = true;
             isDraggingFromHead = fromHead;
 
+            bodyController.SetControlAnchor(fromHead ? BodyController.ControlAnchor.Head : BodyController.ControlAnchor.Tail);
             DebugLog($"Started dragging gecko from {(fromHead ? "HEAD" : "TAIL")}");
 
             // Initialize pathfinder
@@ -149,11 +150,11 @@ namespace Geckout
 
         void FindAndSetSmoothPath(Vector2Int targetTile)
         {
-            if (targetGecko == null) return;
+            if (bodyController == null) return;
 
             Vector2Int startPos = isDraggingFromHead ?
-                targetGecko.Segments[0].Coordinate :
-                targetGecko.Segments[targetGecko.Segments.Count - 1].Coordinate;
+                bodyController.Segments[0].Coordinate :
+                bodyController.Segments[bodyController.Segments.Count - 1].Coordinate;
 
             if (startPos == targetTile) return;
 
@@ -161,11 +162,11 @@ namespace Geckout
             bool[] mapState = GameMap.GetCurrentMapState();
 
             // block tiles mà gecko đang chiếm
-            for (int i = 0; i < targetGecko.Segments.Count; i++)
+            for (int i = 0; i < bodyController.Segments.Count; i++)
             {
                 // Lấy vị trí THỰC TẾ hiện tại của segment
-                Vector3 worldPos = targetGecko.Segments[i].transform.position;
-                Vector2Int gridPos = targetGecko.OccupiedTileController.WorldToGridPosition(worldPos);
+                Vector3 worldPos = bodyController.Segments[i].transform.position;
+                Vector2Int gridPos = bodyController.OccupiedTileController.WorldToGridPosition(worldPos);
 
                 int index = gridPos.y * GameMap.MapSize.x + gridPos.x;
                 if (index >= 0 && index < mapState.Length)
@@ -209,16 +210,16 @@ namespace Geckout
 
         void ExecuteSmoothPath(List<Vector2Int> path)
         {
-            if (targetGecko == null || path == null || path.Count == 0)
+            if (bodyController == null || path == null || path.Count == 0)
             {
                 DebugLog("Cannot execute path: invalid state");
                 return;
             }
 
             DebugLog($"Executing smooth path with {path.Count} points");
-            targetGecko.ClearPath();
+            bodyController.ClearPath();
             // PATCH: không cần ClearPath phức tạp nữa, chỉ set path
-            targetGecko.SetMovementPath(path);
+            bodyController.SetMovementPath(path);
 
             DebugLog("Smooth path movement started");
         }
@@ -253,7 +254,7 @@ namespace Geckout
             return null;
         }
 
-        BodyController GetGeckoByMouse(Vector2 screenPosition)
+        BodyController GetBodyControllerByMouse(Vector2 screenPosition)
         {
             Ray ray = gameCamera.ScreenPointToRay(screenPosition);
 

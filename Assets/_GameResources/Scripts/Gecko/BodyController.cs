@@ -1,8 +1,10 @@
 ﻿using Dreamteck.Splines;
 using Geckout.Generals;
 using Geckout.PathFinding;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Geckout
@@ -31,6 +33,10 @@ namespace Geckout
         public List<Segment> Segments { private set; get; }
         public bool IsMoving { get => isMoving; }
         public OccupiedTileController OccupiedTileController { get => occupiedTileController; set => occupiedTileController = value; }
+
+        // Movement events
+        public Action OnStartMove;
+        public Action OnEndMove;
 
         bool isMoving = false;
 
@@ -74,6 +80,7 @@ namespace Geckout
             _head.SetController(this);
 
             _tail.Setup(Segments[Segments.Count - 2], null);
+            _tail.SetController(this);
 
             for (int i = 1; i < Segments.Count - 1; i++)
             {
@@ -107,6 +114,19 @@ namespace Geckout
                 _bodyRenderer.Initialize(Segments);
         }
 
+        private List<Segment> GetOrderedSegments()
+        {
+            if (controlAnchor == ControlAnchor.Head)
+                return Segments; // Normal order: Head leads
+            else
+                return Segments.AsEnumerable().Reverse().ToList(); // Reversed: Tail leads
+        }
+
+        public List<Segment> GetOrderedSegmentsForTileUpdate()
+        {
+            return GetOrderedSegments();
+        }
+
         public void SetMovementPath(List<Vector2Int> path)
         {
             if (path == null || path.Count == 0) return;
@@ -120,16 +140,39 @@ namespace Geckout
             currentPath = new List<Vector2Int>(path);
             moveCoroutine = StartCoroutine(FollowPathContinuous());
         }
+
         public void SetControlAnchor(ControlAnchor anchor)
         {
-            controlAnchor = anchor;
+            if (controlAnchor != anchor)
+            {
+                controlAnchor = anchor;
+
+                // Rebuild history to match new control direction
+                InitHistoryFromSegments();
+
+                // Force occupied tile update to sync with new positions
+                if (occupiedTileController != null)
+                {
+                    occupiedTileController.UpdateAllSegmentPositions();
+                }
+
+                Debug.Log($"Control anchor switched to: {anchor}, history rebuilt, tiles updated");
+            }
         }
+
         public void ClearPath()
         {
             if (moveCoroutine != null)
             {
                 StopCoroutine(moveCoroutine);
                 moveCoroutine = null;
+
+                // If we were moving and got interrupted, fire end move event
+                if (isMoving)
+                {
+                    isMoving = false;
+                    OnEndMove?.Invoke();
+                }
             }
             currentPath.Clear();
             isMoving = false;
@@ -138,13 +181,15 @@ namespace Geckout
         IEnumerator FollowPathContinuous()
         {
             if (currentPath.Count == 0) yield break;
+
             isMoving = true;
+            OnStartMove?.Invoke(); 
 
             List<Vector3> worldPath = new List<Vector3>();
-            if (controlAnchor == ControlAnchor.Head)
-                worldPath.Add(_head.transform.position);
-            else
-                worldPath.Add(_tail.transform.position);
+
+            // Get current anchor position (always the leading segment in ordered view)
+            var orderedSegments = GetOrderedSegments();
+            worldPath.Add(orderedSegments[0].transform.position);
 
             foreach (var coord in currentPath)
             {
@@ -152,13 +197,14 @@ namespace Geckout
                     worldPath.Add(tile.transform.position);
             }
 
-            yield return SmoothPathMovement_History(worldPath, controlAnchor == ControlAnchor.Head);
+            yield return SmoothPathMovement_Simplified(worldPath);
 
             isMoving = false;
             currentPath.Clear();
+            OnEndMove?.Invoke(); // Fire end move event
         }
 
-        IEnumerator SmoothPathMovement_History(List<Vector3> worldPath, bool moveHead)
+        IEnumerator SmoothPathMovement_Simplified(List<Vector3> worldPath)
         {
             if (worldPath.Count < 2) yield break;
 
@@ -172,7 +218,8 @@ namespace Geckout
             }
 
             float anchorDist = 0f;
-            Vector3 lastAnchorPos = moveHead ? _head.transform.position : _tail.transform.position;
+            var orderedSegments = GetOrderedSegments();
+            Vector3 lastAnchorPos = orderedSegments[0].transform.position;
 
             while (anchorDist < totalPathLength)
             {
@@ -181,35 +228,53 @@ namespace Geckout
 
                 if ((anchorPos - lastAnchorPos).sqrMagnitude > (minSampleStep * minSampleStep))
                 {
-                    if (moveHead) AddHeadSample(anchorPos);
-                    else AddTailSample(anchorPos);
+                    AddAnchorSample(anchorPos);
                     lastAnchorPos = anchorPos;
                 }
 
-                for (int segIdx = 0; segIdx < Segments.Count; segIdx++)
+                // Apply positions to ordered segments
+                for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
                 {
-                    float backDist = segIdx * segmentSpacing;
-                    Vector3 pos = moveHead
-                        ? GetHistoryPointAtDistanceBack(backDist)
-                        : GetHistoryPointAtDistanceForward(backDist);
-                    Segments[segIdx].transform.position = pos;
+                    float backDist;
+                    if (controlAnchor == ControlAnchor.Head)
+                    {
+                        // Normal: segIdx 0 = anchor (distance 0), segIdx 1 = behind anchor, etc.
+                        backDist = segIdx * segmentSpacing;
+                    }
+                    else
+                    {
+                        // Reverse: segIdx 0 = anchor (distance 0), but we want the tail segments to be further back
+                        backDist = segIdx * segmentSpacing;
+                    }
+
+                    Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
+                    orderedSegments[segIdx].transform.position = pos;
                 }
 
                 yield return null;
             }
 
+            // Final position
             Vector3 finalAnchor = worldPath[worldPath.Count - 1];
-            if (moveHead) AddHeadSample(finalAnchor);
-            else AddTailSample(finalAnchor);
+            AddAnchorSample(finalAnchor);
 
-            for (int segIdx = 0; segIdx < Segments.Count; segIdx++)
+            for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
             {
-                float backDist = segIdx * segmentSpacing;
-                Vector3 pos = moveHead
-                    ? GetHistoryPointAtDistanceBack(backDist)
-                    : GetHistoryPointAtDistanceForward(backDist);
-                Segments[segIdx].transform.position = pos;
+                float backDist;
+                if (controlAnchor == ControlAnchor.Head)
+                {
+                    backDist = segIdx * segmentSpacing;
+                }
+                else
+                {
+                    backDist = segIdx * segmentSpacing;
+                }
+
+                Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
+                orderedSegments[segIdx].transform.position = pos;
             }
+
+           
         }
 
         private Vector3 GetPointAtDistanceOnWorldPath(List<Vector3> path, List<float> segLens, float distance)
@@ -232,7 +297,7 @@ namespace Geckout
             return path[path.Count - 1];
         }
 
-        // ===== History =====
+        // ===== History System =====
 
         private float RequiredHistoryLength()
         {
@@ -243,27 +308,50 @@ namespace Geckout
         {
             historyPoints.Clear();
             historyTotalLength = 0f;
-            historyPoints.AddLast(Segments[Segments.Count - 1].transform.position);
 
-            for (int i = Segments.Count - 2; i >= 0; i--)
+            var orderedSegments = GetOrderedSegments();
+
+            if (controlAnchor == ControlAnchor.Head)
             {
-                Vector3 from = historyPoints.Last.Value;
-                Vector3 to = Segments[i].transform.position;
-                AppendSegmentSamples(from, to);
+                // Normal: Start from tail, build toward head
+                historyPoints.AddLast(orderedSegments[orderedSegments.Count - 1].transform.position);
+
+                for (int i = orderedSegments.Count - 2; i >= 0; i--)
+                {
+                    Vector3 from = historyPoints.Last.Value;
+                    Vector3 to = orderedSegments[i].transform.position;
+                    AppendSegmentSamples(from, to, true); // Add to end
+                }
+            }
+            else
+            {
+                // Reverse: Start from head, build toward tail
+                historyPoints.AddFirst(orderedSegments[orderedSegments.Count - 1].transform.position);
+
+                for (int i = orderedSegments.Count - 2; i >= 0; i--)
+                {
+                    Vector3 from = historyPoints.First.Value;
+                    Vector3 to = orderedSegments[i].transform.position;
+                    AppendSegmentSamples(from, to, false); // Add to beginning
+                }
             }
 
             TrimHistory();
         }
 
-        private void AppendSegmentSamples(Vector3 from, Vector3 to)
+        private void AppendSegmentSamples(Vector3 from, Vector3 to, bool addToEnd = true)
         {
             float segmentLen = Vector3.Distance(from, to);
             if (segmentLen <= Mathf.Epsilon)
             {
-                if ((historyPoints.Last.Value - to).sqrMagnitude > 1e-6f)
+                Vector3 comparePoint = addToEnd ? historyPoints.Last.Value : historyPoints.First.Value;
+                if ((comparePoint - to).sqrMagnitude > 1e-6f)
                 {
-                    historyTotalLength += Vector3.Distance(historyPoints.Last.Value, to);
-                    historyPoints.AddLast(to);
+                    historyTotalLength += Vector3.Distance(comparePoint, to);
+                    if (addToEnd)
+                        historyPoints.AddLast(to);
+                    else
+                        historyPoints.AddFirst(to);
                 }
                 return;
             }
@@ -273,45 +361,47 @@ namespace Geckout
             {
                 float t = (float)s / steps;
                 Vector3 p = Vector3.Lerp(from, to, t);
-                float d = Vector3.Distance(historyPoints.Last.Value, p);
+
+                Vector3 comparePoint = addToEnd ? historyPoints.Last.Value : historyPoints.First.Value;
+                float d = Vector3.Distance(comparePoint, p);
+
                 if (d > Mathf.Epsilon)
                 {
                     historyTotalLength += d;
-                    historyPoints.AddLast(p);
+                    if (addToEnd)
+                        historyPoints.AddLast(p);
+                    else
+                        historyPoints.AddFirst(p);
                 }
             }
         }
 
-        private void AddHeadSample(Vector3 headPos)
+        private void AddAnchorSample(Vector3 anchorPos)
         {
             if (historyPoints.Count == 0)
             {
-                historyPoints.AddLast(headPos);
+                historyPoints.AddLast(anchorPos);
                 return;
             }
 
-            float d = Vector3.Distance(historyPoints.Last.Value, headPos);
-            if (d < minSampleStep) return;
-
-            historyPoints.AddLast(headPos);
-            historyTotalLength += d;
-
-            TrimHistory();
-        }
-
-        private void AddTailSample(Vector3 tailPos)
-        {
-            if (historyPoints.Count == 0)
+            if (controlAnchor == ControlAnchor.Head)
             {
-                historyPoints.AddFirst(tailPos);
-                return;
+                // Normal: Add to end, segments follow behind
+                float d = Vector3.Distance(historyPoints.Last.Value, anchorPos);
+                if (d < minSampleStep) return;
+
+                historyPoints.AddLast(anchorPos);
+                historyTotalLength += d;
             }
+            else
+            {
+                // Reverse: Add to beginning, segments follow behind in reverse
+                float d = Vector3.Distance(historyPoints.First.Value, anchorPos);
+                if (d < minSampleStep) return;
 
-            float d = Vector3.Distance(historyPoints.First.Value, tailPos);
-            if (d < minSampleStep) return;
-
-            historyPoints.AddFirst(tailPos);
-            historyTotalLength += d;
+                historyPoints.AddFirst(anchorPos);
+                historyTotalLength += d;
+            }
 
             TrimHistory();
         }
@@ -319,65 +409,89 @@ namespace Geckout
         private void TrimHistory()
         {
             float need = RequiredHistoryLength();
-            while (historyPoints.Count > 1 && historyTotalLength > need)
-            {
-                Vector3 first = historyPoints.First.Value;
-                Vector3 second = historyPoints.First.Next.Value;
-                float seg = Vector3.Distance(first, second);
 
-                historyPoints.RemoveFirst();
-                historyTotalLength -= seg;
+            if (controlAnchor == ControlAnchor.Head)
+            {
+                // Normal: Remove from beginning (oldest)
+                while (historyPoints.Count > 1 && historyTotalLength > need)
+                {
+                    Vector3 first = historyPoints.First.Value;
+                    Vector3 second = historyPoints.First.Next.Value;
+                    float seg = Vector3.Distance(first, second);
+
+                    historyPoints.RemoveFirst();
+                    historyTotalLength -= seg;
+                }
+            }
+            else
+            {
+                // Reverse: Remove from end (oldest in reverse direction)
+                while (historyPoints.Count > 1 && historyTotalLength > need)
+                {
+                    Vector3 last = historyPoints.Last.Value;
+                    Vector3 secondLast = historyPoints.Last.Previous.Value;
+                    float seg = Vector3.Distance(last, secondLast);
+
+                    historyPoints.RemoveLast();
+                    historyTotalLength -= seg;
+                }
             }
         }
 
         private Vector3 GetHistoryPointAtDistanceBack(float backDistance)
         {
             if (historyPoints.Count == 0) return Vector3.zero;
-            if (backDistance <= 0f) return historyPoints.Last.Value;
-
-            float remain = backDistance;
-            LinkedListNode<Vector3> bNode = historyPoints.Last;
-            while (bNode.Previous != null)
+            if (backDistance <= 0f)
             {
-                Vector3 b = bNode.Value;
-                Vector3 a = bNode.Previous.Value;
-                float seg = Vector3.Distance(a, b);
-
-                if (remain <= seg)
-                {
-                    float t = 1f - (remain / Mathf.Max(seg, 1e-6f));
-                    return Vector3.Lerp(a, b, t);
-                }
-
-                remain -= seg;
-                bNode = bNode.Previous;
+                // Return anchor position
+                return controlAnchor == ControlAnchor.Head ?
+                    historyPoints.Last.Value : historyPoints.First.Value;
             }
-            return historyPoints.First.Value;
-        }
 
-        private Vector3 GetHistoryPointAtDistanceForward(float forwardDistance)
-        {
-            if (historyPoints.Count == 0) return Vector3.zero;
-            if (forwardDistance <= 0f) return historyPoints.First.Value;
-
-            float remain = forwardDistance;
-            LinkedListNode<Vector3> aNode = historyPoints.First;
-            while (aNode.Next != null)
+            if (controlAnchor == ControlAnchor.Head)
             {
-                Vector3 a = aNode.Value;
-                Vector3 b = aNode.Next.Value;
-                float seg = Vector3.Distance(a, b);
-
-                if (remain <= seg)
+                // Normal direction: traverse from Last to First
+                float remain = backDistance;
+                LinkedListNode<Vector3> bNode = historyPoints.Last;
+                while (bNode.Previous != null)
                 {
-                    float t = (remain / Mathf.Max(seg, 1e-6f));
-                    return Vector3.Lerp(a, b, t);
-                }
+                    Vector3 b = bNode.Value;
+                    Vector3 a = bNode.Previous.Value;
+                    float seg = Vector3.Distance(a, b);
 
-                remain -= seg;
-                aNode = aNode.Next;
+                    if (remain <= seg)
+                    {
+                        float t = 1f - (remain / Mathf.Max(seg, 1e-6f));
+                        return Vector3.Lerp(a, b, t);
+                    }
+
+                    remain -= seg;
+                    bNode = bNode.Previous;
+                }
+                return historyPoints.First.Value;
             }
-            return historyPoints.Last.Value;
+            else
+            {
+                // Reverse direction: traverse from First to Last
+                float remain = backDistance;
+                LinkedListNode<Vector3> aNode = historyPoints.First;
+                while (aNode.Next != null)
+                {
+                    Vector3 a = aNode.Value;
+                    Vector3 b = aNode.Next.Value;
+                    float seg = Vector3.Distance(a, b);
+
+                    if (remain <= seg)
+                    {
+                        float t = (remain / Mathf.Max(seg, 1e-6f));
+                        return Vector3.Lerp(a, b, t);
+                    }
+
+                    remain -= seg;
+                    aNode = aNode.Next;
+                }
+                return historyPoints.Last.Value;
+            }
         }
     }
 }

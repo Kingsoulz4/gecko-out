@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Geckout
 {
@@ -6,7 +7,7 @@ namespace Geckout
     {
         [Header("Performance Settings")]
         [SerializeField] private float updateInterval = 0.05f; // 20 FPS, có thể cao hơn
-        [SerializeField] private BodyController geckoController;
+        [SerializeField] private BodyController bodyController;
 
         private Vector2Int[] lastGridPositions;
         private GameTile[] currentOccupiedTiles;
@@ -16,24 +17,35 @@ namespace Geckout
         private Vector2 gridOffset;
         private bool isInitialized = false;
 
-        public Vector2Int[] LastGridPositions { get => lastGridPositions;  }
+        public Vector2Int[] LastGridPositions { get => lastGridPositions; }
 
         void Start()
         {
-            InitializeGridSampler();
+            Init();
+            bodyController.OnStartMove += OnStartMoveHandle;
+            bodyController.OnEndMove += OnEndMoveHandle;
         }
 
-        void InitializeGridSampler()
+        private void OnStartMoveHandle()
         {
-            this.WaitUntil(() => geckoController != null, () =>
+        }
+
+        private void OnEndMoveHandle()
+        {
+            UpdateAllSegmentPositions();
+        }
+
+        void Init()
+        {
+            this.WaitUntil(() => bodyController != null, () =>
             {
-                if (geckoController?.Segments == null)
+                if (bodyController?.Segments == null)
                 {
                     Debug.LogWarning("Cannot initialize - no segments!");
                     return;
                 }
 
-                int segmentCount = geckoController.Segments.Count;
+                int segmentCount = bodyController.Segments.Count;
                 lastGridPositions = new Vector2Int[segmentCount];
                 currentOccupiedTiles = new GameTile[segmentCount];
 
@@ -61,7 +73,6 @@ namespace Geckout
 
                 isInitialized = true;
 
-                // Force update ngay lần đầu
                 UpdateAllSegmentPositions();
             });
         }
@@ -76,35 +87,49 @@ namespace Geckout
 
             if (Time.time - lastUpdateTime < updateInterval)
             {
-                return; // Too early
+                return;
             }
 
             UpdateAllSegmentPositions();
             lastUpdateTime = Time.time;
         }
 
-        void UpdateAllSegmentPositions()
+        public void UpdateAllSegmentPositions()
         {
-            var segments = geckoController.Segments;
+            // Get segments in movement order to avoid conflicts
+            var orderedSegments = bodyController.GetOrderedSegmentsForTileUpdate();
+            var segments = bodyController.Segments;
+
+            for (int i = 0; i < orderedSegments.Count; i++)
+            {
+                var segment = orderedSegments[i];
+                int rawIndex = segments.IndexOf(segment);
+
+                Vector3 worldPos = segment.transform.position;
+                Vector2Int gridPos = WorldToGridPosition(worldPos);
+
+                if (gridPos != lastGridPositions[rawIndex])
+                {
+                    UpdateSegmentTile(rawIndex, gridPos);
+                    lastGridPositions[rawIndex] = gridPos;
+                }
+            }
+        }
+
+        public void ClearOccupied()
+        {
+            var segments = bodyController.Segments;
 
             for (int i = 0; i < segments.Count; i++)
             {
-                Vector3 worldPos = segments[i].transform.position;
-                Vector2Int gridPos = WorldToGridPosition(worldPos);
-
-                // Chỉ update khi thực sự di chuyển sang ô khác
-                if (gridPos != lastGridPositions[i])
-                {
-                    UpdateSegmentTile(i, gridPos);
-                    lastGridPositions[i] = gridPos;
-                }
+                segments[i].CurrentTile.SetOccupied(false);
             }
         }
 
         public Vector2Int WorldToGridPosition(Vector3 worldPos)
         {
             float gridX = worldPos.x + gridOffset.x;
-            float gridY = worldPos.y + gridOffset.y; 
+            float gridY = worldPos.y + gridOffset.y;
 
             Vector2Int result = new Vector2Int(
                 Mathf.RoundToInt(gridX),
@@ -116,7 +141,7 @@ namespace Geckout
 
         void UpdateSegmentTile(int segmentIndex, Vector2Int gridPos)
         {
-            var segment = geckoController.Segments[segmentIndex];
+            var segment = bodyController.Segments[segmentIndex];
 
 
             if (currentOccupiedTiles[segmentIndex] != null)

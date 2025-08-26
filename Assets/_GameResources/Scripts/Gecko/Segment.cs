@@ -27,6 +27,7 @@ namespace Geckout
         // Movement state
         private bool _isInMovement = false;
         public BodyController Controller { get; private set; }
+        public GameTile CurrentTile { get => _currentTile; set => _currentTile = value; }
 
         public void SetController(BodyController controller)
         {
@@ -70,14 +71,12 @@ namespace Geckout
             }
         }
 
-        // Dùng khi đã di chuyển smooth -> chỉ update logic, không dịch chuyển transform
         public void UpdateCoordinateOnly(Vector2Int coordinate)
         {
             if (GameMap.TryGetTileAt(coordinate, out var tile))
             {
                 _currentTile = tile;
                 Coordinate = coordinate;
-                _currentTile.SetOccupied(true);
             }
         }
 

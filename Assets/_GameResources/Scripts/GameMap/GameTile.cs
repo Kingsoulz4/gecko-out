@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace Geckout
 {
-    public class GameTile : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler
+    public class GameTile : MonoBehaviour
     {
         [SerializeField] private Renderer tileRenderer;
         [SerializeField] public bool IsOccupied;
@@ -26,11 +26,6 @@ namespace Geckout
                     tileCollider = boxCollider;
                 }
             }
-        }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            GameEvents.OnTileSelected?.Invoke(this);
         }
 
         public void SetCoordinate(int x, int y)
@@ -68,11 +63,6 @@ namespace Geckout
             }
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            GameEvents.OnTileSelected?.Invoke(this);
-        }
-
         // Highlight tile for path visualization
         public void SetPathHighlight(bool highlight)
         {
@@ -84,12 +74,6 @@ namespace Geckout
             {
                 ChangeColor(Color.white); // Default color
             }
-        }
-
-        // Get world position for movement calculations
-        public Vector3 GetWorldPosition()
-        {
-            return transform.position;
         }
 
         private void OnDrawGizmos()
