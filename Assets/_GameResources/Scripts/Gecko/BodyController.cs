@@ -155,8 +155,6 @@ namespace Geckout
                 {
                     occupiedTileController.UpdateAllSegmentPositions();
                 }
-
-                Debug.Log($"Control anchor switched to: {anchor}, history rebuilt, tiles updated");
             }
         }
 
@@ -183,7 +181,7 @@ namespace Geckout
             if (currentPath.Count == 0) yield break;
 
             isMoving = true;
-            OnStartMove?.Invoke(); 
+            OnStartMove?.Invoke();
 
             List<Vector3> worldPath = new List<Vector3>();
 
@@ -274,7 +272,7 @@ namespace Geckout
                 orderedSegments[segIdx].transform.position = pos;
             }
 
-           
+
         }
 
         private Vector3 GetPointAtDistanceOnWorldPath(List<Vector3> path, List<float> segLens, float distance)
