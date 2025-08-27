@@ -52,7 +52,10 @@ namespace Geckout
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime * 10);
             }
 
+            if(segmentType == SegmentType.TAIL && PrevSegment != null)
+            {
 
+            }    
         }
 
         public void SetController(BodyController controller)
