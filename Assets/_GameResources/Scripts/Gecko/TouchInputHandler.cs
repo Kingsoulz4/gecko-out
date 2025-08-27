@@ -12,7 +12,7 @@ namespace Geckout
         [SerializeField] private LayerMask tileLayerMask = 1;
         [SerializeField] private LayerMask segmentLayer = 7;
         [SerializeField] private bool enableDebugLogs = true;
-        [SerializeField] private float pathUpdateInterval = 0.2f; // Cập nhật path mỗi 0.2s khi drag
+        [SerializeField] private float pathUpdateInterval = 0.03f; // Cập nhật path mỗi 0.2s khi drag
 
         private BodyController bodyController;
         private bool isDragging = false;
@@ -223,7 +223,6 @@ namespace Geckout
 
             DebugLog("Smooth path movement started");
         }
-
 
         Vector2Int? GetTileCoordinateFromScreen(Vector2 screenPosition)
         {

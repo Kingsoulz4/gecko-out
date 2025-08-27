@@ -6,7 +6,7 @@ namespace Geckout
     public class OccupiedTileController : MonoBehaviour
     {
         [Header("Performance Settings")]
-        [SerializeField] private float updateInterval = 0.05f; // 20 FPS, có thể cao hơn
+        [SerializeField] private float updateInterval = 0.05f;
         [SerializeField] private BodyController bodyController;
 
         private Vector2Int[] lastGridPositions;
@@ -22,7 +22,6 @@ namespace Geckout
         void Start()
         {
             Init();
-            
         }
 
         private void OnStartMoveHandle()

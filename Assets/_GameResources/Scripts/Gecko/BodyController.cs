@@ -17,40 +17,34 @@ namespace Geckout
             Tail
         }
 
-        [SerializeField] private int length = 4;
+        [SerializeField] private int length = 5;
+        [SerializeField] private int subLength = 3;
+        [SerializeField] private float moveSpeed = 6f;
+        [SerializeField] private float minSampleStep = 0.05f;
+        [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
         [SerializeField] private Segment headPrefab;
         [SerializeField] private Segment segment;
         [SerializeField] private Segment tailPrefab;
-        [SerializeField] private float moveSpeed = 5f;
-        [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-        [SerializeField] private float outerSmoothness = 0.7f;
-        [SerializeField] private float cornerRadius = 0.3f;
         [SerializeField] private OccupiedTileController occupiedTileController;
         [SerializeField] private BodyRenderer _bodyRenderer;
         [SerializeField] private ControlAnchor controlAnchor = ControlAnchor.Head;
-        [SerializeField] private float minSampleStep = 0.025f;
-        [SerializeField] private int subLength = 1;
-
-
-        private Segment _head, _tail;
-        public List<Segment> Segments { private set; get; }
-        public bool IsMoving { get => isMoving; }
-        public OccupiedTileController OccupiedTileController { get => occupiedTileController; set => occupiedTileController = value; }
-
+       
         // Movement events
         public Action OnStartMove;
         public Action OnEndMove;
 
-        bool isMoving = false;
-
-        private List<Vector2Int> currentPath = new List<Vector2Int>();
-        private Coroutine moveCoroutine;
-
+        private Segment _head, _tail;
+        private bool isMoving = false;
         private float segmentSpacing = 1f;
-
-        private LinkedList<Vector3> historyPoints = new LinkedList<Vector3>();
         private float historyTotalLength = 0f;
         private const float extraHistoryPadding = 4f;
+        private Coroutine moveCoroutine;
+        private List<Vector2Int> currentPath = new List<Vector2Int>();
+        private LinkedList<Vector3> historyPoints = new LinkedList<Vector3>();
+
+        public List<Segment> Segments { private set; get; }
+        public bool IsMoving { get => isMoving; }
+        public OccupiedTileController OccupiedTileController { get => occupiedTileController; set => occupiedTileController = value; }
 
         private void Start()
         {
@@ -97,7 +91,6 @@ namespace Geckout
                 Segment nextSegment = Segments[i + 1];
                 currentSegment.Setup(prevSegment, nextSegment);
                 currentSegment.SetController(this);
-                currentSegment.SetCorner(outerSmoothness, cornerRadius);
             }
 
             // ===== Set coordinate ban đầu =====
@@ -120,8 +113,6 @@ namespace Geckout
 
             Debug.Log($"Body initialized: length={length}, subLength={subLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
         }
-
-
 
         private List<Segment> GetOrderedSegments()
         {
