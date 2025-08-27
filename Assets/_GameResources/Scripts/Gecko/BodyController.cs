@@ -210,35 +210,62 @@ namespace Geckout
             OnEndMove?.Invoke(); // Fire end move event
         }
 
+        // ===== BodyController - Precise Movement Method =====
         IEnumerator SmoothPathMovement_Simplified(List<Vector3> worldPath)
         {
             if (worldPath.Count < 2) yield break;
 
-            float totalPathLength = 0f;
-            List<float> segmentLengths = new List<float>();
-            for (int i = 0; i < worldPath.Count - 1; i++)
-            {
-                float length = Vector3.Distance(worldPath[i], worldPath[i + 1]);
-                segmentLengths.Add(length);
-                totalPathLength += length;
-            }
-
-            float anchorDist = 0f;
             var orderedSegments = GetOrderedSegments();
             Vector3 lastAnchorPos = orderedSegments[0].transform.position;
 
-            // Get GridHeadClamper component
-            GridHeadClamper gridClamper = GetComponent<GridHeadClamper>();
+            // For grid-precise movement when controlling head
+            int currentWaypointIndex = 0;
+            bool useGridPreciseMovement = (controlAnchor == ControlAnchor.Head);
+            GridHeadClamper gridClamper = useGridPreciseMovement ? GetComponent<GridHeadClamper>() : null;
 
-            while (anchorDist < totalPathLength)
+            while (currentWaypointIndex < worldPath.Count - 1)
             {
-                anchorDist += moveSpeed * Time.deltaTime;
-                Vector3 anchorPos = GetPointAtDistanceOnWorldPath(worldPath, segmentLengths, anchorDist);
+                Vector3 currentTarget = worldPath[currentWaypointIndex + 1];
+                Vector3 anchorPos;
 
-                // Clamp head position to grid if GridHeadClamper is present and controlling head
-                if (gridClamper != null && controlAnchor == ControlAnchor.Head)
+                if (useGridPreciseMovement)
                 {
-                    anchorPos = gridClamper.ClampHeadPosition(anchorPos);
+                    // Precise movement towards target waypoint
+                    float frameSpeed = moveSpeed * Time.deltaTime;
+                    Vector3 intendedPos = Vector3.MoveTowards(lastAnchorPos, currentTarget, frameSpeed);
+
+                    // Apply grid constraints through GridHeadClamper
+                    if (gridClamper != null)
+                    {
+                        anchorPos = gridClamper.ClampHeadPosition(intendedPos);
+                    }
+                    else
+                    {
+                        anchorPos = intendedPos;
+                    }
+
+                    // Check if we reached the target waypoint (with small tolerance)
+                    if (Vector3.Distance(anchorPos, currentTarget) < 0.01f)
+                    {
+                        anchorPos = currentTarget; // Ensure exact position
+                        currentWaypointIndex++; // Move to next waypoint
+                    }
+                }
+                else
+                {
+                    // Original smooth movement for tail control
+                    float totalPathLength = 0f;
+                    List<float> segmentLengths = new List<float>();
+                    for (int i = 0; i < worldPath.Count - 1; i++)
+                    {
+                        float length = Vector3.Distance(worldPath[i], worldPath[i + 1]);
+                        segmentLengths.Add(length);
+                        totalPathLength += length;
+                    }
+
+                    float anchorDist = 0f;
+                    anchorDist += moveSpeed * Time.deltaTime;
+                    anchorPos = GetPointAtDistanceOnWorldPath(worldPath, segmentLengths, anchorDist);
                 }
 
                 if ((anchorPos - lastAnchorPos).sqrMagnitude > (minSampleStep * minSampleStep))
@@ -250,18 +277,7 @@ namespace Geckout
                 // Apply positions to ordered segments
                 for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
                 {
-                    float backDist;
-                    if (controlAnchor == ControlAnchor.Head)
-                    {
-                        // Normal: segIdx 0 = anchor (distance 0), segIdx 1 = behind anchor, etc.
-                        backDist = segIdx * segmentSpacing;
-                    }
-                    else
-                    {
-                        // Reverse: segIdx 0 = anchor (distance 0), but we want the tail segments to be further back
-                        backDist = segIdx * segmentSpacing;
-                    }
-
+                    float backDist = segIdx * segmentSpacing;
                     Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
                     orderedSegments[segIdx].transform.position = pos;
                 }
@@ -269,34 +285,29 @@ namespace Geckout
                 yield return null;
             }
 
-            // Final position
-            Vector3 finalAnchor = worldPath[worldPath.Count - 1];
-
-            // Clamp final position as well
-            if (gridClamper != null && controlAnchor == ControlAnchor.Head)
+            // Ensure final position is exact
+            if (useGridPreciseMovement)
             {
-                finalAnchor = gridClamper.ClampHeadPosition(finalAnchor);
-            }
+                Vector3 finalAnchor = worldPath[worldPath.Count - 1];
 
-            AddAnchorSample(finalAnchor);
-
-            for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
-            {
-                float backDist;
-                if (controlAnchor == ControlAnchor.Head)
+                if (gridClamper != null)
                 {
-                    backDist = segIdx * segmentSpacing;
-                }
-                else
-                {
-                    backDist = segIdx * segmentSpacing;
+                    finalAnchor = gridClamper.ClampHeadPosition(finalAnchor);
                 }
 
-                Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
-                orderedSegments[segIdx].transform.position = pos;
+                AddAnchorSample(finalAnchor);
+
+                for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
+                {
+                    float backDist = segIdx * segmentSpacing;
+                    Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
+                    orderedSegments[segIdx].transform.position = pos;
+                }
             }
         }
 
+        // ===== GridHeadClamper - Updated for Precise Movement =====
+        
         private Vector3 GetPointAtDistanceOnWorldPath(List<Vector3> path, List<float> segLens, float distance)
         {
             if (path.Count < 2) return path[0];

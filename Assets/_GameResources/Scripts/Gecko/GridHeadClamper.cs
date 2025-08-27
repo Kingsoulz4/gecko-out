@@ -69,10 +69,11 @@ namespace Geckout
             queuedPath = null;
         }
 
-        public Vector3 ClampHeadPosition(Vector3 targetPosition)
+
+        public Vector3 ClampHeadPosition(Vector3 intendedPosition)
         {
             if (bodyController?.Segments == null || bodyController.Segments.Count == 0)
-                return targetPosition;
+                return intendedPosition;
 
             Vector3 currentHeadPos = bodyController.Segments[0].transform.position;
             Vector2Int currentTileCoord = bodyController.OccupiedTileController.WorldToGridPosition(currentHeadPos);
@@ -86,18 +87,48 @@ namespace Geckout
                 UpdateDirectionAtTileCenter(currentTileCoord);
             }
 
-            // If no path or direction, stay at current position
+            // If no path or direction, snap to current tile center
             if (currentPath.Count == 0 || currentDirection == Vector2Int.zero)
             {
+                if (GameMap.TryGetTileAt(currentTileCoord, out GameTile currentTile))
+                {
+                    return currentTile.transform.position; // Snap to tile center
+                }
                 return currentHeadPos;
             }
 
-            // Apply grid clamp movement
-            Vector3 clampedPosition = ApplyGridClamp(currentHeadPos, targetPosition, currentTileCoord);
-
-            return clampedPosition;
+            // Apply grid constraint to intended movement
+            return ApplyGridConstraintToIntendedPosition(currentHeadPos, intendedPosition, currentTileCoord);
         }
 
+        private Vector3 ApplyGridConstraintToIntendedPosition(Vector3 currentPos, Vector3 intendedPos, Vector2Int currentTileCoord)
+        {
+            // Get current tile center
+            if (!GameMap.TryGetTileAt(currentTileCoord, out GameTile currentTile))
+                return intendedPos;
+
+            Vector3 currentTileCenter = currentTile.transform.position;
+
+            // Calculate next tile position based on current direction
+            Vector2Int nextTileCoord = currentTileCoord + currentDirection;
+            if (!GameMap.TryGetTileAt(nextTileCoord, out GameTile nextTile))
+            {
+                return currentTileCenter; // Can't move, stay at center
+            }
+
+            Vector3 nextTileCenter = nextTile.transform.position;
+
+            // Calculate movement towards next tile center
+            Vector3 movementDelta = intendedPos - currentPos;
+            float intendedSpeed = movementDelta.magnitude;
+
+            // Use MoveTowards for precise movement along grid line
+            Vector3 precisePosition = Vector3.MoveTowards(currentPos, nextTileCenter, intendedSpeed);
+
+            DebugLog($"Grid constraint: {currentPos} -> intended {intendedPos} -> clamped {precisePosition}");
+
+            return precisePosition;
+        }
         private void CheckTileCenterAlignment(Vector3 headPos, Vector2Int tileCoord)
         {
             if (!GameMap.TryGetTileAt(tileCoord, out GameTile currentTile))
@@ -173,55 +204,6 @@ namespace Geckout
             }
 
             return Vector2Int.zero;
-        }
-
-        private Vector3 ApplyGridClamp(Vector3 currentPos, Vector3 targetPos, Vector2Int currentTileCoord)
-        {
-            // Calculate movement delta
-            Vector3 moveDelta = targetPos - currentPos;
-            float moveDistance = moveDelta.magnitude;
-
-            if (moveDistance < 0.001f) return currentPos;
-
-            // Get current tile center
-            if (!GameMap.TryGetTileAt(currentTileCoord, out GameTile currentTile))
-                return targetPos;
-
-            Vector3 tileCenter = currentTile.transform.position;
-
-            // Clamp movement to current direction only
-            Vector3 directionVector = new Vector3(currentDirection.x, currentDirection.y, 0f);
-
-            // Project movement onto current direction
-            float projectedDistance = Vector3.Dot(moveDelta.normalized, directionVector) * moveDistance;
-
-            // Only move in positive direction along current direction
-            if (projectedDistance > 0)
-            {
-                Vector3 clampedDelta = directionVector * projectedDistance;
-                Vector3 clampedPosition = currentPos + clampedDelta;
-
-                // Ensure we don't overshoot next tile center
-                Vector2Int nextTileCoord = currentTileCoord + currentDirection;
-                if (GameMap.TryGetTileAt(nextTileCoord, out GameTile nextTile))
-                {
-                    Vector3 nextTileCenter = nextTile.transform.position;
-
-                    // Check if we would overshoot
-                    float distanceToNext = Vector3.Distance(tileCenter, nextTileCenter);
-                    float currentDistance = Vector3.Distance(tileCenter, clampedPosition);
-
-                    if (currentDistance > distanceToNext)
-                    {
-                        clampedPosition = nextTileCenter;
-                        DebugLog($"Clamped to next tile center: {nextTileCoord}");
-                    }
-                }
-
-                return clampedPosition;
-            }
-
-            return currentPos;
         }
 
         private void DebugLog(string message)
