@@ -122,7 +122,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!43 &418296531
+--- !u!43 &604943378
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -491,6 +491,7 @@ GameObject:
   - component: {fileID: 1022657190}
   - component: {fileID: 1022657191}
   - component: {fileID: 1022657197}
+  - component: {fileID: 1022657198}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -526,10 +527,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   length: 5
-  headPrefab: {fileID: 977039008493845289, guid: a442355917e79054d8f791998cf8e814, type: 3}
-  segment: {fileID: 977039008493845289, guid: 1cad3011a7ab3f94b83b159e6b78c38d, type: 3}
-  tailPrefab: {fileID: 977039008493845289, guid: 16b78289a1dd6e648b0990603f852fc7, type: 3}
-  moveSpeed: 6
+  subLength: 3
+  moveSpeed: 5
+  minSampleStep: 0.05
   movementCurve:
     serializedVersion: 2
     m_Curve:
@@ -554,13 +554,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  outerSmoothness: 0.7
-  cornerRadius: 0.3
+  headPrefab: {fileID: 977039008493845289, guid: a442355917e79054d8f791998cf8e814, type: 3}
+  segment: {fileID: 977039008493845289, guid: 1cad3011a7ab3f94b83b159e6b78c38d, type: 3}
+  tailPrefab: {fileID: 977039008493845289, guid: 16b78289a1dd6e648b0990603f852fc7, type: 3}
   occupiedTileController: {fileID: 1022657197}
   _bodyRenderer: {fileID: 1022657191}
   controlAnchor: 0
-  minSampleStep: 0.05
-  subLength: 3
 --- !u!114 &1022657191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -625,7 +624,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1022657188}
-  m_Mesh: {fileID: 418296531}
+  m_Mesh: {fileID: 604943378}
 --- !u!114 &1022657195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -728,7 +727,7 @@ MonoBehaviour:
   triggerGroups: []
   _spline:
     points: []
-    type: 0
+    type: 3
     linearAverageDirection: 1
     customValueInterpolation:
       serializedVersion: 2
@@ -769,6 +768,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   updateInterval: 0.03
   bodyController: {fileID: 1022657190}
+--- !u!114 &1022657198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1022657188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 637971271dc391e489ce8b078ed444ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileCenterThreshold: 0.02
+  enableDebugLogs: 0
 --- !u!1 &1580965441
 GameObject:
   m_ObjectHideFlags: 0

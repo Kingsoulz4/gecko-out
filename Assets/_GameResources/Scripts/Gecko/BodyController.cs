@@ -138,6 +138,14 @@ namespace Geckout
             }
 
             currentPath = new List<Vector2Int>(path);
+
+            // Set path for GridHeadClamper if present and controlling head
+            GridHeadClamper gridClamper = GetComponent<GridHeadClamper>();
+            if (gridClamper != null && controlAnchor == ControlAnchor.Head)
+            {
+                gridClamper.SetPath(path);
+            }
+
             moveCoroutine = StartCoroutine(FollowPathContinuous());
         }
 
@@ -219,10 +227,19 @@ namespace Geckout
             var orderedSegments = GetOrderedSegments();
             Vector3 lastAnchorPos = orderedSegments[0].transform.position;
 
+            // Get GridHeadClamper component
+            GridHeadClamper gridClamper = GetComponent<GridHeadClamper>();
+
             while (anchorDist < totalPathLength)
             {
                 anchorDist += moveSpeed * Time.deltaTime;
                 Vector3 anchorPos = GetPointAtDistanceOnWorldPath(worldPath, segmentLengths, anchorDist);
+
+                // Clamp head position to grid if GridHeadClamper is present and controlling head
+                if (gridClamper != null && controlAnchor == ControlAnchor.Head)
+                {
+                    anchorPos = gridClamper.ClampHeadPosition(anchorPos);
+                }
 
                 if ((anchorPos - lastAnchorPos).sqrMagnitude > (minSampleStep * minSampleStep))
                 {
@@ -254,6 +271,13 @@ namespace Geckout
 
             // Final position
             Vector3 finalAnchor = worldPath[worldPath.Count - 1];
+
+            // Clamp final position as well
+            if (gridClamper != null && controlAnchor == ControlAnchor.Head)
+            {
+                finalAnchor = gridClamper.ClampHeadPosition(finalAnchor);
+            }
+
             AddAnchorSample(finalAnchor);
 
             for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
@@ -271,8 +295,6 @@ namespace Geckout
                 Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
                 orderedSegments[segIdx].transform.position = pos;
             }
-
-
         }
 
         private Vector3 GetPointAtDistanceOnWorldPath(List<Vector3> path, List<float> segLens, float distance)

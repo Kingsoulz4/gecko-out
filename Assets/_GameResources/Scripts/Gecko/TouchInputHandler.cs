@@ -148,6 +148,24 @@ namespace Geckout
             DebugLog($"Map size: {GameMap.MapSize}, total tiles: {mapState.Length}");
         }
 
+        // 1. Add this new method to TouchInputHandler
+        Vector2Int GetDirectionToTarget(Vector2Int start, Vector2Int target)
+        {
+            Vector2Int diff = target - start;
+
+            // Return primary direction (prioritize horizontal movement)
+            if (Mathf.Abs(diff.x) > Mathf.Abs(diff.y))
+            {
+                return new Vector2Int(diff.x > 0 ? 1 : -1, 0);
+            }
+            else if (Mathf.Abs(diff.y) > 0)
+            {
+                return new Vector2Int(0, diff.y > 0 ? 1 : -1);
+            }
+
+            return Vector2Int.zero;
+        }
+
         void FindAndSetSmoothPath(Vector2Int targetTile)
         {
             if (bodyController == null) return;
@@ -204,9 +222,11 @@ namespace Geckout
                 smoothPath.Add(node.Position);
             }
 
-            // Execute smooth continuous movement immediately
+            // Execute path - GridHeadClamper will handle direction changes automatically
             ExecuteSmoothPath(smoothPath);
         }
+
+
 
         void ExecuteSmoothPath(List<Vector2Int> path)
         {
