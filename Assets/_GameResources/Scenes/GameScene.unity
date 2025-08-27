@@ -361,9 +361,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 158e413efc2349c4a95e561309993f8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  length: 5
-  subLength: 3
-  moveSpeed: 5
+  length: 4
+  moveSpeed: 6
   minSampleStep: 0.05
   movementCurve:
     serializedVersion: 2
@@ -459,7 +458,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1022657188}
-  m_Mesh: {fileID: 1322163770}
+  m_Mesh: {fileID: 1027872533}
 --- !u!114 &1022657195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -617,7 +616,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileCenterThreshold: 0.05
   enableDebugLogs: 0
---- !u!43 &1322163770
+--- !u!43 &1027872533
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

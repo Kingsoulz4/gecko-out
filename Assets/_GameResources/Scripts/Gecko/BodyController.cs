@@ -17,8 +17,7 @@ namespace Geckout
             Tail
         }
 
-        [SerializeField] private int length = 5;
-        [SerializeField] private int subLength = 3;
+        [SerializeField] private int length = 3;
         [SerializeField] private float moveSpeed = 6f;
         [SerializeField] private float minSampleStep = 0.05f;
         [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
@@ -35,27 +34,40 @@ namespace Geckout
 
         private Segment _head, _tail;
         private bool isMoving = false;
-        private float segmentSpacing = 1f;
         private float historyTotalLength = 0f;
         private const float extraHistoryPadding = 4f;
         private Coroutine moveCoroutine;
         private List<Vector2Int> currentPath = new List<Vector2Int>();
         private LinkedList<Vector3> historyPoints = new LinkedList<Vector3>();
+        private float segmentSpacing;
 
         public List<Segment> Segments { private set; get; }
         public bool IsMoving { get => isMoving; }
         public OccupiedTileController OccupiedTileController { get => occupiedTileController; set => occupiedTileController = value; }
 
+
+        // Mỗi phần tử: (totalSegments, spacing)
+        private static readonly List<(int totalSegments, float spacing)> SegmentConfig =
+            new List<(int, float)>
+            {
+        (0, 0f),                 
+        (3,  1f / (3 - 1)),      
+        (6,  2f / (6 - 1)),      
+        (9,  3f / (9 - 1)),      
+        (12, 4f / (12 - 1)),     
+        (15, 5f / (15 - 1)),     
+        (18, 6f / (18 - 1)),     
+        (21, 7f / (21 - 1))      
+            };
+
         private void Start()
         {
             Segments = new List<Segment>();
 
-            // ===== Tính toán tổng số segment =====
-            int totalSegments = length * subLength;
-            float unitSpacing = 1f / subLength;  // khoảng cách giữa các segment con
-            segmentSpacing = unitSpacing;
-            float totalBodyLength = length;      // chiều dài thật sự (theo world space)
-
+            // ===== Lấy config theo length =====
+            (int totalSegments, float segmentSpacing) = SegmentConfig[length-1];
+            int bodySegmentCount = totalSegments - 2;
+            this.segmentSpacing = segmentSpacing;
             // ===== Head =====
             _head = Instantiate(headPrefab, transform);
             _head.name = "Head";
@@ -63,18 +75,20 @@ namespace Geckout
             Segments.Add(_head);
 
             // ===== Body segments =====
-            for (int i = 1; i < totalSegments - 1; i++)
+            for (int i = 1; i <= bodySegmentCount; i++)
             {
                 Segment seg = Instantiate(this.segment, transform);
-                seg.name = "Segment " + i;
-                seg.transform.localPosition = new Vector3(0, -i * unitSpacing, 0);
+                seg.name = "Body " + i;
+                float yPos = -i * segmentSpacing;
+                seg.transform.localPosition = new Vector3(0, yPos, 0);
                 Segments.Add(seg);
             }
 
             // ===== Tail =====
             _tail = Instantiate(tailPrefab, transform);
             _tail.name = "Tail";
-            _tail.transform.localPosition = new Vector3(0, -(totalSegments - 1) * unitSpacing, 0);
+            float tailYPos = -length; // luôn ở cuối
+            _tail.transform.localPosition = new Vector3(0, tailYPos, 0);
             Segments.Add(_tail);
 
             // ===== Setup neighbors =====
@@ -93,16 +107,19 @@ namespace Geckout
                 currentSegment.SetController(this);
             }
 
-            // ===== Set coordinate ban đầu =====
+            // ===== Set coordinates based on position =====
             for (int i = 0; i < Segments.Count; i++)
             {
-                // unitIndex = segment thuộc về tile nào
-                int unitIndex = i / subLength;
+                float segmentYPos = -i * segmentSpacing;
+                if (i == Segments.Count - 1) // Tail
+                {
+                    segmentYPos = -length;
+                }
 
-                var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
+                int tileIndex = Mathf.RoundToInt(Mathf.Abs(segmentYPos));
+                var coordinate = new Vector2Int(0, GameMap.MapSize.y - tileIndex - 1);
                 Segments[i].SetCoordinate(coordinate);
             }
-
 
             // ===== Init history system =====
             InitHistoryFromSegments();
@@ -111,7 +128,11 @@ namespace Geckout
             if (_bodyRenderer != null)
                 _bodyRenderer.Initialize(Segments);
 
-            Debug.Log($"Body initialized: length={length}, subLength={subLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
+            Debug.Log($"Body initialized:");
+            Debug.Log($"- Length: {length} units");
+            Debug.Log($"- Total segments: {totalSegments} (Head + {bodySegmentCount} body + Tail)");
+            Debug.Log($"- Spacing: {segmentSpacing:F3}");
+            Debug.Log($"- Head at: (0, 0), Tail at: (0, {tailYPos})");
         }
 
         private List<Segment> GetOrderedSegments()
