@@ -13,7 +13,7 @@ namespace Geckout
         [SerializeField] GameLevelData levelData;
         [SerializeField] private GameTile tilePrefab;
         [SerializeField] private bool isDebug = false;
-        [SerializeField] private float offsetFactor = 1.15f;
+        [SerializeField] private float offsetFactor = 1f;
 
         [SerializeField] private Transform _tilesContainer;
         private Transform _entitiesContainer;

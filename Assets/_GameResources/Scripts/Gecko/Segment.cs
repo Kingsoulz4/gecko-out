@@ -11,6 +11,7 @@ namespace Geckout
 
     public class Segment : MonoBehaviour
     {
+        public SegmentType segmentType = SegmentType.BODY;
         private GameTile _currentTile;
 
         // Movement data

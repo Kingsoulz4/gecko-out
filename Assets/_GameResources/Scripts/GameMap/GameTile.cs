@@ -26,7 +26,7 @@ namespace Geckout
                     tileCollider = boxCollider;
                 }
             }
-            tileRenderer.enabled = false;
+            tileRenderer.enabled = true;
         }
 
         public void SetCoordinate(int x, int y)
@@ -79,7 +79,7 @@ namespace Geckout
 
         private void OnValidate()
         {
-            tileRenderer.enabled = false;
+            tileRenderer.enabled = true;
         }
 
         private void OnDrawGizmos()
