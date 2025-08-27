@@ -187,11 +187,6 @@ namespace Geckout
             currentPath.Clear();
         }
 
-        void Update()
-        {
-            Debug.Log("Update123 " + IsMoving);
-        }
-
         IEnumerator FollowPathContinuous()
         {
             if (currentPath.Count == 0) yield break;
