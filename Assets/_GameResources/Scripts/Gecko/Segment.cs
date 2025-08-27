@@ -2,8 +2,16 @@
 
 namespace Geckout
 {
+    public enum SegmentType
+    {
+        HEAD,
+        BODY,
+        TAIL
+    }
+
     public class Segment : MonoBehaviour
     {
+        public SegmentType segmentType; 
         public Segment PrevSegment { private set; get; }
         public Segment NextSegment { private set; get; }
         public Vector2Int Coordinate { private set; get; }

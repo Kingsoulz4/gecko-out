@@ -30,10 +30,15 @@ namespace Geckout
         [SerializeField] private ControlAnchor controlAnchor = ControlAnchor.Head;
         [SerializeField] private float minSampleStep = 0.025f;
         [SerializeField] private int subLength = 1;
-
+        [SerializeField] private SplineComputer splineComputer;
+        [SerializeField] private SplineFollower splineFollower;
+        [Header("Test")]
+        [SerializeField] private int posXTest = 0;
+        [SerializeField] private int posYTest = 1;
+        
 
         private Segment _head, _tail;
-        public List<Segment> Segments { private set; get; }
+        public List<Segment> Segments;
         public bool IsMoving { get => isMoving; }
         public OccupiedTileController OccupiedTileController { get => occupiedTileController; set => occupiedTileController = value; }
 
@@ -66,6 +71,7 @@ namespace Geckout
             _head = Instantiate(headPrefab, transform);
             _head.name = "Head";
             _head.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+
             Segments.Add(_head);
 
             // ===== Body segments =====
@@ -106,7 +112,7 @@ namespace Geckout
                 // unitIndex = segment thuộc về tile nào
                 int unitIndex = i / subLength;
 
-                var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
+                var coordinate = new Vector2Int(posXTest, GameMap.MapSize.y - unitIndex - posYTest);
                 Segments[i].SetCoordinate(coordinate);
             }
 
@@ -122,6 +128,106 @@ namespace Geckout
         }
 
 
+        private void Update()
+        {
+            if (splineFollower == null || _head == null || _tail == null) return;
+
+            float rotationSmooth = 10;
+
+            // Get head direction (tangent at current position)
+            SplineSample headSample = splineFollower.result;
+            Vector3 headForward = headSample.forward;
+
+            // Rotate head smoothly towards tangent
+            if (headForward != Vector3.zero)
+            {
+                Quaternion headRotation = Quaternion.LookRotation(headForward, Vector3.forward);
+                _head.transform.rotation = Quaternion.Lerp(_head.transform.rotation, headRotation, Time.deltaTime * rotationSmooth);
+            }
+
+            // Get tail position a bit behind the head
+            double tailPercent = Mathf.Clamp01((float)splineFollower.result.percent - 0.05f); // offset 5% behind
+            SplineSample tailSample = new SplineSample();
+            splineFollower.spline.Project(splineFollower.spline.EvaluatePosition(tailPercent), ref tailSample);
+
+            Vector3 tailForward = tailSample.forward;
+
+            // Rotate tail
+            if (tailForward != Vector3.zero)
+            {
+                Quaternion tailRotation = Quaternion.LookRotation(tailForward, Vector3.up);
+                _tail.transform.rotation = Quaternion.Lerp(_tail.transform.rotation, tailRotation, Time.deltaTime * rotationSmooth);
+            }
+        }
+
+
+        public void InitBody(List<Vector2Int> listCoordinate)
+        {
+            Segments = new List<Segment>();
+
+            // ===== Tính toán tổng số segment =====
+            int totalSegments = length * subLength;
+            float unitSpacing = 1f / subLength;  // khoảng cách giữa các segment con
+            segmentSpacing = unitSpacing;
+            float totalBodyLength = length;      // chiều dài thật sự (theo world space)
+
+            // ===== Head =====
+            _head = Instantiate(headPrefab, transform);
+            _head.name = "Head";
+            _head.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+
+            Segments.Add(_head);
+
+            // ===== Body segments =====
+            for (int i = 1; i < totalSegments - 1; i++)
+            {
+                Segment seg = Instantiate(this.segment, transform);
+                seg.name = "Segment " + i;
+                seg.transform.localPosition = new Vector3(0, -i * unitSpacing, 0);
+                Segments.Add(seg);
+            }
+
+            // ===== Tail =====
+            _tail = Instantiate(tailPrefab, transform);
+            _tail.name = "Tail";
+            _tail.transform.localPosition = new Vector3(0, -(totalSegments - 1) * unitSpacing, 0);
+            Segments.Add(_tail);
+
+            // ===== Setup neighbors =====
+            _head.Setup(null, Segments[1]);
+            _head.SetController(this);
+
+            _tail.Setup(Segments[Segments.Count - 2], null);
+            _tail.SetController(this);
+
+            for (int i = 1; i < Segments.Count - 1; i++)
+            {
+                var currentSegment = Segments[i];
+                Segment prevSegment = Segments[i - 1];
+                Segment nextSegment = Segments[i + 1];
+                currentSegment.Setup(prevSegment, nextSegment);
+                currentSegment.SetController(this);
+                currentSegment.SetCorner(outerSmoothness, cornerRadius);
+            }
+
+
+
+            for (int i = 0; i < Segments.Count; i++)
+            {
+                // unitIndex = segment thuộc về tile nào
+                var coord = listCoordinate[i];
+                int unitIndex = i / subLength;
+
+                var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
+                Segments[i].SetCoordinate(coordinate);
+            }
+
+            InitHistoryFromSegments();
+
+            // ===== Initialize renderer =====
+            if (_bodyRenderer != null)
+                _bodyRenderer.Initialize(Segments);
+        }
 
         private List<Segment> GetOrderedSegments()
         {
@@ -278,7 +384,11 @@ namespace Geckout
                 }
 
                 Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
+
                 orderedSegments[segIdx].transform.position = pos;
+
+                
+
             }
 
 
@@ -500,5 +610,6 @@ namespace Geckout
                 return historyPoints.Last.Value;
             }
         }
+
     }
 }

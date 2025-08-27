@@ -26,6 +26,7 @@ namespace Geckout
                     tileCollider = boxCollider;
                 }
             }
+            tileRenderer.enabled = false;
         }
 
         public void SetCoordinate(int x, int y)
@@ -74,6 +75,11 @@ namespace Geckout
             {
                 ChangeColor(Color.white); // Default color
             }
+        }
+
+        private void OnValidate()
+        {
+            tileRenderer.enabled = false;
         }
 
         private void OnDrawGizmos()

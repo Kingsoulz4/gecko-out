@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using Geckout.Data;
 using UnityEngine.Serialization;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Geckout
 {
@@ -11,7 +13,9 @@ namespace Geckout
         [SerializeField] GameLevelData levelData;
         [SerializeField] private GameTile tilePrefab;
         [SerializeField] private bool isDebug = false;
-        private Transform _tilesContainer;
+        [SerializeField] private float offsetFactor = 1.15f;
+
+        [SerializeField] private Transform _tilesContainer;
         private Transform _entitiesContainer;
         private GameTile[] tiles;
         private Vector2Int _mapSize;
@@ -47,8 +51,9 @@ namespace Geckout
 
         public void Initialize(GameLevelData levelData)
         {
-            CreateContainers();
-            SpawnAllTiles(levelData);
+            //CreateContainers();
+            //SpawnAllTiles(levelData);
+            GetAllTilesTest(levelData);
         }
         public static Vector3 GetTileWorldPosition(Vector2Int coord)
         {
@@ -90,6 +95,30 @@ namespace Geckout
             return true;
         }
 
+        void GetAllTilesTest(GameLevelData levelData)
+        {
+            _mapSize = levelData.MapSize;
+            _entitiesContainer = CreateChild("EntitiesContainer");
+            if (_tilesContainer == null)
+            {
+                _tilesContainer = GameObject.Find("TilesContainer").transform;
+            }    
+            tiles = new GameTile[_mapSize.x * _mapSize.y];
+            List<GameTile> listTile = _tilesContainer.GetComponentsInChildren<GameTile>().ToList();
+            int i = 0;
+            for (int x = 0; x < _mapSize.x; x++)
+            {
+                for (int y = 0; y < _mapSize.y; y++)
+                {
+                    var tile = listTile[i];
+                    tiles[x + y * _mapSize.x] = tile;
+                    tile.SetCoordinate(x, y);
+                    i++;
+                }
+            }
+        }
+
+
         void SpawnAllTiles(GameLevelData levelData)
         {
             _mapSize = levelData.MapSize;
@@ -99,7 +128,7 @@ namespace Geckout
                 for (int y = 0; y < _mapSize.y; y++)
                 {
                     Vector3 offSet = new Vector3(_mapSize.x - 1, _mapSize.y - 1, 0) * 0.5f;
-                    GameTile tile = Instantiate(tilePrefab, new Vector3(x, y, 0) - offSet, Quaternion.identity);
+                    GameTile tile = Instantiate(tilePrefab, (new Vector3(x, y, 0) - offSet) * offsetFactor, Quaternion.identity);
                     tile.name = $"Tile {x}, {y}";
                     tiles[x + y * _mapSize.x] = tile;
 

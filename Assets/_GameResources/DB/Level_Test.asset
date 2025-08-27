@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e4bbb77418447a4ad117f74d48f98ba, type: 3}
   m_Name: Level_Test
   m_EditorClassIdentifier: 
-  mapSize: {x: 6, y: 8}
+  mapSize: {x: 6, y: 9}

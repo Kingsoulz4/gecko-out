@@ -11,6 +11,7 @@ namespace Geckout
         [SerializeField]private SplineComputer _spline;
         [SerializeField] private float tubeRadius = 0.5f;
         [SerializeField] private TubeGenerator _tubeGenerator;
+        [SerializeField] private SplineMesh _splineMesh;
 
 
         private List<Segment> _segments;
@@ -52,6 +53,10 @@ namespace Geckout
 
             _spline.SetPoints(splinePoints, SplineComputer.Space.Local);
             _spline.RebuildImmediate();
+            if (_splineMesh != null)
+            {
+                _splineMesh.RebuildImmediate();
+            }
             _tubeGenerator.RebuildImmediate();
         }
 
