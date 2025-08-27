@@ -11,11 +11,6 @@ namespace Geckout
 
     public class Segment : MonoBehaviour
     {
-        public SegmentType segmentType = SegmentType.BODY; 
-        public Segment PrevSegment { private set; get; }
-        public Segment NextSegment { private set; get; }
-        public Vector2Int Coordinate { private set; get; }
-        public Vector2Int MoveDirection { private set; get; }
         private GameTile _currentTile;
 
         // Movement data
@@ -28,12 +23,14 @@ namespace Geckout
         private Vector2Int _previousMoveDirection;
         private Vector2Int _currentTurnDirection;
 
-        // Hybrid corner settings
-        private float outerSmoothness = 0f;
-        private float cornerRadius = 0f;
 
         // Movement state
         private bool _isInMovement = false;
+
+        public Segment PrevSegment { private set; get; }
+        public Segment NextSegment { private set; get; }
+        public Vector2Int Coordinate { private set; get; }
+        public Vector2Int MoveDirection { private set; get; }
         public BodyController Controller { get; private set; }
         public GameTile CurrentTile { get => _currentTile; set => _currentTile = value; }
 
@@ -62,22 +59,11 @@ namespace Geckout
         {
             Controller = controller;
         }
-        public void SetCorner(float outerSmoothness, float cornerRadius)
-        {
-            this.outerSmoothness = outerSmoothness;
-            this.cornerRadius = cornerRadius;
-        }
 
         public void Setup(Segment prev, Segment next)
         {
             PrevSegment = prev;
             NextSegment = next;
-        }
-
-        public void ReleaseCurrentTile()
-        {
-            if (_currentTile != null)
-                _currentTile.SetOccupied(false);
         }
 
         // Dùng khi spawn / init

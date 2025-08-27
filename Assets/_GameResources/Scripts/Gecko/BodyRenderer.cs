@@ -13,7 +13,6 @@ namespace Geckout
         [SerializeField] private TubeGenerator _tubeGenerator;
         [SerializeField] private SplineMesh _splineMesh;
 
-
         private List<Segment> _segments;
         private Vector3[] _lastPositions; // Cache để check thay đổi
 
@@ -58,20 +57,6 @@ namespace Geckout
                 _splineMesh.RebuildImmediate();
             }
             _tubeGenerator.RebuildImmediate();
-        }
-
-        private bool IsCorner(int index)
-        {
-            if (index == 0 || index >= _segments.Count - 1) return false;
-
-            Vector3 pos = _segments[index].transform.position;
-            Vector3 prevPos = _segments[index - 1].transform.position;
-            Vector3 nextPos = _segments[index + 1].transform.position;
-
-            Vector3 dirIn = (pos - prevPos).normalized;
-            Vector3 dirOut = (nextPos - pos).normalized;
-
-            return Vector3.Angle(dirIn, dirOut) > 30f;
         }
 
         private void LateUpdate()
