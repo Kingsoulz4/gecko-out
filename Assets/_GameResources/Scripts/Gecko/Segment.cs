@@ -11,7 +11,7 @@ namespace Geckout
 
     public class Segment : MonoBehaviour
     {
-        public SegmentType segmentType; 
+        public SegmentType segmentType = SegmentType.BODY; 
         public Segment PrevSegment { private set; get; }
         public Segment NextSegment { private set; get; }
         public Vector2Int Coordinate { private set; get; }
@@ -36,6 +36,24 @@ namespace Geckout
         private bool _isInMovement = false;
         public BodyController Controller { get; private set; }
         public GameTile CurrentTile { get => _currentTile; set => _currentTile = value; }
+
+
+        private void Update()
+        {
+            if (segmentType == SegmentType.HEAD && NextSegment != null)
+            {
+                Vector3 dir = transform.position - NextSegment.transform.position;
+
+                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+                // Offset the angle by +90 degrees so the head points correctly
+                Quaternion targetRot = Quaternion.Euler(0, 0, angle - 90f);
+
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime * 10);
+            }
+
+
+        }
 
         public void SetController(BodyController controller)
         {
