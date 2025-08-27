@@ -26,8 +26,9 @@ namespace Geckout
         [SerializeField] private Segment tailPrefab;
         [SerializeField] private OccupiedTileController occupiedTileController;
         [SerializeField] private BodyRenderer _bodyRenderer;
-        [SerializeField] private ControlAnchor controlAnchor = ControlAnchor.Head;
-       
+        [SerializeField] private GridHeadClamper gridClamper;
+        public ControlAnchor controlAnchor = ControlAnchor.Head;
+
         // Movement events
         public Action OnStartMove;
         public Action OnEndMove;
@@ -45,19 +46,18 @@ namespace Geckout
         public bool IsMoving { get => isMoving; }
         public OccupiedTileController OccupiedTileController { get => occupiedTileController; set => occupiedTileController = value; }
 
-
         // Mỗi phần tử: (totalSegments, spacing)
         private static readonly List<(int totalSegments, float spacing)> SegmentConfig =
             new List<(int, float)>
             {
-        (0, 0f),                 
-        (3,  1f / (3 - 1)),      
-        (6,  2f / (6 - 1)),      
-        (9,  3f / (9 - 1)),      
-        (12, 4f / (12 - 1)),     
-        (15, 5f / (15 - 1)),     
-        (18, 6f / (18 - 1)),     
-        (21, 7f / (21 - 1))      
+        (0, 0f),
+        (3,  1f / (3 - 1)),
+        (6,  2f / (6 - 1)),
+        (9,  3f / (9 - 1)),
+        (12, 4f / (12 - 1)),
+        (15, 5f / (15 - 1)),
+        (18, 6f / (18 - 1)),
+        (21, 7f / (21 - 1))
             };
 
         private void Start()
@@ -65,7 +65,7 @@ namespace Geckout
             Segments = new List<Segment>();
 
             // ===== Lấy config theo length =====
-            (int totalSegments, float segmentSpacing) = SegmentConfig[length-1];
+            (int totalSegments, float segmentSpacing) = SegmentConfig[length - 1];
             int bodySegmentCount = totalSegments - 2;
             this.segmentSpacing = segmentSpacing;
             // ===== Head =====
@@ -135,7 +135,7 @@ namespace Geckout
             Debug.Log($"- Head at: (0, 0), Tail at: (0, {tailYPos})");
         }
 
-        private List<Segment> GetOrderedSegments()
+        public List<Segment> GetOrderedSegments()
         {
             if (controlAnchor == ControlAnchor.Head)
                 return Segments; // Normal order: Head leads
@@ -161,8 +161,7 @@ namespace Geckout
             currentPath = new List<Vector2Int>(path);
 
             // Set path for GridHeadClamper if present and controlling head
-            GridHeadClamper gridClamper = GetComponent<GridHeadClamper>();
-            if (gridClamper != null && controlAnchor == ControlAnchor.Head)
+            if (gridClamper != null)
             {
                 gridClamper.SetPath(path);
             }
@@ -232,6 +231,8 @@ namespace Geckout
         }
 
         // ===== BodyController - Precise Movement Method =====
+        // Replace the SmoothPathMovement_Simplified method in BodyController.cs with this version:
+
         IEnumerator SmoothPathMovement_Simplified(List<Vector3> worldPath)
         {
             if (worldPath.Count < 2) yield break;
@@ -239,10 +240,10 @@ namespace Geckout
             var orderedSegments = GetOrderedSegments();
             Vector3 lastAnchorPos = orderedSegments[0].transform.position;
 
-            // For grid-precise movement when controlling head
+            // FIXED: Use grid-precise movement for BOTH head and tail control
             int currentWaypointIndex = 0;
-            bool useGridPreciseMovement = (controlAnchor == ControlAnchor.Head);
-            GridHeadClamper gridClamper = useGridPreciseMovement ? GetComponent<GridHeadClamper>() : null;
+            bool useGridPreciseMovement = true; // Always use precise movement
+            GridHeadClamper gridClamper = GetComponent<GridHeadClamper>();
 
             while (currentWaypointIndex < worldPath.Count - 1)
             {
@@ -255,7 +256,7 @@ namespace Geckout
                     float frameSpeed = moveSpeed * Time.deltaTime;
                     Vector3 intendedPos = Vector3.MoveTowards(lastAnchorPos, currentTarget, frameSpeed);
 
-                    // Apply grid constraints through GridHeadClamper
+                    // Apply grid constraints through GridHeadClamper (now works for both head and tail)
                     if (gridClamper != null)
                     {
                         anchorPos = gridClamper.ClampHeadPosition(intendedPos);
@@ -274,7 +275,7 @@ namespace Geckout
                 }
                 else
                 {
-                    // Original smooth movement for tail control
+                    // This branch is no longer used, but kept for reference
                     float totalPathLength = 0f;
                     List<float> segmentLengths = new List<float>();
                     for (int i = 0; i < worldPath.Count - 1; i++)
@@ -328,7 +329,7 @@ namespace Geckout
         }
 
         // ===== GridHeadClamper - Updated for Precise Movement =====
-        
+
         private Vector3 GetPointAtDistanceOnWorldPath(List<Vector3> path, List<float> segLens, float distance)
         {
             if (path.Count < 2) return path[0];
