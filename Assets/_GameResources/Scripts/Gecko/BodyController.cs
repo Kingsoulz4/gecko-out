@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 namespace Geckout
 {
@@ -35,7 +36,6 @@ namespace Geckout
 
         private int subLength = 3;
         private Segment _head, _tail;
-        private bool isMoving = false;
         private float historyTotalLength = 0f;
         private const float extraHistoryPadding = 4f;
         private Coroutine moveCoroutine;
@@ -44,18 +44,28 @@ namespace Geckout
         private float segmentSpacing;
 
         public List<Segment> Segments { private set; get; }
-        public bool IsMoving { get => isMoving; }
-        public OccupiedTileController OccupiedTileController { get => occupiedTileController; set => occupiedTileController = value; }
 
+        public OccupiedTileController OccupiedTileController { get => occupiedTileController; set => occupiedTileController = value; }
+        public bool IsMoving
+        {
+            get
+            {
+                if (moveCoroutine != null) return true;
+
+                //if (gridClamper != null && !gridClamper.IsAtTileCenter) return true;
+
+                return false;
+            }
+        }
         private void Start()
         {
             Segments = new List<Segment>();
 
             // ===== Tính toán tổng số segment =====
-            int totalSegments = length * subLength - 2;   
-            float unitSpacing = 1f / subLength;       
+            int totalSegments = length * subLength - 2;
+            float unitSpacing = 1f / subLength;
             segmentSpacing = unitSpacing;
-            float totalBodyLength = length;  
+            float totalBodyLength = length;
 
             // ===== Head =====
             _head = Instantiate(headPrefab, transform);
@@ -173,23 +183,19 @@ namespace Geckout
             {
                 StopCoroutine(moveCoroutine);
                 moveCoroutine = null;
-
-                // If we were moving and got interrupted, fire end move event
-                if (isMoving)
-                {
-                    isMoving = false;
-                    OnEndMove?.Invoke();
-                }
             }
             currentPath.Clear();
-            isMoving = false;
+        }
+
+        void Update()
+        {
+            Debug.Log("Update123 " + IsMoving);
         }
 
         IEnumerator FollowPathContinuous()
         {
             if (currentPath.Count == 0) yield break;
 
-            isMoving = true;
             OnStartMove?.Invoke();
 
             List<Vector3> worldPath = new List<Vector3>();
@@ -206,13 +212,12 @@ namespace Geckout
 
             yield return SmoothPathMovement_Simplified(worldPath);
 
-            isMoving = false;
+            moveCoroutine = null;
+            OnEndMove?.Invoke();
             currentPath.Clear();
-            OnEndMove?.Invoke(); // Fire end move event
         }
 
         // ===== BodyController - Precise Movement Method =====
-        // Replace the SmoothPathMovement_Simplified method in BodyController.cs with this version:
 
         IEnumerator SmoothPathMovement_Simplified(List<Vector3> worldPath)
         {
@@ -221,7 +226,6 @@ namespace Geckout
             var orderedSegments = GetOrderedSegments();
             Vector3 lastAnchorPos = orderedSegments[0].transform.position;
 
-            // FIXED: Use grid-precise movement for BOTH head and tail control
             int currentWaypointIndex = 0;
             bool useGridPreciseMovement = true; // Always use precise movement
             GridHeadClamper gridClamper = GetComponent<GridHeadClamper>();
@@ -307,6 +311,7 @@ namespace Geckout
                     orderedSegments[segIdx].transform.position = pos;
                 }
             }
+
         }
 
         // ===== GridHeadClamper - Updated for Precise Movement =====

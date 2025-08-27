@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Geckout
 {
-    public class TouchInputHandler : MonoBehaviour
+    public class TouchInputHandler : SingletonMono<TouchInputHandler>
     {
         [SerializeField] private Camera gameCamera;
         [SerializeField] private LayerMask tileLayerMask = 1;
@@ -23,6 +23,8 @@ namespace Geckout
 
         private List<ASNode> currentPath;
         private List<Vector2Int> smoothPath = new List<Vector2Int>();
+
+        public bool IsDragging { get => isDragging;}
 
         void Start()
         {
@@ -167,7 +169,6 @@ namespace Geckout
         {
             if (bodyController == null) return;
 
-            // FIXED: Get the correct start position based on current control anchor
             Vector2Int startPos;
             if (isDraggingFromHead)
             {

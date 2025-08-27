@@ -122,7 +122,8 @@ namespace Geckout
 
         public Vector3 ClampHeadPosition(Vector3 targetPosition)
         {
-            if (bodyController?.Segments == null || bodyController.Segments.Count == 0)
+            if (bodyController?.Segments == null || bodyController.Segments.Count == 0 ||
+                !TouchInputHandler.Instance.IsDragging)
                 return targetPosition;
 
             // FIXED: Use controlling segment instead of always using head
