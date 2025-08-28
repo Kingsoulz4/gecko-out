@@ -361,7 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 158e413efc2349c4a95e561309993f8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  length: 4
+  length: 6
   moveSpeed: 6
   minSampleStep: 0.05
   movementCurve:
@@ -393,6 +393,7 @@ MonoBehaviour:
   tailPrefab: {fileID: 977039008493845289, guid: 16b78289a1dd6e648b0990603f852fc7, type: 3}
   occupiedTileController: {fileID: 1022657197}
   _bodyRenderer: {fileID: 1022657191}
+  gridClamper: {fileID: 1022657198}
   controlAnchor: 0
 --- !u!114 &1022657191
 MonoBehaviour:
@@ -458,7 +459,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1022657188}
-  m_Mesh: {fileID: 1027872533}
+  m_Mesh: {fileID: 1145341160}
 --- !u!114 &1022657195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -616,7 +617,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileCenterThreshold: 0.05
   enableDebugLogs: 0
---- !u!43 &1027872533
+--- !u!43 &1145341160
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

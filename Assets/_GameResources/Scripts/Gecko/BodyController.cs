@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 namespace Geckout
 {
@@ -26,17 +27,15 @@ namespace Geckout
         [SerializeField] private Segment tailPrefab;
         [SerializeField] private OccupiedTileController occupiedTileController;
         [SerializeField] private BodyRenderer _bodyRenderer;
-        [SerializeField] private ControlAnchor controlAnchor = ControlAnchor.Head;
-        [Header("Test")]
-        [SerializeField] private int posXTest = 0;
-        [SerializeField] private int posYTest = 1;
-       
+        [SerializeField] private GridHeadClamper gridClamper;
+        public ControlAnchor controlAnchor = ControlAnchor.Head;
+
         // Movement events
         public Action OnStartMove;
         public Action OnEndMove;
 
+        private int subLength = 3;
         private Segment _head, _tail;
-        private bool isMoving = false;
         private float historyTotalLength = 0f;
         private const float extraHistoryPadding = 4f;
         private Coroutine moveCoroutine;
@@ -45,54 +44,49 @@ namespace Geckout
         private float segmentSpacing;
 
         public List<Segment> Segments { private set; get; }
-        public bool IsMoving { get => isMoving; }
+
         public OccupiedTileController OccupiedTileController { get => occupiedTileController; set => occupiedTileController = value; }
-
-
-        // Mỗi phần tử: (totalSegments, spacing)
-        private static readonly List<(int totalSegments, float spacing)> SegmentConfig =
-            new List<(int, float)>
+        public bool IsMoving
+        {
+            get
             {
-        (0, 0f),                 
-        (3,  1f / (3 - 1)),      
-        (6,  2f / (6 - 1)),      
-        (9,  3f / (9 - 1)),      
-        (12, 4f / (12 - 1)),     
-        (15, 5f / (15 - 1)),     
-        (18, 6f / (18 - 1)),     
-        (21, 7f / (21 - 1))      
-            };
+                if (moveCoroutine != null) return true;
 
+                //if (gridClamper != null && !gridClamper.IsAtTileCenter) return true;
+
+                return false;
+            }
+        }
         private void Start()
         {
             Segments = new List<Segment>();
 
-            // ===== Lấy config theo length =====
-            (int totalSegments, float segmentSpacing) = SegmentConfig[length-1];
-            int bodySegmentCount = totalSegments - 2;
-            this.segmentSpacing = segmentSpacing;
+            // ===== Tính toán tổng số segment =====
+            int totalSegments = length * subLength - 2;
+            float unitSpacing = 1f / subLength;
+            segmentSpacing = unitSpacing;
+            float totalBodyLength = length;
+
             // ===== Head =====
             _head = Instantiate(headPrefab, transform);
             _head.name = "Head";
             _head.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-
             Segments.Add(_head);
 
             // ===== Body segments =====
-            for (int i = 1; i <= bodySegmentCount; i++)
+            // chỉ spawn từ 1 đến totalSegments - 2 (dành chỗ cho Tail)
+            for (int i = 1; i < totalSegments - 1; i++)
             {
                 Segment seg = Instantiate(this.segment, transform);
-                seg.name = "Body " + i;
-                float yPos = -i * segmentSpacing;
-                seg.transform.localPosition = new Vector3(0, yPos, 0);
+                seg.name = "Segment " + i;
+                seg.transform.localPosition = new Vector3(0, -i * unitSpacing, 0);
                 Segments.Add(seg);
             }
 
             // ===== Tail =====
             _tail = Instantiate(tailPrefab, transform);
             _tail.name = "Tail";
-            float tailYPos = -length; // luôn ở cuối
-            _tail.transform.localPosition = new Vector3(0, tailYPos, 0);
+            _tail.transform.localPosition = new Vector3(0, -(totalSegments - 1) * unitSpacing, 0);
             Segments.Add(_tail);
 
             // ===== Setup neighbors =====
@@ -111,17 +105,13 @@ namespace Geckout
                 currentSegment.SetController(this);
             }
 
-            // ===== Set coordinates based on position =====
+            // ===== Set coordinate ban đầu =====
             for (int i = 0; i < Segments.Count; i++)
             {
-                float segmentYPos = -i * segmentSpacing;
-                if (i == Segments.Count - 1) // Tail
-                {
-                    segmentYPos = -length;
-                }
+                // unitIndex = segment thuộc về tile nào
+                int unitIndex = i / subLength;
 
-                int tileIndex = Mathf.RoundToInt(Mathf.Abs(segmentYPos));
-                var coordinate = new Vector2Int(posXTest, GameMap.MapSize.y - tileIndex - posYTest);
+                var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
                 Segments[i].SetCoordinate(coordinate);
             }
 
@@ -132,26 +122,11 @@ namespace Geckout
             if (_bodyRenderer != null)
                 _bodyRenderer.Initialize(Segments);
 
-            Debug.Log($"Body initialized:");
-            Debug.Log($"- Length: {length} units");
-            Debug.Log($"- Total segments: {totalSegments} (Head + {bodySegmentCount} body + Tail)");
-            Debug.Log($"- Spacing: {segmentSpacing:F3}");
-            Debug.Log($"- Head at: (0, 0), Tail at: (0, {tailYPos})");
+            Debug.Log($"Body initialized: length={length}, subLength={subLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
         }
 
 
-        private void Update()
-        {
-            
-        }
-
-
-        public void InitBody(List<Vector2Int> listCoordinate)
-        {
-            
-        }
-
-        private List<Segment> GetOrderedSegments()
+        public List<Segment> GetOrderedSegments()
         {
             if (controlAnchor == ControlAnchor.Head)
                 return Segments; // Normal order: Head leads
@@ -177,8 +152,7 @@ namespace Geckout
             currentPath = new List<Vector2Int>(path);
 
             // Set path for GridHeadClamper if present and controlling head
-            GridHeadClamper gridClamper = GetComponent<GridHeadClamper>();
-            if (gridClamper != null && controlAnchor == ControlAnchor.Head)
+            if (gridClamper != null)
             {
                 gridClamper.SetPath(path);
             }
@@ -209,23 +183,14 @@ namespace Geckout
             {
                 StopCoroutine(moveCoroutine);
                 moveCoroutine = null;
-
-                // If we were moving and got interrupted, fire end move event
-                if (isMoving)
-                {
-                    isMoving = false;
-                    OnEndMove?.Invoke();
-                }
             }
             currentPath.Clear();
-            isMoving = false;
         }
 
         IEnumerator FollowPathContinuous()
         {
             if (currentPath.Count == 0) yield break;
 
-            isMoving = true;
             OnStartMove?.Invoke();
 
             List<Vector3> worldPath = new List<Vector3>();
@@ -242,12 +207,13 @@ namespace Geckout
 
             yield return SmoothPathMovement_Simplified(worldPath);
 
-            isMoving = false;
+            moveCoroutine = null;
+            OnEndMove?.Invoke();
             currentPath.Clear();
-            OnEndMove?.Invoke(); // Fire end move event
         }
 
         // ===== BodyController - Precise Movement Method =====
+
         IEnumerator SmoothPathMovement_Simplified(List<Vector3> worldPath)
         {
             if (worldPath.Count < 2) yield break;
@@ -255,10 +221,9 @@ namespace Geckout
             var orderedSegments = GetOrderedSegments();
             Vector3 lastAnchorPos = orderedSegments[0].transform.position;
 
-            // For grid-precise movement when controlling head
             int currentWaypointIndex = 0;
-            bool useGridPreciseMovement = (controlAnchor == ControlAnchor.Head);
-            GridHeadClamper gridClamper = useGridPreciseMovement ? GetComponent<GridHeadClamper>() : null;
+            bool useGridPreciseMovement = true; // Always use precise movement
+            GridHeadClamper gridClamper = GetComponent<GridHeadClamper>();
 
             while (currentWaypointIndex < worldPath.Count - 1)
             {
@@ -271,7 +236,7 @@ namespace Geckout
                     float frameSpeed = moveSpeed * Time.deltaTime;
                     Vector3 intendedPos = Vector3.MoveTowards(lastAnchorPos, currentTarget, frameSpeed);
 
-                    // Apply grid constraints through GridHeadClamper
+                    // Apply grid constraints through GridHeadClamper (now works for both head and tail)
                     if (gridClamper != null)
                     {
                         anchorPos = gridClamper.ClampHeadPosition(intendedPos);
@@ -290,7 +255,7 @@ namespace Geckout
                 }
                 else
                 {
-                    // Original smooth movement for tail control
+                    // This branch is no longer used, but kept for reference
                     float totalPathLength = 0f;
                     List<float> segmentLengths = new List<float>();
                     for (int i = 0; i < worldPath.Count - 1; i++)
@@ -341,10 +306,11 @@ namespace Geckout
                     orderedSegments[segIdx].transform.position = pos;
                 }
             }
+
         }
 
         // ===== GridHeadClamper - Updated for Precise Movement =====
-        
+
         private Vector3 GetPointAtDistanceOnWorldPath(List<Vector3> path, List<float> segLens, float distance)
         {
             if (path.Count < 2) return path[0];
@@ -561,6 +527,5 @@ namespace Geckout
                 return historyPoints.Last.Value;
             }
         }
-
     }
 }

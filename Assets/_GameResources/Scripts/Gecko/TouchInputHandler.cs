@@ -6,13 +6,13 @@ using System.Linq;
 
 namespace Geckout
 {
-    public class TouchInputHandler : MonoBehaviour
+    public class TouchInputHandler : SingletonMono<TouchInputHandler>
     {
         [SerializeField] private Camera gameCamera;
         [SerializeField] private LayerMask tileLayerMask = 1;
         [SerializeField] private LayerMask segmentLayer = 7;
         [SerializeField] private bool enableDebugLogs = true;
-        [SerializeField] private float pathUpdateInterval = 0.03f; // Cập nhật path mỗi 0.2s khi drag
+        [SerializeField] private float pathUpdateInterval = 0.03f;
 
         private BodyController bodyController;
         private bool isDragging = false;
@@ -23,6 +23,8 @@ namespace Geckout
 
         private List<ASNode> currentPath;
         private List<Vector2Int> smoothPath = new List<Vector2Int>();
+
+        public bool IsDragging { get => isDragging;}
 
         void Start()
         {
@@ -75,7 +77,6 @@ namespace Geckout
             if (gecko.IsMoving)
             {
                 DebugLog("Gecko is currently moving, but allowing path update");
-                // Không return nữa, cho phép cập nhật path khi đang di chuyển
             }
 
             Vector2Int headCoord = gecko.Segments[0].Coordinate;
@@ -107,7 +108,7 @@ namespace Geckout
 
             if (tileCoord.Value == lastTargetTile) return;
 
-            // Throttle path updates để tránh spam
+            // Throttle path updates
             if (Time.time - lastPathUpdateTime < pathUpdateInterval)
             {
                 return;
@@ -118,7 +119,6 @@ namespace Geckout
 
             DebugLog($"Dragging to NEW target tile: {tileCoord.Value}");
 
-            // Find and set new smooth path
             FindAndSetSmoothPath(tileCoord.Value);
         }
 
@@ -137,6 +137,7 @@ namespace Geckout
             isDragging = true;
             isDraggingFromHead = fromHead;
 
+            // Set control anchor based on drag source
             bodyController.SetControlAnchor(fromHead ? BodyController.ControlAnchor.Head : BodyController.ControlAnchor.Tail);
             DebugLog($"Started dragging gecko from {(fromHead ? "HEAD" : "TAIL")}");
 
@@ -148,12 +149,10 @@ namespace Geckout
             DebugLog($"Map size: {GameMap.MapSize}, total tiles: {mapState.Length}");
         }
 
-        // 1. Add this new method to TouchInputHandler
         Vector2Int GetDirectionToTarget(Vector2Int start, Vector2Int target)
         {
             Vector2Int diff = target - start;
 
-            // Return primary direction (prioritize horizontal movement)
             if (Mathf.Abs(diff.x) > Mathf.Abs(diff.y))
             {
                 return new Vector2Int(diff.x > 0 ? 1 : -1, 0);
@@ -170,34 +169,42 @@ namespace Geckout
         {
             if (bodyController == null) return;
 
-            Vector2Int startPos = isDraggingFromHead ?
-                bodyController.Segments[0].Coordinate :
-                bodyController.Segments[bodyController.Segments.Count - 1].Coordinate;
+            Vector2Int startPos;
+            if (isDraggingFromHead)
+            {
+                startPos = bodyController.Segments[0].Coordinate; // Head
+            }
+            else
+            {
+                startPos = bodyController.Segments[bodyController.Segments.Count - 1].Coordinate; // Tail
+            }
 
             if (startPos == targetTile) return;
 
-            // Lấy map state hiện tại
+            // Get current map state
             bool[] mapState = GameMap.GetCurrentMapState();
 
-            // block tiles mà gecko đang chiếm
+            // Block tiles occupied by gecko segments
             for (int i = 0; i < bodyController.Segments.Count; i++)
             {
-                // Lấy vị trí THỰC TẾ hiện tại của segment
                 Vector3 worldPos = bodyController.Segments[i].transform.position;
                 Vector2Int gridPos = bodyController.OccupiedTileController.WorldToGridPosition(worldPos);
 
                 int index = gridPos.y * GameMap.MapSize.x + gridPos.x;
                 if (index >= 0 && index < mapState.Length)
                 {
-                    mapState[index] = false; // Force block
+                    mapState[index] = false; // Block occupied tiles
                 }
             }
 
-            // Chỉ mở tile xuất phát
+            // Only unblock the start tile (head or tail depending on control)
             int startIndex = startPos.y * GameMap.MapSize.x + startPos.x;
-            mapState[startIndex] = true;
+            if (startIndex >= 0 && startIndex < mapState.Length)
+            {
+                mapState[startIndex] = true;
+            }
 
-            // Tạo pathfinder với grid đã update
+            // Create pathfinder with updated grid
             ASGrid grid = new ASGrid(GameMap.MapSize.x, GameMap.MapSize.y, mapState);
             pathfinder = new ASPathFinding(grid);
 
@@ -213,20 +220,34 @@ namespace Geckout
                 return;
             }
 
-            DebugLog($"Path found with {path.Count} steps");
+            DebugLog($"Raw path found with {path.Count} steps");
 
-            // Convert to coordinate list
+            // Convert to coordinate list and remove starting position
             smoothPath.Clear();
+            Vector2Int startPos = isDraggingFromHead ?
+                bodyController.Segments[0].Coordinate :
+                bodyController.Segments[bodyController.Segments.Count - 1].Coordinate;
+
             foreach (var node in path)
             {
-                smoothPath.Add(node.Position);
+                // Skip the starting position to avoid immediate completion
+                if (node.Position != startPos)
+                {
+                    smoothPath.Add(node.Position);
+                }
             }
 
-            // Execute path - GridHeadClamper will handle direction changes automatically
+            DebugLog($"Filtered path has {smoothPath.Count} steps (removed starting position)");
+
+            if (smoothPath.Count == 0)
+            {
+                DebugLog("No movement needed - already at target");
+                return;
+            }
+
+            // Execute path
             ExecuteSmoothPath(smoothPath);
         }
-
-
 
         void ExecuteSmoothPath(List<Vector2Int> path)
         {
@@ -236,9 +257,9 @@ namespace Geckout
                 return;
             }
 
-            DebugLog($"Executing smooth path with {path.Count} points");
+            DebugLog($"Executing smooth path with {path.Count} points for {(isDraggingFromHead ? "HEAD" : "TAIL")} control");
+
             bodyController.ClearPath();
-            // PATCH: không cần ClearPath phức tạp nữa, chỉ set path
             bodyController.SetMovementPath(path);
 
             DebugLog("Smooth path movement started");
@@ -255,12 +276,7 @@ namespace Geckout
                 {
                     if (tile.IsOccupied && isDragging)
                     {
-                        //Debug.Log($"Tile at {tile.Coordinate} is occupied");
                         return null;
-                    }
-                    else
-                    {
-                        //Debug.Log($"Tile at {tile.Coordinate} is free");
                     }
                     return tile.Coordinate;
                 }
