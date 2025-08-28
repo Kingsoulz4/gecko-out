@@ -122,7 +122,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!43 &11404025
+--- !u!43 &589990971
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -488,9 +488,9 @@ GameObject:
   - component: {fileID: 1022657193}
   - component: {fileID: 1022657196}
   - component: {fileID: 1022657195}
-  - component: {fileID: 1022657190}
   - component: {fileID: 1022657191}
   - component: {fileID: 1022657197}
+  - component: {fileID: 1022657190}
   - component: {fileID: 1022657198}
   m_Layer: 0
   m_Name: Body
@@ -624,7 +624,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1022657188}
-  m_Mesh: {fileID: 11404025}
+  m_Mesh: {fileID: 589990971}
 --- !u!114 &1022657195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -780,8 +780,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 637971271dc391e489ce8b078ed444ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileCenterThreshold: 0.05
-  enableDebugLogs: 0
+  tileCenterThreshold: 0.02
+  enableDebugLogs: 1
 --- !u!1 &1580965441
 GameObject:
   m_ObjectHideFlags: 0

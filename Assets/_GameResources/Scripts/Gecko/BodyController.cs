@@ -222,7 +222,6 @@ namespace Geckout
             Vector3 lastAnchorPos = orderedSegments[0].transform.position;
 
             int currentWaypointIndex = 0;
-            bool useGridPreciseMovement = true; // Always use precise movement
             GridHeadClamper gridClamper = GetComponent<GridHeadClamper>();
 
             while (currentWaypointIndex < worldPath.Count - 1)
@@ -269,47 +268,18 @@ namespace Geckout
             }
 
             // Ensure final position is exact
-            if (useGridPreciseMovement)
+            Vector3 finalAnchor = worldPath[worldPath.Count - 1];
+
+            finalAnchor = gridClamper.ClampHeadPosition(finalAnchor);
+
+            AddAnchorSample(finalAnchor);
+
+            for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
             {
-                Vector3 finalAnchor = worldPath[worldPath.Count - 1];
-
-                if (gridClamper != null)
-                {
-                    finalAnchor = gridClamper.ClampHeadPosition(finalAnchor);
-                }
-
-                AddAnchorSample(finalAnchor);
-
-                for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
-                {
-                    float backDist = segIdx * segmentSpacing;
-                    Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
-                    orderedSegments[segIdx].transform.position = pos;
-                }
+                float backDist = segIdx * segmentSpacing;
+                Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
+                orderedSegments[segIdx].transform.position = pos;
             }
-
-        }
-
-        // ===== GridHeadClamper - Updated for Precise Movement =====
-
-        private Vector3 GetPointAtDistanceOnWorldPath(List<Vector3> path, List<float> segLens, float distance)
-        {
-            if (path.Count < 2) return path[0];
-            if (distance <= 0f) return path[0];
-
-            float total = 0f;
-            for (int i = 0; i < segLens.Count; i++)
-            {
-                float segLen = segLens[i];
-                if (total + segLen >= distance)
-                {
-                    float t = (distance - total) / segLen;
-                    t = movementCurve.Evaluate(Mathf.Clamp01(t));
-                    return Vector3.Lerp(path[i], path[i + 1], t);
-                }
-                total += segLen;
-            }
-            return path[path.Count - 1];
         }
 
         // ===== History System =====

@@ -21,7 +21,6 @@ namespace Geckout
             bodyController = GetComponent<BodyController>();
             if (bodyController == null)
             {
-                Debug.LogError("GridHeadClamper requires BodyController component!");
                 enabled = false;
             }
         }
@@ -109,7 +108,6 @@ namespace Geckout
             return gridPos;
         }
 
-        // FIXED: Get the position of the segment that's actually being controlled
         private Vector3 GetControllingSegmentPosition()
         {
             if (bodyController?.Segments == null || bodyController.Segments.Count == 0)
@@ -170,7 +168,8 @@ namespace Geckout
             bool wasAtCenter = IsAtTileCenter;
             IsAtTileCenter = distanceToCenter <= tileCenterThreshold;
 
-            DebugLog($"Distance to center: {distanceToCenter}, threshold: {tileCenterThreshold}, at center: {IsAtTileCenter}");
+            DebugLog($"Distance to center: {distanceToCenter}, threshold: {tileCenterThreshold}, at center: {IsAtTileCenter}" +
+                $", at coor: {tileCoord}");
 
             // Log transition to tile center
             if (!wasAtCenter && IsAtTileCenter)
@@ -294,11 +293,5 @@ namespace Geckout
                 Debug.Log($"[GridHeadClamper] {message}");
             }
         }
-
-        // Public methods for debugging
-        public Vector2Int GetCurrentDirection() => currentDirection;
-        public int GetCurrentWaypointIndex() => currentWaypointIndex;
-        public int GetPathLength() => currentPath.Count;
-        public bool HasQueuedPath() => queuedPath != null;
     }
 }
