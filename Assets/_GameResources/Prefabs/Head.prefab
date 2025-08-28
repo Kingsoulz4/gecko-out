@@ -182,15 +182,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8543400844083088173, guid: 398c8e692c0ac3645be2f5066f8ca25d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8543400844083088173, guid: 398c8e692c0ac3645be2f5066f8ca25d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.29
+      value: 0.213
       objectReference: {fileID: 0}
     - target: {fileID: 8543400844083088173, guid: 398c8e692c0ac3645be2f5066f8ca25d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.4
+      value: -0.285
       objectReference: {fileID: 0}
     - target: {fileID: 8543400844083088173, guid: 398c8e692c0ac3645be2f5066f8ca25d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -222,7 +222,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8543400844083088173, guid: 398c8e692c0ac3645be2f5066f8ca25d, type: 3}
       propertyPath: m_ConstrainProportionsScale
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8587926247728214891, guid: 398c8e692c0ac3645be2f5066f8ca25d, type: 3}
       propertyPath: m_CastShadows

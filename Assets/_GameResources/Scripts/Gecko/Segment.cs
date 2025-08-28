@@ -52,7 +52,14 @@ namespace Geckout
 
             if(segmentType == SegmentType.TAIL && PrevSegment != null)
             {
+                Vector3 dir = transform.position - PrevSegment.transform.position;
 
+                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+                // Offset the angle by +90 degrees so the head points correctly
+                Quaternion targetRot = Quaternion.Euler(0, 0, angle + 90f);
+
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime * 10);
             }    
         }
 

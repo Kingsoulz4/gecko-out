@@ -27,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 20501433527251840}
   serializedVersion: 2
   m_LocalRotation: {x: -0.70710677, y: 0, z: 0, w: 0.70710677}
-  m_LocalPosition: {x: -4.71, y: -0.0078, z: 0.99}
-  m_LocalScale: {x: 19, y: 19, z: 221.53058}
+  m_LocalPosition: {x: -4.71, y: -0.4324, z: 0.96}
+  m_LocalScale: {x: 19, y: 19, z: 208.32736}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5010282028087265998}
@@ -553,7 +553,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spline: {fileID: 5359156951111108792}
-  tubeRadius: 0.6
+  tubeRadius: 0.55
   _tubeGenerator: {fileID: 7417522584249222097}
   _splineMesh: {fileID: 0}
 --- !u!114 &148967167332435691
@@ -3946,8 +3946,8 @@ Transform:
   m_GameObject: {fileID: 1884295108240601617}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.70710677, z: 0.70710677, w: 0}
-  m_LocalPosition: {x: 4.68, y: 0.0718, z: 0.99}
-  m_LocalScale: {x: 19, y: 19, z: 220.13223}
+  m_LocalPosition: {x: 4.68, y: -0.3736, z: 0.95}
+  m_LocalScale: {x: 19, y: 19, z: 206.27867}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 5010282028087265998}
@@ -10756,7 +10756,7 @@ Transform:
   m_GameObject: {fileID: 6354918502767474877}
   serializedVersion: 2
   m_LocalRotation: {x: -0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -0.0125, y: -6.73, z: 0.99}
+  m_LocalPosition: {x: -0.0125, y: -6.73, z: 0.93}
   m_LocalScale: {x: 19, y: 19, z: 165.61824}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -12452,7 +12452,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spline: {fileID: 6871703946465931216}
-  tubeRadius: 0.6
+  tubeRadius: 0.55
   _tubeGenerator: {fileID: 3826130170334289903}
   _splineMesh: {fileID: 0}
 --- !u!114 &3230623575562497416
