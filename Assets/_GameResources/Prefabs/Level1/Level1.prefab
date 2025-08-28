@@ -553,7 +553,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spline: {fileID: 5359156951111108792}
-  tubeRadius: 0.8
+  tubeRadius: 0.6
   _tubeGenerator: {fileID: 7417522584249222097}
   _splineMesh: {fileID: 0}
 --- !u!114 &148967167332435691
@@ -12452,7 +12452,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spline: {fileID: 6871703946465931216}
-  tubeRadius: 0.8
+  tubeRadius: 0.6
   _tubeGenerator: {fileID: 3826130170334289903}
   _splineMesh: {fileID: 0}
 --- !u!114 &3230623575562497416
@@ -16280,6 +16280,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5010282028087265998}
     m_Modifications:
+    - target: {fileID: 619658044194229777, guid: 5497db6270b3ffa4fb8241522b52d02b, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1064606192955641457, guid: 5497db6270b3ffa4fb8241522b52d02b, type: 3}
       propertyPath: m_LocalScale.x
       value: 16
@@ -16358,6 +16362,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5010282028087265998}
     m_Modifications:
+    - target: {fileID: 1037456071652651743, guid: ffeb13970591c3045bc9716103e1fb02, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3518422932426588703, guid: ffeb13970591c3045bc9716103e1fb02, type: 3}
       propertyPath: m_Name
       value: Map_Long (5)
@@ -16440,6 +16448,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5010282028087265998}
     m_Modifications:
+    - target: {fileID: 619658044194229777, guid: 5497db6270b3ffa4fb8241522b52d02b, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1064606192955641457, guid: 5497db6270b3ffa4fb8241522b52d02b, type: 3}
       propertyPath: m_LocalScale.x
       value: 16
@@ -16574,6 +16586,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2809122811671275362, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5523488513453811592, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
       propertyPath: m_Name
       value: Map_tip (10)
@@ -16652,6 +16668,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2809122811671275362, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5523488513453811592, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
       propertyPath: m_Name
       value: Map_tip
@@ -16674,6 +16694,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5010282028087265998}
     m_Modifications:
+    - target: {fileID: 1037456071652651743, guid: ffeb13970591c3045bc9716103e1fb02, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3518422932426588703, guid: ffeb13970591c3045bc9716103e1fb02, type: 3}
       propertyPath: m_Name
       value: Map_Long (1)
@@ -16752,6 +16776,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5010282028087265998}
     m_Modifications:
+    - target: {fileID: 1037456071652651743, guid: ffeb13970591c3045bc9716103e1fb02, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3518422932426588703, guid: ffeb13970591c3045bc9716103e1fb02, type: 3}
       propertyPath: m_Name
       value: Map_Long (2)
@@ -16886,6 +16914,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2809122811671275362, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5523488513453811592, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
       propertyPath: m_Name
       value: Map_tip (3)
@@ -16964,6 +16996,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2809122811671275362, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5523488513453811592, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
       propertyPath: m_Name
       value: Map_tip (7)
@@ -17041,6 +17077,10 @@ PrefabInstance:
     - target: {fileID: 2578193699047665554, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2809122811671275362, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5523488513453811592, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
       propertyPath: m_Name
@@ -17124,6 +17164,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8728967185373294739, guid: a4da41119dc2ef547bb257ddf98ce863, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17142,6 +17186,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5010282028087265998}
     m_Modifications:
+    - target: {fileID: 1037456071652651743, guid: ffeb13970591c3045bc9716103e1fb02, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3518422932426588703, guid: ffeb13970591c3045bc9716103e1fb02, type: 3}
       propertyPath: m_Name
       value: Map_Long (3)
@@ -17224,6 +17272,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5010282028087265998}
     m_Modifications:
+    - target: {fileID: 1037456071652651743, guid: ffeb13970591c3045bc9716103e1fb02, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3518422932426588703, guid: ffeb13970591c3045bc9716103e1fb02, type: 3}
       propertyPath: m_Name
       value: Map_Long (4)
@@ -17358,6 +17410,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2809122811671275362, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5523488513453811592, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
       propertyPath: m_Name
       value: Map_tip (4)
@@ -17440,6 +17496,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8728967185373294739, guid: a4da41119dc2ef547bb257ddf98ce863, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17513,6 +17573,10 @@ PrefabInstance:
     - target: {fileID: 2578193699047665554, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2809122811671275362, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5523488513453811592, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
       propertyPath: m_Name
@@ -17592,6 +17656,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2809122811671275362, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5523488513453811592, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
       propertyPath: m_Name
       value: Map_tip (2)
@@ -17669,6 +17737,10 @@ PrefabInstance:
     - target: {fileID: 2578193699047665554, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2809122811671275362, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5523488513453811592, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
       propertyPath: m_Name
@@ -17751,6 +17823,10 @@ PrefabInstance:
     - target: {fileID: 2578193699047665554, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2809122811671275362, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5523488513453811592, guid: f06f04bd317f1644f9bec46c4565be70, type: 3}
       propertyPath: m_Name
