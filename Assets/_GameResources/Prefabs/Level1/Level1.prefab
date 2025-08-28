@@ -421,7 +421,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 195d90e741e8c1246b30c9c45c2f5b31, type: 2}
+  - {fileID: 2100000, guid: c257601d4194be249a69a4de40bc83b2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -17398,7 +17398,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 195d90e741e8c1246b30c9c45c2f5b31, type: 2}
+  - {fileID: 2100000, guid: c257601d4194be249a69a4de40bc83b2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -17444,7 +17444,7 @@ MonoBehaviour:
   triggerGroups: []
   _spline:
     points: []
-    type: 3
+    type: 0
     linearAverageDirection: 1
     customValueInterpolation:
       serializedVersion: 2

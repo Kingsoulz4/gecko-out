@@ -157,7 +157,7 @@ namespace Geckout
                 gridClamper.SetPath(path);
             }
 
-            moveCoroutine = StartCoroutine(FollowPathContinuous());
+            moveCoroutine = StartCoroutine(StartMovePath());
         }
 
         public void SetControlAnchor(ControlAnchor anchor)
@@ -187,7 +187,7 @@ namespace Geckout
             currentPath.Clear();
         }
 
-        IEnumerator FollowPathContinuous()
+        IEnumerator StartMovePath()
         {
             if (currentPath.Count == 0) yield break;
 
@@ -205,7 +205,7 @@ namespace Geckout
                     worldPath.Add(tile.transform.position);
             }
 
-            yield return SmoothPathMovement_Simplified(worldPath);
+            yield return MovePath(worldPath);
 
             moveCoroutine = null;
             OnEndMove?.Invoke();
@@ -214,7 +214,7 @@ namespace Geckout
 
         // ===== BodyController - Precise Movement Method =====
 
-        IEnumerator SmoothPathMovement_Simplified(List<Vector3> worldPath)
+        IEnumerator MovePath(List<Vector3> worldPath)
         {
             if (worldPath.Count < 2) yield break;
 
@@ -230,44 +230,25 @@ namespace Geckout
                 Vector3 currentTarget = worldPath[currentWaypointIndex + 1];
                 Vector3 anchorPos;
 
-                if (useGridPreciseMovement)
+                // Precise movement towards target waypoint
+                float frameSpeed = moveSpeed * Time.deltaTime;
+                Vector3 intendedPos = Vector3.MoveTowards(lastAnchorPos, currentTarget, frameSpeed);
+
+                // Apply grid constraints through GridHeadClamper (now works for both head and tail)
+                if (gridClamper != null)
                 {
-                    // Precise movement towards target waypoint
-                    float frameSpeed = moveSpeed * Time.deltaTime;
-                    Vector3 intendedPos = Vector3.MoveTowards(lastAnchorPos, currentTarget, frameSpeed);
-
-                    // Apply grid constraints through GridHeadClamper (now works for both head and tail)
-                    if (gridClamper != null)
-                    {
-                        anchorPos = gridClamper.ClampHeadPosition(intendedPos);
-                    }
-                    else
-                    {
-                        anchorPos = intendedPos;
-                    }
-
-                    // Check if we reached the target waypoint (with small tolerance)
-                    if (Vector3.Distance(anchorPos, currentTarget) < 0.01f)
-                    {
-                        anchorPos = currentTarget; // Ensure exact position
-                        currentWaypointIndex++; // Move to next waypoint
-                    }
+                    anchorPos = gridClamper.ClampHeadPosition(intendedPos);
                 }
                 else
                 {
-                    // This branch is no longer used, but kept for reference
-                    float totalPathLength = 0f;
-                    List<float> segmentLengths = new List<float>();
-                    for (int i = 0; i < worldPath.Count - 1; i++)
-                    {
-                        float length = Vector3.Distance(worldPath[i], worldPath[i + 1]);
-                        segmentLengths.Add(length);
-                        totalPathLength += length;
-                    }
+                    anchorPos = intendedPos;
+                }
 
-                    float anchorDist = 0f;
-                    anchorDist += moveSpeed * Time.deltaTime;
-                    anchorPos = GetPointAtDistanceOnWorldPath(worldPath, segmentLengths, anchorDist);
+                // Check if we reached the target waypoint (with small tolerance)
+                if (Vector3.Distance(anchorPos, currentTarget) < 0.01f)
+                {
+                    anchorPos = currentTarget; // Ensure exact position
+                    currentWaypointIndex++; // Move to next waypoint
                 }
 
                 if ((anchorPos - lastAnchorPos).sqrMagnitude > (minSampleStep * minSampleStep))
