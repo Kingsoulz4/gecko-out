@@ -259,28 +259,27 @@ namespace Geckout
 
             Vector3 currentTileCenter = currentTile.transform.position;
 
-            // If no direction, stay at current tile center
+            // Nếu không có direction thì đứng tại tâm tile hiện tại
             if (currentDirection == Vector2Int.zero)
             {
                 DebugLog("No direction - staying at tile center");
                 return currentTileCenter;
             }
 
-            // Calculate next tile position
+            // Xác định tile kế tiếp
             Vector2Int nextTileCoord = currentTileCoord + currentDirection;
             if (!GameMap.TryGetTileAt(nextTileCoord, out GameTile nextTile))
             {
-                DebugLog($"Cannot move to {nextTileCoord} - tile doesn't exist");
-                return currentTileCenter; // Can't move, stay at center
+                return targetPos;
             }
 
             Vector3 nextTileCenter = nextTile.transform.position;
 
-            // Calculate movement speed for this frame
+            // Tính movement cho frame này
             Vector3 moveDelta = targetPos - currentPos;
             float frameSpeed = moveDelta.magnitude;
 
-            // Use MoveTowards for precise movement to next tile center
+            // Di chuyển mượt về tile kế tiếp
             Vector3 precisePosition = Vector3.MoveTowards(currentPos, nextTileCenter, frameSpeed);
 
             DebugLog($"Moving from {currentPos} towards {nextTileCenter} (direction: {currentDirection}), result: {precisePosition}");
