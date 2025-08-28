@@ -120,15 +120,13 @@ namespace Geckout
 
         public Vector3 ClampHeadPosition(Vector3 targetPosition)
         {
-            if (bodyController?.Segments == null || bodyController.Segments.Count == 0 ||
-                !TouchInputHandler.Instance.IsDragging)
+            if (bodyController?.Segments == null || bodyController.Segments.Count == 0 
+               )
                 return targetPosition;
 
             // FIXED: Use controlling segment instead of always using head
             Vector3 currentControllingPos = GetControllingSegmentPosition();
             Vector2Int currentTileCoord = bodyController.OccupiedTileController.WorldToGridPosition(currentControllingPos);
-
-            DebugLog($"Clamping position - Current: {currentControllingPos}, Target: {targetPosition}, Grid: {currentTileCoord}");
 
             // Check if controlling segment is at tile center
             CheckTileCenterAlignment(currentControllingPos, currentTileCoord);
@@ -168,8 +166,7 @@ namespace Geckout
             bool wasAtCenter = IsAtTileCenter;
             IsAtTileCenter = distanceToCenter <= tileCenterThreshold;
 
-            DebugLog($"Distance to center: {distanceToCenter}, threshold: {tileCenterThreshold}, at center: {IsAtTileCenter}" +
-                $", at coor: {tileCoord}");
+            DebugLog($"Control: {controllingPos}, distance to center: {distanceToCenter}, at center: {IsAtTileCenter}, at coord: {tileCoord}");
 
             // Log transition to tile center
             if (!wasAtCenter && IsAtTileCenter)

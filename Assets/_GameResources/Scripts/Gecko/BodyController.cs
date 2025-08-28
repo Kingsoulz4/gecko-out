@@ -222,7 +222,6 @@ namespace Geckout
             Vector3 lastAnchorPos = orderedSegments[0].transform.position;
 
             int currentWaypointIndex = 0;
-            GridHeadClamper gridClamper = GetComponent<GridHeadClamper>();
 
             while (currentWaypointIndex < worldPath.Count - 1)
             {
