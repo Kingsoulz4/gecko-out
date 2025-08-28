@@ -1,9 +1,10 @@
+﻿using Geckout.Data;
 using System;
-using UnityEngine;
-using Geckout.Data;
-using UnityEngine.Serialization;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Geckout
 {
@@ -115,6 +116,50 @@ namespace Geckout
                     tile.SetCoordinate(x, y);
                     i++;
                 }
+            }
+        }
+
+        [ContextMenu("Test SpawnTiles")]
+        void TestSpawnTiles()
+        {
+            SpawnAllTiles(levelData.mapTileDatas);
+        }    
+
+
+        void SpawnAllTiles(List<MapTileData> mapTileData)
+        {
+            var cubeSize = 1f;
+            var spacing = 0f;
+            var gridSize = levelData.MapSize;
+            float cellSize = cubeSize + spacing;
+            GameTile prefab = tilePrefab;
+
+            // calculate offset so grid is centered at (0,0)
+            Vector3 centerOffset = new Vector3(
+                (gridSize.x - 1) * cellSize * 0.5f,
+                (gridSize.y - 1) * cellSize * 0.5f,
+                0
+                
+            );
+
+            // spawn based on coordinates
+            foreach (var tile in mapTileData)
+            {
+                Vector2Int c = tile.coordinate;
+
+                // matrix coordinate → world position
+                Vector3 pos = new Vector3(c.x * cellSize, c.y * cellSize, 0);
+                pos -= centerOffset; // center grid
+
+#if UNITY_EDITOR
+                GameObject obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, _tilesContainer)).gameObject;
+                obj.transform.localPosition = pos;
+                obj.transform.localScale = Vector3.one * cubeSize;
+                obj.name = $"Tile_{c.x}_{c.y}_{tile.type}";
+#else
+            GameObject obj = Instantiate(prefab, pos, Quaternion.identity, root);
+            obj.transform.localScale = Vector3.one * cubeSize;
+#endif
             }
         }
 
