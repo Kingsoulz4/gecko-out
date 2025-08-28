@@ -21,7 +21,6 @@ namespace Geckout
             bodyController = GetComponent<BodyController>();
             if (bodyController == null)
             {
-                Debug.LogError("GridHeadClamper requires BodyController component!");
                 enabled = false;
             }
         }
@@ -78,19 +77,21 @@ namespace Geckout
             currentPath = new List<Vector2Int>(gridPath);
             currentWaypointIndex = 0;
 
-            // Calculate initial direction to first waypoint
+            // Khóa tile ngay khi bắt đầu path
+            lockedTileCoord = GetControllingSegmentCoordinate();
+            hasLockedTile = true;
+
             if (currentPath.Count > 0)
             {
-                Vector2Int controllingCoord = GetControllingSegmentCoordinate();
+                Vector2Int controllingCoord = lockedTileCoord; // dùng tile đã khóa
                 currentDirection = CalculateDirectionToWaypoint(controllingCoord, currentPath[0]);
                 DebugLog($"New path applied with {currentPath.Count} waypoints. Initial direction: {currentDirection}. Control anchor: {bodyController.controlAnchor}");
             }
 
-            // Clear queued path since we just applied a new one
             queuedPath = null;
         }
 
-        // FIXED: Get the coordinate of the segment that's actually being controlled
+        // Get the coordinate of the segment that's actually being controlled
         private Vector2Int GetControllingSegmentCoordinate()
         {
             if (bodyController?.Segments == null || bodyController.Segments.Count == 0)
@@ -109,7 +110,6 @@ namespace Geckout
             return gridPos;
         }
 
-        // FIXED: Get the position of the segment that's actually being controlled
         private Vector3 GetControllingSegmentPosition()
         {
             if (bodyController?.Segments == null || bodyController.Segments.Count == 0)
@@ -122,38 +122,40 @@ namespace Geckout
 
         public Vector3 ClampHeadPosition(Vector3 targetPosition)
         {
-            if (bodyController?.Segments == null || bodyController.Segments.Count == 0 ||
-                !TouchInputHandler.Instance.IsDragging)
+            if (bodyController?.Segments == null || bodyController.Segments.Count == 0)
                 return targetPosition;
 
-            // FIXED: Use controlling segment instead of always using head
             Vector3 currentControllingPos = GetControllingSegmentPosition();
-            Vector2Int currentTileCoord = bodyController.OccupiedTileController.WorldToGridPosition(currentControllingPos);
 
-            DebugLog($"Clamping position - Current: {currentControllingPos}, Target: {targetPosition}, Grid: {currentTileCoord}");
-
-            // Check if controlling segment is at tile center
-            CheckTileCenterAlignment(currentControllingPos, currentTileCoord);
-
-            // Update direction if at tile center
-            if (IsAtTileCenter)
+            // Nếu chưa có khóa, tạo khóa từ vị trí hiện tại một lần
+            if (!hasLockedTile)
             {
-                UpdateDirectionAtTileCenter(currentTileCoord);
+                lockedTileCoord = GetControllingSegmentCoordinate();
+                hasLockedTile = true;
             }
 
-            // If no path or direction, stay at current position
+            // Kiểm tra đứng giữa tâm DỰA TRÊN TILE ĐÃ KHÓA
+            CheckTileCenterAlignment(currentControllingPos, lockedTileCoord);
+
+            if (IsAtTileCenter)
+            {
+                UpdateDirectionAtTileCenter(lockedTileCoord);
+            }
+
             if (currentPath.Count == 0 || currentDirection == Vector2Int.zero)
             {
                 DebugLog("No path or direction - staying at current position");
                 return currentControllingPos;
             }
 
-            // Apply grid clamp movement
-            Vector3 clampedPosition = ApplyGridClamp(currentControllingPos, targetPosition, currentTileCoord);
+            Vector3 clampedPosition = ApplyGridClamp(currentControllingPos, targetPosition, lockedTileCoord);
             DebugLog($"Clamped position result: {clampedPosition}");
 
             return clampedPosition;
         }
+
+        private Vector2Int lockedTileCoord;
+        private bool hasLockedTile = false;
 
         private void CheckTileCenterAlignment(Vector3 controllingPos, Vector2Int tileCoord)
         {
@@ -170,7 +172,7 @@ namespace Geckout
             bool wasAtCenter = IsAtTileCenter;
             IsAtTileCenter = distanceToCenter <= tileCenterThreshold;
 
-            DebugLog($"Distance to center: {distanceToCenter}, threshold: {tileCenterThreshold}, at center: {IsAtTileCenter}");
+            DebugLog($"Control: {controllingPos}, distance to center: {distanceToCenter}, at center: {IsAtTileCenter}, at coord: {tileCoord}");
 
             // Log transition to tile center
             if (!wasAtCenter && IsAtTileCenter)
@@ -250,23 +252,18 @@ namespace Geckout
 
         private Vector3 ApplyGridClamp(Vector3 currentPos, Vector3 targetPos, Vector2Int currentTileCoord)
         {
-            // Get current tile center
             if (!GameMap.TryGetTileAt(currentTileCoord, out GameTile currentTile))
             {
                 DebugLog($"Cannot find current tile at {currentTileCoord}");
                 return targetPos;
             }
 
-            Vector3 currentTileCenter = currentTile.transform.position;
-
-            // Nếu không có direction thì đứng tại tâm tile hiện tại
             if (currentDirection == Vector2Int.zero)
             {
                 DebugLog("No direction - staying at tile center");
-                return currentTileCenter;
+                return currentTile.transform.position;
             }
 
-            // Xác định tile kế tiếp
             Vector2Int nextTileCoord = currentTileCoord + currentDirection;
             if (!GameMap.TryGetTileAt(nextTileCoord, out GameTile nextTile))
             {
@@ -275,14 +272,25 @@ namespace Geckout
 
             Vector3 nextTileCenter = nextTile.transform.position;
 
-            // Tính movement cho frame này
+            // Move theo đúng delta của frame từ BodyController
             Vector3 moveDelta = targetPos - currentPos;
             float frameSpeed = moveDelta.magnitude;
 
-            // Di chuyển mượt về tile kế tiếp
             Vector3 precisePosition = Vector3.MoveTowards(currentPos, nextTileCenter, frameSpeed);
-
             DebugLog($"Moving from {currentPos} towards {nextTileCenter} (direction: {currentDirection}), result: {precisePosition}");
+
+            // Nếu đã tới tâm tile kế → chuyển khóa sang tile đó
+            float distToNextCenter = Vector3.Distance(precisePosition, nextTileCenter);
+            if (distToNextCenter <= tileCenterThreshold)
+            {
+                lockedTileCoord = nextTileCoord;
+                IsAtTileCenter = true; // giúp UpdateDirectionAtTileCenter chạy ở frame kế
+                DebugLog($"Locked tile advanced to {lockedTileCoord}");
+            }
+            else
+            {
+                IsAtTileCenter = false;
+            }
 
             return precisePosition;
         }
@@ -294,11 +302,5 @@ namespace Geckout
                 Debug.Log($"[GridHeadClamper] {message}");
             }
         }
-
-        // Public methods for debugging
-        public Vector2Int GetCurrentDirection() => currentDirection;
-        public int GetCurrentWaypointIndex() => currentWaypointIndex;
-        public int GetPathLength() => currentPath.Count;
-        public bool HasQueuedPath() => queuedPath != null;
     }
 }
