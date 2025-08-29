@@ -16,7 +16,13 @@ namespace Geckout
         [SerializeField] private bool isDebug = false;
         [SerializeField] private float offsetFactor = 1f;
 
+        [Header("Tiles")]
         [SerializeField] private Transform _tilesContainer;
+        [SerializeField] private Transform m_wallContainer;
+        [SerializeField] private GameTile m_tileWallEdge;
+        [SerializeField] private GameTile m_tileWallCorner;
+
+
         private Transform _entitiesContainer;
         private GameTile[] tiles;
         private Vector2Int _mapSize;
@@ -128,6 +134,16 @@ namespace Geckout
 
         void SpawnAllTiles(List<MapTileData> mapTileData)
         {
+            if(_tilesContainer.transform.childCount > 0)
+            {
+                Utils.RemoveAllChilds(_tilesContainer);
+            }
+
+            if(m_wallContainer.transform.childCount > 0)
+            {
+                Utils.RemoveAllChilds(m_wallContainer);
+            }
+
             var cubeSize = 1f;
             var spacing = 0f;
             var gridSize = levelData.MapSize;
@@ -161,8 +177,56 @@ namespace Geckout
             obj.transform.localScale = Vector3.one * cubeSize;
 #endif
             }
+
+            SpawnWalls(gridSize, cellSize, cubeSize, centerOffset);
         }
 
+
+        private void SpawnWalls(Vector2Int gridSize, float cellSize, float cubeSize, Vector3 centerOffset)
+        {
+            // Corners
+            var wallCornerPrefab = m_tileWallCorner;
+            var wallEdgePrefab = m_tileWallEdge;
+
+            PlaceWall(wallCornerPrefab, new Vector2Int(-1, -1), cellSize, cubeSize, centerOffset, "Corner_BottomLeft");
+            PlaceWall(wallCornerPrefab, new Vector2Int(gridSize.x, -1), cellSize, cubeSize, centerOffset, "Corner_BottomRight");
+            PlaceWall(wallCornerPrefab, new Vector2Int(-1, gridSize.y), cellSize, cubeSize, centerOffset, "Corner_TopLeft");
+            PlaceWall(wallCornerPrefab, new Vector2Int(gridSize.x, gridSize.y), cellSize, cubeSize, centerOffset, "Corner_TopRight");
+
+            // Bottom edge
+            for (int x = 0; x < gridSize.x; x++)
+                PlaceWall(wallEdgePrefab, new Vector2Int(x, -1), cellSize, cubeSize, centerOffset, $"Wall_Bottom_{x}");
+
+            // Top edge
+            for (int x = 0; x < gridSize.x; x++)
+                PlaceWall(wallEdgePrefab, new Vector2Int(x, gridSize.y), cellSize, cubeSize, centerOffset, $"Wall_Top_{x}");
+
+            // Left edge
+            for (int y = 0; y < gridSize.y; y++)
+                PlaceWall(wallEdgePrefab, new Vector2Int(-1, y), cellSize, cubeSize, centerOffset, $"Wall_Left_{y}");
+
+            // Right edge
+            for (int y = 0; y < gridSize.y; y++)
+                PlaceWall(wallEdgePrefab, new Vector2Int(gridSize.x, y), cellSize, cubeSize, centerOffset, $"Wall_Right_{y}");
+        }
+
+        private void PlaceWall(GameTile prefab, Vector2Int c, float cellSize, float cubeSize, Vector3 centerOffset, string name)
+        {
+            if (prefab == null) return;
+
+            Vector3 pos = new Vector3(c.x * cellSize, c.y * cellSize, 0) - centerOffset;
+
+#if UNITY_EDITOR
+            GameObject obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, m_wallContainer)).gameObject;
+            obj.transform.localPosition = pos;
+            obj.transform.localScale = Vector3.one * cubeSize;
+            obj.name = name;
+#else
+        GameObject obj = Instantiate(prefab, pos, Quaternion.identity, _tilesContainer);
+        obj.transform.localScale = Vector3.one * cubeSize;
+        obj.name = name;
+#endif
+        }
 
         void SpawnAllTiles(GameLevelData levelData)
         {
