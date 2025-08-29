@@ -129,6 +129,10 @@ namespace Geckout
         void TestSpawnTiles()
         {
             SpawnAllTiles(levelData.mapTileDatas);
+
+#if UNITY_EDITOR
+            EditorUtility.SetDirty(gameObject);
+#endif
         }    
 
 
@@ -188,29 +192,37 @@ namespace Geckout
             var wallCornerPrefab = m_tileWallCorner;
             var wallEdgePrefab = m_tileWallEdge;
 
-            PlaceWall(wallCornerPrefab, new Vector2Int(-1, -1), cellSize, cubeSize, centerOffset, "Corner_BottomLeft");
-            PlaceWall(wallCornerPrefab, new Vector2Int(gridSize.x, -1), cellSize, cubeSize, centerOffset, "Corner_BottomRight");
-            PlaceWall(wallCornerPrefab, new Vector2Int(-1, gridSize.y), cellSize, cubeSize, centerOffset, "Corner_TopLeft");
-            PlaceWall(wallCornerPrefab, new Vector2Int(gridSize.x, gridSize.y), cellSize, cubeSize, centerOffset, "Corner_TopRight");
+            var angleCornerBottomLeft = new Vector3(270, -90, 90);
+            PlaceWall(wallCornerPrefab, new Vector2Int(-1, -1), cellSize, cubeSize, centerOffset, "Corner_BottomLeft", angleCornerBottomLeft);
+            var angleCornerBottomRight = new Vector3(0, -90, 90);
+            PlaceWall(wallCornerPrefab, new Vector2Int(gridSize.x, -1), cellSize, cubeSize, centerOffset, "Corner_BottomRight", angleCornerBottomRight);
+            var angleCornerTopLeft = new Vector3(0, 90, -90);
+            PlaceWall(wallCornerPrefab, new Vector2Int(-1, gridSize.y), cellSize, cubeSize, centerOffset, "Corner_TopLeft", angleCornerTopLeft);
+            var angleCornerTopRight = new Vector3(90, -90, 90);
+            PlaceWall(wallCornerPrefab, new Vector2Int(gridSize.x, gridSize.y), cellSize, cubeSize, centerOffset, "Corner_TopRight", angleCornerTopRight);
 
             // Bottom edge
+            var angleBottomEdge = new Vector3(180, 90, -90);
             for (int x = 0; x < gridSize.x; x++)
-                PlaceWall(wallEdgePrefab, new Vector2Int(x, -1), cellSize, cubeSize, centerOffset, $"Wall_Bottom_{x}");
+                PlaceWall(wallEdgePrefab, new Vector2Int(x, -1), cellSize, cubeSize, centerOffset, $"Wall_Bottom_{x}", angleBottomEdge);
 
             // Top edge
+            var angleTopEdge = new Vector3(0, 90, -90);
             for (int x = 0; x < gridSize.x; x++)
-                PlaceWall(wallEdgePrefab, new Vector2Int(x, gridSize.y), cellSize, cubeSize, centerOffset, $"Wall_Top_{x}");
+                PlaceWall(wallEdgePrefab, new Vector2Int(x, gridSize.y), cellSize, cubeSize, centerOffset, $"Wall_Top_{x}", angleTopEdge);
 
             // Left edge
+            var angleLeftEdge = new Vector3(270, -90, 90);
             for (int y = 0; y < gridSize.y; y++)
-                PlaceWall(wallEdgePrefab, new Vector2Int(-1, y), cellSize, cubeSize, centerOffset, $"Wall_Left_{y}");
+                PlaceWall(wallEdgePrefab, new Vector2Int(-1, y), cellSize, cubeSize, centerOffset, $"Wall_Left_{y}", angleLeftEdge);
 
             // Right edge
+            var angleRightEdge = new Vector3(90, -90, 90);
             for (int y = 0; y < gridSize.y; y++)
-                PlaceWall(wallEdgePrefab, new Vector2Int(gridSize.x, y), cellSize, cubeSize, centerOffset, $"Wall_Right_{y}");
+                PlaceWall(wallEdgePrefab, new Vector2Int(gridSize.x, y), cellSize, cubeSize, centerOffset, $"Wall_Right_{y}", angleRightEdge);
         }
 
-        private void PlaceWall(GameTile prefab, Vector2Int c, float cellSize, float cubeSize, Vector3 centerOffset, string name)
+        private void PlaceWall(GameTile prefab, Vector2Int c, float cellSize, float cubeSize, Vector3 centerOffset, string name, Vector3 localRotation)
         {
             if (prefab == null) return;
 
@@ -226,6 +238,8 @@ namespace Geckout
         obj.transform.localScale = Vector3.one * cubeSize;
         obj.name = name;
 #endif
+
+            obj.transform.localRotation = Quaternion.Euler(localRotation);
         }
 
         void SpawnAllTiles(GameLevelData levelData)
