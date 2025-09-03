@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3258273406305859224
 Transform:
   m_ObjectHideFlags: 0
@@ -101,7 +101,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1.1, y: 1.1, z: 1.1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -115,6 +115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6905907069750856322}
   - component: {fileID: 6968164639324100578}
+  - component: {fileID: 1670932677207146501}
   m_Layer: 3
   m_Name: GameTile
   m_TagString: Untagged
@@ -153,7 +154,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileRenderer: {fileID: 2479105195814628658}
   IsOccupied: 0
-  tileCollider: {fileID: 5008373320036738480}
+  tileCollider: {fileID: 1670932677207146501}
+  m_outLine: {fileID: 1151066934085194566}
+--- !u!65 &1670932677207146501
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7324613345957075875}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1, y: 1.1, z: 1.1}
+  m_Center: {x: 0, y: 0, z: 1}
 --- !u!1001 &3865804456083435958
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -225,7 +248,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 92faa375c014fca4081175aefa4c688a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1151066934085194566}
   m_SourcePrefab: {fileID: 100100000, guid: 92faa375c014fca4081175aefa4c688a, type: 3}
 --- !u!23 &2479105195814628658 stripped
 MeshRenderer:
@@ -237,3 +263,26 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 92faa375c014fca4081175aefa4c688a, type: 3}
   m_PrefabInstance: {fileID: 3865804456083435958}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4136399553105792231 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 92faa375c014fca4081175aefa4c688a, type: 3}
+  m_PrefabInstance: {fileID: 3865804456083435958}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1151066934085194566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4136399553105792231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0.3160377, b: 0.3160377, a: 1}
+  outlineWidth: 7.16
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

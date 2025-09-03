@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 
 namespace Geckout
 {
-    public class GameMap : SingletonMono<GameMap>
+    public partial class GameMap : SingletonMono<GameMap>
     {
         private static GameMap _instance;
         [SerializeField] GameLevelData levelData;
@@ -33,7 +33,7 @@ namespace Geckout
         private void Awake()
         {
             _instance = this;
-            Initialize(levelData);
+            //Initialize(levelData);
         }
         void CreateContainers()
         {
@@ -60,7 +60,7 @@ namespace Geckout
         {
             //CreateContainers();
             //SpawnAllTiles(levelData);
-            GetAllTilesTest(levelData);
+            //GetAllTilesTest(levelData);
         }
         public static Vector3 GetTileWorldPosition(Vector2Int coord)
         {
@@ -104,7 +104,7 @@ namespace Geckout
 
         void GetAllTilesTest(GameLevelData levelData)
         {
-            _mapSize = levelData.MapSize;
+            _mapSize = levelData.mapSize;
             _entitiesContainer = CreateChild("EntitiesContainer");
             if (_tilesContainer == null)
             {
@@ -125,6 +125,19 @@ namespace Geckout
             }
         }
 
+        public void SetLevelData(GameLevelData levelData)
+        {
+            this.levelData = levelData;
+            if (levelData.mapTileDatas != null && levelData.mapTileDatas.Count > 0)
+            {
+                SpawnAllTiles(levelData.mapTileDatas);
+            }
+            else
+            {
+                SpawnAllTiles();
+            }
+        }
+
         [ContextMenu("Test SpawnTiles")]
         void TestSpawnTiles()
         {
@@ -135,6 +148,62 @@ namespace Geckout
 #endif
         }    
 
+        void SpawnAllTiles()
+        {
+            if (_tilesContainer.transform.childCount > 0)
+            {
+                Utils.RemoveAllChilds(_tilesContainer);
+            }
+
+            if (m_wallContainer.transform.childCount > 0)
+            {
+                Utils.RemoveAllChilds(m_wallContainer);
+            }
+
+            var cubeSize = 1f;
+            var spacing = 0f;
+            var gridSize = levelData.mapSize;
+            float cellSize = cubeSize + spacing;
+            GameTile prefab = tilePrefab;
+
+            // calculate offset so grid is centered at (0,0)
+            Vector3 centerOffset = new Vector3(
+                (gridSize.x - 1) * cellSize * 0.5f,
+                (gridSize.y - 1) * cellSize * 0.5f,
+                0
+
+            );
+
+            // spawn based on coordinates
+            for (int x = 0; x < gridSize.x; x++)
+            {
+                for (int y = 0; y < gridSize.y; y++)
+                {
+                    Vector2Int c = new Vector2Int(x, y);
+                    MapTileData tile = new();
+                    tile.coordinate = c;
+                    tile.type = MapTileType.Normal;
+                    levelData.mapTileDatas.Add(tile);
+
+                    // matrix coordinate → world position
+                    Vector3 pos = new Vector3(c.x * cellSize, c.y * cellSize, 0);
+                    pos -= centerOffset; // center grid
+
+#if UNITY_EDITOR
+                    var obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, _tilesContainer));
+                    obj.SetCoordinate(c.x, c.y);
+                    obj.transform.localPosition = pos;
+                    obj.transform.localScale = Vector3.one * cubeSize;
+                    obj.name = $"Tile_{c.x}_{c.y}_{tile.type}";
+#else
+            GameObject obj = Instantiate(prefab, pos, Quaternion.identity, root);
+            obj.transform.localScale = Vector3.one * cubeSize;
+#endif
+                }
+            }
+
+            SpawnWalls(gridSize, cellSize, cubeSize, centerOffset);
+        }
 
         void SpawnAllTiles(List<MapTileData> mapTileData)
         {
@@ -150,7 +219,7 @@ namespace Geckout
 
             var cubeSize = 1f;
             var spacing = 0f;
-            var gridSize = levelData.MapSize;
+            var gridSize = levelData.mapSize;
             float cellSize = cubeSize + spacing;
             GameTile prefab = tilePrefab;
 
@@ -172,7 +241,8 @@ namespace Geckout
                 pos -= centerOffset; // center grid
 
 #if UNITY_EDITOR
-                GameObject obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, _tilesContainer)).gameObject;
+                var obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, _tilesContainer));
+                obj.SetCoordinate(c.x, c.y);
                 obj.transform.localPosition = pos;
                 obj.transform.localScale = Vector3.one * cubeSize;
                 obj.name = $"Tile_{c.x}_{c.y}_{tile.type}";
@@ -244,7 +314,7 @@ namespace Geckout
 
         void SpawnAllTiles(GameLevelData levelData)
         {
-            _mapSize = levelData.MapSize;
+            _mapSize = levelData.mapSize;
             tiles = new GameTile[_mapSize.x * _mapSize.y];
             for (int x = 0; x < _mapSize.x; x++)
             {

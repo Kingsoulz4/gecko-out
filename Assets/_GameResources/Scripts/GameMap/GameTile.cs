@@ -14,6 +14,7 @@ namespace Geckout
         [SerializeField] private Renderer tileRenderer;
         [SerializeField] public bool IsOccupied;
         [SerializeField] private Collider tileCollider; // For raycast
+        [SerializeField] private Outline m_outLine;
 
         public Vector2Int Coordinate { get; private set; }
 
@@ -30,6 +31,15 @@ namespace Geckout
                 }
             }
             tileRenderer.enabled = true;
+            SetSelected(false);
+        }
+
+        public void SetSelected(bool selected)
+        {
+            if(m_outLine != null)
+            { 
+                m_outLine.enabled = selected;
+            }
         }
 
         public void SetCoordinate(int x, int y)

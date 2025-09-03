@@ -5,13 +5,47 @@ using UnityEngine;
 
 namespace Geckout.Data
 {
+    public enum LevelType
+    {
+        NORMAL,
+        HARD,
+        SUPER_HARD
+    }
+
     public class GameLevelData : ScriptableObject
     {
-        [SerializeField] private Vector2Int mapSize;
-        public Vector2Int MapSize => mapSize;
+        public int levelNum;
+        public int levelIndex;
+        public Vector2Int mapSize = new(8, 12);
+        public int time;
+        public LevelType type;
+        public List<MapTileData> mapTileDatas = new();
+        public List<DogData> listDogData = new();
 
-        public List<MapTileData> mapTileDatas;
-        public List<DogData> listDogData;
+        public void GenerateDefaultMap()
+        {
+            mapTileDatas.Clear();
+            var gridSize = mapSize;
+
+            for (int y = 0; y < gridSize.y; y++)
+            {
+                for (int x = 0; x < gridSize.x; x++)
+                {
+                    MapTileData data = new MapTileData();
+                    data.coordinate = new Vector2Int(x, y);
+
+                    // pick random type
+                    data.type = MapTileType.Normal;
+
+                    mapTileDatas.Add(data);
+                }
+            }
+
+            Debug.Log($"Generated {mapTileDatas.Count} MapTileData entries for grid {gridSize.x}x{gridSize.y}");
+#if UNITY_EDITOR
+            EditorUtility.SetDirty(this); // mark as dirty so data is saved
+#endif
+        }
 
         [ContextMenu("Generate Test Data")]
         public void GenerateTestData()
