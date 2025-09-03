@@ -452,6 +452,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3626055781503237806, guid: 07f41c8bbaf563446979281513016b18, type: 3}
+      propertyPath: _spline.type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3997041558925918299, guid: 07f41c8bbaf563446979281513016b18, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -463,7 +467,7 @@ PrefabInstance:
     - target: {fileID: 8616699575255678695, guid: 07f41c8bbaf563446979281513016b18, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1828567178}
+      objectReference: {fileID: 1957178818}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -522,7 +526,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!43 &1828567178
+--- !u!43 &1957178818
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -741,8 +745,8 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 689588991}
+  - {fileID: 1180754235}
   - {fileID: 2060455395}
   - {fileID: 1580965443}
   - {fileID: 963717745}
-  - {fileID: 1180754235}
   - {fileID: 462015896}

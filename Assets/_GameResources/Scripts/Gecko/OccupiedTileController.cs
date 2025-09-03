@@ -6,16 +6,12 @@ namespace Geckout
     public class OccupiedTileController : MonoBehaviour
     {
         [Header("Performance Settings")]
-        [SerializeField] private float updateInterval = 0.05f;
         [SerializeField] private BodyController bodyController;
 
         private Vector2Int[] lastGridPositions;
         private GameTile[] currentOccupiedTiles;
-        private float lastUpdateTime;
 
-        // Cache để tránh tính toán offset mỗi frame
         private Vector2 gridOffset;
-        private bool isInitialized = false;
 
         public Vector2Int[] LastGridPositions { get => lastGridPositions; }
 
@@ -71,27 +67,8 @@ namespace Geckout
                     lastGridPositions[i] = Vector2Int.one * int.MinValue; // Force update lần đầu
                 }
 
-                isInitialized = true;
-
                 UpdateAllSegmentPositions();
             });
-        }
-
-        void Update()
-        {
-
-            if (!isInitialized)
-            {
-                return;
-            }
-
-            if (Time.time - lastUpdateTime < updateInterval)
-            {
-                return;
-            }
-
-            UpdateAllSegmentPositions();
-            lastUpdateTime = Time.time;
         }
 
         public void UpdateAllSegmentPositions()
