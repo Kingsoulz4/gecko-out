@@ -231,8 +231,8 @@ namespace Geckout
                 }
             }
 
-            string pathStr = string.Join(" -> ", smoothPath.Select(n => $"{n.x.ToString()} {n.y.ToString()}"));
-            Debug.Log($"Full path: {pathStr}, Start: {startPos}");
+            //string pathStr = string.Join(" -> ", smoothPath.Select(n => $"{n.x.ToString()} {n.y.ToString()}"));
+            //Debug.Log($"Full path: {pathStr}, Start: {startPos}");
 
 
             if (smoothPath.Count == 0)

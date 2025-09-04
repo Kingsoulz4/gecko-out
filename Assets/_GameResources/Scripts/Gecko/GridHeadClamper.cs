@@ -6,14 +6,15 @@ namespace Geckout
     public class GridHeadClamper : MonoBehaviour
     {
         [Header("Grid Clamping Settings")]
-        [SerializeField] private float tileCenterThreshold = 0.1f;
+        [SerializeField] private float tileCenterThreshold = 0.02f;
         [SerializeField] private bool enableDebugLogs = false;
 
         private BodyController bodyController;
         private List<Vector2Int> currentPath = new List<Vector2Int>();
         private int currentWaypointIndex = 0;
         private Vector2Int currentDirection = Vector2Int.zero;
-
+        private Vector2Int lockedTileCoord;
+        private bool hasLockedTile = false;
         public bool IsAtTileCenter { get; private set; }
         public Vector2Int CurrentDirection { get => currentDirection; set => currentDirection = value; }
 
@@ -154,9 +155,6 @@ namespace Geckout
 
             return clampedPosition;
         }
-
-        private Vector2Int lockedTileCoord;
-        private bool hasLockedTile = false;
 
         private void CheckTileCenterAlignment(Vector3 controllingPos, Vector2Int tileCoord)
         {
