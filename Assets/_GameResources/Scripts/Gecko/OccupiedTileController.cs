@@ -173,7 +173,7 @@ namespace Geckout
             {
                 currentOccupiedTiles[segmentIndex] = newTile;
                 newTile.SetOccupied(true);
-                segment.UpdateCoordinateOnly(gridPos);
+                segment.UpdateCoordinateAndTile(gridPos);
             }
             else
             {

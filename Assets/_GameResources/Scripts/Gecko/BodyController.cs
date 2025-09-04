@@ -115,7 +115,7 @@ namespace Geckout
                 int unitIndex = i / subLength;
 
                 var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
-                Segments[i].SetCoordinate(coordinate);
+                Segments[i].InitCoordinate(coordinate);
             }
 
             // ===== Init history system =====
