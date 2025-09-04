@@ -1,4 +1,5 @@
 ﻿using Dreamteck.Splines;
+using Geckout.Data;
 using Geckout.Generals;
 using Geckout.PathFinding;
 using System;
@@ -59,6 +60,76 @@ namespace Geckout
         }
         private void Start()
         {
+            //Segments = new List<Segment>();
+
+            //// ===== Tính toán tổng số segment =====
+            //int totalSegments = length * subLength - 2;
+            //float unitSpacing = 1f / subLength;
+            //segmentSpacing = unitSpacing;
+            //float totalBodyLength = length;
+
+            //// ===== Head =====
+            //_head = Instantiate(headPrefab, transform);
+            //_head.name = "Head";
+            //_head.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            //Segments.Add(_head);
+
+            //// ===== Body segments =====
+            //// chỉ spawn từ 1 đến totalSegments - 2 (dành chỗ cho Tail)
+            //for (int i = 1; i < totalSegments - 1; i++)
+            //{
+            //    Segment seg = Instantiate(this.segment, transform);
+            //    seg.name = "Segment " + i;
+            //    seg.transform.localPosition = new Vector3(0, -i * unitSpacing, 0);
+            //    Segments.Add(seg);
+            //}
+
+            //// ===== Tail =====
+            //_tail = Instantiate(tailPrefab, transform);
+            //_tail.name = "Tail";
+            //_tail.transform.localPosition = new Vector3(0, -(totalSegments - 1) * unitSpacing, 0);
+            //Segments.Add(_tail);
+
+            //// ===== Setup neighbors =====
+            //_head.Setup(null, Segments[1]);
+            //_head.SetController(this);
+
+            //_tail.Setup(Segments[Segments.Count - 2], null);
+            //_tail.SetController(this);
+
+            //for (int i = 1; i < Segments.Count - 1; i++)
+            //{
+            //    var currentSegment = Segments[i];
+            //    Segment prevSegment = Segments[i - 1];
+            //    Segment nextSegment = Segments[i + 1];
+            //    currentSegment.Setup(prevSegment, nextSegment);
+            //    currentSegment.SetController(this);
+            //}
+
+            //// ===== Set coordinate ban đầu =====
+            //for (int i = 0; i < Segments.Count; i++)
+            //{
+            //    // unitIndex = segment thuộc về tile nào
+            //    int unitIndex = i / subLength;
+
+            //    var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
+            //    Segments[i].SetCoordinate(coordinate);
+            //}
+
+            //// ===== Init history system =====
+            //InitHistoryFromSegments();
+
+            //// ===== Initialize renderer =====
+            //if (_bodyRenderer != null)
+            //    _bodyRenderer.Initialize(Segments);
+
+            //Debug.Log($"Body initialized: length={length}, subLength={subLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
+        }
+
+        public void Initialize(DogData dogData)
+        {
+            List<Vector2Int> listDefaultCoordinate = dogData.listCoordinate;
+
             Segments = new List<Segment>();
 
             // ===== Tính toán tổng số segment =====
@@ -106,12 +177,22 @@ namespace Geckout
             }
 
             // ===== Set coordinate ban đầu =====
-            for (int i = 0; i < Segments.Count; i++)
+            //for (int i = 0; i < Segments.Count; i++)
+            //{
+            //    // unitIndex = segment thuộc về tile nào
+            //    int unitIndex = i / subLength;
+
+            //    var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
+            //    Segments[i].SetCoordinate(coordinate);
+            //}
+
+            for (int i = 0; i < listDefaultCoordinate.Count; i++)
             {
                 // unitIndex = segment thuộc về tile nào
                 int unitIndex = i / subLength;
 
-                var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
+                //var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
+                var coordinate = listDefaultCoordinate[unitIndex];
                 Segments[i].SetCoordinate(coordinate);
             }
 

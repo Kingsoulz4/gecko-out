@@ -12,10 +12,15 @@ namespace Geckout
         [SerializeField] private GameLevelData m_gameLevelData;
         [SerializeField] private GameMap m_gameMap;
         [SerializeField] private BodyController m_dogPrefab;
+        [SerializeField] private Transform m_listDogContainer;
 
         private HashSet<GameTile> listSelectedTile = new();
 
+        public List<GameTile> ListSelectedTile { get => listSelectedTile.ToList(); }
+
         public GameLevelData GameLevelData => m_gameLevelData;
+
+        public BodyController selectedDog { get; set; }
 
         public void SetLevelData(GameLevelData gameLevelData)
         {
@@ -61,6 +66,23 @@ namespace Geckout
                 ClearAllSelectedTiles();
             }
         }
+
+        public void GenerateNewDog(DogData dogData)
+        {
+            m_gameLevelData.listDogData.Add(dogData);
+            dogData.listCoordinate = listSelectedTile.Select(x => x.Coordinate).ToList();
+            var newDog = Instantiate(m_dogPrefab, m_listDogContainer);
+            newDog.Initialize(dogData);
+        }
+
+        public void DeleteSelectedDog()
+        {
+            if(selectedDog == null)
+            {
+                return;
+            }    
+            Destroy(selectedDog.gameObject);
+        }    
 
         public void ClearAllSelectedTiles()
         {

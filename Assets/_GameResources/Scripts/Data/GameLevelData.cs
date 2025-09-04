@@ -121,8 +121,8 @@ namespace Geckout.Data
     public class DogData
     {
         public DogType dogType;
-        public List<DogColor> listColor;
-        public List<Vector2Int> listCoordinate;
+        public List<DogColor> listColor = new();
+        public List<Vector2Int> listCoordinate = new();
 
     }
 

@@ -1,21 +1,35 @@
+using Geckout.Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Geckout
 {
     public class DesignDogTab : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        [SerializeField] private Button m_buttonGenerate;
+        [SerializeField] private Button m_buttonDelete;
+
+        public LevelGame LevelGame { get; set; }
+
+        private DogData dogData = new();
+
+        private void Awake()
         {
-        
+            m_buttonGenerate.onClick.AddListener(OnClickGenerate);
+            m_buttonDelete.onClick.AddListener(OnClickDelete);
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnClickDelete()
         {
-        
+            LevelGame.DeleteSelectedDog();
+        }
+
+        private void OnClickGenerate()
+        {
+            LevelGame.GenerateNewDog(dogData);
         }
     }
 }
