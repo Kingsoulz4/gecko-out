@@ -22,6 +22,8 @@ namespace Geckout
 
         public BodyController selectedDog { get; set; }
 
+        public GameMap GameMap => m_gameMap;
+
         public void SetLevelData(GameLevelData gameLevelData)
         {
             m_gameLevelData = gameLevelData;
@@ -88,6 +90,16 @@ namespace Geckout
         {
             listSelectedTile.ToList().ForEach(x => x.SetSelected(false));
             listSelectedTile.Clear();
+        }
+
+        public void ChangeTypeSelectedTiles(MapTileType tileType)
+        {
+            listSelectedTile.ToList().ForEach(x => x.SetTileType(tileType));
+        }
+
+        public void RotateSelectedTiles(float angle)
+        {
+            listSelectedTile.ToList().ForEach(x => x.RotateBy(angle));
         }
     }
 }

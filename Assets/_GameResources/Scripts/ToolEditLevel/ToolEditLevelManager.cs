@@ -89,6 +89,7 @@ namespace Geckout
         {
             HideAllTabs();
             m_editWallsTab.gameObject.SetActive(true);
+            m_editWallsTab.LevelGame = LevelGame;
         }
 
         private void OnClickTest()

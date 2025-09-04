@@ -86,7 +86,22 @@ namespace Geckout
             result = _instance.tiles[index];
             return true;
         }
-        
+
+        public bool TryGetTileAtCoord(Vector2Int coordinate, out GameTile result)
+        {
+            var x = coordinate.x;
+            var y = coordinate.y;
+            if (x < 0 || y < 0 || x >= levelData.mapSize.x || y >= levelData.mapSize.y)
+            {
+                result = null;
+                return false;
+            }
+
+            var index = x + y * levelData.mapSize.x;
+            result = tiles[index];
+            return true;
+        }
+
         public static bool TryGetTileAt(Vector2Int coordinate, out GameTile result)
         {
             var x= coordinate.x;
@@ -136,6 +151,8 @@ namespace Geckout
             {
                 SpawnAllTiles();
             }
+
+            GetAllTilesTest(levelData);
         }
 
         [ContextMenu("Test SpawnTiles")]
@@ -199,6 +216,8 @@ namespace Geckout
             GameObject obj = Instantiate(prefab, pos, Quaternion.identity, root);
             obj.transform.localScale = Vector3.one * cubeSize;
 #endif
+                    obj.Initialize(tile);
+
                 }
             }
 
@@ -250,6 +269,8 @@ namespace Geckout
             GameObject obj = Instantiate(prefab, pos, Quaternion.identity, root);
             obj.transform.localScale = Vector3.one * cubeSize;
 #endif
+                obj.Initialize(tile);
+
             }
 
             SpawnWalls(gridSize, cellSize, cubeSize, centerOffset);

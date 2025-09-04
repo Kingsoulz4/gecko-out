@@ -1,21 +1,50 @@
+using AYellowpaper.SerializedCollections;
+using Geckout.Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Geckout
 {
     public class EditWallsTab : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        [SerializeField] private SerializedDictionary<MapTileType, Button> m_listButtonChangeType;
+
+        [SerializeField] private Button m_buttonRotateLeft;
+        [SerializeField] private Button m_buttonRotateRight;
+
+        public LevelGame LevelGame { get; set; }
+
+        private void Awake()
         {
-        
+            foreach(var item in m_listButtonChangeType)
+            {
+                item.Value.onClick.AddListener(() =>
+                {
+                    ChangeToTileType(item.Key);
+                });
+            }
+
+            m_buttonRotateLeft.onClick.AddListener(OnClickRotateLeft);
+            m_buttonRotateRight.onClick.AddListener(OnClickRotateRight);
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnClickRotateRight()
         {
-        
+            LevelGame.RotateSelectedTiles(-90);
         }
+
+        private void OnClickRotateLeft()
+        {
+            LevelGame.RotateSelectedTiles(90);
+        }
+
+        private void ChangeToTileType(MapTileType tileType)
+        {
+            LevelGame.ChangeTypeSelectedTiles(tileType);
+        }
+
     }
 }

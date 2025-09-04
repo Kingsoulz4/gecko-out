@@ -91,11 +91,11 @@ namespace Geckout.Data
     public enum MapTileType
     {
         Normal,
-        Wall,
-        WallCorner,
+        Wall4Side,
+        WallCornerInside,
         Wall1Side,
         Wall2Side,
-        Wall2Side2Corner,
+        Wall3Side,
     }
 
     public enum DogType
@@ -131,6 +131,7 @@ namespace Geckout.Data
     {
         public Vector2Int coordinate;
         public MapTileType type;
+        public Vector3Int rotation = new Vector3Int(0, 90, -90);
     }
 
 

@@ -35,6 +35,16 @@ namespace Geckout
         public BodyController Controller { get; private set; }
         public GameTile CurrentTile { get => _currentTile; set => _currentTile = value; }
 
+        private LevelGame levelGame;
+
+        private LevelGame LevelGame
+        {
+            get
+            {
+                if(levelGame == null) levelGame = GetComponentInParent<LevelGame>(); 
+                return levelGame;
+            }
+        }    
 
         private void Update()
         {
@@ -77,7 +87,7 @@ namespace Geckout
         // Dùng khi spawn / init
         public void SetCoordinate(Vector2Int coordinate)
         {
-            if (GameMap.TryGetTileAt(coordinate, out var tile))
+            if (LevelGame.GameMap.TryGetTileAtCoord(coordinate, out var tile))
             {
                 _currentTile = tile;
                 Coordinate = coordinate;
@@ -96,7 +106,7 @@ namespace Geckout
 
         public void UpdateCoordinateOnly(Vector2Int coordinate)
         {
-            if (GameMap.TryGetTileAt(coordinate, out var tile))
+            if (LevelGame.GameMap.TryGetTileAtCoord(coordinate, out var tile))
             {
                 _currentTile = tile;
                 Coordinate = coordinate;

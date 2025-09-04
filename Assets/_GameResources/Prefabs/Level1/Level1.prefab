@@ -542,6 +542,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 1062892106297573820}
   IsOccupied: 0
   tileCollider: {fileID: 2174083110129395510}
+  m_outLine: {fileID: 0}
 --- !u!1 &202639800972939824
 GameObject:
   m_ObjectHideFlags: 0
@@ -591,6 +592,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 3490313332580297717}
   IsOccupied: 0
   tileCollider: {fileID: 7636914170887672585}
+  m_outLine: {fileID: 0}
 --- !u!1 &216223175550676484
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,6 +642,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 8988113325159100595}
   IsOccupied: 0
   tileCollider: {fileID: 5041913870973339538}
+  m_outLine: {fileID: 0}
 --- !u!1 &222465876434550452
 GameObject:
   m_ObjectHideFlags: 0
@@ -772,6 +775,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 75542967927446657}
   IsOccupied: 0
   tileCollider: {fileID: 2975434854246922070}
+  m_outLine: {fileID: 0}
 --- !u!1 &261583464135677022
 GameObject:
   m_ObjectHideFlags: 0
@@ -821,6 +825,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 2046167748265497346}
   IsOccupied: 0
   tileCollider: {fileID: 5384829718186303708}
+  m_outLine: {fileID: 0}
 --- !u!1 &289977315610213928
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,6 +875,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 3155244621823554381}
   IsOccupied: 1
   tileCollider: {fileID: 4504898439492928506}
+  m_outLine: {fileID: 0}
 --- !u!1 &325648575672271857
 GameObject:
   m_ObjectHideFlags: 0
@@ -1461,6 +1467,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 2642161335340331489}
   IsOccupied: 0
   tileCollider: {fileID: 6720551247133997403}
+  m_outLine: {fileID: 0}
 --- !u!1 &516005904436596681
 GameObject:
   m_ObjectHideFlags: 0
@@ -1510,6 +1517,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 9044995461365312329}
   IsOccupied: 0
   tileCollider: {fileID: 1121335028994993989}
+  m_outLine: {fileID: 0}
 --- !u!1 &550292432835604643
 GameObject:
   m_ObjectHideFlags: 0
@@ -2123,6 +2131,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4357975103778826760}
   IsOccupied: 0
   tileCollider: {fileID: 7242115287835867675}
+  m_outLine: {fileID: 0}
 --- !u!1 &734395234649856211
 GameObject:
   m_ObjectHideFlags: 0
@@ -2172,6 +2181,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 3304216436686692840}
   IsOccupied: 0
   tileCollider: {fileID: 8578033360050335891}
+  m_outLine: {fileID: 0}
 --- !u!1 &738545783913786199
 GameObject:
   m_ObjectHideFlags: 0
@@ -2304,6 +2314,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 6618461875613933487}
   IsOccupied: 0
   tileCollider: {fileID: 5212707242775532243}
+  m_outLine: {fileID: 0}
 --- !u!1 &859068415862875719
 GameObject:
   m_ObjectHideFlags: 0
@@ -2353,6 +2364,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 6230123602056622201}
   IsOccupied: 0
   tileCollider: {fileID: 4427634008725366698}
+  m_outLine: {fileID: 0}
 --- !u!1 &901713489931392317
 GameObject:
   m_ObjectHideFlags: 0
@@ -2568,6 +2580,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 2111180394101061017}
   IsOccupied: 1
   tileCollider: {fileID: 3473897413893804946}
+  m_outLine: {fileID: 0}
 --- !u!1 &1037642936608701852
 GameObject:
   m_ObjectHideFlags: 0
@@ -2617,6 +2630,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4424413136521179478}
   IsOccupied: 0
   tileCollider: {fileID: 4069886606739467246}
+  m_outLine: {fileID: 0}
 --- !u!1 &1110253219591697851
 GameObject:
   m_ObjectHideFlags: 0
@@ -2666,6 +2680,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 5983980449554102463}
   IsOccupied: 0
   tileCollider: {fileID: 3304042563081480726}
+  m_outLine: {fileID: 0}
 --- !u!1 &1127019891716796480
 GameObject:
   m_ObjectHideFlags: 0
@@ -2881,6 +2896,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 8831666555292922215}
   IsOccupied: 0
   tileCollider: {fileID: 7575369123183666749}
+  m_outLine: {fileID: 0}
 --- !u!1 &1230128779503422940
 GameObject:
   m_ObjectHideFlags: 0
@@ -2930,6 +2946,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 1127418054152439230}
   IsOccupied: 1
   tileCollider: {fileID: 4766009623586598376}
+  m_outLine: {fileID: 0}
 --- !u!1 &1243394960086374199
 GameObject:
   m_ObjectHideFlags: 0
@@ -2979,6 +2996,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 8923836354756785570}
   IsOccupied: 0
   tileCollider: {fileID: 7729024174905388896}
+  m_outLine: {fileID: 0}
 --- !u!1 &1293202445768549782
 GameObject:
   m_ObjectHideFlags: 0
@@ -3111,6 +3129,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4600508481343233351}
   IsOccupied: 0
   tileCollider: {fileID: 6516306484504516464}
+  m_outLine: {fileID: 0}
 --- !u!1 &1312939851175238238
 GameObject:
   m_ObjectHideFlags: 0
@@ -3558,6 +3577,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 28557054586318740}
   IsOccupied: 0
   tileCollider: {fileID: 5990776232009715859}
+  m_outLine: {fileID: 0}
 --- !u!1 &1462374598898700412
 GameObject:
   m_ObjectHideFlags: 0
@@ -3607,6 +3627,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 568100839020785841}
   IsOccupied: 0
   tileCollider: {fileID: 3790317402162917483}
+  m_outLine: {fileID: 0}
 --- !u!1 &1593149161037687874
 GameObject:
   m_ObjectHideFlags: 0
@@ -4369,6 +4390,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 2127839823795439348}
   IsOccupied: 1
   tileCollider: {fileID: 9024552644293773854}
+  m_outLine: {fileID: 0}
 --- !u!1 &1884295108240601617
 GameObject:
   m_ObjectHideFlags: 0
@@ -4606,6 +4628,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4910671926537931770}
   IsOccupied: 0
   tileCollider: {fileID: 7239424162331959829}
+  m_outLine: {fileID: 0}
 --- !u!1 &2016729211739485636
 GameObject:
   m_ObjectHideFlags: 0
@@ -4843,6 +4866,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 1661146308321037905}
   IsOccupied: 1
   tileCollider: {fileID: 5585807360099165020}
+  m_outLine: {fileID: 0}
 --- !u!1 &2112039748889797205
 GameObject:
   m_ObjectHideFlags: 0
@@ -4892,6 +4916,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 1812478804779650081}
   IsOccupied: 0
   tileCollider: {fileID: 3321428242222961357}
+  m_outLine: {fileID: 0}
 --- !u!1 &2118989290247587337
 GameObject:
   m_ObjectHideFlags: 0
@@ -5483,6 +5508,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 5402033632210426441}
   IsOccupied: 0
   tileCollider: {fileID: 9017297781374411540}
+  m_outLine: {fileID: 0}
 --- !u!1 &2321683112076678516
 GameObject:
   m_ObjectHideFlags: 0
@@ -5532,6 +5558,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 6586487567905313255}
   IsOccupied: 0
   tileCollider: {fileID: 7233236936790223070}
+  m_outLine: {fileID: 0}
 --- !u!1 &2359141931206416986
 GameObject:
   m_ObjectHideFlags: 0
@@ -5769,6 +5796,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 458416268919958529}
   IsOccupied: 0
   tileCollider: {fileID: 5558623275991422636}
+  m_outLine: {fileID: 0}
 --- !u!1 &2420034353376608987
 GameObject:
   m_ObjectHideFlags: 0
@@ -6487,6 +6515,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 8978968029155468343}
   IsOccupied: 1
   tileCollider: {fileID: 5068582264984488755}
+  m_outLine: {fileID: 0}
 --- !u!1 &2849383034284797058
 GameObject:
   m_ObjectHideFlags: 0
@@ -6829,6 +6858,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 3589553133546157818}
   IsOccupied: 0
   tileCollider: {fileID: 127848159347430755}
+  m_outLine: {fileID: 0}
 --- !u!1 &2930763422238695603
 GameObject:
   m_ObjectHideFlags: 0
@@ -6878,6 +6908,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 2095414548661859549}
   IsOccupied: 0
   tileCollider: {fileID: 3471468756410997840}
+  m_outLine: {fileID: 0}
 --- !u!1 &2931914598662532725
 GameObject:
   m_ObjectHideFlags: 0
@@ -7010,6 +7041,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 6369803186342246959}
   IsOccupied: 0
   tileCollider: {fileID: 3479617592086191904}
+  m_outLine: {fileID: 0}
 --- !u!1 &2988392058662959961
 GameObject:
   m_ObjectHideFlags: 0
@@ -7855,6 +7887,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 521094055543712316}
   IsOccupied: 0
   tileCollider: {fileID: 5529084578998897724}
+  m_outLine: {fileID: 0}
 --- !u!1 &3326290030986313138
 GameObject:
   m_ObjectHideFlags: 0
@@ -8009,6 +8042,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 6742601823211663837}
   IsOccupied: 0
   tileCollider: {fileID: 5075473539391504057}
+  m_outLine: {fileID: 0}
 --- !u!1 &3390450584337464425
 GameObject:
   m_ObjectHideFlags: 0
@@ -8058,6 +8092,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4836209143429704626}
   IsOccupied: 0
   tileCollider: {fileID: 2721520787514237167}
+  m_outLine: {fileID: 0}
 --- !u!1 &3403472691870044384
 GameObject:
   m_ObjectHideFlags: 0
@@ -8107,6 +8142,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 2413395096468260271}
   IsOccupied: 0
   tileCollider: {fileID: 6863075432727349343}
+  m_outLine: {fileID: 0}
 --- !u!1 &3411140725567631723
 GameObject:
   m_ObjectHideFlags: 0
@@ -8239,6 +8275,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 6558024295578242692}
   IsOccupied: 1
   tileCollider: {fileID: 1304800594204407421}
+  m_outLine: {fileID: 0}
 --- !u!1 &3485150410099359853
 GameObject:
   m_ObjectHideFlags: 0
@@ -8642,6 +8679,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 2689736976888986362}
   IsOccupied: 0
   tileCollider: {fileID: 8767570075361948974}
+  m_outLine: {fileID: 0}
 --- !u!1 &3730952089987854768
 GameObject:
   m_ObjectHideFlags: 0
@@ -8857,6 +8895,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 2468743995584898672}
   IsOccupied: 0
   tileCollider: {fileID: 8729052674439939142}
+  m_outLine: {fileID: 0}
 --- !u!1 &3806133454847650860
 GameObject:
   m_ObjectHideFlags: 0
@@ -8989,6 +9028,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 5111048192581380982}
   IsOccupied: 0
   tileCollider: {fileID: 5922621575364964387}
+  m_outLine: {fileID: 0}
 --- !u!1 &3828486516244596907
 GameObject:
   m_ObjectHideFlags: 0
@@ -9436,6 +9476,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 1543112877140466905}
   IsOccupied: 0
   tileCollider: {fileID: 8793776534823118668}
+  m_outLine: {fileID: 0}
 --- !u!1 &3923044249895078770
 GameObject:
   m_ObjectHideFlags: 0
@@ -9861,6 +9902,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 3433358583875655524}
   IsOccupied: 0
   tileCollider: {fileID: 5431110551739110037}
+  m_outLine: {fileID: 0}
 --- !u!1 &4154545444445600571
 GameObject:
   m_ObjectHideFlags: 0
@@ -10203,6 +10245,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 3595540098386602293}
   IsOccupied: 0
   tileCollider: {fileID: 7791164899018560629}
+  m_outLine: {fileID: 0}
 --- !u!1 &4239210161083885429
 GameObject:
   m_ObjectHideFlags: 0
@@ -10440,6 +10483,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 5114529635944732902}
   IsOccupied: 0
   tileCollider: {fileID: 2712604842283606107}
+  m_outLine: {fileID: 0}
 --- !u!1 &4334864614880717497
 GameObject:
   m_ObjectHideFlags: 0
@@ -10804,6 +10848,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 3281851517931537170}
   IsOccupied: 0
   tileCollider: {fileID: 4809715222406594843}
+  m_outLine: {fileID: 0}
 --- !u!1 &4494724675544167965
 GameObject:
   m_ObjectHideFlags: 0
@@ -10936,6 +10981,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 5091510650356859356}
   IsOccupied: 0
   tileCollider: {fileID: 8410905127352974178}
+  m_outLine: {fileID: 0}
 --- !u!1 &4576114981812516983
 GameObject:
   m_ObjectHideFlags: 0
@@ -10987,6 +11033,9 @@ MonoBehaviour:
   isDebug: 1
   offsetFactor: 1
   _tilesContainer: {fileID: 0}
+  m_wallContainer: {fileID: 0}
+  m_tileWallEdge: {fileID: 0}
+  m_tileWallCorner: {fileID: 0}
 --- !u!1 &4585483024562142130
 GameObject:
   m_ObjectHideFlags: 0
@@ -11224,6 +11273,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 7798086936096309996}
   IsOccupied: 0
   tileCollider: {fileID: 4554883892220862616}
+  m_outLine: {fileID: 0}
 --- !u!1 &4737985750886704677
 GameObject:
   m_ObjectHideFlags: 0
@@ -11356,6 +11406,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 2825932454446868112}
   IsOccupied: 1
   tileCollider: {fileID: 3093264904596388524}
+  m_outLine: {fileID: 0}
 --- !u!1 &4852851762159773934
 GameObject:
   m_ObjectHideFlags: 0
@@ -11593,6 +11644,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 6647631486383194681}
   IsOccupied: 0
   tileCollider: {fileID: 6736851282394696128}
+  m_outLine: {fileID: 0}
 --- !u!1 &4899904766703623027
 GameObject:
   m_ObjectHideFlags: 0
@@ -11913,6 +11965,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 1709064841603145476}
   IsOccupied: 1
   tileCollider: {fileID: 3427935611217273077}
+  m_outLine: {fileID: 0}
 --- !u!1 &4969720284706560264
 GameObject:
   m_ObjectHideFlags: 0
@@ -12277,6 +12330,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4357850026643399804}
   IsOccupied: 1
   tileCollider: {fileID: 1536223480873665935}
+  m_outLine: {fileID: 0}
 --- !u!1 &5094663684974229602
 GameObject:
   m_ObjectHideFlags: 0
@@ -12597,6 +12651,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 6747522605448383761}
   IsOccupied: 0
   tileCollider: {fileID: 7653775342485197151}
+  m_outLine: {fileID: 0}
 --- !u!1 &5210162392580534765
 GameObject:
   m_ObjectHideFlags: 0
@@ -12895,6 +12950,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 3074902935788799010}
   IsOccupied: 1
   tileCollider: {fileID: 1864455286644301143}
+  m_outLine: {fileID: 0}
 --- !u!1 &5423799993192635618
 GameObject:
   m_ObjectHideFlags: 0
@@ -13298,6 +13354,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 8271663015532009825}
   IsOccupied: 0
   tileCollider: {fileID: 1849220967614732236}
+  m_outLine: {fileID: 0}
 --- !u!1 &5582123043060628764
 GameObject:
   m_ObjectHideFlags: 0
@@ -13618,6 +13675,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 6316768427650927848}
   IsOccupied: 0
   tileCollider: {fileID: 4601707830810986939}
+  m_outLine: {fileID: 0}
 --- !u!1 &5798554576253971425
 GameObject:
   m_ObjectHideFlags: 0
@@ -13667,6 +13725,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 1620159871946044410}
   IsOccupied: 0
   tileCollider: {fileID: 8998676620865286240}
+  m_outLine: {fileID: 0}
 --- !u!1 &5877226905706643777
 GameObject:
   m_ObjectHideFlags: 0
@@ -13716,6 +13775,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4105892557391750600}
   IsOccupied: 0
   tileCollider: {fileID: 2358149068877921329}
+  m_outLine: {fileID: 0}
 --- !u!1 &5960636639923703758
 GameObject:
   m_ObjectHideFlags: 0
@@ -13931,6 +13991,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 5087911817521965462}
   IsOccupied: 1
   tileCollider: {fileID: 2610586807025907612}
+  m_outLine: {fileID: 0}
 --- !u!1 &6000765104854602446
 GameObject:
   m_ObjectHideFlags: 0
@@ -14334,6 +14395,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4955995379658446670}
   IsOccupied: 0
   tileCollider: {fileID: 2212260475033882469}
+  m_outLine: {fileID: 0}
 --- !u!1 &6162566410833983296
 GameObject:
   m_ObjectHideFlags: 0
@@ -14488,6 +14550,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 193409740889372196}
   IsOccupied: 0
   tileCollider: {fileID: 1307470474256249692}
+  m_outLine: {fileID: 0}
 --- !u!1 &6212997507215424028
 GameObject:
   m_ObjectHideFlags: 0
@@ -14642,6 +14705,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 3334742344931169144}
   IsOccupied: 0
   tileCollider: {fileID: 3754091200859754811}
+  m_outLine: {fileID: 0}
 --- !u!1 &6255197152140044034
 GameObject:
   m_ObjectHideFlags: 0
@@ -14774,6 +14838,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 6476323489825264613}
   IsOccupied: 0
   tileCollider: {fileID: 4346010313574597057}
+  m_outLine: {fileID: 0}
 --- !u!1 &6273337016941974814
 GameObject:
   m_ObjectHideFlags: 0
@@ -14928,6 +14993,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 5943897904377086920}
   IsOccupied: 0
   tileCollider: {fileID: 3581815855427279661}
+  m_outLine: {fileID: 0}
 --- !u!1 &6278499085148715429
 GameObject:
   m_ObjectHideFlags: 0
@@ -15082,6 +15148,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 8781656900053514917}
   IsOccupied: 0
   tileCollider: {fileID: 1635917607322760368}
+  m_outLine: {fileID: 0}
 --- !u!1 &6354918502767474877
 GameObject:
   m_ObjectHideFlags: 0
@@ -15507,6 +15574,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 5649945365210647581}
   IsOccupied: 0
   tileCollider: {fileID: 3263167509792353197}
+  m_outLine: {fileID: 0}
 --- !u!1 &6461082776747833204
 GameObject:
   m_ObjectHideFlags: 0
@@ -15954,6 +16022,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 6825480014256043354}
   IsOccupied: 0
   tileCollider: {fileID: 2498119487224201671}
+  m_outLine: {fileID: 0}
 --- !u!1 &6499569849932122306
 GameObject:
   m_ObjectHideFlags: 0
@@ -16003,6 +16072,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4584327919120963665}
   IsOccupied: 0
   tileCollider: {fileID: 256573347926969658}
+  m_outLine: {fileID: 0}
 --- !u!1 &6519526242152444623
 GameObject:
   m_ObjectHideFlags: 0
@@ -16052,6 +16122,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4448532695375117568}
   IsOccupied: 0
   tileCollider: {fileID: 8621086687993113778}
+  m_outLine: {fileID: 0}
 --- !u!1 &6558426004907356110
 GameObject:
   m_ObjectHideFlags: 0
@@ -16289,6 +16360,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 2496293558435047872}
   IsOccupied: 0
   tileCollider: {fileID: 243447791766414277}
+  m_outLine: {fileID: 0}
 --- !u!1 &6731547733377199920
 GameObject:
   m_ObjectHideFlags: 0
@@ -16526,6 +16598,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 8235074099766329868}
   IsOccupied: 1
   tileCollider: {fileID: 7534659173400315585}
+  m_outLine: {fileID: 0}
 --- !u!1 &6859316418090928560
 GameObject:
   m_ObjectHideFlags: 0
@@ -16575,6 +16648,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 1856946133338105488}
   IsOccupied: 0
   tileCollider: {fileID: 2999148284770893185}
+  m_outLine: {fileID: 0}
 --- !u!1 &6899192039470775681
 GameObject:
   m_ObjectHideFlags: 0
@@ -16812,6 +16886,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 9035824613206371884}
   IsOccupied: 0
   tileCollider: {fileID: 1199768740728359271}
+  m_outLine: {fileID: 0}
 --- !u!1 &7006792428902195937
 GameObject:
   m_ObjectHideFlags: 0
@@ -17237,6 +17312,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 6895421825008040088}
   IsOccupied: 0
   tileCollider: {fileID: 3254501456774885538}
+  m_outLine: {fileID: 0}
 --- !u!1 &7173056704201378952
 GameObject:
   m_ObjectHideFlags: 0
@@ -17391,6 +17467,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4967089636453034731}
   IsOccupied: 0
   tileCollider: {fileID: 1393839179836544712}
+  m_outLine: {fileID: 0}
 --- !u!1 &7242268605577428857
 GameObject:
   m_ObjectHideFlags: 0
@@ -17523,6 +17600,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4114389523454075193}
   IsOccupied: 0
   tileCollider: {fileID: 1254877404744261111}
+  m_outLine: {fileID: 0}
 --- !u!1 &7259254358057688711
 GameObject:
   m_ObjectHideFlags: 0
@@ -17572,6 +17650,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 452783527296566419}
   IsOccupied: 1
   tileCollider: {fileID: 6082105345447912399}
+  m_outLine: {fileID: 0}
 --- !u!1 &7264085317571093684
 GameObject:
   m_ObjectHideFlags: 0
@@ -18019,6 +18098,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4499779976364280577}
   IsOccupied: 1
   tileCollider: {fileID: 3260233907225336767}
+  m_outLine: {fileID: 0}
 --- !u!1 &7482535771149082003
 GameObject:
   m_ObjectHideFlags: 0
@@ -18173,6 +18253,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4740362174420985118}
   IsOccupied: 1
   tileCollider: {fileID: 6986810467832403444}
+  m_outLine: {fileID: 0}
 --- !u!1 &7497935189216515479
 GameObject:
   m_ObjectHideFlags: 0
@@ -18222,6 +18303,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 568784802149768560}
   IsOccupied: 0
   tileCollider: {fileID: 3308707378710577958}
+  m_outLine: {fileID: 0}
 --- !u!1 &7505010856326845508
 GameObject:
   m_ObjectHideFlags: 0
@@ -18625,6 +18707,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 5812372947138034560}
   IsOccupied: 0
   tileCollider: {fileID: 3318298043397385105}
+  m_outLine: {fileID: 0}
 --- !u!1 &7572538881507169282
 GameObject:
   m_ObjectHideFlags: 0
@@ -18862,6 +18945,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 6450330647876370258}
   IsOccupied: 1
   tileCollider: {fileID: 5486806743872734686}
+  m_outLine: {fileID: 0}
 --- !u!1 &7811645303731957422
 GameObject:
   m_ObjectHideFlags: 0
@@ -18994,6 +19078,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 7540943391377157451}
   IsOccupied: 0
   tileCollider: {fileID: 7555696401588149887}
+  m_outLine: {fileID: 0}
 --- !u!1 &7966306047287631958
 GameObject:
   m_ObjectHideFlags: 0
@@ -19314,6 +19399,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 3710766692359956124}
   IsOccupied: 0
   tileCollider: {fileID: 864159873863612099}
+  m_outLine: {fileID: 0}
 --- !u!1 &8001055386380360470
 GameObject:
   m_ObjectHideFlags: 0
@@ -19468,6 +19554,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 1824946825875456455}
   IsOccupied: 0
   tileCollider: {fileID: 7053494600826389322}
+  m_outLine: {fileID: 0}
 --- !u!1 &8038212450858683470
 GameObject:
   m_ObjectHideFlags: 0
@@ -19517,6 +19604,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 6767718052152254475}
   IsOccupied: 0
   tileCollider: {fileID: 2062231194267891081}
+  m_outLine: {fileID: 0}
 --- !u!1 &8099262124412749184
 GameObject:
   m_ObjectHideFlags: 0
@@ -19671,6 +19759,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 538425493614601518}
   IsOccupied: 1
   tileCollider: {fileID: 520845418716456049}
+  m_outLine: {fileID: 0}
 --- !u!1 &8104861877201927561
 GameObject:
   m_ObjectHideFlags: 0
@@ -20345,6 +20434,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 5034646362264260330}
   IsOccupied: 0
   tileCollider: {fileID: 2173868227007507145}
+  m_outLine: {fileID: 0}
 --- !u!1 &8377239110901227863
 GameObject:
   m_ObjectHideFlags: 0
@@ -21063,6 +21153,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 3415529416928254573}
   IsOccupied: 0
   tileCollider: {fileID: 5889095529608321961}
+  m_outLine: {fileID: 0}
 --- !u!1 &8687931175729277372
 GameObject:
   m_ObjectHideFlags: 0
@@ -21300,6 +21391,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 7319570798017608099}
   IsOccupied: 1
   tileCollider: {fileID: 2347242637157153664}
+  m_outLine: {fileID: 0}
 --- !u!1 &8777796983450394514
 GameObject:
   m_ObjectHideFlags: 0
@@ -21349,6 +21441,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4587843887758198004}
   IsOccupied: 0
   tileCollider: {fileID: 3060576175210807216}
+  m_outLine: {fileID: 0}
 --- !u!1 &8802710012682139131
 GameObject:
   m_ObjectHideFlags: 0
@@ -21481,6 +21574,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4370535499312842819}
   IsOccupied: 0
   tileCollider: {fileID: 1148939429743556809}
+  m_outLine: {fileID: 0}
 --- !u!1 &8841349167484423643
 GameObject:
   m_ObjectHideFlags: 0
@@ -21718,6 +21812,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 7890755212774386988}
   IsOccupied: 0
   tileCollider: {fileID: 1324872631325199025}
+  m_outLine: {fileID: 0}
 --- !u!1 &8863488039402317407
 GameObject:
   m_ObjectHideFlags: 0
@@ -22220,6 +22315,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4502496763974623666}
   IsOccupied: 0
   tileCollider: {fileID: 4586572911971072738}
+  m_outLine: {fileID: 0}
 --- !u!1 &8982139894470148279
 GameObject:
   m_ObjectHideFlags: 0
@@ -22374,6 +22470,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4548494596464629359}
   IsOccupied: 1
   tileCollider: {fileID: 1010250828899581344}
+  m_outLine: {fileID: 0}
 --- !u!1 &9027762909399185548
 GameObject:
   m_ObjectHideFlags: 0
@@ -22716,6 +22813,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 566986818843219091}
   IsOccupied: 0
   tileCollider: {fileID: 3082731887123053668}
+  m_outLine: {fileID: 0}
 --- !u!1 &9091446473707287055
 GameObject:
   m_ObjectHideFlags: 0
@@ -23058,6 +23156,7 @@ MonoBehaviour:
   tileRenderer: {fileID: 4258562449538034756}
   IsOccupied: 1
   tileCollider: {fileID: 6804079648008673938}
+  m_outLine: {fileID: 0}
 --- !u!1 &9162534486170780997
 GameObject:
   m_ObjectHideFlags: 0
@@ -23571,10 +23670,6 @@ PrefabInstance:
     - target: {fileID: 4970065939563323752, guid: 07f41c8bbaf563446979281513016b18, type: 3}
       propertyPath: m_Name
       value: Body (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8616699575255678695, guid: 07f41c8bbaf563446979281513016b18, type: 3}
-      propertyPath: m_Mesh
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -24790,17 +24885,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3997041558925918299, guid: 07f41c8bbaf563446979281513016b18, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: c257601d4194be249a69a4de40bc83b2, type: 2}
     - target: {fileID: 4970065939563323752, guid: 07f41c8bbaf563446979281513016b18, type: 3}
       propertyPath: m_Name
       value: Body
-      objectReference: {fileID: 0}
-    - target: {fileID: 8616699575255678695, guid: 07f41c8bbaf563446979281513016b18, type: 3}
-      propertyPath: m_Mesh
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
