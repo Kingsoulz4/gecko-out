@@ -83,6 +83,10 @@ namespace Geckout
                 Segment seg = Instantiate(this.segment, transform);
                 seg.name = "Segment " + i;
                 seg.transform.localPosition = new Vector3(0, -i * unitSpacing, 0);
+                if (i % 3 == 0 )
+                {
+                    seg.gameObject.AddComponent<BoxCollider>();
+                }
                 Segments.Add(seg);
             }
 
