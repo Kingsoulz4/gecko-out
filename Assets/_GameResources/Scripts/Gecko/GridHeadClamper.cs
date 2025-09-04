@@ -217,7 +217,6 @@ namespace Geckout
             }
             else
             {
-                // Reached end of path
                 if (currentDirection != Vector2Int.zero)
                 {
                     currentDirection = Vector2Int.zero;

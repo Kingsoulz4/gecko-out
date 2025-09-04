@@ -132,13 +132,12 @@ namespace Geckout
             Debug.Log($"Body initialized: length={length}, subLength={subLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
         }
 
-
         public List<Segment> GetOrderedSegments()
         {
             if (controlAnchor == ControlAnchor.Head)
                 return Segments;
             else
-                return Segments.AsEnumerable().Reverse().ToList(); 
+                return Segments.AsEnumerable().Reverse().ToList();
         }
 
         public List<Segment> GetOrderedSegmentsForTileUpdate()
@@ -266,23 +265,9 @@ namespace Geckout
 
                 yield return null;
             }
-
-            //// Đảm bảo vị trí cuối cùng chính xác
-            //Vector3 finalAnchor = worldPath[worldPath.Count - 1];
-            //finalAnchor = gridClamper.ClampHeadPosition(finalAnchor);
-            //AddAnchorSample(finalAnchor);
-
-            //for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
-            //{
-            //    float backDist = segIdx * segmentSpacing;
-            //    Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
-            //    orderedSegments[segIdx].transform.position = pos;
-            //}
         }
 
-
-        // ===== History System =====
-
+        #region History system
         private float RequiredHistoryLength()
         {
             return Mathf.Max(0f, (Segments.Count - 1) * segmentSpacing + extraHistoryPadding);
@@ -478,4 +463,6 @@ namespace Geckout
             }
         }
     }
+
+    #endregion
 }
