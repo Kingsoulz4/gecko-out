@@ -26,7 +26,7 @@ namespace Geckout
 
         public void SetEmpty(bool isEmpty)
         {
-            m_image.sprite = !isEmpty? null: m_image.sprite;
+            m_image.gameObject.SetActive(!isEmpty);
             m_imagePlus.gameObject.SetActive(isEmpty);
         }
 

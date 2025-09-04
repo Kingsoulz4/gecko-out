@@ -29,14 +29,25 @@ namespace Geckout
             {
                 buttonColorPicked.OnClick = OnClickSelectColorPicked;
             }
+            UpdateUI(dogData);
         }
 
         public void UpdateUI(DogData dogData)
         {
-            foreach (var itemColor in dogData.listColor)
+            var listColorData = LevelGame.GameLevelData.colorAndMaterialData.listColor;
+            for (int i=0; i< m_listButtonColorPicked.Count; i++)
             {
-
+                if (i < dogData.listColor.Count)
+                {
+                    m_listButtonColorPicked[i].SetEmpty(false);
+                    m_listButtonColorPicked[i].SetColor(listColorData[dogData.listColor[i]]);
+                }
+                else
+                {
+                    m_listButtonColorPicked[i].SetEmpty(true);
+                }
             }
+            UpdateUI();
         }
 
         public void UpdateUI()
@@ -51,7 +62,15 @@ namespace Geckout
                 itemColorPick.onClick.AddListener(() =>
                 {
                     m_listButtonColorPicked[currentSelectedColorIndex].SetColor(color.Value);
-                    dogData.listColor[currentSelectedColorIndex] = color.Key;
+                    m_listButtonColorPicked[currentSelectedColorIndex].SetEmpty(false);
+                    if (currentSelectedColorIndex >= dogData.listColor.Count)
+                    {
+                        dogData.listColor.Add(color.Key);
+                    }
+                    else
+                    {
+                        dogData.listColor[currentSelectedColorIndex] = color.Key;
+                    }
                 });
             }
         }

@@ -50,6 +50,18 @@ namespace Geckout
                     {
                         tile.SetSelected(true);
                         listSelectedTile.Add(tile);
+                        return;
+                    }
+
+                    var dogBody = hitInfo.transform.GetComponentInParent<BodyController>();
+                    if(dogBody != null)
+                    {
+                        if (selectedDog != null)
+                        {
+                            selectedDog.SetSelected(false);
+                        }
+                        selectedDog = dogBody;
+                        dogBody.SetSelected(true);
                     }
                 }
             }

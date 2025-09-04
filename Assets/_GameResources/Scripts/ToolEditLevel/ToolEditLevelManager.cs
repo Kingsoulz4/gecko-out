@@ -83,7 +83,14 @@ namespace Geckout
             HideAllTabs();
             m_designDogTab.gameObject.SetActive(true);
             m_designDogTab.LevelGame = LevelGame;
-            m_designDogTab.UpdateUI();
+            if (LevelGame != null && LevelGame.selectedDog != null)
+            {
+                m_designDogTab.UpdateUI(LevelGame.selectedDog.DogData);
+            }
+            else
+            {
+                m_designDogTab.UpdateUI();
+            }
         }
 
         private void OnClickEditWalls()

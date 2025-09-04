@@ -31,6 +31,9 @@ namespace Geckout
         [SerializeField] private GridHeadClamper gridClamper;
         public ControlAnchor controlAnchor = ControlAnchor.Head;
 
+        [Header("Tool")]
+        [SerializeField] private Outline m_outlineSelected;
+
         // Movement events
         public Action OnStartMove;
         public Action OnEndMove;
@@ -60,6 +63,8 @@ namespace Geckout
 
         public GridHeadClamper GridClamper { get => gridClamper; set => gridClamper = value; }
 
+        public DogData DogData { get; set; }
+
         private void Start()
         {
             //Init();
@@ -67,6 +72,7 @@ namespace Geckout
 
         public void Initialize(DogData dogData)
         {
+            DogData = dogData;
             List<Vector2Int> listDefaultCoordinate = dogData.listCoordinate;
             Segments = new List<Segment>();
 
@@ -280,6 +286,16 @@ namespace Geckout
             }
         }
 
+        #region Tool
+
+        public void SetSelected(bool selected)
+        {
+            m_outlineSelected.enabled = selected;
+        }
+
+        #endregion
+
+
         #region History system
         private float RequiredHistoryLength()
         {
@@ -475,7 +491,13 @@ namespace Geckout
                 return historyPoints.Last.Value;
             }
         }
+    
+    
+    
     }
 
     #endregion
+
+    
+
 }
