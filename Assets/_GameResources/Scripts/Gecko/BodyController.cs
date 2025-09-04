@@ -171,12 +171,6 @@ namespace Geckout
 
                 // Rebuild history to match new control direction
                 InitHistoryFromSegments();
-
-                // Force occupied tile update to sync with new positions
-                if (occupiedTileController != null)
-                {
-                    occupiedTileController.UpdateAllSegmentPositions();
-                }
             }
         }
 
@@ -216,8 +210,6 @@ namespace Geckout
         }
 
         // ===== BodyController - Precise Movement Method =====
-
-        // BodyController.cs
 
         IEnumerator MovePath(List<Vector3> worldPath)
         {
@@ -268,7 +260,6 @@ namespace Geckout
                     orderedSegments[segIdx].transform.position = pos;
                 }
 
-                // ✅ NEW: cập nhật occupied ngay sau khi đã set transform
                 occupiedTileController?.UpdateAllSegmentPositions();
 
                 yield return null;
@@ -285,8 +276,6 @@ namespace Geckout
                 Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
                 orderedSegments[segIdx].transform.position = pos;
             }
-
-            occupiedTileController?.UpdateAllSegmentPositions();
         }
 
 

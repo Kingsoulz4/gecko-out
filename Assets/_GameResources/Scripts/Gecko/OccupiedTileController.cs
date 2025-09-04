@@ -26,7 +26,6 @@ namespace Geckout
 
         private void OnEndMoveHandle()
         {
-            UpdateAllSegmentPositions();
         }
 
         void Init()
@@ -132,23 +131,20 @@ namespace Geckout
                 Vector3 worldPos = segment.transform.position;
                 Vector2Int gridPos = WorldToGridPosition(worldPos);
 
-                if (gridPos != lastGridPositions[rawIndex])
-                {
-                    UpdateSegmentTile(rawIndex, gridPos);
-                    lastGridPositions[rawIndex] = gridPos;
-                }
+                UpdateSegmentTile(rawIndex, gridPos);
+                lastGridPositions[rawIndex] = gridPos;
             }
         }
 
-        public void ClearOccupied()
-        {
-            var segments = bodyController.Segments;
+        //public void ClearOccupied()
+        //{
+        //    var segments = bodyController.Segments;
 
-            for (int i = 0; i < segments.Count; i++)
-            {
-                segments[i].CurrentTile.SetOccupied(false);
-            }
-        }
+        //    for (int i = 0; i < segments.Count; i++)
+        //    {
+        //        segments[i].CurrentTile.SetOccupied(false);
+        //    }
+        //}
 
         public Vector2Int WorldToGridPosition(Vector3 worldPos)
         {
