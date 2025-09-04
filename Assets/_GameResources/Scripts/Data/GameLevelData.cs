@@ -131,14 +131,7 @@ namespace Geckout.Data
     {
         Normal,
         DoubleColor,
-
-    }
-
-    public enum DogColor
-    {
-        Red,
-        Green,
-
+        TripleColor
     }
 
     public class MovableBoxData
@@ -150,7 +143,7 @@ namespace Geckout.Data
     public class DogData
     {
         public DogType dogType;
-        public List<DogColor> listColor = new();
+        public List<ColorList> listColor = new();
         public List<Vector2Int> listCoordinate = new();
 
     }

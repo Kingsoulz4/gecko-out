@@ -132,7 +132,7 @@ namespace Geckout
 
                 //var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
                 var coordinate = listDefaultCoordinate[Mathf.Clamp(unitIndex, 0, listDefaultCoordinate.Count -1)];
-                Segments[i].Init(coordinate);
+                Segments[i].InitCoordinate(coordinate);
             }
 
             // ===== Init history system =====
