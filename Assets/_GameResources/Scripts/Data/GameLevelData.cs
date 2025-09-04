@@ -21,6 +21,7 @@ namespace Geckout.Data
         public LevelType type;
         public List<MapTileData> mapTileDatas = new();
         public List<DogData> listDogData = new();
+        public ColorAndMaterialData colorAndMaterialData;
 
         public void GenerateDefaultMap()
         {
@@ -73,6 +74,14 @@ namespace Geckout.Data
 #endif
         }
 
+        private void OnValidate()
+        {
+            if(colorAndMaterialData == null)
+            {
+                colorAndMaterialData = Resources.Load<ColorAndMaterialData>("ColorsAndMaterials/ColorAndMaterialData");
+            }
+        }
+
     }
 
 
@@ -88,6 +97,25 @@ namespace Geckout.Data
         }
     }
 
+    public enum ColorList
+    {
+        Red,
+        Orange,
+        Yellow,
+        Green,
+        Blue,
+        Violet,
+        Pink,
+        Brown,
+        White,
+        Black,
+        Cyan,
+        Grey,
+        Purple,
+        BabyPink,
+        RedWine
+    }
+
     public enum MapTileType
     {
         Normal,
@@ -96,6 +124,7 @@ namespace Geckout.Data
         Wall1Side,
         Wall2Side,
         Wall3Side,
+        Portal
     }
 
     public enum DogType

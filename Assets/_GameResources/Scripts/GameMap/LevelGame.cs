@@ -28,6 +28,11 @@ namespace Geckout
         {
             m_gameLevelData = gameLevelData;
             m_gameMap.SetLevelData(gameLevelData);
+            Utils.RemoveAllChilds(m_listDogContainer);
+            foreach(var dogData in gameLevelData.listDogData)
+            {
+                SpawnDog(dogData);
+            }
 #if UNITY_EDITOR
             EditorUtility.SetDirty(this.gameObject);   
 #endif
@@ -69,12 +74,17 @@ namespace Geckout
             }
         }
 
+        public void SpawnDog(DogData dogData)
+        {
+            var newDog = Instantiate(m_dogPrefab, m_listDogContainer);
+            newDog.Initialize(dogData);
+        }
+
         public void GenerateNewDog(DogData dogData)
         {
             m_gameLevelData.listDogData.Add(dogData);
-            dogData.listCoordinate = listSelectedTile.Select(x => x.Coordinate).ToList();
-            var newDog = Instantiate(m_dogPrefab, m_listDogContainer);
-            newDog.Initialize(dogData);
+            dogData.listCoordinate = new List<Vector2Int>(listSelectedTile.Select(x => x.Coordinate).ToList());
+            SpawnDog(dogData);
         }
 
         public void DeleteSelectedDog()

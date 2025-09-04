@@ -35,7 +35,7 @@ namespace Geckout
         public Action OnStartMove;
         public Action OnEndMove;
 
-        private int subLength = 3;
+        private int subLength = 1;
         private Segment _head, _tail;
         private float historyTotalLength = 0f;
         private const float extraHistoryPadding = 4f;
@@ -133,6 +133,7 @@ namespace Geckout
             Segments = new List<Segment>();
 
             // ===== Tính toán tổng số segment =====
+            length = listDefaultCoordinate.Count + 2;
             int totalSegments = length * subLength - 2;
             float unitSpacing = 1f / subLength;
             segmentSpacing = unitSpacing;
@@ -186,13 +187,13 @@ namespace Geckout
             //    Segments[i].SetCoordinate(coordinate);
             //}
 
-            for (int i = 0; i < listDefaultCoordinate.Count; i++)
+            for (int i = 0; i < Segments.Count; i++)
             {
                 // unitIndex = segment thuộc về tile nào
                 int unitIndex = i / subLength;
 
                 //var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
-                var coordinate = listDefaultCoordinate[unitIndex];
+                var coordinate = listDefaultCoordinate[Mathf.Clamp(unitIndex, 0, listDefaultCoordinate.Count -1)];
                 Segments[i].SetCoordinate(coordinate);
             }
 

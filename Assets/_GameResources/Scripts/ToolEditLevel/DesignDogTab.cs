@@ -29,6 +29,7 @@ namespace Geckout
 
         private void OnClickGenerate()
         {
+            dogData = new();
             LevelGame.GenerateNewDog(dogData);
         }
     }

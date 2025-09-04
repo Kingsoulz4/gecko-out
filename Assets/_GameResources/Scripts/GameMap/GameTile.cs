@@ -23,7 +23,17 @@ namespace Geckout
 
         private MapTileData mapTileData = new();
 
-        public Vector2Int Coordinate { get; private set; }
+        public Vector2Int Coordinate {
+            get 
+            {
+                return mapTileData.coordinate;
+            }
+            
+            set
+            {
+
+            }
+        }
 
         private void Awake()
         {

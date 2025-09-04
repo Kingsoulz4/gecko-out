@@ -271,7 +271,7 @@ namespace Geckout
 
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, tileLayerMask))
             {
-                GameTile tile = hit.collider.transform.parent.GetComponent<GameTile>();
+                GameTile tile = hit.collider.transform.GetComponent<GameTile>();
                 if (tile != null)
                 {
                     if (tile.IsOccupied && isDragging)

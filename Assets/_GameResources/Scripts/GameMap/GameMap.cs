@@ -97,9 +97,12 @@ namespace Geckout
                 return false;
             }
 
-            var index = x + y * levelData.mapSize.x;
-            result = tiles[index];
-            return true;
+            //var index = x + y * levelData.mapSize.x;
+            //result = tiles[index];
+
+            result = tiles.First(x => x.Coordinate == coordinate);
+
+            return  result != null;
         }
 
         public static bool TryGetTileAt(Vector2Int coordinate, out GameTile result)
@@ -128,9 +131,9 @@ namespace Geckout
             tiles = new GameTile[_mapSize.x * _mapSize.y];
             List<GameTile> listTile = _tilesContainer.GetComponentsInChildren<GameTile>().ToList();
             int i = 0;
-            for (int x = 0; x < _mapSize.x; x++)
+            for (int y = 0; y < _mapSize.y; y++)
             {
-                for (int y = 0; y < _mapSize.y; y++)
+                for (int x = 0; x < _mapSize.x; x++)
                 {
                     var tile = listTile[i];
                     tiles[x + y * _mapSize.x] = tile;
