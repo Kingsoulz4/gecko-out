@@ -113,7 +113,7 @@ MonoBehaviour:
   triggerGroups: []
   _spline:
     points: []
-    type: 0
+    type: 1
     linearAverageDirection: 1
     customValueInterpolation:
       serializedVersion: 2
@@ -246,7 +246,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0a01bc272d4c68428db50eacb4a914a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateInterval: 0.03
   bodyController: {fileID: 3655932188227585431}
 --- !u!114 &3655932188227585431
 MonoBehaviour:

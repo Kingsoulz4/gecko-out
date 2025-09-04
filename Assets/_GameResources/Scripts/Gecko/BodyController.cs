@@ -54,82 +54,20 @@ namespace Geckout
                 if (moveCoroutine != null) return true;
 
                 //if (gridClamper != null && !gridClamper.IsAtTileCenter) return true;
-
                 return false;
             }
         }
+
+        public GridHeadClamper GridClamper { get => gridClamper; set => gridClamper = value; }
+
         private void Start()
         {
-            //Segments = new List<Segment>();
-
-            //// ===== Tính toán tổng số segment =====
-            //int totalSegments = length * subLength - 2;
-            //float unitSpacing = 1f / subLength;
-            //segmentSpacing = unitSpacing;
-            //float totalBodyLength = length;
-
-            //// ===== Head =====
-            //_head = Instantiate(headPrefab, transform);
-            //_head.name = "Head";
-            //_head.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-            //Segments.Add(_head);
-
-            //// ===== Body segments =====
-            //// chỉ spawn từ 1 đến totalSegments - 2 (dành chỗ cho Tail)
-            //for (int i = 1; i < totalSegments - 1; i++)
-            //{
-            //    Segment seg = Instantiate(this.segment, transform);
-            //    seg.name = "Segment " + i;
-            //    seg.transform.localPosition = new Vector3(0, -i * unitSpacing, 0);
-            //    Segments.Add(seg);
-            //}
-
-            //// ===== Tail =====
-            //_tail = Instantiate(tailPrefab, transform);
-            //_tail.name = "Tail";
-            //_tail.transform.localPosition = new Vector3(0, -(totalSegments - 1) * unitSpacing, 0);
-            //Segments.Add(_tail);
-
-            //// ===== Setup neighbors =====
-            //_head.Setup(null, Segments[1]);
-            //_head.SetController(this);
-
-            //_tail.Setup(Segments[Segments.Count - 2], null);
-            //_tail.SetController(this);
-
-            //for (int i = 1; i < Segments.Count - 1; i++)
-            //{
-            //    var currentSegment = Segments[i];
-            //    Segment prevSegment = Segments[i - 1];
-            //    Segment nextSegment = Segments[i + 1];
-            //    currentSegment.Setup(prevSegment, nextSegment);
-            //    currentSegment.SetController(this);
-            //}
-
-            //// ===== Set coordinate ban đầu =====
-            //for (int i = 0; i < Segments.Count; i++)
-            //{
-            //    // unitIndex = segment thuộc về tile nào
-            //    int unitIndex = i / subLength;
-
-            //    var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
-            //    Segments[i].SetCoordinate(coordinate);
-            //}
-
-            //// ===== Init history system =====
-            //InitHistoryFromSegments();
-
-            //// ===== Initialize renderer =====
-            //if (_bodyRenderer != null)
-            //    _bodyRenderer.Initialize(Segments);
-
-            //Debug.Log($"Body initialized: length={length}, subLength={subLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
+            //Init();
         }
 
         public void Initialize(DogData dogData)
         {
             List<Vector2Int> listDefaultCoordinate = dogData.listCoordinate;
-
             Segments = new List<Segment>();
 
             // ===== Tính toán tổng số segment =====
@@ -194,7 +132,7 @@ namespace Geckout
 
                 //var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
                 var coordinate = listDefaultCoordinate[Mathf.Clamp(unitIndex, 0, listDefaultCoordinate.Count -1)];
-                Segments[i].SetCoordinate(coordinate);
+                Segments[i].Init(coordinate);
             }
 
             // ===== Init history system =====
@@ -207,13 +145,12 @@ namespace Geckout
             Debug.Log($"Body initialized: length={length}, subLength={subLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
         }
 
-
         public List<Segment> GetOrderedSegments()
         {
             if (controlAnchor == ControlAnchor.Head)
-                return Segments; // Normal order: Head leads
+                return Segments;
             else
-                return Segments.AsEnumerable().Reverse().ToList(); // Reversed: Tail leads
+                return Segments.AsEnumerable().Reverse().ToList();
         }
 
         public List<Segment> GetOrderedSegmentsForTileUpdate()
@@ -250,12 +187,6 @@ namespace Geckout
 
                 // Rebuild history to match new control direction
                 InitHistoryFromSegments();
-
-                // Force occupied tile update to sync with new positions
-                if (occupiedTileController != null)
-                {
-                    occupiedTileController.UpdateAllSegmentPositions();
-                }
             }
         }
 
@@ -294,8 +225,6 @@ namespace Geckout
             currentPath.Clear();
         }
 
-        // ===== BodyController - Precise Movement Method =====
-
         IEnumerator MovePath(List<Vector3> worldPath)
         {
             if (worldPath.Count < 2) yield break;
@@ -314,7 +243,7 @@ namespace Geckout
                 float frameSpeed = moveSpeed * Time.deltaTime;
                 Vector3 intendedPos = Vector3.MoveTowards(lastAnchorPos, currentTarget, frameSpeed);
 
-                // Apply grid constraints through GridHeadClamper (now works for both head and tail)
+                // Clamp theo lưới (head/tail đều dùng được)
                 if (gridClamper != null)
                 {
                     anchorPos = gridClamper.ClampHeadPosition(intendedPos);
@@ -324,11 +253,11 @@ namespace Geckout
                     anchorPos = intendedPos;
                 }
 
-                // Check if we reached the target waypoint (with small tolerance)
+                // Đến waypoint?
                 if (Vector3.Distance(anchorPos, currentTarget) < 0.01f)
                 {
-                    anchorPos = currentTarget; // Ensure exact position
-                    currentWaypointIndex++; // Move to next waypoint
+                    anchorPos = currentTarget;
+                    currentWaypointIndex++;
                 }
 
                 if ((anchorPos - lastAnchorPos).sqrMagnitude > (minSampleStep * minSampleStep))
@@ -337,7 +266,7 @@ namespace Geckout
                     lastAnchorPos = anchorPos;
                 }
 
-                // Apply positions to ordered segments
+                // Cập nhật vị trí mọi segment theo history
                 for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
                 {
                     float backDist = segIdx * segmentSpacing;
@@ -345,26 +274,13 @@ namespace Geckout
                     orderedSegments[segIdx].transform.position = pos;
                 }
 
+                occupiedTileController?.UpdateAllSegmentPositions();
+
                 yield return null;
-            }
-
-            // Ensure final position is exact
-            Vector3 finalAnchor = worldPath[worldPath.Count - 1];
-
-            finalAnchor = gridClamper.ClampHeadPosition(finalAnchor);
-
-            AddAnchorSample(finalAnchor);
-
-            for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
-            {
-                float backDist = segIdx * segmentSpacing;
-                Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
-                orderedSegments[segIdx].transform.position = pos;
             }
         }
 
-        // ===== History System =====
-
+        #region History system
         private float RequiredHistoryLength()
         {
             return Mathf.Max(0f, (Segments.Count - 1) * segmentSpacing + extraHistoryPadding);
@@ -560,4 +476,6 @@ namespace Geckout
             }
         }
     }
+
+    #endregion
 }
