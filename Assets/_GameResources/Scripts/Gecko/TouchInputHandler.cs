@@ -67,29 +67,67 @@ namespace Geckout
 
             DebugLog($"Touch at tile coordinate: {tileCoord.Value}");
 
-            var gecko = GetBodyControllerByMouse(screenPosition);
-            if (gecko == null)
+            // Kiểm tra xem có click trực tiếp lên segment không
+            var directGecko = GetBodyControllerByMouse(screenPosition);
+            if (directGecko != null)
             {
-                DebugLog("No gecko found at tile");
+                HandleDirectGeckoTouch(directGecko, tileCoord.Value);
                 return;
             }
 
-            if (gecko.IsMoving)
+            // Kiểm tra tile trống + tìm head/tail adjacent
+            if (GameMap.TryGetTileAt(tileCoord.Value, out GameTile tile) && !tile.IsOccupied)
             {
-                DebugLog("Gecko is currently moving, but allowing path update");
+                var adjacentResult = FindAdjacentGeckoAnchor(tileCoord.Value);
+                if (adjacentResult.HasValue)
+                {
+                    var (gecko, anchor, anchorPos) = adjacentResult.Value;
+                    DebugLog($"Found adjacent {anchor} at {anchorPos} for target {tileCoord.Value}");
+                    StartAutomaticMovement(gecko, anchor, tileCoord.Value);
+                }
+                else
+                {
+                    DebugLog("No adjacent head/tail found within 1 tile distance");
+                }
             }
+            else
+            {
+                DebugLog("Tile is occupied or invalid");
+            }
+        }
 
+        void HandleDirectGeckoTouch(BodyController gecko, Vector2Int tileCoord)
+        {
             Vector2Int headCoord = gecko.Segments[0].Coordinate;
             Vector2Int tailCoord = gecko.Segments[gecko.Segments.Count - 1].Coordinate;
 
             DebugLog($"Gecko head at: {headCoord}, tail at: {tailCoord}");
 
-            if (tileCoord.Value == headCoord)
+            // 🔒 BLOCK: đang move theo HEAD thì không cho grab TAIL và ngược lại
+            if (gecko.IsMoving)
+            {
+                if (gecko.controlAnchor == BodyController.ControlAnchor.Head && tileCoord == tailCoord)
+                {
+                    DebugLog("Blocked: cannot start dragging from TAIL while gecko is moving from HEAD");
+                    return;
+                }
+                else if (gecko.controlAnchor == BodyController.ControlAnchor.Tail && tileCoord == headCoord)
+                {
+                    DebugLog("Blocked: cannot start dragging from HEAD while gecko is moving from TAIL");
+                    return;
+                }
+                else
+                {
+                    DebugLog("Gecko is currently moving, but allowing path update from same anchor");
+                }
+            }
+
+            if (tileCoord == headCoord)
             {
                 DebugLog("Starting drag from HEAD");
                 StartDragging(gecko, true);
             }
-            else if (tileCoord.Value == tailCoord)
+            else if (tileCoord == tailCoord)
             {
                 DebugLog("Starting drag from TAIL");
                 StartDragging(gecko, false);
@@ -98,6 +136,75 @@ namespace Geckout
             {
                 DebugLog("Touch not on head or tail");
             }
+        }
+
+        private (BodyController gecko, BodyController.ControlAnchor anchor, Vector2Int anchorPos)?
+            FindAdjacentGeckoAnchor(Vector2Int targetTile)
+        {
+            // Tìm tất cả gecko trong scene
+            BodyController[] geckos = FindObjectsOfType<BodyController>();
+
+            foreach (var gecko in geckos)
+            {
+                if (gecko.IsMoving) continue; // Skip gecko đang di chuyển
+
+                var headPos = gecko.OccupiedTileController.WorldToGridPosition(
+                    gecko.Segments[0].transform.position);
+                var tailPos = gecko.OccupiedTileController.WorldToGridPosition(
+                    gecko.Segments[gecko.Segments.Count - 1].transform.position);
+
+                // Kiểm tra head có adjacent với target không
+                if (IsAdjacent(headPos, targetTile))
+                {
+                    DebugLog($"Found adjacent HEAD at {headPos}, target: {targetTile}");
+                    return (gecko, BodyController.ControlAnchor.Head, headPos);
+                }
+
+                // Kiểm tra tail có adjacent với target không  
+                if (IsAdjacent(tailPos, targetTile))
+                {
+                    DebugLog($"Found adjacent TAIL at {tailPos}, target: {targetTile}");
+                    return (gecko, BodyController.ControlAnchor.Tail, tailPos);
+                }
+            }
+
+            return null; // Không tìm thấy head/tail nào trong vòng 1 ô
+        }
+
+        private bool IsAdjacent(Vector2Int pos1, Vector2Int pos2)
+        {
+            int manhattanDistance = Mathf.Abs(pos1.x - pos2.x) + Mathf.Abs(pos1.y - pos2.y);
+            bool adjacent = manhattanDistance == 1;
+
+            if (enableDebugLogs && adjacent)
+            {
+                DebugLog($"Adjacent check: {pos1} -> {pos2}, distance: {manhattanDistance}");
+            }
+
+            return adjacent;
+        }
+
+        void StartAutomaticMovement(BodyController gecko, BodyController.ControlAnchor anchor, Vector2Int targetTile)
+        {
+            bodyController = gecko;
+            isDragging = false; // Không phải drag mode
+            isDraggingFromHead = (anchor == BodyController.ControlAnchor.Head);
+
+            // Set control anchor
+            bodyController.SetControlAnchor(anchor);
+            DebugLog($"Auto movement: {anchor} -> {targetTile}");
+
+            // Initialize pathfinder
+            bool[] mapState = GameMap.GetCurrentMapState();
+            ASGrid grid = new ASGrid(GameMap.MapSize.x, GameMap.MapSize.y, mapState);
+            pathfinder = new ASPathFinding(grid);
+
+            // Tìm path và di chuyển ngay
+            FindAndSetSmoothPath(targetTile);
+
+            // Reset lastTargetTile để tránh conflict với drag mode
+            lastTargetTile = targetTile;
+            lastPathUpdateTime = Time.time;
         }
 
         void OnTouchDrag(Vector2 screenPosition)
@@ -124,6 +231,11 @@ namespace Geckout
 
         void OnTouchEnd()
         {
+            if (isDragging)
+            {
+                DebugLog("Drag ended");
+            }
+
             isDragging = false;
             bodyController = null;
             currentPath?.Clear();
@@ -231,10 +343,6 @@ namespace Geckout
                 }
             }
 
-            //string pathStr = string.Join(" -> ", smoothPath.Select(n => $"{n.x.ToString()} {n.y.ToString()}"));
-            //Debug.Log($"Full path: {pathStr}, Start: {startPos}");
-
-
             if (smoothPath.Count == 0)
             {
                 DebugLog("No movement needed - already at target");
@@ -270,6 +378,7 @@ namespace Geckout
                 GameTile tile = hit.collider.transform.parent.GetComponent<GameTile>();
                 if (tile != null)
                 {
+                    // Chỉ block occupied tiles trong drag mode
                     if (tile.IsOccupied && isDragging)
                     {
                         return null;

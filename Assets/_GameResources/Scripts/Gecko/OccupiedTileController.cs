@@ -132,15 +132,12 @@ namespace Geckout
                 Vector3 worldPos = segment.transform.position;
                 Vector2Int gridPos = WorldToGridPosition(worldPos);
 
-                if (gridPos != lastGridPositions[rawIndex])
-                {
-                    UpdateSegmentTile(rawIndex, gridPos);
-                    lastGridPositions[rawIndex] = gridPos;
-                }
+                UpdateSegmentTile(rawIndex, gridPos);
+                lastGridPositions[rawIndex] = gridPos;
             }
         }
 
-        public void ClearOccupied()
+        public void ClearAllOccupied()
         {
             var segments = bodyController.Segments;
 
@@ -189,14 +186,7 @@ namespace Geckout
         void OnDestroy()
         {
             if (currentOccupiedTiles == null) return;
-
-            for (int i = 0; i < currentOccupiedTiles.Length; i++)
-            {
-                if (currentOccupiedTiles[i] != null)
-                {
-                    currentOccupiedTiles[i].SetOccupied(false);
-                }
-            }
+            ClearAllOccupied();
         }
     }
 }

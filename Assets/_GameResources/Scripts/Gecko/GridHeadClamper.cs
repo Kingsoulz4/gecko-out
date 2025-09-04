@@ -17,6 +17,7 @@ namespace Geckout
         private bool hasLockedTile = false;
         public bool IsAtTileCenter { get; private set; }
         public Vector2Int CurrentDirection { get => currentDirection; set => currentDirection = value; }
+        public float TileCenterThreshold { get => tileCenterThreshold; set => tileCenterThreshold = value; }
 
         void Start()
         {

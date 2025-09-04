@@ -128,7 +128,6 @@ namespace Geckout
             Debug.Log($"Body initialized: length={length}, subLength={subLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
         }
 
-
         public List<Segment> GetOrderedSegments()
         {
             if (controlAnchor == ControlAnchor.Head)
@@ -215,10 +214,6 @@ namespace Geckout
             currentPath.Clear();
         }
 
-        // ===== BodyController - Precise Movement Method =====
-
-        // BodyController.cs
-
         IEnumerator MovePath(List<Vector3> worldPath)
         {
             if (worldPath.Count < 2) yield break;
@@ -248,7 +243,7 @@ namespace Geckout
                 }
 
                 // Đến waypoint?
-                if (Vector3.Distance(anchorPos, currentTarget) < 0.01f)
+                if (Vector3.Distance(anchorPos, currentTarget) < gridClamper.TileCenterThreshold)
                 {
                     anchorPos = currentTarget;
                     currentWaypointIndex++;
@@ -289,9 +284,7 @@ namespace Geckout
             occupiedTileController?.UpdateAllSegmentPositions();
         }
 
-
-        // ===== History System =====
-
+        #region History system
         private float RequiredHistoryLength()
         {
             return Mathf.Max(0f, (Segments.Count - 1) * segmentSpacing + extraHistoryPadding);
@@ -486,5 +479,6 @@ namespace Geckout
                 return historyPoints.Last.Value;
             }
         }
+        #endregion
     }
 }
