@@ -332,7 +332,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 37b5a67b527225d4c90972bd2cb612ee, type: 2}
+  - {fileID: 2100000, guid: c257601d4194be249a69a4de40bc83b2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -378,7 +378,7 @@ MonoBehaviour:
   triggerGroups: []
   _spline:
     points: []
-    type: 0
+    type: 1
     linearAverageDirection: 1
     customValueInterpolation:
       serializedVersion: 2
@@ -511,7 +511,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0a01bc272d4c68428db50eacb4a914a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateInterval: 0.03
   bodyController: {fileID: 3655932188227585431}
 --- !u!114 &3655932188227585431
 MonoBehaviour:

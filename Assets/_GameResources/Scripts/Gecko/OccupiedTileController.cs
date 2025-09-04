@@ -6,16 +6,12 @@ namespace Geckout
     public class OccupiedTileController : MonoBehaviour
     {
         [Header("Performance Settings")]
-        [SerializeField] private float updateInterval = 0.05f;
         [SerializeField] private BodyController bodyController;
 
         private Vector2Int[] lastGridPositions;
         private GameTile[] currentOccupiedTiles;
-        private float lastUpdateTime;
 
-        // Cache để tránh tính toán offset mỗi frame
         private Vector2 gridOffset;
-        private bool isInitialized = false;
 
         public Vector2Int[] LastGridPositions { get => lastGridPositions; }
 
@@ -71,27 +67,55 @@ namespace Geckout
                     lastGridPositions[i] = Vector2Int.one * int.MinValue; // Force update lần đầu
                 }
 
-                isInitialized = true;
-
                 UpdateAllSegmentPositions();
             });
         }
 
-        void Update()
+        // Trong OccupiedTileController.cs
+        public Vector2Int WorldToGridPositionForward(Vector3 worldPos)
         {
+            float gridX = worldPos.x + gridOffset.x;
+            float gridY = worldPos.y + gridOffset.y;
 
-            if (!isInitialized)
+            // Standard conversion để lấy tile hiện tại
+            Vector2Int currentTile = new Vector2Int(Mathf.RoundToInt(gridX), Mathf.RoundToInt(gridY));
+            var movementDirection = bodyController.GridClamper.CurrentDirection;
+            if (movementDirection == Vector2Int.zero)
+                return currentTile;
+
+            // Kiểm tra xem đã qua tâm tile hiện tại theo direction chưa
+            Vector3 currentTileCenter = new Vector3(
+                currentTile.x - gridOffset.x,
+                currentTile.y - gridOffset.y,
+                0
+            );
+
+            bool crossedCenter = false;
+
+            if (movementDirection.x > 0) // Moving right
             {
-                return;
+                crossedCenter = worldPos.x > currentTileCenter.x;
+            }
+            else if (movementDirection.x < 0) // Moving left
+            {
+                crossedCenter = worldPos.x < currentTileCenter.x;
+            }
+            else if (movementDirection.y > 0) // Moving up  
+            {
+                crossedCenter = worldPos.y > currentTileCenter.y;
+            }
+            else if (movementDirection.y < 0) // Moving down
+            {
+                crossedCenter = worldPos.y < currentTileCenter.y;
             }
 
-            if (Time.time - lastUpdateTime < updateInterval)
+            // Nếu đã qua tâm theo hướng di chuyển → return tile tiếp theo
+            if (crossedCenter)
             {
-                return;
+                return currentTile + movementDirection;
             }
 
-            UpdateAllSegmentPositions();
-            lastUpdateTime = Time.time;
+            return currentTile;
         }
 
         public void UpdateAllSegmentPositions()
@@ -108,15 +132,12 @@ namespace Geckout
                 Vector3 worldPos = segment.transform.position;
                 Vector2Int gridPos = WorldToGridPosition(worldPos);
 
-                if (gridPos != lastGridPositions[rawIndex])
-                {
-                    UpdateSegmentTile(rawIndex, gridPos);
-                    lastGridPositions[rawIndex] = gridPos;
-                }
+                UpdateSegmentTile(rawIndex, gridPos);
+                lastGridPositions[rawIndex] = gridPos;
             }
         }
 
-        public void ClearOccupied()
+        public void ClearAllOccupied()
         {
             var segments = bodyController.Segments;
 
@@ -165,14 +186,7 @@ namespace Geckout
         void OnDestroy()
         {
             if (currentOccupiedTiles == null) return;
-
-            for (int i = 0; i < currentOccupiedTiles.Length; i++)
-            {
-                if (currentOccupiedTiles[i] != null)
-                {
-                    currentOccupiedTiles[i].SetOccupied(false);
-                }
-            }
+            ClearAllOccupied();
         }
     }
 }

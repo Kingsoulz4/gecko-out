@@ -51,9 +51,9 @@ namespace Geckout
 
         public void Initialize(GameLevelData levelData)
         {
-            //CreateContainers();
-            //SpawnAllTiles(levelData);
-            GetAllTilesTest(levelData);
+            CreateContainers();
+            SpawnAllTiles(levelData);
+            //GetAllTilesTest(levelData);
         }
         public static Vector3 GetTileWorldPosition(Vector2Int coord)
         {

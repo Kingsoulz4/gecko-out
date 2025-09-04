@@ -57,6 +57,9 @@ namespace Geckout
                 return false;
             }
         }
+
+        public GridHeadClamper GridClamper { get => gridClamper; set => gridClamper = value; }
+
         private void Start()
         {
             Segments = new List<Segment>();
@@ -124,7 +127,6 @@ namespace Geckout
 
             Debug.Log($"Body initialized: length={length}, subLength={subLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
         }
-
 
         public List<Segment> GetOrderedSegments()
         {
@@ -212,8 +214,6 @@ namespace Geckout
             currentPath.Clear();
         }
 
-        // ===== BodyController - Precise Movement Method =====
-
         IEnumerator MovePath(List<Vector3> worldPath)
         {
             if (worldPath.Count < 2) yield break;
@@ -232,7 +232,7 @@ namespace Geckout
                 float frameSpeed = moveSpeed * Time.deltaTime;
                 Vector3 intendedPos = Vector3.MoveTowards(lastAnchorPos, currentTarget, frameSpeed);
 
-                // Apply grid constraints through GridHeadClamper (now works for both head and tail)
+                // Clamp theo lưới (head/tail đều dùng được)
                 if (gridClamper != null)
                 {
                     anchorPos = gridClamper.ClampHeadPosition(intendedPos);
@@ -242,11 +242,11 @@ namespace Geckout
                     anchorPos = intendedPos;
                 }
 
-                // Check if we reached the target waypoint (with small tolerance)
-                if (Vector3.Distance(anchorPos, currentTarget) < 0.01f)
+                // Đến waypoint?
+                if (Vector3.Distance(anchorPos, currentTarget) < gridClamper.TileCenterThreshold)
                 {
-                    anchorPos = currentTarget; // Ensure exact position
-                    currentWaypointIndex++; // Move to next waypoint
+                    anchorPos = currentTarget;
+                    currentWaypointIndex++;
                 }
 
                 if ((anchorPos - lastAnchorPos).sqrMagnitude > (minSampleStep * minSampleStep))
@@ -255,7 +255,7 @@ namespace Geckout
                     lastAnchorPos = anchorPos;
                 }
 
-                // Apply positions to ordered segments
+                // Cập nhật vị trí mọi segment theo history
                 for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
                 {
                     float backDist = segIdx * segmentSpacing;
@@ -263,14 +263,15 @@ namespace Geckout
                     orderedSegments[segIdx].transform.position = pos;
                 }
 
+                // ✅ NEW: cập nhật occupied ngay sau khi đã set transform
+                occupiedTileController?.UpdateAllSegmentPositions();
+
                 yield return null;
             }
 
-            // Ensure final position is exact
+            // Đảm bảo vị trí cuối cùng chính xác
             Vector3 finalAnchor = worldPath[worldPath.Count - 1];
-
             finalAnchor = gridClamper.ClampHeadPosition(finalAnchor);
-
             AddAnchorSample(finalAnchor);
 
             for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
@@ -279,10 +280,11 @@ namespace Geckout
                 Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
                 orderedSegments[segIdx].transform.position = pos;
             }
+
+            occupiedTileController?.UpdateAllSegmentPositions();
         }
 
-        // ===== History System =====
-
+        #region History system
         private float RequiredHistoryLength()
         {
             return Mathf.Max(0f, (Segments.Count - 1) * segmentSpacing + extraHistoryPadding);
@@ -477,5 +479,6 @@ namespace Geckout
                 return historyPoints.Last.Value;
             }
         }
+        #endregion
     }
 }
