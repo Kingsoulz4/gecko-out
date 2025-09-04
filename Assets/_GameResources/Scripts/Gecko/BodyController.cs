@@ -53,7 +53,6 @@ namespace Geckout
                 if (moveCoroutine != null) return true;
 
                 //if (gridClamper != null && !gridClamper.IsAtTileCenter) return true;
-
                 return false;
             }
         }
@@ -61,6 +60,11 @@ namespace Geckout
         public GridHeadClamper GridClamper { get => gridClamper; set => gridClamper = value; }
 
         private void Start()
+        {
+            Init();
+        }
+
+        private void Init()
         {
             Segments = new List<Segment>();
 
@@ -132,9 +136,9 @@ namespace Geckout
         public List<Segment> GetOrderedSegments()
         {
             if (controlAnchor == ControlAnchor.Head)
-                return Segments; // Normal order: Head leads
+                return Segments;
             else
-                return Segments.AsEnumerable().Reverse().ToList(); // Reversed: Tail leads
+                return Segments.AsEnumerable().Reverse().ToList(); 
         }
 
         public List<Segment> GetOrderedSegmentsForTileUpdate()
@@ -209,8 +213,6 @@ namespace Geckout
             currentPath.Clear();
         }
 
-        // ===== BodyController - Precise Movement Method =====
-
         IEnumerator MovePath(List<Vector3> worldPath)
         {
             if (worldPath.Count < 2) yield break;
@@ -265,17 +267,17 @@ namespace Geckout
                 yield return null;
             }
 
-            // Đảm bảo vị trí cuối cùng chính xác
-            Vector3 finalAnchor = worldPath[worldPath.Count - 1];
-            finalAnchor = gridClamper.ClampHeadPosition(finalAnchor);
-            AddAnchorSample(finalAnchor);
+            //// Đảm bảo vị trí cuối cùng chính xác
+            //Vector3 finalAnchor = worldPath[worldPath.Count - 1];
+            //finalAnchor = gridClamper.ClampHeadPosition(finalAnchor);
+            //AddAnchorSample(finalAnchor);
 
-            for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
-            {
-                float backDist = segIdx * segmentSpacing;
-                Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
-                orderedSegments[segIdx].transform.position = pos;
-            }
+            //for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
+            //{
+            //    float backDist = segIdx * segmentSpacing;
+            //    Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
+            //    orderedSegments[segIdx].transform.position = pos;
+            //}
         }
 
 
