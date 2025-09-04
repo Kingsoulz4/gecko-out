@@ -191,12 +191,12 @@ namespace Geckout
         void StartAutomaticMovement(BodyController gecko, BodyController.ControlAnchor anchor, Vector2Int targetTile)
         {
             bodyController = gecko;
-            isDragging = false; // Không phải drag mode
+            isDragging = true; // Enable drag mode ngay để có thể continue drag
             isDraggingFromHead = (anchor == BodyController.ControlAnchor.Head);
 
             // Set control anchor
             bodyController.SetControlAnchor(anchor);
-            DebugLog($"Auto movement: {anchor} -> {targetTile}");
+            DebugLog($"Auto movement started: {anchor} -> {targetTile} (drag mode enabled)");
 
             // Initialize pathfinder
             bool[] mapState = GameMap.GetCurrentMapState();
@@ -206,7 +206,7 @@ namespace Geckout
             // Tìm path và di chuyển ngay
             FindAndSetSmoothPath(targetTile);
 
-            // Reset lastTargetTile để tránh conflict với drag mode
+            // Set target để drag system có thể continue
             lastTargetTile = targetTile;
             lastPathUpdateTime = Time.time;
         }
