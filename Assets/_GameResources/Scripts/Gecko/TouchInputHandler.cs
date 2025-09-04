@@ -134,7 +134,30 @@ namespace Geckout
             }
             else
             {
-                DebugLog("Touch not on head or tail");
+                // Xử lý click vào body segment (không phải head/tail)
+                // Tính anchor gần nhất với vị trí click
+                float headDistance = Vector2Int.Distance(headCoord, tileCoord);
+                float tailDistance = Vector2Int.Distance(tailCoord, tileCoord);
+
+                bool useHead = headDistance <= tailDistance;
+                BodyController.ControlAnchor selectedAnchor = useHead ?
+                    BodyController.ControlAnchor.Head : BodyController.ControlAnchor.Tail;
+
+                // 🔒 BLOCK: kiểm tra movement conflict cho body segment touch
+                if (gecko.IsMoving)
+                {
+                    if ((gecko.controlAnchor == BodyController.ControlAnchor.Head && selectedAnchor == BodyController.ControlAnchor.Tail) ||
+                        (gecko.controlAnchor == BodyController.ControlAnchor.Tail && selectedAnchor == BodyController.ControlAnchor.Head))
+                    {
+                        DebugLog($"Blocked: cannot start movement from {selectedAnchor} while gecko is moving from {gecko.controlAnchor}");
+                        return;
+                    }
+                }
+
+                DebugLog($"Body segment clicked, selected nearest anchor: {selectedAnchor} (head dist: {headDistance}, tail dist: {tailDistance})");
+
+                // Bắt đầu drag mode với anchor đã chọn
+                StartBodyDrag(gecko, selectedAnchor);
             }
         }
 
@@ -186,6 +209,26 @@ namespace Geckout
             }
 
             return adjacent;
+        }
+
+        void StartBodyDrag(BodyController gecko, BodyController.ControlAnchor anchor)
+        {
+            bodyController = gecko;
+            isDragging = true;
+            isDraggingFromHead = (anchor == BodyController.ControlAnchor.Head);
+
+            // Set control anchor
+            bodyController.SetControlAnchor(anchor);
+            DebugLog($"Started body drag with {anchor} anchor");
+
+            // Initialize pathfinder
+            bool[] mapState = GameMap.GetCurrentMapState();
+            ASGrid grid = new ASGrid(GameMap.MapSize.x, GameMap.MapSize.y, mapState);
+            pathfinder = new ASPathFinding(grid);
+
+            // Reset target để OnTouchDrag có thể handle
+            lastTargetTile = Vector2Int.one * -1;
+            lastPathUpdateTime = 0f;
         }
 
         void StartAutomaticMovement(BodyController gecko, BodyController.ControlAnchor anchor, Vector2Int targetTile)
@@ -402,13 +445,45 @@ namespace Geckout
         {
             Ray ray = gameCamera.ScreenPointToRay(screenPosition);
 
+            // Test với all layers trước để debug
+            if (Physics.Raycast(ray, out RaycastHit debugHit, Mathf.Infinity))
+            {
+                DebugLog($"Debug raycast (all layers) hit: {debugHit.collider.name}, layer: {debugHit.collider.gameObject.layer}");
+            }
+
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, segmentLayer))
             {
-                Segment segment = hit.collider.transform.parent.GetComponent<Segment>();
+                DebugLog($"Raycast hit: {hit.collider.name}, layer: {hit.collider.gameObject.layer}");
+
+                // Try direct component on hit object
+                Segment segment = hit.collider.GetComponent<Segment>();
+                if (segment == null)
+                {
+                    // Try parent
+                    segment = hit.collider.transform.parent?.GetComponent<Segment>();
+                    DebugLog($"Tried parent: {hit.collider.transform.parent?.name}");
+                }
+
+                if (segment == null)
+                {
+                    // Try children
+                    segment = hit.collider.GetComponentInParent<Segment>();
+                    DebugLog("Tried GetComponentInParent");
+                }
+
                 if (segment != null)
                 {
+                    DebugLog($"Found segment: {segment.name}, Controller: {segment.Controller?.name}");
                     return segment.Controller;
                 }
+                else
+                {
+                    DebugLog("No Segment component found in hit object hierarchy");
+                }
+            }
+            else
+            {
+                DebugLog($"No raycast hit on segmentLayer ({segmentLayer})");
             }
             return null;
         }
