@@ -173,12 +173,16 @@ namespace Geckout
 
         private bool IsAdjacent(Vector2Int pos1, Vector2Int pos2)
         {
-            int manhattanDistance = Mathf.Abs(pos1.x - pos2.x) + Mathf.Abs(pos1.y - pos2.y);
-            bool adjacent = manhattanDistance == 1;
+            // Kiểm tra 8 hướng (bao gồm chéo): Chebyshev distance = 1
+            int deltaX = Mathf.Abs(pos1.x - pos2.x);
+            int deltaY = Mathf.Abs(pos1.y - pos2.y);
+
+            // Adjacent nếu cả deltaX và deltaY <= 1, và ít nhất 1 trong 2 != 0
+            bool adjacent = (deltaX <= 1 && deltaY <= 1) && (deltaX != 0 || deltaY != 0);
 
             if (enableDebugLogs && adjacent)
             {
-                DebugLog($"Adjacent check: {pos1} -> {pos2}, distance: {manhattanDistance}");
+                DebugLog($"Adjacent check (8-dir): {pos1} -> {pos2}, delta: ({deltaX}, {deltaY})");
             }
 
             return adjacent;
