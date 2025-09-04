@@ -15,6 +15,7 @@ namespace Geckout
         private Vector2Int currentDirection = Vector2Int.zero;
 
         public bool IsAtTileCenter { get; private set; }
+        public Vector2Int CurrentDirection { get => currentDirection; set => currentDirection = value; }
 
         void Start()
         {

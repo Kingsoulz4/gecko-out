@@ -57,6 +57,9 @@ namespace Geckout
                 return false;
             }
         }
+
+        public GridHeadClamper GridClamper { get => gridClamper; set => gridClamper = value; }
+
         private void Start()
         {
             Segments = new List<Segment>();

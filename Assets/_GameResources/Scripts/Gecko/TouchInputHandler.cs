@@ -24,7 +24,7 @@ namespace Geckout
         private List<ASNode> currentPath;
         private List<Vector2Int> smoothPath = new List<Vector2Int>();
 
-        public bool IsDragging { get => isDragging;}
+        public bool IsDragging { get => isDragging; }
 
         void Start()
         {
@@ -169,15 +169,9 @@ namespace Geckout
         {
             if (bodyController == null) return;
 
-            Vector2Int startPos;
-            if (isDraggingFromHead)
-            {
-                startPos = bodyController.Segments[0].Coordinate; // Head
-            }
-            else
-            {
-                startPos = bodyController.Segments[bodyController.Segments.Count - 1].Coordinate; // Tail
-            }
+            var headPos = bodyController.OccupiedTileController.WorldToGridPositionForward(bodyController.Segments[0].transform.position);
+            var tailPos = bodyController.OccupiedTileController.WorldToGridPositionForward(bodyController.Segments[bodyController.Segments.Count - 1].transform.position);
+            Vector2Int startPos = isDraggingFromHead ? headPos : tailPos;
 
             if (startPos == targetTile) return;
 
@@ -224,9 +218,9 @@ namespace Geckout
 
             // Convert to coordinate list and remove starting position
             smoothPath.Clear();
-            Vector2Int startPos = isDraggingFromHead ?
-                bodyController.Segments[0].Coordinate :
-                bodyController.Segments[bodyController.Segments.Count - 1].Coordinate;
+            var headPos = bodyController.OccupiedTileController.WorldToGridPositionForward(bodyController.Segments[0].transform.position);
+            var tailPos = bodyController.OccupiedTileController.WorldToGridPositionForward(bodyController.Segments[bodyController.Segments.Count - 1].transform.position);
+            Vector2Int startPos = isDraggingFromHead ? headPos : tailPos;
 
             foreach (var node in path)
             {
@@ -237,7 +231,9 @@ namespace Geckout
                 }
             }
 
-            DebugLog($"Filtered path has {smoothPath.Count} steps (removed starting position)");
+            string pathStr = string.Join(" -> ", smoothPath.Select(n => $"{n.x.ToString()} {n.y.ToString()}"));
+            Debug.Log($"Full path: {pathStr}, Start: {startPos}");
+
 
             if (smoothPath.Count == 0)
             {

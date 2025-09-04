@@ -71,6 +71,53 @@ namespace Geckout
             });
         }
 
+        // Trong OccupiedTileController.cs
+        public Vector2Int WorldToGridPositionForward(Vector3 worldPos)
+        {
+            float gridX = worldPos.x + gridOffset.x;
+            float gridY = worldPos.y + gridOffset.y;
+
+            // Standard conversion để lấy tile hiện tại
+            Vector2Int currentTile = new Vector2Int(Mathf.RoundToInt(gridX), Mathf.RoundToInt(gridY));
+            var movementDirection = bodyController.GridClamper.CurrentDirection;
+            if (movementDirection == Vector2Int.zero)
+                return currentTile;
+
+            // Kiểm tra xem đã qua tâm tile hiện tại theo direction chưa
+            Vector3 currentTileCenter = new Vector3(
+                currentTile.x - gridOffset.x,
+                currentTile.y - gridOffset.y,
+                0
+            );
+
+            bool crossedCenter = false;
+
+            if (movementDirection.x > 0) // Moving right
+            {
+                crossedCenter = worldPos.x > currentTileCenter.x;
+            }
+            else if (movementDirection.x < 0) // Moving left
+            {
+                crossedCenter = worldPos.x < currentTileCenter.x;
+            }
+            else if (movementDirection.y > 0) // Moving up  
+            {
+                crossedCenter = worldPos.y > currentTileCenter.y;
+            }
+            else if (movementDirection.y < 0) // Moving down
+            {
+                crossedCenter = worldPos.y < currentTileCenter.y;
+            }
+
+            // Nếu đã qua tâm theo hướng di chuyển → return tile tiếp theo
+            if (crossedCenter)
+            {
+                return currentTile + movementDirection;
+            }
+
+            return currentTile;
+        }
+
         public void UpdateAllSegmentPositions()
         {
             // Get segments in movement order to avoid conflicts
