@@ -136,9 +136,9 @@ namespace Geckout
             }
         }
 
-        //public void ClearOccupied()
-        //{
-        //    var segments = bodyController.Segments;
+        public void ClearAllOccupied()
+        {
+            var segments = bodyController.Segments;
 
         //    for (int i = 0; i < segments.Count; i++)
         //    {
@@ -185,14 +185,7 @@ namespace Geckout
         void OnDestroy()
         {
             if (currentOccupiedTiles == null) return;
-
-            for (int i = 0; i < currentOccupiedTiles.Length; i++)
-            {
-                if (currentOccupiedTiles[i] != null)
-                {
-                    currentOccupiedTiles[i].SetOccupied(false);
-                }
-            }
+            ClearAllOccupied();
         }
     }
 }

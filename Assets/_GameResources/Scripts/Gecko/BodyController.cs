@@ -96,6 +96,10 @@ namespace Geckout
                 Segment seg = Instantiate(this.segment, transform);
                 seg.name = "Segment " + i;
                 seg.transform.localPosition = new Vector3(0, -i * unitSpacing, 0);
+                if (i % 3 == 0 )
+                {
+                    seg.gameObject.AddComponent<BoxCollider>();
+                }
                 Segments.Add(seg);
             }
 
@@ -260,7 +264,7 @@ namespace Geckout
                 }
 
                 // Đến waypoint?
-                if (Vector3.Distance(anchorPos, currentTarget) < 0.01f)
+                if (Vector3.Distance(anchorPos, currentTarget) < gridClamper.TileCenterThreshold)
                 {
                     anchorPos = currentTarget;
                     currentWaypointIndex++;
@@ -284,9 +288,23 @@ namespace Geckout
 
                 yield return null;
             }
+
+            // Đảm bảo vị trí cuối cùng chính xác
+            Vector3 finalAnchor = worldPath[worldPath.Count - 1];
+            finalAnchor = gridClamper.ClampHeadPosition(finalAnchor);
+            AddAnchorSample(finalAnchor);
+
+            for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
+            {
+                float backDist = segIdx * segmentSpacing;
+                Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
+                orderedSegments[segIdx].transform.position = pos;
+            }
+
+            occupiedTileController?.UpdateAllSegmentPositions();
         }
 
-        #region Tool
+         #region Tool
 
         public void SetSelected(bool selected)
         {
@@ -294,7 +312,6 @@ namespace Geckout
         }
 
         #endregion
-
 
         #region History system
         private float RequiredHistoryLength()
@@ -491,13 +508,6 @@ namespace Geckout
                 return historyPoints.Last.Value;
             }
         }
-    
-    
-    
+        #endregion
     }
-
-    #endregion
-
-    
-
 }
