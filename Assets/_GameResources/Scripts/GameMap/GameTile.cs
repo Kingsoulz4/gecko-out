@@ -1,18 +1,44 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using AYellowpaper.SerializedCollections;
+using Geckout.Data;
 using Geckout.Generals;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Geckout
 {
+    
+
     public class GameTile : MonoBehaviour
     {
         [SerializeField] private Renderer tileRenderer;
         [SerializeField] public bool IsOccupied;
         [SerializeField] private Collider tileCollider; // For raycast
+        [SerializeField] private Outline m_outLine;
+        [SerializeField] private SerializedDictionary<MapTileType, GameObject> m_tilesTypeDisplay;
+        [SerializeField] private GameObject m_displayObject;
 
-        public Vector2Int Coordinate { get; private set; }
+        private MapTileData mapTileData = new();
+
+        public Vector2Int Coordinate {
+            get 
+            {
+                return mapTileData.coordinate;
+            }
+            
+            set
+            {
+
+            }
+        }
+
+        private void Awake()
+        {
+            SetTileType(MapTileType.Normal);
+        }
 
         private void Start()
         {
@@ -27,6 +53,48 @@ namespace Geckout
                 }
             }
             tileRenderer.enabled = true;
+            SetSelected(false);
+        }
+
+        public void Initialize(MapTileData tileData)
+        {
+            mapTileData = tileData;
+            SetTileType(tileData.type);
+        }
+
+        public void SetTileType(MapTileType tileType)
+        {
+            if(m_tilesTypeDisplay == null || m_tilesTypeDisplay.Count <= 0)
+            {
+                return;
+            }
+            //m_tileTypeDisplay.Values.ToList().ForEach(x => x.gameObject.SetActive(false));
+            if (mapTileData.type != MapTileType.Normal)
+            {
+                m_displayObject.SetActive(false);
+            }
+            mapTileData.type = tileType;
+            IsOccupied = tileType != MapTileType.Normal;
+            m_displayObject = m_tilesTypeDisplay[tileType];
+            m_displayObject.SetActive(true);
+            m_displayObject.transform.localRotation = Quaternion.Euler(mapTileData.rotation);
+            m_tilesTypeDisplay[MapTileType.Normal].SetActive(true);
+        }
+
+        public void RotateBy(float deltaAngle)
+        {
+            var currentRotation = m_displayObject.transform.localRotation.eulerAngles;
+            var rotatateAngle = new Vector3Int((int)(currentRotation.x + deltaAngle), 90, -90);
+            m_displayObject.transform.localRotation = Quaternion.Euler(rotatateAngle);
+            mapTileData.rotation = rotatateAngle;
+        }
+
+        public void SetSelected(bool selected)
+        {
+            if(m_outLine != null)
+            { 
+                m_outLine.enabled = selected;
+            }
         }
 
         public void SetCoordinate(int x, int y)
@@ -93,9 +161,9 @@ namespace Geckout
             var style = new GUIStyle();
             style.normal.textColor = Color.white;
 #if UNITY_EDITOR
-            if(GameMap.Instance.IsDebug)
-            UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f,
-                $"({Coordinate.x},{Coordinate.y})", style);
+            //if(GameMap.Instance.IsDebug)
+            //UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f,
+            //    $"({Coordinate.x},{Coordinate.y})", style);
 #endif
         }
     }

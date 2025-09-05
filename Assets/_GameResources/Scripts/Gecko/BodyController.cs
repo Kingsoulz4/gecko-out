@@ -1,4 +1,5 @@
 ﻿using Dreamteck.Splines;
+using Geckout.Data;
 using Geckout.Generals;
 using Geckout.PathFinding;
 using System;
@@ -30,11 +31,14 @@ namespace Geckout
         [SerializeField] private GridHeadClamper gridClamper;
         public ControlAnchor controlAnchor = ControlAnchor.Head;
 
+        [Header("Tool")]
+        [SerializeField] private Outline m_outlineSelected;
+
         // Movement events
         public Action OnStartMove;
         public Action OnEndMove;
 
-        private int subLength = 3;
+        private int subLength = 1;
         private Segment _head, _tail;
         private float historyTotalLength = 0f;
         private const float extraHistoryPadding = 4f;
@@ -53,18 +57,27 @@ namespace Geckout
                 if (moveCoroutine != null) return true;
 
                 //if (gridClamper != null && !gridClamper.IsAtTileCenter) return true;
-
                 return false;
             }
         }
 
         public GridHeadClamper GridClamper { get => gridClamper; set => gridClamper = value; }
 
+        public DogData DogData { get; set; }
+
         private void Start()
         {
+            //Init();
+        }
+
+        public void Initialize(DogData dogData)
+        {
+            DogData = dogData;
+            List<Vector2Int> listDefaultCoordinate = dogData.listCoordinate;
             Segments = new List<Segment>();
 
             // ===== Tính toán tổng số segment =====
+            length = listDefaultCoordinate.Count + 2;
             int totalSegments = length * subLength - 2;
             float unitSpacing = 1f / subLength;
             segmentSpacing = unitSpacing;
@@ -83,6 +96,10 @@ namespace Geckout
                 Segment seg = Instantiate(this.segment, transform);
                 seg.name = "Segment " + i;
                 seg.transform.localPosition = new Vector3(0, -i * unitSpacing, 0);
+                if (i % 3 == 0 )
+                {
+                    seg.gameObject.AddComponent<BoxCollider>();
+                }
                 Segments.Add(seg);
             }
 
@@ -109,13 +126,23 @@ namespace Geckout
             }
 
             // ===== Set coordinate ban đầu =====
+            //for (int i = 0; i < Segments.Count; i++)
+            //{
+            //    // unitIndex = segment thuộc về tile nào
+            //    int unitIndex = i / subLength;
+
+            //    var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
+            //    Segments[i].SetCoordinate(coordinate);
+            //}
+
             for (int i = 0; i < Segments.Count; i++)
             {
                 // unitIndex = segment thuộc về tile nào
                 int unitIndex = i / subLength;
 
-                var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
-                Segments[i].SetCoordinate(coordinate);
+                //var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
+                var coordinate = listDefaultCoordinate[Mathf.Clamp(unitIndex, 0, listDefaultCoordinate.Count -1)];
+                Segments[i].InitCoordinate(coordinate);
             }
 
             // ===== Init history system =====
@@ -131,9 +158,9 @@ namespace Geckout
         public List<Segment> GetOrderedSegments()
         {
             if (controlAnchor == ControlAnchor.Head)
-                return Segments; // Normal order: Head leads
+                return Segments;
             else
-                return Segments.AsEnumerable().Reverse().ToList(); // Reversed: Tail leads
+                return Segments.AsEnumerable().Reverse().ToList();
         }
 
         public List<Segment> GetOrderedSegmentsForTileUpdate()
@@ -170,12 +197,6 @@ namespace Geckout
 
                 // Rebuild history to match new control direction
                 InitHistoryFromSegments();
-
-                // Force occupied tile update to sync with new positions
-                if (occupiedTileController != null)
-                {
-                    occupiedTileController.UpdateAllSegmentPositions();
-                }
             }
         }
 
@@ -263,7 +284,6 @@ namespace Geckout
                     orderedSegments[segIdx].transform.position = pos;
                 }
 
-                // ✅ NEW: cập nhật occupied ngay sau khi đã set transform
                 occupiedTileController?.UpdateAllSegmentPositions();
 
                 yield return null;
@@ -283,6 +303,20 @@ namespace Geckout
 
             occupiedTileController?.UpdateAllSegmentPositions();
         }
+
+         #region Tool
+
+        public void SetSelected(bool selected)
+        {
+            m_outlineSelected.enabled = selected;
+        }
+
+        public void UpdateColor()
+        {
+            _bodyRenderer.UpdateDogColor();
+        }    
+
+        #endregion
 
         #region History system
         private float RequiredHistoryLength()

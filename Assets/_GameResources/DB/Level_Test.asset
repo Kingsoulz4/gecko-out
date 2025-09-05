@@ -13,3 +13,197 @@ MonoBehaviour:
   m_Name: Level_Test
   m_EditorClassIdentifier: 
   mapSize: {x: 8, y: 12}
+  mapTileDatas:
+  - coordinate: {x: 0, y: 0}
+    type: 0
+  - coordinate: {x: 1, y: 0}
+    type: 1
+  - coordinate: {x: 2, y: 0}
+    type: 0
+  - coordinate: {x: 3, y: 0}
+    type: 5
+  - coordinate: {x: 4, y: 0}
+    type: 1
+  - coordinate: {x: 5, y: 0}
+    type: 4
+  - coordinate: {x: 6, y: 0}
+    type: 0
+  - coordinate: {x: 7, y: 0}
+    type: 3
+  - coordinate: {x: 0, y: 1}
+    type: 5
+  - coordinate: {x: 1, y: 1}
+    type: 0
+  - coordinate: {x: 2, y: 1}
+    type: 1
+  - coordinate: {x: 3, y: 1}
+    type: 2
+  - coordinate: {x: 4, y: 1}
+    type: 2
+  - coordinate: {x: 5, y: 1}
+    type: 2
+  - coordinate: {x: 6, y: 1}
+    type: 4
+  - coordinate: {x: 7, y: 1}
+    type: 0
+  - coordinate: {x: 0, y: 2}
+    type: 2
+  - coordinate: {x: 1, y: 2}
+    type: 2
+  - coordinate: {x: 2, y: 2}
+    type: 1
+  - coordinate: {x: 3, y: 2}
+    type: 0
+  - coordinate: {x: 4, y: 2}
+    type: 1
+  - coordinate: {x: 5, y: 2}
+    type: 5
+  - coordinate: {x: 6, y: 2}
+    type: 5
+  - coordinate: {x: 7, y: 2}
+    type: 2
+  - coordinate: {x: 0, y: 3}
+    type: 3
+  - coordinate: {x: 1, y: 3}
+    type: 1
+  - coordinate: {x: 2, y: 3}
+    type: 4
+  - coordinate: {x: 3, y: 3}
+    type: 1
+  - coordinate: {x: 4, y: 3}
+    type: 2
+  - coordinate: {x: 5, y: 3}
+    type: 0
+  - coordinate: {x: 6, y: 3}
+    type: 1
+  - coordinate: {x: 7, y: 3}
+    type: 0
+  - coordinate: {x: 0, y: 4}
+    type: 1
+  - coordinate: {x: 1, y: 4}
+    type: 3
+  - coordinate: {x: 2, y: 4}
+    type: 5
+  - coordinate: {x: 3, y: 4}
+    type: 3
+  - coordinate: {x: 4, y: 4}
+    type: 4
+  - coordinate: {x: 5, y: 4}
+    type: 5
+  - coordinate: {x: 6, y: 4}
+    type: 0
+  - coordinate: {x: 7, y: 4}
+    type: 2
+  - coordinate: {x: 0, y: 5}
+    type: 2
+  - coordinate: {x: 1, y: 5}
+    type: 5
+  - coordinate: {x: 2, y: 5}
+    type: 0
+  - coordinate: {x: 3, y: 5}
+    type: 1
+  - coordinate: {x: 4, y: 5}
+    type: 5
+  - coordinate: {x: 5, y: 5}
+    type: 1
+  - coordinate: {x: 6, y: 5}
+    type: 2
+  - coordinate: {x: 7, y: 5}
+    type: 2
+  - coordinate: {x: 0, y: 6}
+    type: 3
+  - coordinate: {x: 1, y: 6}
+    type: 5
+  - coordinate: {x: 2, y: 6}
+    type: 3
+  - coordinate: {x: 3, y: 6}
+    type: 0
+  - coordinate: {x: 4, y: 6}
+    type: 2
+  - coordinate: {x: 5, y: 6}
+    type: 4
+  - coordinate: {x: 6, y: 6}
+    type: 0
+  - coordinate: {x: 7, y: 6}
+    type: 2
+  - coordinate: {x: 0, y: 7}
+    type: 0
+  - coordinate: {x: 1, y: 7}
+    type: 4
+  - coordinate: {x: 2, y: 7}
+    type: 4
+  - coordinate: {x: 3, y: 7}
+    type: 3
+  - coordinate: {x: 4, y: 7}
+    type: 0
+  - coordinate: {x: 5, y: 7}
+    type: 2
+  - coordinate: {x: 6, y: 7}
+    type: 0
+  - coordinate: {x: 7, y: 7}
+    type: 3
+  - coordinate: {x: 0, y: 8}
+    type: 5
+  - coordinate: {x: 1, y: 8}
+    type: 0
+  - coordinate: {x: 2, y: 8}
+    type: 0
+  - coordinate: {x: 3, y: 8}
+    type: 4
+  - coordinate: {x: 4, y: 8}
+    type: 0
+  - coordinate: {x: 5, y: 8}
+    type: 5
+  - coordinate: {x: 6, y: 8}
+    type: 0
+  - coordinate: {x: 7, y: 8}
+    type: 0
+  - coordinate: {x: 0, y: 9}
+    type: 1
+  - coordinate: {x: 1, y: 9}
+    type: 0
+  - coordinate: {x: 2, y: 9}
+    type: 1
+  - coordinate: {x: 3, y: 9}
+    type: 4
+  - coordinate: {x: 4, y: 9}
+    type: 5
+  - coordinate: {x: 5, y: 9}
+    type: 4
+  - coordinate: {x: 6, y: 9}
+    type: 1
+  - coordinate: {x: 7, y: 9}
+    type: 0
+  - coordinate: {x: 0, y: 10}
+    type: 1
+  - coordinate: {x: 1, y: 10}
+    type: 2
+  - coordinate: {x: 2, y: 10}
+    type: 4
+  - coordinate: {x: 3, y: 10}
+    type: 1
+  - coordinate: {x: 4, y: 10}
+    type: 0
+  - coordinate: {x: 5, y: 10}
+    type: 4
+  - coordinate: {x: 6, y: 10}
+    type: 2
+  - coordinate: {x: 7, y: 10}
+    type: 2
+  - coordinate: {x: 0, y: 11}
+    type: 5
+  - coordinate: {x: 1, y: 11}
+    type: 4
+  - coordinate: {x: 2, y: 11}
+    type: 4
+  - coordinate: {x: 3, y: 11}
+    type: 3
+  - coordinate: {x: 4, y: 11}
+    type: 3
+  - coordinate: {x: 5, y: 11}
+    type: 4
+  - coordinate: {x: 6, y: 11}
+    type: 0
+  - coordinate: {x: 7, y: 11}
+    type: 1
+  listDogData: []

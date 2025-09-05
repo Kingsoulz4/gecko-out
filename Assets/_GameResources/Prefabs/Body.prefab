@@ -281,6 +281,9 @@ GameObject:
   - component: {fileID: 2788433321168617802}
   - component: {fileID: 3655932188227585431}
   - component: {fileID: 4085413186241585128}
+  - component: {fileID: 7048425041857568442}
+  - component: {fileID: 6021424304399516285}
+  - component: {fileID: 38492727839514911}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -332,7 +335,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c257601d4194be249a69a4de40bc83b2, type: 2}
+  - {fileID: 2100000, guid: d050685eb2c39ec4086e2eca9afdd6b7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -403,6 +406,7 @@ MonoBehaviour:
   _sampleMode: 0
   _subscribers:
   - {fileID: 9047026933609085666}
+  - {fileID: 6210646821500656581}
   _rawSamples: []
   _nodes: []
 --- !u!114 &9047026933609085666
@@ -496,7 +500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spline: {fileID: 3626055781503237806}
-  tubeRadius: 0.8
+  tubeRadius: 0.6
   _tubeGenerator: {fileID: 9047026933609085666}
   _splineMesh: {fileID: 6210646821500656581}
 --- !u!114 &2788433321168617802
@@ -558,6 +562,7 @@ MonoBehaviour:
   _bodyRenderer: {fileID: 4282819325411265969}
   gridClamper: {fileID: 4085413186241585128}
   controlAnchor: 0
+  m_outlineSelected: {fileID: 7048425041857568442}
 --- !u!114 &4085413186241585128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -572,3 +577,79 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileCenterThreshold: 0.02
   enableDebugLogs: 0
+--- !u!114 &7048425041857568442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4970065939563323752}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0.16509432, b: 0.16509432, a: 1}
+  outlineWidth: 7.03
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!114 &6021424304399516285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4970065939563323752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6994af074a32a8246a398178f8c902f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_bodyController: {fileID: 3655932188227585431}
+--- !u!114 &38492727839514911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4970065939563323752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4340ed5d8765e84e9e9cf72ff437367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_meshRenderer: {fileID: 3997041558925918299}
+  m_listMaterial:
+    _serializedList:
+    - Key: 0
+      Value: {fileID: 2100000, guid: 7dfc610ef47fb704e880d8dd1001dc96, type: 2}
+    - Key: 1
+      Value: {fileID: 2100000, guid: 1626d874ef1786e458ad451679cc5a5a, type: 2}
+    - Key: 2
+      Value: {fileID: 2100000, guid: 62e1799ea3124de4296276a91704fdd4, type: 2}
+    - Key: 3
+      Value: {fileID: 2100000, guid: b2e27fcc9662bf147803f9fb4696934f, type: 2}
+    - Key: 4
+      Value: {fileID: 2100000, guid: 0bf3c66ca5c52d6429adb22705a76af2, type: 2}
+    - Key: 5
+      Value: {fileID: 2100000, guid: 5a64281ce9a820d4d91ffe4b64cb211b, type: 2}
+    - Key: 6
+      Value: {fileID: 2100000, guid: 9570e7e2d06d5e9458d60a1aa5944aed, type: 2}
+    - Key: 7
+      Value: {fileID: 2100000, guid: 0720199fa5354dc45852ed67d09abf5f, type: 2}
+    - Key: 8
+      Value: {fileID: 2100000, guid: f5b0072722bb0be4cb65188513801e66, type: 2}
+    - Key: 9
+      Value: {fileID: 2100000, guid: 999e8b31a44bd7b4a819e22531494453, type: 2}
+    - Key: 10
+      Value: {fileID: 2100000, guid: 7d7b20fe42945b34db80137f1dbef221, type: 2}
+    - Key: 11
+      Value: {fileID: 2100000, guid: ff25f66bb60cd244191febdb3663f860, type: 2}
+    - Key: 12
+      Value: {fileID: 2100000, guid: 4c52bb53279c401489642e1df58db150, type: 2}
+    - Key: 13
+      Value: {fileID: 2100000, guid: 5ed52e0df17dacc4aa4bb9096a28310c, type: 2}
+    - Key: 14
+      Value: {fileID: 2100000, guid: 213b53b2230c2344f86ace7cc8484aec, type: 2}

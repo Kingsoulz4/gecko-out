@@ -35,8 +35,23 @@ namespace Geckout
         public BodyController Controller { get; private set; }
         public GameTile CurrentTile { get => _currentTile; set => _currentTile = value; }
 
+        private LevelGame levelGame;
+
+        private LevelGame LevelGame
+        {
+            get
+            {
+                if(levelGame == null) levelGame = GetComponentInParent<LevelGame>(); 
+                return levelGame;
+            }
+        }    
 
         private void Update()
+        {
+            UpdateRotation();
+        }
+
+        private void UpdateRotation()
         {
             if (segmentType == SegmentType.HEAD && NextSegment != null)
             {
@@ -50,7 +65,7 @@ namespace Geckout
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime * 10);
             }
 
-            if(segmentType == SegmentType.TAIL && PrevSegment != null)
+            if (segmentType == SegmentType.TAIL && PrevSegment != null)
             {
                 Vector3 dir = transform.position - PrevSegment.transform.position;
 
@@ -60,7 +75,7 @@ namespace Geckout
                 Quaternion targetRot = Quaternion.Euler(0, 0, angle + 90f);
 
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime * 10);
-            }    
+            }
         }
 
         public void SetController(BodyController controller)
@@ -74,10 +89,9 @@ namespace Geckout
             NextSegment = next;
         }
 
-        // Dùng khi spawn / init
-        public void SetCoordinate(Vector2Int coordinate)
+        public void InitCoordinate(Vector2Int coordinate)
         {
-            if (GameMap.TryGetTileAt(coordinate, out var tile))
+            if (LevelGame.GameMap.TryGetTileAtCoord(coordinate, out var tile))
             {
                 _currentTile = tile;
                 Coordinate = coordinate;
@@ -94,16 +108,15 @@ namespace Geckout
             }
         }
 
-        public void UpdateCoordinateOnly(Vector2Int coordinate)
+        public void UpdateCoordinateAndTile(Vector2Int coordinate)
         {
-            if (GameMap.TryGetTileAt(coordinate, out var tile))
+            if (LevelGame.GameMap.TryGetTileAtCoord(coordinate, out var tile))
             {
                 _currentTile = tile;
                 Coordinate = coordinate;
             }
         }
 
-        // Debug visualization giữ nguyên...
         private void OnDrawGizmos()
         {
             if (_isInMovement) return;
