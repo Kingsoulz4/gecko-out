@@ -19,7 +19,20 @@ namespace Geckout
 
         private int currentSelectedColorIndex = 0;
 
-        private DogData dogData = new();
+        private DogData dogData;
+
+        private DogData DogData
+        {
+            get
+            {
+                if (dogData == null)
+                {
+                    dogData = new DogData();
+                }
+                return LevelGame != null && LevelGame.selectedDog != null ? LevelGame.selectedDog.DogData : dogData;
+            
+            }
+        }
 
         private void Awake()
         {
@@ -29,7 +42,7 @@ namespace Geckout
             {
                 buttonColorPicked.OnClick = OnClickSelectColorPicked;
             }
-            UpdateUI(dogData);
+            UpdateUI(DogData);
         }
 
         public void UpdateUI(DogData dogData)
@@ -61,16 +74,23 @@ namespace Geckout
                 itemColorPick.gameObject.SetActive(true);
                 itemColorPick.onClick.AddListener(() =>
                 {
+                    
                     m_listButtonColorPicked[currentSelectedColorIndex].SetColor(color.Value);
                     m_listButtonColorPicked[currentSelectedColorIndex].SetEmpty(false);
-                    if (currentSelectedColorIndex >= dogData.listColor.Count)
+                    if (currentSelectedColorIndex >= DogData.listColor.Count)
                     {
-                        dogData.listColor.Add(color.Key);
+                        DogData.listColor.Add(color.Key);
                     }
                     else
                     {
-                        dogData.listColor[currentSelectedColorIndex] = color.Key;
+                        DogData.listColor[currentSelectedColorIndex] = color.Key;
                     }
+
+                    if (LevelGame.selectedDog != null)
+                    {
+                        LevelGame.selectedDog.UpdateColor();
+                    }
+                        
                 });
             }
         }
@@ -82,17 +102,16 @@ namespace Geckout
 
         private void OnClickGenerate()
         {
-            dogData = new();
-            LevelGame.GenerateNewDog(dogData);
+            LevelGame.GenerateNewDog(DogData);
         }
 
         private void OnClickSelectColorPicked(int index)
         {
             var listColorData = LevelGame.GameLevelData.colorAndMaterialData.listColor;
 
-            if (dogData.listColor.Count <= index)
+            if (DogData.listColor.Count <= index)
             {
-                dogData.listColor.Add(ColorList.Red);
+                DogData.listColor.Add(ColorList.Red);
                 m_listButtonColorPicked[index].SetEmpty(false);
                 m_listButtonColorPicked[index].SetColor(listColorData[ColorList.Red]);
             }

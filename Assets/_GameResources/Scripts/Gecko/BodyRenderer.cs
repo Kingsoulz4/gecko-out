@@ -1,6 +1,7 @@
 ﻿using Dreamteck.Splines;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Geckout
@@ -16,6 +17,8 @@ namespace Geckout
         private List<Segment> _segments;
         private Vector3[] _lastPositions; // Cache để check thay đổi
 
+        private List<BodyPartColorChanger> bodyPartColorChangers = new();
+
         private BodyController bodyController;
         private BodyController BodyController
         {
@@ -29,9 +32,15 @@ namespace Geckout
             }
         }
 
+        private void Start()
+        {
+            bodyPartColorChangers = GetComponentsInChildren<BodyPartColorChanger>().ToList();
+            UpdateDogColor();
+        }
+
         public void UpdateDogColor()
         {
-
+            bodyPartColorChangers.ForEach(x => x.UpdateColor(BodyController.DogData.listColor.First()));
         }
 
         public void Initialize(List<Segment> segments)

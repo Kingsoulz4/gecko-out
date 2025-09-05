@@ -1,21 +1,20 @@
+using Geckout.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Geckout
 {
     public class Portal : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
+        [SerializeField] private List<BodyPartColorChanger> bodyPartColorChangers = new();
 
-        // Update is called once per frame
-        void Update()
+        public PortalData PortalData { get; set; }
+
+        public void UpdateVisual()
         {
-        
+            bodyPartColorChangers.ForEach(x => x.UpdateColor(PortalData.listColor.First()));
         }
     }
 }

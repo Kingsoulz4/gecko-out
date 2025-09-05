@@ -1,3 +1,5 @@
+using AYellowpaper.SerializedCollections;
+using Geckout.Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,16 +8,22 @@ namespace Geckout
 {
     public class BodyPartColorChanger : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        [SerializeField] private Renderer m_meshRenderer;
+        [SerializeField] private SerializedDictionary<ColorList, Material> m_listMaterial;
+
+
+        public void UpdateColor(ColorList colorType)
         {
-        
+            m_meshRenderer.material = m_listMaterial[colorType];
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnValidate()
         {
-        
+            if(m_meshRenderer == null)
+            {
+                m_meshRenderer = GetComponent<Renderer>();
+            }
         }
+
     }
 }

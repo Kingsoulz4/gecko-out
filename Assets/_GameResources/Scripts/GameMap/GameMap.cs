@@ -146,6 +146,11 @@ namespace Geckout
         public void SetLevelData(GameLevelData levelData)
         {
             this.levelData = levelData;
+            if(levelData.mapSize.x * levelData.mapSize.y != levelData.mapTileDatas.Count)
+            {
+                levelData.mapTileDatas.Clear();
+            }   
+            
             if (levelData.mapTileDatas != null && levelData.mapTileDatas.Count > 0)
             {
                 SpawnAllTiles(levelData.mapTileDatas);

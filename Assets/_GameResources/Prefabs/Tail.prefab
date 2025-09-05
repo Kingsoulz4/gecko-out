@@ -520,7 +520,65 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ab557415571e453498a51b44c48f9459, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1965911818150747247}
+    - targetCorrespondingSourceObject: {fileID: -6709536748790145271, guid: ab557415571e453498a51b44c48f9459, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2106483954304357918}
   m_SourcePrefab: {fileID: 100100000, guid: ab557415571e453498a51b44c48f9459, type: 3}
+--- !u!1 &441345119594184479 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -6709536748790145271, guid: ab557415571e453498a51b44c48f9459, type: 3}
+  m_PrefabInstance: {fileID: 2665311759156142102}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2106483954304357918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441345119594184479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4340ed5d8765e84e9e9cf72ff437367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_meshRenderer: {fileID: 1702539012020025590}
+  m_listMaterial:
+    _serializedList:
+    - Key: 0
+      Value: {fileID: 2100000, guid: 18dff0dcc86a0bd4da5711178db2aa90, type: 2}
+    - Key: 1
+      Value: {fileID: 2100000, guid: bdf5555166f80bb4e96f968e5228f3d7, type: 2}
+    - Key: 2
+      Value: {fileID: 2100000, guid: dc0e5fb3ce2d14943bd65eae07334190, type: 2}
+    - Key: 3
+      Value: {fileID: 2100000, guid: fb2c9119ebf4dcc43af936293fb6e0fe, type: 2}
+    - Key: 4
+      Value: {fileID: 2100000, guid: 4fd31c8fabd9ca24b937e5b42fdb32f2, type: 2}
+    - Key: 5
+      Value: {fileID: 2100000, guid: f118c87a00fb1154aa0e24cf204545a0, type: 2}
+    - Key: 6
+      Value: {fileID: 2100000, guid: 9339343347180d8499fd607c9f444658, type: 2}
+    - Key: 7
+      Value: {fileID: 2100000, guid: 6f6e25c5d8949884d8c33b08ac132515, type: 2}
+    - Key: 8
+      Value: {fileID: 2100000, guid: fc9947ae9460b1942a5bcf2f5fdfe9de, type: 2}
+    - Key: 9
+      Value: {fileID: 2100000, guid: 36fd1295e64e96a40ae15419feaab044, type: 2}
+    - Key: 10
+      Value: {fileID: 2100000, guid: 3fe6ce1743b7b8348bd85a5c833393a3, type: 2}
+    - Key: 11
+      Value: {fileID: 2100000, guid: ee6da058120c18643b0e628b0508b44b, type: 2}
+    - Key: 12
+      Value: {fileID: 2100000, guid: d4da280c75b003a46b5712f57f4d8753, type: 2}
+    - Key: 13
+      Value: {fileID: 2100000, guid: cfd36f91d6d953c4d8db46d20481f55c, type: 2}
+    - Key: 14
+      Value: {fileID: 2100000, guid: 9ed95ca712c803a40b7e47d46bd8d2f8, type: 2}
+--- !u!137 &1702539012020025590 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3701313319036967136, guid: ab557415571e453498a51b44c48f9459, type: 3}
+  m_PrefabInstance: {fileID: 2665311759156142102}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2555704351172659197 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ab557415571e453498a51b44c48f9459, type: 3}
@@ -651,6 +709,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 46a222347a3c34146b3272680c6343bd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 579249489313933311}
+    - targetCorrespondingSourceObject: {fileID: -3051824439088111560, guid: 46a222347a3c34146b3272680c6343bd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 36827186507634110}
   m_SourcePrefab: {fileID: 100100000, guid: 46a222347a3c34146b3272680c6343bd, type: 3}
 --- !u!1 &2679049658034182147 stripped
 GameObject:
@@ -683,3 +744,58 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 46a222347a3c34146b3272680c6343bd, type: 3}
   m_PrefabInstance: {fileID: 3020944110334731602}
   m_PrefabAsset: {fileID: 0}
+--- !u!137 &5307740191835728747 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6936789432949395001, guid: 46a222347a3c34146b3272680c6343bd, type: 3}
+  m_PrefabInstance: {fileID: 3020944110334731602}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8955743751800833386 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -3051824439088111560, guid: 46a222347a3c34146b3272680c6343bd, type: 3}
+  m_PrefabInstance: {fileID: 3020944110334731602}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &36827186507634110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8955743751800833386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4340ed5d8765e84e9e9cf72ff437367, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_meshRenderer: {fileID: 5307740191835728747}
+  m_listMaterial:
+    _serializedList:
+    - Key: 0
+      Value: {fileID: 2100000, guid: 18dff0dcc86a0bd4da5711178db2aa90, type: 2}
+    - Key: 1
+      Value: {fileID: 2100000, guid: bdf5555166f80bb4e96f968e5228f3d7, type: 2}
+    - Key: 2
+      Value: {fileID: 2100000, guid: dc0e5fb3ce2d14943bd65eae07334190, type: 2}
+    - Key: 3
+      Value: {fileID: 2100000, guid: fb2c9119ebf4dcc43af936293fb6e0fe, type: 2}
+    - Key: 4
+      Value: {fileID: 2100000, guid: 4fd31c8fabd9ca24b937e5b42fdb32f2, type: 2}
+    - Key: 5
+      Value: {fileID: 2100000, guid: f118c87a00fb1154aa0e24cf204545a0, type: 2}
+    - Key: 6
+      Value: {fileID: 2100000, guid: 9339343347180d8499fd607c9f444658, type: 2}
+    - Key: 7
+      Value: {fileID: 2100000, guid: 6f6e25c5d8949884d8c33b08ac132515, type: 2}
+    - Key: 8
+      Value: {fileID: 2100000, guid: fc9947ae9460b1942a5bcf2f5fdfe9de, type: 2}
+    - Key: 9
+      Value: {fileID: 2100000, guid: 36fd1295e64e96a40ae15419feaab044, type: 2}
+    - Key: 10
+      Value: {fileID: 2100000, guid: 3fe6ce1743b7b8348bd85a5c833393a3, type: 2}
+    - Key: 11
+      Value: {fileID: 2100000, guid: ee6da058120c18643b0e628b0508b44b, type: 2}
+    - Key: 12
+      Value: {fileID: 2100000, guid: d4da280c75b003a46b5712f57f4d8753, type: 2}
+    - Key: 13
+      Value: {fileID: 2100000, guid: cfd36f91d6d953c4d8db46d20481f55c, type: 2}
+    - Key: 14
+      Value: {fileID: 2100000, guid: 9ed95ca712c803a40b7e47d46bd8d2f8, type: 2}

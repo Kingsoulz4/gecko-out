@@ -10,6 +10,7 @@ namespace Geckout
     {
         [SerializeField] private Button m_buttonAddPortal;
         [SerializeField] private Button m_buttonDeletePortal;
+        [SerializeField] private List<ButtonColorPicked> m_listButtonColorPicked;
 
         public LevelGame LevelGame { get; set; }
 
@@ -27,6 +28,7 @@ namespace Geckout
         private void OnClickAddPortal()
         {
             LevelGame.ChangeTypeSelectedTiles(Data.MapTileType.Portal);
+
         }
     }
 }

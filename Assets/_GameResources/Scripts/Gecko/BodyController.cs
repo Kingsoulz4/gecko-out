@@ -311,6 +311,11 @@ namespace Geckout
             m_outlineSelected.enabled = selected;
         }
 
+        public void UpdateColor()
+        {
+            _bodyRenderer.UpdateDogColor();
+        }    
+
         #endregion
 
         #region History system

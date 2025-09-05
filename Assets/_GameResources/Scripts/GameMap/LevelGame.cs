@@ -40,6 +40,8 @@ namespace Geckout
 
         private void Update()
         {
+            if(!GamePlayManager.Instance.IsEdittingLevel) return;
+
             if(Input.GetMouseButtonUp(0))
             {
                 var screenPoint = Input.mousePosition;
@@ -82,7 +84,7 @@ namespace Geckout
 
             if(Input.GetKeyDown(KeyCode.Escape))
             {
-                ClearAllSelectedTiles();
+                ClearAllSelected();
             }
         }
 
@@ -114,10 +116,30 @@ namespace Geckout
             Destroy(selectedDog.gameObject);
         }    
 
+        public void ClearAllSelected()
+        {
+            ClearAllSelectedTiles();
+            selectedDog.SetSelected(false);
+            selectedDog = null;
+        }
+            
+
         public void ClearAllSelectedTiles()
         {
             listSelectedTile.ToList().ForEach(x => x.SetSelected(false));
             listSelectedTile.Clear();
+        }
+
+        public void AddNewPortal()
+        {
+            ChangeTypeSelectedTiles(MapTileType.Portal);
+            for(int i=0; i<listSelectedTile.Count; i++)
+            {
+                var tileSelected = listSelectedTile.ElementAt(i);
+                var newPortalData = new PortalData();
+                newPortalData.Coordinate = new Vector2Int(tileSelected.Coordinate.x, tileSelected.Coordinate.y);
+                var newPortal = tileSelected.gameObject.AddComponent<Portal>();
+            }
         }
 
         public void ChangeTypeSelectedTiles(MapTileType tileType)

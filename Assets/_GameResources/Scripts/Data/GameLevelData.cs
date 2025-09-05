@@ -21,6 +21,7 @@ namespace Geckout.Data
         public LevelType type;
         public List<MapTileData> mapTileDatas = new();
         public List<DogData> listDogData = new();
+        public List<PortalData> listPortalData = new();
         public ColorAndMaterialData colorAndMaterialData;
 
         public void GenerateDefaultMap()
@@ -139,11 +140,23 @@ namespace Geckout.Data
 
     }
 
+    public enum PortalType
+    {
+        Normal,
+    }
+
+    public class PortalData
+    {
+        public PortalType portalType;
+        public Vector2Int Coordinate;
+        public List<ColorList> listColor = new() { ColorList.Red };
+    }
+
     [Serializable]
     public class DogData
     {
         public DogType dogType;
-        public List<ColorList> listColor = new();
+        public List<ColorList> listColor = new() { ColorList.Red};
         public List<Vector2Int> listCoordinate = new();
 
     }

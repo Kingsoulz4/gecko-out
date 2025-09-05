@@ -104,6 +104,8 @@ namespace Geckout
 
         private void OnClickTest()
         {
+            GamePlayManager.Instance.IsEdittingLevel = false;
+            LevelGame.ClearAllSelected();
             SceneManager.LoadScene("GameSceneTestLevel");
             GamePlayManager.Instance.CurrentLevelNum = int.Parse(m_inputLevelNum.text);
             GamePlayManager.Instance.CurrentLevelIndex = int.Parse(m_inputLevelIndex.text);
@@ -188,7 +190,7 @@ namespace Geckout
 
         private void OnClickDesign()
         {
-
+            GamePlayManager.Instance.IsEdittingLevel = true;
         }
 
         private void HideAllTabs()
