@@ -1,59 +1,9 @@
 fileFormatVersion: 2
-guid: a2c39f7236843e349b809dca51c257f2
+guid: 1fc8c37a4f761a742b128c34fa3087ed
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: 0f86bb66b15b407bbea5f9d16d1e33bf_RGB_cubeworld_glow.tga
-    second: {fileID: 2800000, guid: 56e45bf3139d5cc4e9f11e2b5513c8ec, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Arrow
-    second: {fileID: 2800000, guid: 179f8d51c8c0f7b45a6d4edc026e7117, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Axolotl
-    second: {fileID: 2800000, guid: c4089616286b099469197e205d763947, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Axolotl_Purple
-    second: {fileID: 2800000, guid: 36f60289ef671664facf1c54d3b089cd, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Box_Texture_1
-    second: {fileID: 2800000, guid: a355768d4349326409940c59732cf426, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Dashchun
-    second: {fileID: 2800000, guid: 7d596c176903d284a9ffafb149527b73, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Dashchun_Yellow
-    second: {fileID: 2800000, guid: 03072c2f0f8a6b0428b9d24d73b835a7, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Default_Tex_High_Sat
-    second: {fileID: 2800000, guid: 1ceb34aac2657084e9d4f518bee123af, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Test
-    second: {fileID: 2800000, guid: 9830261aa4903734aaa3065f802522e6, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: Tile
-    second: {fileID: 2800000, guid: 55835de3eeeff1d42a0db7a04caf1c81, type: 3}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -82,7 +32,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 1
@@ -121,10 +71,10 @@ ModelImporter:
     strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
-    normalImportMode: 1
+    normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
-    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
