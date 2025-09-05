@@ -388,7 +388,7 @@ Camera:
   m_BackGroundColor: {r: 0.96470594, g: 0.8980393, b: 0.8862746, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
-  m_FOVAxisMode: 1
+  m_FOVAxisMode: 0
   m_Iso: 200
   m_ShutterSpeed: 0.005
   m_Aperture: 16
@@ -408,7 +408,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 81.472
+  field of view: 20
   orthographic: 0
   orthographic size: 7
   m_Depth: -1
