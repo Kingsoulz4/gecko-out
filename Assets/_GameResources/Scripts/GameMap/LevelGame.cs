@@ -88,8 +88,14 @@ namespace Geckout
 
         public void SpawnDog(DogData dogData)
         {
+
+#if UNITY_EDITOR
+            var newDog = (BodyController)PrefabUtility.InstantiatePrefab(m_dogPrefab, m_listDogContainer);
+#else
             var newDog = Instantiate(m_dogPrefab, m_listDogContainer);
+#endif
             newDog.Initialize(dogData);
+
         }
 
         public void GenerateNewDog(DogData dogData)

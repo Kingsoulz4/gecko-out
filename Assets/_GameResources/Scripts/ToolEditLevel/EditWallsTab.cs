@@ -14,6 +14,7 @@ namespace Geckout
 
         [SerializeField] private Button m_buttonRotateLeft;
         [SerializeField] private Button m_buttonRotateRight;
+        [SerializeField] private Button m_buttonDelete;
 
         public LevelGame LevelGame { get; set; }
 
@@ -29,6 +30,12 @@ namespace Geckout
 
             m_buttonRotateLeft.onClick.AddListener(OnClickRotateLeft);
             m_buttonRotateRight.onClick.AddListener(OnClickRotateRight);
+            m_buttonDelete.onClick.AddListener(OnClickDelete);
+        }
+
+        private void OnClickDelete()
+        {
+            LevelGame.ChangeTypeSelectedTiles(MapTileType.Normal);
         }
 
         private void OnClickRotateRight()

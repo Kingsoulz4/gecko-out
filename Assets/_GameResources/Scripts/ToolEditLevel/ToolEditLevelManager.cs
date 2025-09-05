@@ -6,6 +6,7 @@ using TMPro;
 using UnityEditor;
 using UnityEditor.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Geckout
@@ -103,7 +104,9 @@ namespace Geckout
 
         private void OnClickTest()
         {
-            
+            SceneManager.LoadScene("GameSceneTestLevel");
+            GamePlayManager.Instance.CurrentLevelNum = int.Parse(m_inputLevelNum.text);
+            GamePlayManager.Instance.CurrentLevelIndex = int.Parse(m_inputLevelIndex.text);
         }
 
         private void OnClickSaveLevel()

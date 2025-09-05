@@ -333,7 +333,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c257601d4194be249a69a4de40bc83b2, type: 2}
+  - {fileID: 2100000, guid: d050685eb2c39ec4086e2eca9afdd6b7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -404,6 +404,7 @@ MonoBehaviour:
   _sampleMode: 0
   _subscribers:
   - {fileID: 9047026933609085666}
+  - {fileID: 6210646821500656581}
   _rawSamples: []
   _nodes: []
 --- !u!114 &9047026933609085666

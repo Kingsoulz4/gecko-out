@@ -140,11 +140,12 @@ namespace Geckout
         {
             var segments = bodyController.Segments;
 
-        //    for (int i = 0; i < segments.Count; i++)
-        //    {
-        //        segments[i].CurrentTile.SetOccupied(false);
-        //    }
-        //}
+            //    for (int i = 0; i < segments.Count; i++)
+            //    {
+            //        segments[i].CurrentTile.SetOccupied(false);
+            //    }
+            //}
+        }
 
         public Vector2Int WorldToGridPosition(Vector3 worldPos)
         {
