@@ -8,6 +8,7 @@ namespace Geckout
     public class BodyAnimationController : MonoBehaviour
     {
         [SerializeField] private BodyController m_bodyController;
+        [SerializeField] private float animSpeed = 5;
 
         private List<Animator> listAnimator = new();
 
@@ -24,6 +25,7 @@ namespace Geckout
             {
                 isMoving = m_bodyController.IsMoving;
                 listAnimator.ForEach(x => x.SetBool("isMoving", isMoving));
+                listAnimator.ForEach(x => x.speed = isMoving ? animSpeed : 1);
             }
 
         }
