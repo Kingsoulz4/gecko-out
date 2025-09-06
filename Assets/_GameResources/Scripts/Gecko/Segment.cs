@@ -152,6 +152,15 @@ namespace Geckout
             }
         }
 
+        public void UpdateCoordinateOnly(Vector2Int coordinate)
+        {
+            if (GameMap.TryGetTileAt(coordinate, out var tile))
+            {
+                _currentTile = tile;
+                Coordinate = coordinate;
+            }
+        }
+
         public void UpdateCoordinateAndTile(Vector2Int coordinate)
         {
             if (LevelGame.GameMap.TryGetTileAtCoord(coordinate, out var tile))

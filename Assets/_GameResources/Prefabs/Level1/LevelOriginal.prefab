@@ -54,6 +54,8 @@ MonoBehaviour:
   m_wallContainer: {fileID: 4655650912071065848}
   m_tileWallEdge: {fileID: 2424358606838639240, guid: 354325ad6c70f52458b5d0f172e2634e, type: 3}
   m_tileWallCorner: {fileID: 5415367166614964074, guid: 744ed41814ff14343a38e2b106f272a2, type: 3}
+  defaultMaterial: {fileID: 2100000, guid: 07711bf15d913b74f9905ffe65dc1f4e, type: 2}
+  moveMaterial: {fileID: 2100000, guid: 4d442cd59cb090840b7022249cd82da6, type: 2}
 --- !u!1 &6095310145707377625
 GameObject:
   m_ObjectHideFlags: 0

@@ -54,7 +54,6 @@ namespace Geckout
        
         [SerializeField] private float restoreDelay =0.05f;
 
-        public Vector2Int Coordinate { get; private set; }
         public Renderer TileRenderer { get => tileRenderer; }
 
         private Material defaultMaterial;
