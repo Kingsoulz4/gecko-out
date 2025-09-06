@@ -313,6 +313,8 @@ namespace Geckout
         {
             portal.Disappear();
             gameObject.SetActive(false);
+            OccupiedTileController.ClearAllOccupied();
+            occupiedTileController.ForceRestoreAll();
         }
 
 
