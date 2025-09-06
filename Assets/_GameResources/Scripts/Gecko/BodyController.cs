@@ -142,12 +142,12 @@ namespace Geckout
                 int unitIndex = Mathf.CeilToInt((float)i / SubLength);
 
                 //var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
-                var coordinate = listDefaultCoordinate[Mathf.Clamp(unitIndex, 0, listDefaultCoordinate.Count -1)];
+                var coordinate = listDefaultCoordinate[Mathf.Clamp(unitIndex, 0, listDefaultCoordinate.Count - 2)];
 
-                //if(i == 1)
-                //{
-                //    coordinate = listDefaultCoordinate[1];
-                //}
+                if(i == Segments.Count -1)
+                {
+                    coordinate = listDefaultCoordinate.Last();
+                }    
 
                 Segments[i].InitCoordinate(coordinate);
             }
