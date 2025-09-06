@@ -113,7 +113,10 @@ namespace Geckout
 
         private void OnClickSaveLevel()
         {
-            
+#if UNITY_EDITOR
+            Undo.RecordObject(LevelGame.GameLevelData, LevelGame.GameLevelData.name);
+            EditorUtility.SetDirty(LevelGame.GameLevelData);
+#endif
         }
 
         private void OnClickLoadLevel()

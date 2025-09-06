@@ -23,7 +23,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 1, y: 0}
     type: 3
-    rotation: {x: 89, y: 90, z: -90}
+    rotation: {x: 90, y: 90, z: -90}
   - coordinate: {x: 2, y: 0}
     type: 2
     rotation: {x: 180, y: 90, z: -90}
@@ -35,7 +35,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 0}
     type: 2
-    rotation: {x: 89, y: 90, z: -90}
+    rotation: {x: 90, y: 90, z: -90}
   - coordinate: {x: 6, y: 0}
     type: 3
     rotation: {x: -90, y: 90, z: -90}
@@ -145,7 +145,7 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 5}
-    type: 5
+    type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 3, y: 5}
     type: 0
@@ -154,7 +154,7 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 5}
-    type: 5
+    type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 6, y: 5}
     type: 0
@@ -169,7 +169,7 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 6}
-    type: 4
+    type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 3, y: 6}
     type: 0
@@ -178,7 +178,7 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 6}
-    type: 4
+    type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 6, y: 6}
     type: 0
@@ -193,8 +193,8 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 7}
-    type: 5
-    rotation: {x: 180, y: 90, z: -90}
+    type: 0
+    rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 3, y: 7}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
@@ -202,8 +202,8 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 7}
-    type: 5
-    rotation: {x: 180, y: 90, z: -90}
+    type: 0
+    rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 6, y: 7}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
@@ -241,17 +241,17 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 9}
-    type: 5
-    rotation: {x: 90, y: 90, z: -90}
+    type: 0
+    rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 3, y: 9}
-    type: 4
-    rotation: {x: 90, y: 90, z: -90}
+    type: 0
+    rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 4, y: 9}
-    type: 4
-    rotation: {x: 90, y: 90, z: -90}
+    type: 0
+    rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 9}
-    type: 5
-    rotation: {x: -90, y: 90, z: -90}
+    type: 0
+    rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 6, y: 9}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
@@ -289,7 +289,7 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 11}
-    type: 5
+    type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 3, y: 11}
     type: 0
@@ -298,7 +298,7 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 11}
-    type: 5
+    type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 6, y: 11}
     type: 0
@@ -306,40 +306,5 @@ MonoBehaviour:
   - coordinate: {x: 7, y: 11}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
-  listDogData:
-  - dogType: 0
-    listColor: 03000000
-    listCoordinate:
-    - {x: 1, y: 3}
-    - {x: 2, y: 3}
-    - {x: 2, y: 2}
-    - {x: 2, y: 1}
-  - dogType: 0
-    listColor: 0b000000
-    listCoordinate:
-    - {x: 6, y: 8}
-    - {x: 5, y: 8}
-    - {x: 4, y: 8}
-    - {x: 4, y: 7}
-  - dogType: 0
-    listColor: 0b000000
-    listCoordinate:
-    - {x: 6, y: 8}
-    - {x: 5, y: 8}
-    - {x: 4, y: 8}
-    - {x: 4, y: 7}
-  - dogType: 0
-    listColor: 0b000000
-    listCoordinate:
-    - {x: 6, y: 8}
-    - {x: 5, y: 8}
-    - {x: 4, y: 8}
-    - {x: 4, y: 7}
-  - dogType: 0
-    listColor: 0e000000
-    listCoordinate:
-    - {x: 1, y: 8}
-    - {x: 2, y: 8}
-    - {x: 3, y: 8}
-    - {x: 3, y: 7}
+  listDogData: []
   colorAndMaterialData: {fileID: 11400000, guid: bea4b031ece8d284482119e23bace87e, type: 2}

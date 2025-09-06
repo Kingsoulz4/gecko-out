@@ -119,8 +119,11 @@ namespace Geckout
         public void ClearAllSelected()
         {
             ClearAllSelectedTiles();
-            selectedDog.SetSelected(false);
-            selectedDog = null;
+            if (selectedDog != null)
+            {
+                selectedDog.SetSelected(false);
+                selectedDog = null;
+            }
         }
             
 
@@ -147,7 +150,7 @@ namespace Geckout
             listSelectedTile.ToList().ForEach(x => x.SetTileType(tileType));
         }
 
-        public void RotateSelectedTiles(float angle)
+        public void RotateSelectedTiles(int angle)
         {
             listSelectedTile.ToList().ForEach(x => x.RotateBy(angle));
         }

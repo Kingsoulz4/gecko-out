@@ -81,10 +81,19 @@ namespace Geckout
             m_tilesTypeDisplay[MapTileType.Normal].SetActive(true);
         }
 
-        public void RotateBy(float deltaAngle)
+        public void RotateBy(int deltaAngle)
         {
+            if(m_displayObject == null)
+            {
+                return;
+            }
             var currentRotation = m_displayObject.transform.localRotation.eulerAngles;
-            var rotatateAngle = new Vector3Int((int)(currentRotation.x + deltaAngle), 90, -90);
+            var angleRotated = (int)(currentRotation.x + deltaAngle);
+            if(angleRotated % 90 != 0)
+            {
+                angleRotated = (angleRotated / 90) * 90;
+            }
+            var rotatateAngle = new Vector3Int(angleRotated, 90, -90);
             m_displayObject.transform.localRotation = Quaternion.Euler(rotatateAngle);
             mapTileData.rotation = rotatateAngle;
         }
