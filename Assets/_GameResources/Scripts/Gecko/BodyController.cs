@@ -34,7 +34,7 @@ namespace Geckout
         public Action OnStartMove;
         public Action OnEndMove;
 
-        private int subLength = 3;
+        private readonly int subLength = 3;
         private Segment _head, _tail;
         private float historyTotalLength = 0f;
         private const float extraHistoryPadding = 4f;
@@ -60,13 +60,15 @@ namespace Geckout
 
         public GridHeadClamper GridClamper { get => gridClamper; set => gridClamper = value; }
 
+        public int SubLength => subLength;
+
         private void Start()
         {
             Segments = new List<Segment>();
 
             // ===== Tính toán tổng số segment =====
-            int totalSegments = length * subLength - 2;
-            float unitSpacing = 1f / subLength;
+            int totalSegments = length * SubLength - 2;
+            float unitSpacing = 1f / SubLength;
             segmentSpacing = unitSpacing;
             float totalBodyLength = length;
 
@@ -83,7 +85,7 @@ namespace Geckout
                 Segment seg = Instantiate(this.segment, transform);
                 seg.name = "Segment " + i;
                 seg.transform.localPosition = new Vector3(0, -i * unitSpacing, 0);
-                if (i % 3 == 0 )
+                if (i % SubLength == 0)
                 {
                     seg.gameObject.AddComponent<BoxCollider>();
                 }
@@ -116,7 +118,7 @@ namespace Geckout
             for (int i = 0; i < Segments.Count; i++)
             {
                 // unitIndex = segment thuộc về tile nào
-                int unitIndex = i / subLength;
+                int unitIndex = i / SubLength;
 
                 var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
                 Segments[i].SetCoordinate(coordinate);
@@ -129,7 +131,7 @@ namespace Geckout
             if (_bodyRenderer != null)
                 _bodyRenderer.Initialize(Segments);
 
-            Debug.Log($"Body initialized: length={length}, subLength={subLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
+            Debug.Log($"Body initialized: length={length}, subLength={SubLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
         }
 
         public List<Segment> GetOrderedSegments()
@@ -284,8 +286,6 @@ namespace Geckout
                 Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
                 orderedSegments[segIdx].transform.position = pos;
             }
-
-            occupiedTileController?.UpdateAllSegmentPositions();
         }
 
         #region History system

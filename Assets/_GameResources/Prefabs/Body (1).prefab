@@ -291,5 +291,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0a01bc272d4c68428db50eacb4a914a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateInterval: 0.03
   bodyController: {fileID: 8998308601997322155}

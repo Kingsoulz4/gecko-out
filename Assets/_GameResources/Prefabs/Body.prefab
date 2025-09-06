@@ -403,6 +403,7 @@ MonoBehaviour:
   _sampleMode: 0
   _subscribers:
   - {fileID: 9047026933609085666}
+  - {fileID: 6210646821500656581}
   _rawSamples: []
   _nodes: []
 --- !u!114 &9047026933609085666
@@ -525,7 +526,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   length: 5
-  moveSpeed: 8
+  moveSpeed: 10
   minSampleStep: 0.02
   movementCurve:
     serializedVersion: 2
