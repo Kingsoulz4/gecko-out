@@ -21,12 +21,12 @@ namespace Geckout
         [SerializeField] private SerializedDictionary<MapTileType, GameObject> m_tilesTypeDisplay;
         [SerializeField] private GameObject m_displayObject;
 
-        private MapTileData mapTileData = new();
+        public MapTileData MapTileData { get; set; } = new();
 
         public Vector2Int Coordinate {
             get 
             {
-                return mapTileData.coordinate;
+                return MapTileData.coordinate;
             }
             
             set
@@ -58,7 +58,7 @@ namespace Geckout
 
         public void Initialize(MapTileData tileData)
         {
-            mapTileData = tileData;
+            MapTileData = tileData;
             SetTileType(tileData.type);
         }
 
@@ -69,15 +69,15 @@ namespace Geckout
                 return;
             }
             //m_tileTypeDisplay.Values.ToList().ForEach(x => x.gameObject.SetActive(false));
-            if (mapTileData.type != MapTileType.Normal)
+            if (MapTileData.type != MapTileType.Normal)
             {
                 m_displayObject.SetActive(false);
             }
-            mapTileData.type = tileType;
+            MapTileData.type = tileType;
             IsOccupied = tileType != MapTileType.Normal;
             m_displayObject = m_tilesTypeDisplay[tileType];
             m_displayObject.SetActive(true);
-            m_displayObject.transform.localRotation = Quaternion.Euler(mapTileData.rotation);
+            m_displayObject.transform.localRotation = Quaternion.Euler(MapTileData.rotation);
             m_tilesTypeDisplay[MapTileType.Normal].SetActive(true);
         }
 
@@ -95,7 +95,7 @@ namespace Geckout
             }
             var rotatateAngle = new Vector3Int(angleRotated, 90, -90);
             m_displayObject.transform.localRotation = Quaternion.Euler(rotatateAngle);
-            mapTileData.rotation = rotatateAngle;
+            MapTileData.rotation = rotatateAngle;
         }
 
         public void SetSelected(bool selected)

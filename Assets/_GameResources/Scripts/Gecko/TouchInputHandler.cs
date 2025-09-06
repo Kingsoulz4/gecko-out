@@ -35,6 +35,7 @@ namespace Geckout
 
         void Update()
         {
+            if(!GamePlayManager.Instance.IsEdittingLevel)
             HandleTouchInput();
         }
 

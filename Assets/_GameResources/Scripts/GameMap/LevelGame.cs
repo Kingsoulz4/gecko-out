@@ -22,6 +22,8 @@ namespace Geckout
 
         public BodyController selectedDog { get; set; }
 
+        public Portal selectedPortal => listSelectedTile.First(x => x.MapTileData.type == MapTileType.Portal).GetComponent<Portal>();
+
         public GameMap GameMap => m_gameMap;
 
         public void SetLevelData(GameLevelData gameLevelData)
