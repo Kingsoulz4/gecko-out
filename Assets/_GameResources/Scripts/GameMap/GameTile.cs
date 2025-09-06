@@ -97,6 +97,11 @@ namespace Geckout
             }
         }
 
+        public void ChangeVisualToNormalTile()
+        {
+            m_displayObject.SetActive(false);
+        }    
+
         public void RotateBy(int deltaAngle)
         {
             if(m_displayObject == null)

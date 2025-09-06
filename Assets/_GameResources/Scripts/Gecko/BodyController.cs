@@ -304,6 +304,13 @@ namespace Geckout
             occupiedTileController?.UpdateAllSegmentPositions();
         }
 
+        public void MoveToPortal(Portal portal)
+        {
+            portal.Disappear();
+            gameObject.SetActive(false);
+        }
+
+
          #region Tool
 
         public void SetSelected(bool selected)

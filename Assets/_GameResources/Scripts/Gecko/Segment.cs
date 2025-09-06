@@ -68,6 +68,8 @@ namespace Geckout
                 return;
             }
 
+            if (boxCollider == null) return;
+
             var centerBox = boxCollider.transform.TransformPoint(boxCollider.center); 
 
             var listBoxOverlap = Physics.OverlapBox(
@@ -75,6 +77,20 @@ namespace Geckout
                 boxCollider.size * 0.5f,
                 boxCollider.transform.rotation
             );
+
+            //if(listBoxOverlap.Length > 0)
+            //{
+            //    Debug.Log("Collide Many Box Here");
+            //}
+
+            foreach(var boxOverlap in listBoxOverlap)
+            {
+                var portal = boxOverlap.GetComponent<Portal>();
+                if(portal != null && portal.PortalData.listColor.First() == Controller.DogData.listColor.First())
+                {
+                    Controller.MoveToPortal(portal);
+                }
+            }
 
             //var collidePortal = listBoxOverlap.FirstOrDefault(x => x.)
         }

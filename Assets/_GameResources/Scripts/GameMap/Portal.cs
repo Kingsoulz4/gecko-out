@@ -1,4 +1,5 @@
 using Geckout.Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,11 @@ namespace Geckout
         public void UpdateVisual()
         {
             bodyPartColorChangers.ForEach(x => x.UpdateColor(PortalData.listColor.First()));
+        }
+
+        internal void Disappear()
+        {
+            GetComponent<GameTile>().ChangeVisualToNormalTile();
         }
     }
 }
