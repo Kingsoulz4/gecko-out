@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AYellowpaper.SerializedCollections;
@@ -50,6 +51,18 @@ namespace Geckout
         {
             SetTileType(MapTileType.Normal);
         }
+       
+        [SerializeField] private float restoreDelay =0.05f;
+
+        public Vector2Int Coordinate { get; private set; }
+        public Renderer TileRenderer { get => tileRenderer; }
+
+        private Material defaultMaterial;
+        private Material moveMaterial;
+
+        // Self management
+        private int occupancyCount = 0;
+        private Coroutine restoreCoroutine;
 
         private void Start()
         {
@@ -65,6 +78,14 @@ namespace Geckout
             }
             tileRenderer.enabled = true;
             SetSelected(false);
+
+            SetMaterialImmediate(defaultMaterial);
+        }
+
+        public void InitializeMaterials(Material oldMat, Material moveMat)
+        {
+            defaultMaterial = oldMat;
+            moveMaterial = moveMat;
         }
 
         public void Initialize(MapTileData tileData)
@@ -132,10 +153,97 @@ namespace Geckout
             Coordinate = new Vector2Int(x, y);
         }
 
-        public void SetOccupied(bool occupied)
+        #region Occupancy Management
+
+        public void AddOccupant(bool setColor)
         {
-            IsOccupied = occupied;
+            occupancyCount++;
+
+            if (!setColor)
+            {
+                return;
+            }
+
+            // Cancel any pending restore
+            if (restoreCoroutine != null)
+            {
+                StopCoroutine(restoreCoroutine);
+                restoreCoroutine = null;
+            }
+
+            // Apply occupied material immediately
+            SetMaterialImmediate(moveMaterial);
         }
+
+        public void RemoveOccupant()
+        {
+            occupancyCount = Mathf.Max(0, occupancyCount - 1);
+            UpdateOccupiedState();
+
+            // If no more occupants, start restore process
+            if (occupancyCount == 0)
+            {
+                StartRestoreProcess();
+            }
+        }
+
+        public void UpdateOccupiedState()
+        {
+            bool newOccupiedState = occupancyCount > 0;
+
+            if (IsOccupied != newOccupiedState)
+            {
+                IsOccupied = newOccupiedState;
+            }
+        }
+
+        private void StartRestoreProcess()
+        {
+            // Cancel existing restore if any
+            if (restoreCoroutine != null)
+            {
+                StopCoroutine(restoreCoroutine);
+            }
+
+            restoreCoroutine = StartCoroutine(DelayedRestore());
+        }
+
+        private IEnumerator DelayedRestore()
+        {
+            yield return new WaitForSeconds(restoreDelay);
+
+            // Double check we're still unoccupied
+            if (occupancyCount == 0)
+            {
+                SetMaterialImmediate(defaultMaterial);
+            }
+
+            restoreCoroutine = null;
+        }
+
+        #endregion
+
+        #region Material Management
+
+        private void SetMaterialImmediate(Material material)
+        {
+            if (tileRenderer != null && material != null && tileRenderer.material != material)
+            {
+                tileRenderer.material = material;
+            }
+        }
+
+        public void ForceRestoreColor()
+        {
+            if (restoreCoroutine != null)
+            {
+                StopCoroutine(restoreCoroutine);
+                restoreCoroutine = null;
+            }
+            SetMaterialImmediate(defaultMaterial);
+        }
+
+        #endregion
 
         public GameTile[] GetNeighbourTiles(int range)
         {
@@ -154,32 +262,6 @@ namespace Geckout
             return results.ToArray();
         }
 
-        public void ChangeColor(Color color)
-        {
-            if (tileRenderer != null)
-            {
-                tileRenderer.material.color = color;
-            }
-        }
-
-        // Highlight tile for path visualization
-        public void SetPathHighlight(bool highlight)
-        {
-            if (highlight)
-            {
-                ChangeColor(Color.yellow);
-            }
-            else
-            {
-                ChangeColor(Color.white); // Default color
-            }
-        }
-
-        private void OnValidate()
-        {
-            tileRenderer.enabled = true;
-        }
-
         private void OnDrawGizmos()
         {
             if (IsOccupied)
@@ -187,14 +269,29 @@ namespace Geckout
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireCube(transform.position, Vector3.one * 0.9f);
             }
+
             // Draw coordinate text
             var style = new GUIStyle();
             style.normal.textColor = Color.white;
 #if UNITY_EDITOR
-            //if(GameMap.Instance.IsDebug)
-            //UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f,
-            //    $"({Coordinate.x},{Coordinate.y})", style);
+            if (GameMap.Instance != null && GameMap.Instance.IsDebug)
+            {
+                string debugText = $"({Coordinate.x},{Coordinate.y})";
+                if (occupancyCount > 0)
+                {
+                    debugText += $"\nOcc: {occupancyCount}";
+                }
+                UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f, debugText, style);
+            }
 #endif
+        }
+
+        private void OnDestroy()
+        {
+            if (restoreCoroutine != null)
+            {
+                StopCoroutine(restoreCoroutine);
+            }
         }
     }
 }

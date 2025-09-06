@@ -139,7 +139,7 @@ namespace Geckout
             {
                 _currentTile = tile;
                 Coordinate = coordinate;
-                _currentTile.SetOccupied(true);
+                _currentTile.UpdateOccupiedState();
                 transform.position = tile.transform.position;
 
                 _startPosition = transform.position;

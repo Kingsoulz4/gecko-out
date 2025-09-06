@@ -22,7 +22,9 @@ namespace Geckout
         [SerializeField] private GameTile m_tileWallEdge;
         [SerializeField] private GameTile m_tileWallCorner;
 
-
+        [Header("Material Management")]
+        [SerializeField] private Material defaultMaterial;
+        [SerializeField] private Material moveMaterial;
         private Transform _entitiesContainer;
         private GameTile[] tiles;
         private Vector2Int _mapSize;
@@ -138,6 +140,7 @@ namespace Geckout
                     var tile = listTile[i];
                     tiles[x + y * _mapSize.x] = tile;
                     tile.SetCoordinate(x, y);
+                    tile.InitializeMaterials(defaultMaterial, moveMaterial);
                     i++;
                 }
             }
