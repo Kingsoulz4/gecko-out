@@ -42,13 +42,14 @@ namespace Geckout
 
         private void OnClickDeletePortal()
         {
-            LevelGame.ChangeTypeSelectedTiles(Data.MapTileType.Normal);
+            //LevelGame.ChangeTypeSelectedTiles(Data.MapTileType.Normal);
+            LevelGame.RemoveAllSelectedPortals();
         }
 
         private void OnClickAddPortal()
         {
-            LevelGame.ChangeTypeSelectedTiles(Data.MapTileType.Portal);
-
+            //LevelGame.ChangeTypeSelectedTiles(Data.MapTileType.Portal);
+            LevelGame.AddNewPortal();
         }
 
         public void UpdateUI()

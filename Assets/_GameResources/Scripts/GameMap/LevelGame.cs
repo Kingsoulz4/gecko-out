@@ -148,6 +148,18 @@ namespace Geckout
             }
         }
 
+        public void RemoveAllSelectedPortals()
+        {
+            var listPortal = listSelectedTile.ToList().FindAll(x => x.MapTileData.type == MapTileType.Portal);
+            for (int i = 0; i < listPortal.Count; i++)
+            {
+                var portalSelected = listPortal[i].GetComponent<Portal>();
+                GameLevelData.listPortalData.Remove(portalSelected.PortalData);
+                listPortal[i].SetTileType(MapTileType.Normal);
+            }
+            
+        }
+
         public void ChangeTypeSelectedTiles(MapTileType tileType)
         {
             listSelectedTile.ToList().ForEach(x => x.SetTileType(tileType));

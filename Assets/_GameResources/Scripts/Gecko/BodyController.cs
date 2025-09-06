@@ -38,7 +38,7 @@ namespace Geckout
         public Action OnStartMove;
         public Action OnEndMove;
 
-        private int subLength = 1;
+        private int subLength = 3;
         private Segment _head, _tail;
         private float historyTotalLength = 0f;
         private const float extraHistoryPadding = 4f;
@@ -77,7 +77,7 @@ namespace Geckout
             Segments = new List<Segment>();
 
             // ===== Tính toán tổng số segment =====
-            length = listDefaultCoordinate.Count + 2;
+            length = listDefaultCoordinate.Count ;
             int totalSegments = length * subLength - 2;
             float unitSpacing = 1f / subLength;
             segmentSpacing = unitSpacing;
