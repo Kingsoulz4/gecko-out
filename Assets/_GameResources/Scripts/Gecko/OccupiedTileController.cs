@@ -172,12 +172,14 @@ namespace Geckout
             if (previousTile != null)
             {
                 previousTile.RemoveOccupant();
+                currentOccupiedTiles[segmentIndex].SetOccupied(false);
             }
 
             // Add to new tile
             if (GameMap.TryGetTileAt(gridPos, out GameTile newTile))
             {
                 currentOccupiedTiles[segmentIndex] = newTile;
+                newTile.SetOccupied(true);
                 newTile.AddOccupant(changeTileColor);
                 segment.UpdateCoordinateOnly(gridPos);
             }

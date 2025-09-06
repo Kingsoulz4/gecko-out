@@ -241,7 +241,6 @@ GameObject:
   - component: {fileID: 2788433321168617802}
   - component: {fileID: 3655932188227585431}
   - component: {fileID: 4085413186241585128}
-  - component: {fileID: 7048425041857568442}
   - component: {fileID: 6021424304399516285}
   - component: {fileID: 38492727839514911}
   m_Layer: 0
@@ -522,7 +521,7 @@ MonoBehaviour:
   _bodyRenderer: {fileID: 4282819325411265969}
   gridClamper: {fileID: 4085413186241585128}
   controlAnchor: 0
-  m_outlineSelected: {fileID: 7048425041857568442}
+  m_outlineSelected: {fileID: 0}
 --- !u!114 &4085413186241585128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -537,24 +536,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileCenterThreshold: 0.02
   enableDebugLogs: 0
---- !u!114 &7048425041857568442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4970065939563323752}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 0.16509432, b: 0.16509432, a: 1}
-  outlineWidth: 7.03
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!114 &6021424304399516285
 MonoBehaviour:
   m_ObjectHideFlags: 0
