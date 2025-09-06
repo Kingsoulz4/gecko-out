@@ -315,6 +315,7 @@ namespace Geckout
             gameObject.SetActive(false);
             OccupiedTileController.ClearAllOccupied();
             occupiedTileController.ForceRestoreAll();
+            GamePlayManager.Instance.LevelGame.OnBodyMoveToHole(this);
         }
 
 

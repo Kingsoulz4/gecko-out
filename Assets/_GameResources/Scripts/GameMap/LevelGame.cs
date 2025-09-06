@@ -15,7 +15,7 @@ namespace Geckout
         [SerializeField] private Transform m_listDogContainer;
 
         private HashSet<GameTile> listSelectedTile = new();
-
+        private List<BodyController> listBody = new();
         public List<GameTile> ListSelectedTile { get => listSelectedTile.ToList(); }
 
         public GameLevelData GameLevelData => m_gameLevelData;
@@ -37,6 +37,8 @@ namespace Geckout
 
         public GameMap GameMap => m_gameMap;
 
+        public List<BodyController> ListBody { get => listBody;}
+
         public void SetLevelData(GameLevelData gameLevelData)
         {
             m_gameLevelData = gameLevelData;
@@ -44,12 +46,22 @@ namespace Geckout
             Utils.RemoveAllChilds(m_listDogContainer);
             foreach(var dogData in gameLevelData.listDogData)
             {
-                SpawnDog(dogData);
+                ListBody.Add(SpawnDog(dogData));
             }
 #if UNITY_EDITOR
             EditorUtility.SetDirty(this.gameObject);   
 #endif
         }
+
+        public void OnBodyMoveToHole(BodyController body)
+        {
+            if (listBody.Contains(body))
+            {
+                listBody.Remove(body);
+            }
+        }
+
+
 
         private void Update()
         {
@@ -101,7 +113,7 @@ namespace Geckout
             }
         }
 
-        public void SpawnDog(DogData dogData)
+        public BodyController SpawnDog(DogData dogData)
         {
 
 #if UNITY_EDITOR
@@ -110,7 +122,7 @@ namespace Geckout
             var newDog = Instantiate(m_dogPrefab, m_listDogContainer);
 #endif
             newDog.Initialize(dogData);
-
+            return newDog;
         }
 
         public void GenerateNewDog(DogData dogData)
