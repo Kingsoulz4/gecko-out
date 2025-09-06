@@ -307,6 +307,7 @@ namespace Geckout
         {
             portal.Disappear();
             gameObject.SetActive(false);
+            GamePlayManager.Instance.LevelGame.OnBodyMoveToHole(this);
         }
 
 

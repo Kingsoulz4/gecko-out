@@ -166,29 +166,29 @@ namespace Geckout
             FindAdjacentGeckoAnchor(Vector2Int targetTile)
         {
             // Tìm tất cả gecko trong scene
-            BodyController[] geckos = FindObjectsOfType<BodyController>();
+            List<BodyController> bodies = GamePlayManager.Instance.LevelGame.ListBody;
 
-            foreach (var gecko in geckos)
+            foreach (var body in bodies)
             {
-                if (gecko.IsMoving) continue; // Skip gecko đang di chuyển
+                if (body.IsMoving) continue; // Skip gecko đang di chuyển
 
-                var headPos = gecko.OccupiedTileController.WorldToGridPosition(
-                    gecko.Segments[0].transform.position);
-                var tailPos = gecko.OccupiedTileController.WorldToGridPosition(
-                    gecko.Segments[gecko.Segments.Count - 1].transform.position);
+                var headPos = body.OccupiedTileController.WorldToGridPosition(
+                    body.Segments[0].transform.position);
+                var tailPos = body.OccupiedTileController.WorldToGridPosition(
+                    body.Segments[body.Segments.Count - 1].transform.position);
 
                 // Kiểm tra head có adjacent với target không
                 if (IsAdjacent(headPos, targetTile))
                 {
                     DebugLog($"Found adjacent HEAD at {headPos}, target: {targetTile}");
-                    return (gecko, BodyController.ControlAnchor.Head, headPos);
+                    return (body, BodyController.ControlAnchor.Head, headPos);
                 }
 
                 // Kiểm tra tail có adjacent với target không  
                 if (IsAdjacent(tailPos, targetTile))
                 {
                     DebugLog($"Found adjacent TAIL at {tailPos}, target: {targetTile}");
-                    return (gecko, BodyController.ControlAnchor.Tail, tailPos);
+                    return (body, BodyController.ControlAnchor.Tail, tailPos);
                 }
             }
 
