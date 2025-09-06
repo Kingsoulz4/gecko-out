@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Geckout
@@ -75,7 +76,7 @@ namespace Geckout
                 boxCollider.transform.rotation
             );
 
-            var collidePortal = 
+            //var collidePortal = listBoxOverlap.FirstOrDefault(x => x.)
         }
 
         private void UpdateRotation()
