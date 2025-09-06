@@ -12,6 +12,16 @@ namespace Geckout
         
         public PortalData PortalData { get; set; }
 
+        private void Awake()
+        {
+            bodyPartColorChangers = GetComponentsInChildren<BodyPartColorChanger>().ToList();
+        }
+
+        private void Start()
+        {
+            UpdateVisual();
+        }
+
         public void UpdateVisual()
         {
             bodyPartColorChangers.ForEach(x => x.UpdateColor(PortalData.listColor.First()));

@@ -22,7 +22,18 @@ namespace Geckout
 
         public BodyController selectedDog { get; set; }
 
-        public Portal selectedPortal => listSelectedTile.First(x => x.MapTileData.type == MapTileType.Portal).GetComponent<Portal>();
+        public Portal selectedPortal
+        {
+            get
+            {
+                var tile = listSelectedTile.ToList().Find(x => x.MapTileData.type == MapTileType.Portal);
+                if (tile != null)
+                {
+                    return tile.TryGetComponent<Portal>(out var portal) ? portal : null;
+                }
+                return null;
+            }
+        } 
 
         public GameMap GameMap => m_gameMap;
 
@@ -145,6 +156,8 @@ namespace Geckout
                 var newPortalData = new PortalData();
                 newPortalData.Coordinate = new Vector2Int(tileSelected.Coordinate.x, tileSelected.Coordinate.y);
                 var newPortal = tileSelected.gameObject.AddComponent<Portal>();
+                GameLevelData.listPortalData.Add(newPortalData);
+                newPortal.PortalData = newPortalData;
             }
         }
 

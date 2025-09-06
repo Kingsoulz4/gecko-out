@@ -78,6 +78,14 @@ namespace Geckout
             HideAllTabs();
             m_editPortalTab.gameObject.SetActive(true);
             m_editPortalTab.LevelGame = LevelGame;
+            if (LevelGame != null && LevelGame.selectedPortal != null)
+            {
+                m_editPortalTab.UpdateUI(LevelGame.selectedPortal.PortalData);
+            }
+            else
+            {
+                m_editPortalTab.UpdateUI();
+            }
         }
 
         private void OnClickDesignDog()

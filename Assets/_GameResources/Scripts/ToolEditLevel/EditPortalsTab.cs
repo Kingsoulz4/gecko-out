@@ -21,7 +21,7 @@ namespace Geckout
 
         private PortalData portalData;
 
-        private PortalData DogData
+        private PortalData PortalData
         {
             get
             {
@@ -29,7 +29,7 @@ namespace Geckout
                 {
                     portalData = new PortalData();
                 }
-                return LevelGame != null && LevelGame.selectedDog != null ? LevelGame.selectedPortal.PortalData : portalData;
+                return LevelGame != null && LevelGame.selectedPortal != null ? LevelGame.selectedPortal.PortalData : portalData;
 
             }
         }
@@ -38,6 +38,15 @@ namespace Geckout
         {
             m_buttonAddPortal.onClick.AddListener(OnClickAddPortal);
             m_buttonDeletePortal.onClick.AddListener(OnClickDeletePortal);
+            foreach (var buttonColorPicked in m_listButtonColorPicked)
+            {
+                buttonColorPicked.OnClick = OnClickSelectColorPicked;
+            }
+        }
+
+        private void Start()
+        {
+            UpdateUI(PortalData);
         }
 
         private void OnClickDeletePortal()
@@ -50,6 +59,24 @@ namespace Geckout
         {
             //LevelGame.ChangeTypeSelectedTiles(Data.MapTileType.Portal);
             LevelGame.AddNewPortal();
+        }
+
+        public void UpdateUI(PortalData dogData)
+        {
+            var listColorData = LevelGame.GameLevelData.colorAndMaterialData.listColor;
+            for (int i = 0; i < m_listButtonColorPicked.Count; i++)
+            {
+                if (i < dogData.listColor.Count)
+                {
+                    m_listButtonColorPicked[i].SetEmpty(false);
+                    m_listButtonColorPicked[i].SetColor(listColorData[dogData.listColor[i]]);
+                }
+                else
+                {
+                    m_listButtonColorPicked[i].SetEmpty(true);
+                }
+            }
+            UpdateUI();
         }
 
         public void UpdateUI()
@@ -66,21 +93,37 @@ namespace Geckout
 
                     m_listButtonColorPicked[currentSelectedColorIndex].SetColor(color.Value);
                     m_listButtonColorPicked[currentSelectedColorIndex].SetEmpty(false);
-                    if (currentSelectedColorIndex >= DogData.listColor.Count)
+                    if (currentSelectedColorIndex >= PortalData.listColor.Count)
                     {
-                        DogData.listColor.Add(color.Key);
+                        PortalData.listColor.Add(color.Key);
                     }
                     else
                     {
-                        DogData.listColor[currentSelectedColorIndex] = color.Key;
+                        PortalData.listColor[currentSelectedColorIndex] = color.Key;
                     }
 
-                    if (LevelGame.selectedDog != null)
+                    if (LevelGame.selectedPortal != null)
                     {
-                        LevelGame.selectedDog.UpdateColor();
+                        LevelGame.selectedPortal.UpdateVisual();
                     }
 
                 });
+            }
+        }
+
+        private void OnClickSelectColorPicked(int index)
+        {
+            var listColorData = LevelGame.GameLevelData.colorAndMaterialData.listColor;
+
+            if (PortalData.listColor.Count <= index)
+            {
+                PortalData.listColor.Add(ColorList.Red);
+                m_listButtonColorPicked[index].SetEmpty(false);
+                m_listButtonColorPicked[index].SetColor(listColorData[ColorList.Red]);
+            }
+            else
+            {
+                currentSelectedColorIndex = index;
             }
         }
     }

@@ -145,6 +145,7 @@ namespace Geckout.Data
         Normal,
     }
 
+    [Serializable]
     public class PortalData
     {
         public PortalType portalType;

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Geckout
 {
@@ -35,6 +36,8 @@ namespace Geckout
         public BodyController Controller { get; private set; }
         public GameTile CurrentTile { get => _currentTile; set => _currentTile = value; }
 
+        private BoxCollider boxCollider;
+
         private LevelGame levelGame;
 
         private LevelGame LevelGame
@@ -44,11 +47,35 @@ namespace Geckout
                 if(levelGame == null) levelGame = GetComponentInParent<LevelGame>(); 
                 return levelGame;
             }
-        }    
+        }
+
+        private void Awake()
+        {
+            boxCollider = GetComponent<BoxCollider>();
+        }
 
         private void Update()
         {
             UpdateRotation();
+            CheckMoveToPortal();
+        }
+
+        private void CheckMoveToPortal()
+        {
+            if(segmentType != SegmentType.HEAD && segmentType != SegmentType.TAIL)
+            {
+                return;
+            }
+
+            var centerBox = boxCollider.transform.TransformPoint(boxCollider.center); 
+
+            var listBoxOverlap = Physics.OverlapBox(
+                centerBox,
+                boxCollider.size * 0.5f,
+                boxCollider.transform.rotation
+            );
+
+            var collidePortal = 
         }
 
         private void UpdateRotation()
@@ -62,7 +89,7 @@ namespace Geckout
                 // Offset the angle by +90 degrees so the head points correctly
                 Quaternion targetRot = Quaternion.Euler(0, 0, angle - 90f);
 
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime * 10);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime * 20);
             }
 
             if (segmentType == SegmentType.TAIL && PrevSegment != null)
@@ -74,7 +101,7 @@ namespace Geckout
                 // Offset the angle by +90 degrees so the head points correctly
                 Quaternion targetRot = Quaternion.Euler(0, 0, angle + 90f);
 
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime * 10);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime * 20);
             }
         }
 

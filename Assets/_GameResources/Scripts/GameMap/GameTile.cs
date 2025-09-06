@@ -21,6 +21,17 @@ namespace Geckout
         [SerializeField] private SerializedDictionary<MapTileType, GameObject> m_tilesTypeDisplay;
         [SerializeField] private GameObject m_displayObject;
 
+        private LevelGame levelGame;
+
+        private LevelGame LevelGame
+        {
+            get
+            {
+                if (levelGame == null) levelGame = GetComponentInParent<LevelGame>();
+                return levelGame;
+            }
+        }
+
         public MapTileData MapTileData { get; set; } = new();
 
         public Vector2Int Coordinate {
@@ -79,6 +90,11 @@ namespace Geckout
             m_displayObject.SetActive(true);
             m_displayObject.transform.localRotation = Quaternion.Euler(MapTileData.rotation);
             m_tilesTypeDisplay[MapTileType.Normal].SetActive(true);
+            if(tileType == MapTileType.Portal)
+            {
+                var portal = gameObject.AddComponent<Portal>();
+                portal.PortalData = LevelGame.GameLevelData.listPortalData.Find(x => x.Coordinate == MapTileData.coordinate);
+            }
         }
 
         public void RotateBy(int deltaAngle)
