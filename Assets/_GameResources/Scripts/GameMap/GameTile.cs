@@ -146,7 +146,10 @@ namespace Geckout
                 m_outLine.enabled = selected;
             }
         }
-
+        public void SetOccupied(bool occupied)
+        {
+            IsOccupied = occupied;
+        }
         public void SetCoordinate(int x, int y)
         {
             Coordinate = new Vector2Int(x, y);
@@ -177,22 +180,11 @@ namespace Geckout
         public void RemoveOccupant()
         {
             occupancyCount = Mathf.Max(0, occupancyCount - 1);
-            UpdateOccupiedState();
 
             // If no more occupants, start restore process
             if (occupancyCount == 0)
             {
                 StartRestoreProcess();
-            }
-        }
-
-        public void UpdateOccupiedState()
-        {
-            bool newOccupiedState = occupancyCount > 0;
-
-            if (IsOccupied != newOccupiedState)
-            {
-                IsOccupied = newOccupiedState;
             }
         }
 
