@@ -102,7 +102,8 @@ namespace Geckout
 
         private void OnClickGenerate()
         {
-            LevelGame.GenerateNewDog(DogData);
+            var newDogData = new DogData(DogData);
+            LevelGame.GenerateNewDog(newDogData);
         }
 
         private void OnClickSelectColorPicked(int index)

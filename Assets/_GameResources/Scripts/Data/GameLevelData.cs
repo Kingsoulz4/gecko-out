@@ -159,6 +159,15 @@ namespace Geckout.Data
         public List<ColorList> listColor = new() { ColorList.Red};
         public List<Vector2Int> listCoordinate = new();
 
+        public DogData()
+        { }
+
+        public DogData(DogData dogData)
+        {
+            this.dogType = dogData.dogType;
+            this.listColor = new List<ColorList>(dogData.listColor);
+            this.listCoordinate = new List<Vector2Int>(dogData.listCoordinate);
+        }
     }
 
     [Serializable]

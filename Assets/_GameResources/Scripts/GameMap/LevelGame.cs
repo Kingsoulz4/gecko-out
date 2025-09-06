@@ -112,7 +112,8 @@ namespace Geckout
             if(selectedDog == null)
             {
                 return;
-            }    
+            }
+            GameLevelData.listDogData.Remove(selectedDog.DogData);
             Destroy(selectedDog.gameObject);
         }    
 

@@ -116,6 +116,7 @@ namespace Geckout
 #if UNITY_EDITOR
             Undo.RecordObject(LevelGame.GameLevelData, LevelGame.GameLevelData.name);
             EditorUtility.SetDirty(LevelGame.GameLevelData);
+            EditorApplication.ExecuteMenuItem("File/Save Project");
 #endif
         }
 
