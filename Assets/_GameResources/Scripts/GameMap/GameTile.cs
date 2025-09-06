@@ -276,10 +276,10 @@ namespace Geckout
             if (GameMap.Instance != null && GameMap.Instance.IsDebug)
             {
                 string debugText = $"({Coordinate.x},{Coordinate.y})";
-                if (occupancyCount > 0)
-                {
-                    debugText += $"\nOcc: {occupancyCount}";
-                }
+                //if (occupancyCount > 0)
+                //{
+                //    debugText += $"\nOcc: {occupancyCount}";
+                //}
                 UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f, debugText, style);
             }
 #endif
