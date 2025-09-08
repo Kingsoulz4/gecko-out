@@ -367,7 +367,7 @@ GameObject:
   - component: {fileID: 977039008493845289}
   - component: {fileID: 2162445195111988687}
   m_Layer: 7
-  m_Name: Tail
+  m_Name: TailSegment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
