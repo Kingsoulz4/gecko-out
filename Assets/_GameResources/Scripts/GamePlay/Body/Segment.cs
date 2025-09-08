@@ -23,13 +23,6 @@ namespace Geckout
         public BodyController Controller { get; private set; }
         public GameTile CurrentTile { get => _currentTile; set => _currentTile = value; }
 
-        private BoxCollider boxCollider;
-
-        private void Awake()
-        {
-            boxCollider = GetComponent<BoxCollider>();
-        }
-
         private void Update()
         {
             UpdateRotation();
