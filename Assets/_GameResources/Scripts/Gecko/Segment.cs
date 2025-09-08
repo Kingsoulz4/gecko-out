@@ -160,15 +160,6 @@ namespace Geckout
             }
         }
 
-        public void UpdateCoordinateAndTile(Vector2Int coordinate)
-        {
-            if (LevelGame.GameMap.TryGetTileAtCoord(coordinate, out var tile))
-            {
-                _currentTile = tile;
-                Coordinate = coordinate;
-            }
-        }
-
         private void OnDrawGizmos()
         {
             if (_isInMovement) return;

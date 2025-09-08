@@ -24,7 +24,7 @@ namespace Geckout
         [SerializeField] private float lowSpeed = 10f;
         [SerializeField] private float lowDistance = 2f;
         [SerializeField] private float minSampleStep = 0.02f;
-        [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+        //[SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
         [SerializeField] private Segment headPrefab;
         [SerializeField] private Segment segment;
         [SerializeField] private Segment tailPrefab;
@@ -250,7 +250,7 @@ namespace Geckout
                 totalPathDistance += Vector3.Distance(worldPath[i], worldPath[i + 1]);
             }
 
-            Debug.Log($"Moving along path with {worldPath.Count} waypoints, total distance: {totalPathDistance}");
+            //Debug.Log($"Moving along path with {worldPath.Count} waypoints, total distance: {totalPathDistance}");
 
             float currentMoveSpeed = totalPathDistance <= lowDistance ? lowSpeed : moveSpeed;
 
