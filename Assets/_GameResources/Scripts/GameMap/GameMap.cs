@@ -229,6 +229,11 @@ namespace Geckout
                     obj.transform.localScale = Vector3.one * cubeSize;
                     obj.name = $"Tile_{c.x}_{c.y}_{tile.type}";
                     obj.Initialize(tile);
+                    if (tile.type == MapTileType.Portal)
+                    {
+                        var portal = obj.gameObject.AddComponent<Portal>();
+                        portal.Initialize(levelData.listPortalData.Find(x => x.Coordinate == tile.coordinate));
+                    }
 
                 }
             }
@@ -283,6 +288,11 @@ namespace Geckout
                 obj.transform.localPosition = pos;
                 obj.transform.localScale = Vector3.one * cubeSize;
                 obj.Initialize(tile);
+                if (tile.type == MapTileType.Portal)
+                {
+                    var portal = obj.gameObject.AddComponent<Portal>();
+                    portal.Initialize(levelData.listPortalData.Find(x => x.Coordinate == tile.coordinate));
+                }
 
             }
 

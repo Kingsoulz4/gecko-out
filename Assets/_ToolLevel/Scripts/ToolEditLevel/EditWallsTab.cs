@@ -16,7 +16,7 @@ namespace Geckout
         [SerializeField] private Button m_buttonRotateRight;
         [SerializeField] private Button m_buttonDelete;
 
-        public LevelGame LevelGame { get; set; }
+        public LevelGameEditTool LevelGame { get; set; }
 
         private void Awake()
         {

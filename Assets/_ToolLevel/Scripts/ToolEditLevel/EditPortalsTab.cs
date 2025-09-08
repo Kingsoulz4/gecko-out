@@ -15,7 +15,7 @@ namespace Geckout
         [SerializeField] private Transform m_listColorPickContainer;
         [SerializeField] private Button m_colorPickPrefab;
 
-        public LevelGame LevelGame { get; set; }
+        public LevelGameEditTool LevelGame { get; set; }
 
         private int currentSelectedColorIndex = 0;
 

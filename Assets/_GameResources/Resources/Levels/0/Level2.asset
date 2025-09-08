@@ -343,7 +343,7 @@ MonoBehaviour:
     listColor: 01000000
   - portalType: 0
     Coordinate: {x: 7, y: 0}
-    listColor: 0c000000
+    listColor: 05000000
   - portalType: 0
     Coordinate: {x: 0, y: 0}
     listColor: 02000000

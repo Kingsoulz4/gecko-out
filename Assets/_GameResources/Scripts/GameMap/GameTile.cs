@@ -110,11 +110,7 @@ namespace Geckout
             m_displayObject.SetActive(true);
             m_displayObject.transform.localRotation = Quaternion.Euler(MapTileData.rotation);
             m_tilesTypeDisplay[MapTileType.Normal].SetActive(true);
-            if(tileType == MapTileType.Portal)
-            {
-                var portal = gameObject.AddComponent<Portal>();
-                portal.PortalData = LevelGame.GameLevelData.listPortalData.Find(x => x.Coordinate == MapTileData.coordinate);
-            }
+            
         }
 
         public void ChangeVisualToNormalTile()

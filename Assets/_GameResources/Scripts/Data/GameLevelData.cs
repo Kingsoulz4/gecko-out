@@ -7,6 +7,7 @@ namespace Geckout.Data
 {
     public enum LevelType
     {
+        EASY,
         NORMAL,
         HARD,
         SUPER_HARD

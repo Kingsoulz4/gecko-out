@@ -7,33 +7,16 @@ using System.Linq;
 
 namespace Geckout
 {
-    public class LevelGame : MonoBehaviour
+    public partial class LevelGame : MonoBehaviour
     {
-        [SerializeField] private GameLevelData m_gameLevelData;
-        [SerializeField] private GameMap m_gameMap;
-        [SerializeField] private BodyController m_dogPrefab;
-        [SerializeField] private Transform m_listDogContainer;
+        [SerializeField] protected GameLevelData m_gameLevelData;
+        [SerializeField] protected GameMap m_gameMap;
+        [SerializeField] protected BodyController m_dogPrefab;
+        [SerializeField] protected Transform m_listDogContainer;
 
-        private HashSet<GameTile> listSelectedTile = new();
         private List<BodyController> listBody = new();
-        public List<GameTile> ListSelectedTile { get => listSelectedTile.ToList(); }
 
         public GameLevelData GameLevelData => m_gameLevelData;
-
-        public BodyController selectedDog { get; set; }
-
-        public Portal selectedPortal
-        {
-            get
-            {
-                var tile = listSelectedTile.ToList().Find(x => x.MapTileData.type == MapTileType.Portal);
-                if (tile != null)
-                {
-                    return tile.TryGetComponent<Portal>(out var portal) ? portal : null;
-                }
-                return null;
-            }
-        } 
 
         public GameMap GameMap => m_gameMap;
 
@@ -61,56 +44,9 @@ namespace Geckout
             }
         }
 
-
-
         private void Update()
         {
-            if(!GamePlayManager.Instance.IsEdittingLevel) return;
-
-            if(Input.GetMouseButtonUp(0))
-            {
-                var screenPoint = Input.mousePosition;
-                var ray = RectTransformUtility.ScreenPointToRay(Camera.main, screenPoint);
-                if(Physics.Raycast(ray, out var hitInfo,1000))
-                {
-                    if(hitInfo.transform.TryGetComponent<GameTile>(out var tile))
-                    {
-                        tile.SetSelected(true);
-                        listSelectedTile.Add(tile);
-                        return;
-                    }
-
-                    var dogBody = hitInfo.transform.GetComponentInParent<BodyController>();
-                    if(dogBody != null)
-                    {
-                        if (selectedDog != null)
-                        {
-                            selectedDog.SetSelected(false);
-                        }
-                        selectedDog = dogBody;
-                        dogBody.SetSelected(true);
-                    }
-                }
-            }
-
-            if(Input.GetMouseButtonUp(1))
-            {
-                var screenPoint = Input.mousePosition;
-                var ray = RectTransformUtility.ScreenPointToRay(Camera.main, screenPoint);
-                if (Physics.Raycast(ray, out var hitInfo, 1000))
-                {
-                    if (hitInfo.transform.TryGetComponent<GameTile>(out var tile))
-                    {
-                        tile.SetSelected(false);
-                        listSelectedTile.Remove(tile);
-                    }
-                }
-            }
-
-            if(Input.GetKeyDown(KeyCode.Escape))
-            {
-                ClearAllSelected();
-            }
+            
         }
 
         public BodyController SpawnDog(DogData dogData)
@@ -125,74 +61,5 @@ namespace Geckout
             return newDog;
         }
 
-        public void GenerateNewDog(DogData dogData)
-        {
-            m_gameLevelData.listDogData.Add(dogData);
-            dogData.listCoordinate = new List<Vector2Int>(listSelectedTile.Select(x => x.Coordinate).ToList());
-            SpawnDog(dogData);
-        }
-
-        public void DeleteSelectedDog()
-        {
-            if(selectedDog == null)
-            {
-                return;
-            }
-            GameLevelData.listDogData.Remove(selectedDog.DogData);
-            Destroy(selectedDog.gameObject);
-        }    
-
-        public void ClearAllSelected()
-        {
-            ClearAllSelectedTiles();
-            if (selectedDog != null)
-            {
-                selectedDog.SetSelected(false);
-                selectedDog = null;
-            }
-        }
-            
-
-        public void ClearAllSelectedTiles()
-        {
-            listSelectedTile.ToList().ForEach(x => x.SetSelected(false));
-            listSelectedTile.Clear();
-        }
-
-        public void AddNewPortal()
-        {
-            ChangeTypeSelectedTiles(MapTileType.Portal);
-            for(int i=0; i<listSelectedTile.Count; i++)
-            {
-                var tileSelected = listSelectedTile.ElementAt(i);
-                var newPortalData = new PortalData();
-                newPortalData.Coordinate = new Vector2Int(tileSelected.Coordinate.x, tileSelected.Coordinate.y);
-                var newPortal = tileSelected.gameObject.AddComponent<Portal>();
-                GameLevelData.listPortalData.Add(newPortalData);
-                newPortal.PortalData = newPortalData;
-            }
-        }
-
-        public void RemoveAllSelectedPortals()
-        {
-            var listPortal = listSelectedTile.ToList().FindAll(x => x.MapTileData.type == MapTileType.Portal);
-            for (int i = 0; i < listPortal.Count; i++)
-            {
-                var portalSelected = listPortal[i].GetComponent<Portal>();
-                GameLevelData.listPortalData.Remove(portalSelected.PortalData);
-                listPortal[i].SetTileType(MapTileType.Normal);
-            }
-            
-        }
-
-        public void ChangeTypeSelectedTiles(MapTileType tileType)
-        {
-            listSelectedTile.ToList().ForEach(x => x.SetTileType(tileType));
-        }
-
-        public void RotateSelectedTiles(int angle)
-        {
-            listSelectedTile.ToList().ForEach(x => x.RotateBy(angle));
-        }
     }
 }
