@@ -1,11 +1,9 @@
 using System;
 using System.Collections;
-﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AYellowpaper.SerializedCollections;
 using Geckout.Data;
-using Geckout.Generals;
 using UnityEngine;
 using UnityEngine.EventSystems;
 

@@ -11,8 +11,8 @@ namespace Geckout
         [SerializeField] private Camera gameCamera;
         [SerializeField] private LayerMask tileLayerMask = 1;
         [SerializeField] private LayerMask segmentLayer = 7;
-        [SerializeField] private bool enableDebugLogs = true;
-        [SerializeField] private float pathUpdateInterval = 0.03f;
+        [SerializeField] private bool enableDebugLogs = false;
+        [SerializeField] private float pathUpdateInterval = 0.02f;
 
         private BodyController bodyController;
         private bool isDragging = false;
@@ -72,7 +72,7 @@ namespace Geckout
             var directGecko = GetBodyControllerByMouse(screenPosition);
             if (directGecko != null)
             {
-                HandleDirectGeckoTouch(directGecko, tileCoord.Value);
+                HandleDirectBodyTouch(directGecko, tileCoord.Value);
                 return;
             }
 
@@ -97,14 +97,14 @@ namespace Geckout
             }
         }
 
-        void HandleDirectGeckoTouch(BodyController gecko, Vector2Int tileCoord)
+        void HandleDirectBodyTouch(BodyController gecko, Vector2Int tileCoord)
         {
             Vector2Int headCoord = gecko.Segments[0].Coordinate;
             Vector2Int tailCoord = gecko.Segments[gecko.Segments.Count - 1].Coordinate;
 
             DebugLog($"Gecko head at: {headCoord}, tail at: {tailCoord}");
 
-            // 🔒 BLOCK: đang move theo HEAD thì không cho grab TAIL và ngược lại
+            // BLOCK: đang move theo HEAD thì không cho grab TAIL và ngược lại
             if (gecko.IsMoving)
             {
                 if (gecko.controlAnchor == BodyController.ControlAnchor.Head && tileCoord == tailCoord)
@@ -144,7 +144,7 @@ namespace Geckout
                 BodyController.ControlAnchor selectedAnchor = useHead ?
                     BodyController.ControlAnchor.Head : BodyController.ControlAnchor.Tail;
 
-                // 🔒 BLOCK: kiểm tra movement conflict cho body segment touch
+                // BLOCK: kiểm tra movement conflict cho body segment touch
                 if (gecko.IsMoving)
                 {
                     if ((gecko.controlAnchor == BodyController.ControlAnchor.Head && selectedAnchor == BodyController.ControlAnchor.Tail) ||
