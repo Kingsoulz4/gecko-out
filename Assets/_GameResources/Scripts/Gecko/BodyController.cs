@@ -20,8 +20,10 @@ namespace Geckout
         }
 
         [SerializeField] private int length = 3;
-        [SerializeField] private float moveSpeed = 6f;
-        [SerializeField] private float minSampleStep = 0.05f;
+        [SerializeField] private float moveSpeed = 18f;
+        [SerializeField] private float lowSpeed = 10f;
+        [SerializeField] private float lowDistance = 2f;
+        [SerializeField] private float minSampleStep = 0.02f;
         [SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
         [SerializeField] private Segment headPrefab;
         [SerializeField] private Segment segment;
@@ -241,6 +243,17 @@ namespace Geckout
         {
             if (worldPath.Count < 2) yield break;
 
+            float totalPathDistance = 0f;
+
+            for (int i = 0; i < worldPath.Count - 1; i++)
+            {
+                totalPathDistance += Vector3.Distance(worldPath[i], worldPath[i + 1]);
+            }
+
+            Debug.Log($"Moving along path with {worldPath.Count} waypoints, total distance: {totalPathDistance}");
+
+            float currentMoveSpeed = totalPathDistance <= lowDistance ? lowSpeed : moveSpeed;
+
             var orderedSegments = GetOrderedSegments();
             Vector3 lastAnchorPos = orderedSegments[0].transform.position;
 
@@ -252,8 +265,7 @@ namespace Geckout
                 Vector3 anchorPos;
 
                 // Precise movement towards target waypoint
-                float frameSpeed = moveSpeed * Time.deltaTime;
-                Vector3 intendedPos = Vector3.MoveTowards(lastAnchorPos, currentTarget, frameSpeed);
+                Vector3 intendedPos = Vector3.MoveTowards(lastAnchorPos, currentTarget, currentMoveSpeed * Time.deltaTime);
 
                 // Clamp theo lưới (head/tail đều dùng được)
                 if (gridClamper != null)
