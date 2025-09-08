@@ -179,7 +179,7 @@ MonoBehaviour:
     - Key: 3
       Value: {fileID: 392165676572305925}
   m_displayObject: {fileID: 4136399553105792231}
-  restoreDelay: 0.05
+  restoreDelay: 0.1
 --- !u!65 &1670932677207146501
 BoxCollider:
   m_ObjectHideFlags: 0
