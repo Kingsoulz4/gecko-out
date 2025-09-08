@@ -6,29 +6,15 @@ namespace Geckout
 {
     public enum SegmentType
     {
-        HEAD,
-        BODY,
-        TAIL
+        HEAD = 0,
+        BODY = 1,
+        TAIL = 2
     }
 
     public class Segment : MonoBehaviour
     {
         public SegmentType segmentType = SegmentType.BODY;
         private GameTile _currentTile;
-
-        // Movement data
-        private Vector3 _startPosition;
-        private Vector3 _targetPosition;
-        private Vector2Int _startCoordinate;
-        private Vector2Int _targetCoordinate;
-
-        // Turn detection
-        private Vector2Int _previousMoveDirection;
-        private Vector2Int _currentTurnDirection;
-
-
-        // Movement state
-        private bool _isInMovement = false;
 
         public Segment PrevSegment { private set; get; }
         public Segment NextSegment { private set; get; }
@@ -45,7 +31,7 @@ namespace Geckout
         {
             get
             {
-                if(levelGame == null) levelGame = GetComponentInParent<LevelGame>(); 
+                if (levelGame == null) levelGame = GetComponentInParent<LevelGame>();
                 return levelGame;
             }
         }
@@ -63,14 +49,14 @@ namespace Geckout
 
         private void CheckMoveToPortal()
         {
-            if(segmentType != SegmentType.HEAD && segmentType != SegmentType.TAIL)
+            if (segmentType != SegmentType.HEAD && segmentType != SegmentType.TAIL)
             {
                 return;
             }
 
             if (boxCollider == null) return;
 
-            var centerBox = boxCollider.transform.TransformPoint(boxCollider.center); 
+            var centerBox = boxCollider.transform.TransformPoint(boxCollider.center);
 
             var listBoxOverlap = Physics.OverlapBox(
                 centerBox,
@@ -83,10 +69,10 @@ namespace Geckout
             //    Debug.Log("Collide Many Box Here");
             //}
 
-            foreach(var boxOverlap in listBoxOverlap)
+            foreach (var boxOverlap in listBoxOverlap)
             {
                 var portal = boxOverlap.GetComponent<Portal>();
-                if(portal != null && portal.PortalData.listColor.First() == Controller.DogData.listColor.First())
+                if (portal != null && portal.PortalData.listColor.First() == Controller.DogData.listColor.First())
                 {
                     Controller.MoveToPortal(portal);
                 }
@@ -140,10 +126,6 @@ namespace Geckout
                 _currentTile = tile;
                 Coordinate = coordinate;
                 transform.position = tile.transform.position;
-
-                _startPosition = transform.position;
-                _startCoordinate = coordinate;
-                _isInMovement = false;
             }
             else
             {
@@ -160,13 +142,13 @@ namespace Geckout
             }
         }
 
-        private void OnDrawGizmos()
-        {
-            if (_isInMovement) return;
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(_startPosition, 0.1f);
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(_targetPosition, 0.1f);
-        }
+        //private void OnDrawGizmos()
+        //{
+        //    if (_isInMovement) return;
+        //    Gizmos.color = Color.green;
+        //    Gizmos.DrawWireSphere(_startPosition, 0.1f);
+        //    Gizmos.color = Color.red;
+        //    Gizmos.DrawWireSphere(_targetPosition, 0.1f);
+        //}
     }
 }

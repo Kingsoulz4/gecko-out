@@ -8,8 +8,8 @@ namespace Geckout
         [Header("Grid Clamping Settings")]
         [SerializeField] private float tileCenterThreshold = 0.02f;
         [SerializeField] private bool enableDebugLogs = false;
+        [SerializeField] private BodyController bodyController;
 
-        private BodyController bodyController;
         private List<Vector2Int> currentPath = new List<Vector2Int>();
         private int currentWaypointIndex = 0;
         private Vector2Int currentDirection = Vector2Int.zero;
@@ -18,15 +18,6 @@ namespace Geckout
         public bool IsAtTileCenter { get; private set; }
         public Vector2Int CurrentDirection { get => currentDirection; set => currentDirection = value; }
         public float TileCenterThreshold { get => tileCenterThreshold; set => tileCenterThreshold = value; }
-
-        void Start()
-        {
-            bodyController = GetComponent<BodyController>();
-            if (bodyController == null)
-            {
-                enabled = false;
-            }
-        }
 
         private List<Vector2Int> queuedPath = null;
 
@@ -137,7 +128,7 @@ namespace Geckout
                 hasLockedTile = true;
             }
 
-            // Kiểm tra đứng giữa tâm DỰA TRÊN TILE ĐÃ KHÓA
+            // Kiểm tra đứng giữa tâm dựa trên tile đã khóa
             CheckTileCenterAlignment(currentControllingPos, lockedTileCoord);
 
             if (IsAtTileCenter)

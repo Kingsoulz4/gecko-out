@@ -37,11 +37,6 @@ namespace Geckout
             {
                 bodyController.OnStartMove += OnStartMoveHandle;
                 bodyController.OnEndMove += OnEndMoveHandle;
-                if (bodyController?.Segments == null)
-                {
-                    Debug.LogWarning("Cannot initialize - no segments!");
-                    return;
-                }
 
                 int segmentCount = bodyController.Segments.Count;
                 lastGridPositions = new Vector2Int[segmentCount];
