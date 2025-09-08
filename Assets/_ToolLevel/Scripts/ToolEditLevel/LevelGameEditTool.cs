@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Geckout
 {
-    public partial class LevelGameEditTool: LevelManager
+    public partial class LevelGameEditTool: LevelController
     {
         private HashSet<GameTile> listSelectedTile = new();
         private List<BodyController> listBody = new();

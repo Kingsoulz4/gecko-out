@@ -143,7 +143,8 @@ namespace Geckout.Data
 
     public enum PortalType
     {
-        Normal,
+        Normal = 0,
+        Ice = 1,
     }
 
     [Serializable]

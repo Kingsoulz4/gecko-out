@@ -20,13 +20,13 @@ namespace Geckout
         [SerializeField] private SerializedDictionary<MapTileType, GameObject> m_tilesTypeDisplay;
         [SerializeField] private GameObject m_displayObject;
 
-        private LevelManager levelGame;
+        private LevelController levelGame;
 
-        private LevelManager LevelGame
+        private LevelController LevelGame
         {
             get
             {
-                if (levelGame == null) levelGame = GetComponentInParent<LevelManager>();
+                if (levelGame == null) levelGame = GetComponentInParent<LevelController>();
                 return levelGame;
             }
         }

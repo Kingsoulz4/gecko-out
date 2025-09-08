@@ -60,7 +60,7 @@ namespace Geckout
 
             HideAllTabs();
 
-            GamePlayManager.Instance.IsEdittingLevel = true;
+            LevelManager.Instance.IsEdittingLevel = true;
             Utils.SetExistingGameViewSize(1920, 1080);
         }
 
@@ -137,15 +137,15 @@ namespace Geckout
 
         private void OnClickTest()
         {
-            GamePlayManager.Instance.IsEdittingLevel = false;
+            LevelManager.Instance.IsEdittingLevel = false;
             if (LevelGame != null)
             {
                 LevelGame.ClearAllSelected();
             }
             Utils.SetExistingGameViewSize(1080, 1920);
             SceneManager.LoadScene("GameSceneTestLevel");
-            GamePlayManager.Instance.CurrentLevelNum = int.Parse(m_inputLevelNum.text);
-            GamePlayManager.Instance.CurrentLevelIndex = int.Parse(m_inputLevelIndex.text);
+            LevelManager.Instance.CurrentLevelNum = int.Parse(m_inputLevelNum.text);
+            LevelManager.Instance.CurrentLevelIndex = int.Parse(m_inputLevelIndex.text);
            
         }
 
@@ -235,7 +235,7 @@ namespace Geckout
 
         private void OnClickDesign()
         {
-            GamePlayManager.Instance.IsEdittingLevel = true;
+            LevelManager.Instance.IsEdittingLevel = true;
         }
 
         private void HideAllTabs()

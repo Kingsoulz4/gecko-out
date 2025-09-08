@@ -18,12 +18,12 @@ namespace Geckout
 
         private void OnEnable()
         {
-            m_textLevel.text = $"Level {GamePlayManager.Instance.CurrentLevelNum}";
+            m_textLevel.text = $"Level {LevelManager.Instance.CurrentLevelNum}";
         }
 
         private void OnClickPlay()
         {
-            GamePlayManager.Instance.StartCurrentLevel();
+            LevelManager.Instance.StartCurrentLevel();
             gameObject.SetActive(false);
         }
     }

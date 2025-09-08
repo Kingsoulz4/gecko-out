@@ -35,7 +35,7 @@ namespace Geckout
 
         void Update()
         {
-            if(!GamePlayManager.Instance.IsEdittingLevel)
+            if(!LevelManager.Instance.IsEdittingLevel)
             HandleTouchInput();
         }
 
@@ -166,7 +166,7 @@ namespace Geckout
             FindAdjacentGeckoAnchor(Vector2Int targetTile)
         {
             // Tìm tất cả gecko trong scene
-            List<BodyController> bodies = GamePlayManager.Instance.LevelGame.ListBody;
+            List<BodyController> bodies = LevelManager.Instance.LevelGame.ListBody;
 
             foreach (var body in bodies)
             {
