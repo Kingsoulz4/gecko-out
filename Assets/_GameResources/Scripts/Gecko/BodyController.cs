@@ -170,11 +170,6 @@ namespace Geckout
                 return Segments.AsEnumerable().Reverse().ToList();
         }
 
-        public List<Segment> GetOrderedSegmentsForTileUpdate()
-        {
-            return GetOrderedSegments();
-        }
-
         public void SetMovementPath(List<Vector2Int> path)
         {
             if (path == null || path.Count == 0) return;
