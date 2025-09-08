@@ -3,29 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Geckout
 {
     public class UIGamePlay : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI m_textLevel;
-        [SerializeField] private Button m_buttonPlay;
+        [SerializeField] private Button m_designLevel;
 
         private void Awake()
         {
-            m_buttonPlay.onClick.AddListener(OnClickPlay);
+            m_designLevel.onClick.AddListener(OnClickDesignLevel);
         }
 
-        private void OnEnable()
+        private void OnClickDesignLevel()
         {
-            m_textLevel.text = $"Level {GamePlayManager.Instance.CurrentLevelNum}";
-        }
-
-        private void OnClickPlay()
-        {
-            GamePlayManager.Instance.StartCurrentLevel();
-            gameObject.SetActive(false);
+            SceneManager.LoadScene("ToolEditLevel");
         }
     }
 }

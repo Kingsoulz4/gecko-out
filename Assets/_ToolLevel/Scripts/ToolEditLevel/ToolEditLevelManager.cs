@@ -61,6 +61,7 @@ namespace Geckout
             HideAllTabs();
 
             GamePlayManager.Instance.IsEdittingLevel = true;
+            Utils.SetExistingGameViewSize(1920, 1080);
         }
 
         private void Update()
@@ -80,24 +81,23 @@ namespace Geckout
 
         private void OnEditedMapHeight(string arg0)
         {
-            throw new NotImplementedException();
         }
 
         private void OnEditedMapWidth(string arg0)
         {
-            throw new NotImplementedException();
         }
 
-        private void OnClickEditBoxes()
+        public void OnClickEditBoxes()
         {
             HideAllTabs();
             m_buttonEditBoxes.GetComponent<ButtonToolTab>().SetSelected(true);
             m_editBoxesTab.gameObject.SetActive(true);
         }
 
-        private void OnClickEditPortals()
+        public void OnClickEditPortals()
         {
             HideAllTabs();
+            
             m_buttonEditPortals.GetComponent<ButtonToolTab>().SetSelected(true);
             m_editPortalTab.gameObject.SetActive(true);
             m_editPortalTab.LevelGame = LevelGame;
@@ -111,7 +111,7 @@ namespace Geckout
             }
         }
 
-        private void OnClickDesignDog()
+        public void OnClickDesignDog()
         {
             HideAllTabs();
             m_buttonDesignDog.GetComponent<ButtonToolTab>().SetSelected(true);
@@ -127,7 +127,7 @@ namespace Geckout
             }
         }
 
-        private void OnClickEditWalls()
+        public void OnClickEditWalls()
         {
             HideAllTabs();
             m_buttonEditWalls.GetComponent<ButtonToolTab>().SetSelected(true);
@@ -138,10 +138,15 @@ namespace Geckout
         private void OnClickTest()
         {
             GamePlayManager.Instance.IsEdittingLevel = false;
-            LevelGame.ClearAllSelected();
+            if (LevelGame != null)
+            {
+                LevelGame.ClearAllSelected();
+            }
+            Utils.SetExistingGameViewSize(1080, 1920);
             SceneManager.LoadScene("GameSceneTestLevel");
             GamePlayManager.Instance.CurrentLevelNum = int.Parse(m_inputLevelNum.text);
             GamePlayManager.Instance.CurrentLevelIndex = int.Parse(m_inputLevelIndex.text);
+           
         }
 
         private void OnClickSaveLevel()
@@ -175,6 +180,7 @@ namespace Geckout
                     levelData.mapSize = new Vector2Int(width, height);
                 }
             }
+
 
             levelData.type = (LevelType)m_dropLevelType.value;
 
@@ -246,7 +252,7 @@ namespace Geckout
 
             if (LevelGame != null)
             {
-                LevelGame.ClearAllSelected();
+                //LevelGame.ClearAllSelected();
             }
         }
     }

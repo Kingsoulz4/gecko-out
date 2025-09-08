@@ -10,7 +10,7 @@ using UnityEngine.PlayerLoop;
 
 namespace Geckout
 {
-    public class BodyController : MonoBehaviour
+    public partial class BodyController : MonoBehaviour
     {
         public enum ControlAnchor
         {
@@ -32,8 +32,7 @@ namespace Geckout
         [SerializeField] private GridHeadClamper gridClamper;
         public ControlAnchor controlAnchor = ControlAnchor.Head;
 
-        [Header("Tool")]
-        [SerializeField] private Outline m_outlineSelected;
+
 
         // Movement events
         public Action OnStartMove;
@@ -67,20 +66,7 @@ namespace Geckout
         public DogData DogData { get; set; }
         public int SubLength => subLength;
 
-        private Outline OutlineSelected
-        {
-            get
-            {
-                if(m_outlineSelected == null)
-                {
-                    m_outlineSelected = gameObject.AddComponent<Outline>();
-                    m_outlineSelected.OutlineColor = Color.red;
-                    m_outlineSelected.OutlineWidth = 8;
-                    
-                }
-                return m_outlineSelected;
-            }
-        }
+
 
         private void Start()
         {
@@ -338,21 +324,6 @@ namespace Geckout
             occupiedTileController.ForceRestoreAll();
             GamePlayManager.Instance.LevelGame.OnBodyMoveToHole(this);
         }
-
-
-         #region Tool
-
-        public void SetSelected(bool selected)
-        {
-            OutlineSelected.enabled = selected;
-        }
-
-        public void UpdateColor()
-        {
-            _bodyRenderer.UpdateDogColor();
-        }    
-
-        #endregion
 
         #region History system
         private float RequiredHistoryLength()

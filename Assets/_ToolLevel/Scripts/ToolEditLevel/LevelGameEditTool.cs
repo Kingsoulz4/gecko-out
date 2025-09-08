@@ -31,10 +31,21 @@ namespace Geckout
             }
         }
 
+        private ToolEditLevelManager toolEditLevelManager;
+        public ToolEditLevelManager ToolEditLevelManager
+        {
+            get
+            {
+                if(toolEditLevelManager == null)
+                {
+                    toolEditLevelManager = FindObjectOfType<ToolEditLevelManager>();
+                }
+                return toolEditLevelManager;
+            }
+        }
+
         private void Update()
         {
-            if (!GamePlayManager.Instance.IsEdittingLevel) return;
-
             if (Input.GetMouseButton(0))
             {
                 var screenPoint = Input.mousePosition;
@@ -43,8 +54,7 @@ namespace Geckout
                 {
                     if (hitInfo.transform.TryGetComponent<GameTile>(out var tile))
                     {
-                        tile.SetSelected(true);
-                        listSelectedTile.Add(tile);
+                        SelectTile(tile);
                         return;
                     }
 
@@ -78,14 +88,37 @@ namespace Geckout
             }
         }
 
+        public void SelectTile(GameTile tile)
+        {
+            if(tile.MapTileData.type == MapTileType.Portal)
+            {
+                ClearSelectedDog();
+                ToolEditLevelManager.OnClickEditPortals();
+            }
+            else if(tile.MapTileData.type == MapTileType.Normal)
+            {
+
+            }
+            else
+            {
+                ClearSelectedDog();
+                ToolEditLevelManager.OnClickEditWalls();
+            }
+
+            tile.SetSelected(true);
+            listSelectedTile.Add(tile);
+        }
+
         public void SelectDog(BodyController dogBody)
         {
             if (selectedDog != null)
             {
                 selectedDog.SetSelected(false);
             }
+            ClearAllSelectedTiles();
             selectedDog = dogBody;
             dogBody.SetSelected(true);
+            ToolEditLevelManager.OnClickDesignDog();
         }
 
         public BodyController GenerateNewDog(DogData dogData)
@@ -134,6 +167,11 @@ namespace Geckout
         public void ClearAllSelected()
         {
             ClearAllSelectedTiles();
+            ClearSelectedDog();
+        }
+
+        public void ClearSelectedDog()
+        {
             if (selectedDog != null)
             {
                 selectedDog.SetSelected(false);
