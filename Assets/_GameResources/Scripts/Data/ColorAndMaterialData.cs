@@ -9,10 +9,10 @@ namespace Geckout
     [CreateAssetMenu(fileName = "ColorAndMaterialData", menuName = "ScriptableObjects/ColorAndMaterialData", order = 1)]
     public class ColorAndMaterialData : ScriptableObject
     {
-        public SerializedDictionary<ColorList, Color> listColor;
+        public SerializedDictionary<ColorType, Color> listColor;
 
-        public SerializedDictionary<ColorList, Material> listDogMaterial;
+        public SerializedDictionary<ColorType, Material> listDogMaterial;
 
-        public SerializedDictionary<ColorList, Material> listPortalMaterial;
+        public SerializedDictionary<ColorType, Material> listPortalMaterial;
     }
 }

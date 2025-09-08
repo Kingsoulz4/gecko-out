@@ -37,11 +37,11 @@ namespace Geckout
         [SerializeField] private EditPortalsTab m_editPortalTab;
         [SerializeField] private EditBoxesTab m_editBoxesTab;
 
-        [SerializeField] private LevelGame m_levelRootPrefab;
+        [SerializeField] private LevelGameEditTool m_levelRootPrefab;
 
         public GameLevelData GameLevelData { get; set; }
 
-        public LevelGame LevelGame { get; set; }
+        public LevelGameEditTool LevelGame { get; set; }
 
         private void Awake()
         {
@@ -57,6 +57,25 @@ namespace Geckout
 
             m_inputMapWidth.onSubmit.AddListener(OnEditedMapWidth);
             m_inputMapHeight.onSubmit.AddListener(OnEditedMapHeight);
+
+            HideAllTabs();
+
+            GamePlayManager.Instance.IsEdittingLevel = true;
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Delete))
+            {
+                OnPressDelete();
+            }
+        }
+
+        private void OnPressDelete()
+        {
+            LevelGame.DeleteSelectedDog();
+            LevelGame.ChangeTypeSelectedTiles(MapTileType.Normal);
+            HideAllTabs();
         }
 
         private void OnEditedMapHeight(string arg0)
@@ -72,12 +91,14 @@ namespace Geckout
         private void OnClickEditBoxes()
         {
             HideAllTabs();
+            m_buttonEditBoxes.GetComponent<ButtonToolTab>().SetSelected(true);
             m_editBoxesTab.gameObject.SetActive(true);
         }
 
         private void OnClickEditPortals()
         {
             HideAllTabs();
+            m_buttonEditPortals.GetComponent<ButtonToolTab>().SetSelected(true);
             m_editPortalTab.gameObject.SetActive(true);
             m_editPortalTab.LevelGame = LevelGame;
             if (LevelGame != null && LevelGame.selectedPortal != null)
@@ -93,6 +114,7 @@ namespace Geckout
         private void OnClickDesignDog()
         {
             HideAllTabs();
+            m_buttonDesignDog.GetComponent<ButtonToolTab>().SetSelected(true);
             m_designDogTab.gameObject.SetActive(true);
             m_designDogTab.LevelGame = LevelGame;
             if (LevelGame != null && LevelGame.selectedDog != null)
@@ -108,6 +130,7 @@ namespace Geckout
         private void OnClickEditWalls()
         {
             HideAllTabs();
+            m_buttonEditWalls.GetComponent<ButtonToolTab>().SetSelected(true);
             m_editWallsTab.gameObject.SetActive(true);
             m_editWallsTab.LevelGame = LevelGame;
         }
@@ -166,7 +189,10 @@ namespace Geckout
         private GameLevelData CreateNewLevelData(int level, int index)
         {
             // Create an instance of MyScriptableObject
-            var newLevelData = ScriptableObject.CreateInstance<GameLevelData>();
+            GameLevelData newLevelData = new();
+
+#if UNITY_EDITOR
+            newLevelData = ScriptableObject.CreateInstance<GameLevelData>();
 
             // Assign values to its properties
             newLevelData.name = $"Level{level}";
@@ -196,9 +222,8 @@ namespace Geckout
             // Optionally, select the newly created asset in the Project window
             EditorUtility.FocusProjectWindow();
             Selection.activeObject = newLevelData;
+#endif
 
-            Debug.Log("MyScriptableObject created at: " + path);
-        
             return newLevelData;
         }
 
@@ -213,6 +238,16 @@ namespace Geckout
             m_designDogTab.gameObject.SetActive(false);
             m_editPortalTab.gameObject.SetActive(false);
             m_editBoxesTab.gameObject.SetActive(false);
+
+            m_buttonEditWalls.GetComponent<ButtonToolTab>().SetSelected(false);
+            m_buttonEditPortals.GetComponent<ButtonToolTab>().SetSelected(false);   
+            m_buttonEditBoxes.GetComponent<ButtonToolTab>().SetSelected(false);
+            m_buttonDesignDog.GetComponent<ButtonToolTab>().SetSelected(false);
+
+            if (LevelGame != null)
+            {
+                LevelGame.ClearAllSelected();
+            }
         }
     }
 }

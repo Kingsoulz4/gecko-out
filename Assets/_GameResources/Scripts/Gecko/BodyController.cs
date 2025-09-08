@@ -68,6 +68,21 @@ namespace Geckout
         public DogData DogData { get; set; }
         public int SubLength => subLength;
 
+        private Outline OutlineSelected
+        {
+            get
+            {
+                if(m_outlineSelected == null)
+                {
+                    m_outlineSelected = gameObject.AddComponent<Outline>();
+                    m_outlineSelected.OutlineColor = Color.red;
+                    m_outlineSelected.OutlineWidth = 8;
+                    
+                }
+                return m_outlineSelected;
+            }
+        }
+
         private void Start()
         {
             //Init();
@@ -330,7 +345,7 @@ namespace Geckout
 
         public void SetSelected(bool selected)
         {
-            m_outlineSelected.enabled = selected;
+            OutlineSelected.enabled = selected;
         }
 
         public void UpdateColor()

@@ -96,7 +96,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7072393982718881304}
-  - component: {fileID: 4424269172292526087}
+  - component: {fileID: -1383312017683571834}
   m_Layer: 0
   m_Name: LevelOriginal
   m_TagString: Untagged
@@ -121,7 +121,7 @@ Transform:
   - {fileID: 2062647947501416683}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4424269172292526087
+--- !u!114 &-1383312017683571834
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130,10 +130,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7854088454610840849}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2546982a9919eaa4da89cc6e2457177a, type: 3}
+  m_Script: {fileID: 11500000, guid: d1ac201542c01d842b7e181e23376b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_gameLevelData: {fileID: 11400000, guid: 871e6911b67d7c14487ab702155e9f62, type: 2}
+  m_gameLevelData: {fileID: 0}
   m_gameMap: {fileID: 8946495759869636908}
   m_dogPrefab: {fileID: 3655932188227585431, guid: 07f41c8bbaf563446979281513016b18, type: 3}
   m_listDogContainer: {fileID: 8024906829326578474}

@@ -23,6 +23,11 @@ namespace Geckout
             UpdateVisual();
         }
 
+        public void Initialize(PortalData portalData)
+        {
+            PortalData = portalData;
+        }
+
         public void UpdateVisual()
         {
             bodyPartColorChangers.ForEach(x => x.UpdateColor(PortalData.listColor.First()));

@@ -15,7 +15,7 @@ namespace Geckout
         [SerializeField] private Transform m_listColorPickContainer;
         [SerializeField] private Button m_colorPickPrefab;
 
-        public LevelGame LevelGame { get; set; }
+        public LevelGameEditTool LevelGame { get; set; }
 
         private int currentSelectedColorIndex = 0;
 
@@ -117,9 +117,9 @@ namespace Geckout
 
             if (PortalData.listColor.Count <= index)
             {
-                PortalData.listColor.Add(ColorList.Red);
+                PortalData.listColor.Add(ColorType.Red);
                 m_listButtonColorPicked[index].SetEmpty(false);
-                m_listButtonColorPicked[index].SetColor(listColorData[ColorList.Red]);
+                m_listButtonColorPicked[index].SetColor(listColorData[ColorType.Red]);
             }
             else
             {

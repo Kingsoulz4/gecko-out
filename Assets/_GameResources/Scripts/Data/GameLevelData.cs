@@ -7,6 +7,7 @@ namespace Geckout.Data
 {
     public enum LevelType
     {
+        EASY,
         NORMAL,
         HARD,
         SUPER_HARD
@@ -77,7 +78,7 @@ namespace Geckout.Data
 
         private void OnValidate()
         {
-            if(colorAndMaterialData == null)
+            if (colorAndMaterialData == null)
             {
                 colorAndMaterialData = Resources.Load<ColorAndMaterialData>("ColorsAndMaterials/ColorAndMaterialData");
             }
@@ -98,23 +99,23 @@ namespace Geckout.Data
         }
     }
 
-    public enum ColorList
+    public enum ColorType
     {
-        Red,
-        Orange,
-        Yellow,
-        Green,
-        Blue,
-        Violet,
-        Pink,
-        Brown,
-        White,
-        Black,
-        Cyan,
-        Grey,
-        Purple,
-        BabyPink,
-        RedWine
+        Red = 0,
+        Orange = 1,
+        Yellow = 2,
+        Green = 3,
+        Blue = 4,
+        Violet = 5,
+        Pink = 6,
+        Brown = 7,
+        White = 8,
+        Black = 9,
+        Cyan = 10,
+        Grey = 11,
+        Purple = 12,
+        BabyPink = 13,
+        RedWine = 14
     }
 
     public enum MapTileType
@@ -150,14 +151,14 @@ namespace Geckout.Data
     {
         public PortalType portalType;
         public Vector2Int Coordinate;
-        public List<ColorList> listColor = new() { ColorList.Red };
+        public List<ColorType> listColor = new() { ColorType.Red };
     }
 
     [Serializable]
     public class DogData
     {
         public DogType dogType;
-        public List<ColorList> listColor = new() { ColorList.Red};
+        public List<ColorType> listColor = new() { ColorType.Red };
         public List<Vector2Int> listCoordinate = new();
 
         public DogData()
@@ -166,7 +167,7 @@ namespace Geckout.Data
         public DogData(DogData dogData)
         {
             this.dogType = dogData.dogType;
-            this.listColor = new List<ColorList>(dogData.listColor);
+            this.listColor = new List<ColorType>(dogData.listColor);
             this.listCoordinate = new List<Vector2Int>(dogData.listCoordinate);
         }
     }
@@ -180,6 +181,6 @@ namespace Geckout.Data
     }
 
 
-    
-    
+
+
 }

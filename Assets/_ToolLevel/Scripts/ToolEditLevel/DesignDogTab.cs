@@ -15,7 +15,7 @@ namespace Geckout
         [SerializeField] private Button m_colorPickPrefab;
         [SerializeField] private List<ButtonColorPicked> m_listButtonColorPicked;
 
-        public LevelGame LevelGame { get; set; }
+        public LevelGameEditTool LevelGame { get; set; }
 
         private int currentSelectedColorIndex = 0;
 
@@ -98,12 +98,17 @@ namespace Geckout
         private void OnClickDelete()
         {
             LevelGame.DeleteSelectedDog();
+            LevelGame.ClearAllSelectedTiles();
         }
 
         private void OnClickGenerate()
         {
             var newDogData = new DogData(DogData);
-            LevelGame.GenerateNewDog(newDogData);
+            var newDog = LevelGame.GenerateNewDog(newDogData);
+            LevelGame.SelectDog(newDog);
+            UpdateUI(newDogData);
+            LevelGame.ClearAllSelectedTiles();
+
         }
 
         private void OnClickSelectColorPicked(int index)
@@ -112,9 +117,9 @@ namespace Geckout
 
             if (DogData.listColor.Count <= index)
             {
-                DogData.listColor.Add(ColorList.Red);
+                DogData.listColor.Add(ColorType.Red);
                 m_listButtonColorPicked[index].SetEmpty(false);
-                m_listButtonColorPicked[index].SetColor(listColorData[ColorList.Red]);
+                m_listButtonColorPicked[index].SetColor(listColorData[ColorType.Red]);
             }
             else
             {
