@@ -25,17 +25,6 @@ namespace Geckout
 
         private BoxCollider boxCollider;
 
-        private LevelGame levelGame;
-
-        private LevelGame LevelGame
-        {
-            get
-            {
-                if (levelGame == null) levelGame = GetComponentInParent<LevelGame>();
-                return levelGame;
-            }
-        }
-
         private void Awake()
         {
             boxCollider = GetComponent<BoxCollider>();
@@ -121,7 +110,7 @@ namespace Geckout
 
         public void InitCoordinate(Vector2Int coordinate)
         {
-            if (LevelGame.GameMap.TryGetTileAtCoord(coordinate, out var tile))
+            if (GameMap.Instance.TryGetTileAtCoord(coordinate, out var tile))
             {
                 _currentTile = tile;
                 Coordinate = coordinate;

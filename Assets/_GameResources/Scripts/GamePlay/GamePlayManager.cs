@@ -7,12 +7,12 @@ namespace Geckout
 {
     public class GamePlayManager : SingletonDontDestroyMono<GamePlayManager>, IGameState
     {
-        [SerializeField] private LevelGame m_levelGameOriginal;
+        [SerializeField] private LevelManager m_levelGameOriginal;
 
         public bool IsEdittingLevel { get; set; } = false;
 
-        private LevelGame levelGame;
-        public LevelGame LevelGame { 
+        private LevelManager levelGame;
+        public LevelManager LevelGame { 
             get
             {
                 if(levelGame == null)

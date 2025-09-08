@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Geckout
 {
-    public partial class LevelGame : MonoBehaviour
+    public partial class LevelManager : MonoBehaviour
     {
         [SerializeField] protected GameLevelData m_gameLevelData;
         [SerializeField] protected GameMap m_gameMap;
