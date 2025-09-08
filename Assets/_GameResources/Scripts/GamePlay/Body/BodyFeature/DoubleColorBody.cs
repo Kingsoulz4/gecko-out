@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Geckout
 {
-    public class HiddenBody : BodyController
+    public class DoubleColorBody : BodyController
     {
-       
+        
     }
 }
