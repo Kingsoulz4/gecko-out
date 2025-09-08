@@ -9,10 +9,10 @@ namespace Geckout
     public class BodyPartColorChanger : MonoBehaviour
     {
         [SerializeField] private Renderer m_meshRenderer;
-        [SerializeField] private SerializedDictionary<ColorList, Material> m_listMaterial;
+        [SerializeField] private SerializedDictionary<ColorType, Material> m_listMaterial;
 
 
-        public void UpdateColor(ColorList colorType)
+        public void UpdateColor(ColorType colorType)
         {
             m_meshRenderer.material = m_listMaterial[colorType];
         }
