@@ -16,7 +16,7 @@ namespace Geckout
                 else
                     GameObject.DestroyImmediate(parent.GetChild(i).gameObject);
 #else
-            GameObject.DestroyImmediate(transform.GetChild(i).gameObject);
+            GameObject.DestroyImmediate(parent.GetChild(i).gameObject);
 #endif
             }
         }

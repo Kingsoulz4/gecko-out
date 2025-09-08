@@ -217,16 +217,17 @@ namespace Geckout
                     Vector3 pos = new Vector3(c.x * cellSize, c.y * cellSize, 0);
                     pos -= centerOffset; // center grid
 
+                    GameTile obj;
 #if UNITY_EDITOR
-                    var obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, _tilesContainer));
+                    obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, _tilesContainer));
+                    
+#else
+                    obj = Instantiate(prefab, pos, Quaternion.identity, _tilesContainer);
+#endif
                     obj.SetCoordinate(c.x, c.y);
                     obj.transform.localPosition = pos;
                     obj.transform.localScale = Vector3.one * cubeSize;
                     obj.name = $"Tile_{c.x}_{c.y}_{tile.type}";
-#else
-            GameObject obj = Instantiate(prefab, pos, Quaternion.identity, root);
-            obj.transform.localScale = Vector3.one * cubeSize;
-#endif
                     obj.Initialize(tile);
 
                 }
@@ -270,16 +271,17 @@ namespace Geckout
                 Vector3 pos = new Vector3(c.x * cellSize, c.y * cellSize, 0);
                 pos -= centerOffset; // center grid
 
+                GameTile obj;
 #if UNITY_EDITOR
-                var obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, _tilesContainer));
+                obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, _tilesContainer));
+                
+                obj.name = $"Tile_{c.x}_{c.y}_{tile.type}";
+#else
+            obj = Instantiate(prefab, pos, Quaternion.identity, _tilesContainer);
+#endif
                 obj.SetCoordinate(c.x, c.y);
                 obj.transform.localPosition = pos;
                 obj.transform.localScale = Vector3.one * cubeSize;
-                obj.name = $"Tile_{c.x}_{c.y}_{tile.type}";
-#else
-            GameObject obj = Instantiate(prefab, pos, Quaternion.identity, root);
-            obj.transform.localScale = Vector3.one * cubeSize;
-#endif
                 obj.Initialize(tile);
 
             }
@@ -330,15 +332,16 @@ namespace Geckout
 
             Vector3 pos = new Vector3(c.x * cellSize, c.y * cellSize, 0) - centerOffset;
 
+            GameObject obj;
 #if UNITY_EDITOR
-            GameObject obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, m_wallContainer)).gameObject;
+            obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, m_wallContainer)).gameObject;
             obj.transform.localPosition = pos;
             obj.transform.localScale = Vector3.one * cubeSize;
             obj.name = name;
 #else
-        GameObject obj = Instantiate(prefab, pos, Quaternion.identity, _tilesContainer);
-        obj.transform.localScale = Vector3.one * cubeSize;
-        obj.name = name;
+            obj = Instantiate(prefab.gameObject, pos, Quaternion.identity, m_wallContainer);
+            obj.transform.localScale = Vector3.one * cubeSize;
+            obj.name = name;
 #endif
 
             obj.transform.localRotation = Quaternion.Euler(localRotation);

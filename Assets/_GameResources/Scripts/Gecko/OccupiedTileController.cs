@@ -138,6 +138,7 @@ namespace Geckout
                 {
                     // Remove occupant từ tile - tile sẽ tự restore color
                     currentOccupiedTiles[i].RemoveOccupant();
+                    currentOccupiedTiles[i].SetOccupied(false);
                     currentOccupiedTiles[i] = null;
                 }
             }
