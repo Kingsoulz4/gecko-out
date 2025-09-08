@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace Geckout
@@ -27,6 +29,7 @@ namespace Geckout
 
         public static void SetExistingGameViewSize(int width, int height)
         {
+#if UNITY_EDITOR
             var asm = typeof(EditorWindow).Assembly;
 
             // Access GameViewSizes singleton
@@ -78,6 +81,7 @@ namespace Geckout
             sizeSelectionCallback.Invoke(gameViewWindow, new object[] { foundIndex, null });
 
             Debug.Log($"✅ Switched GameView to existing size {width}x{height} (index {foundIndex})");
+#endif
         }
 
     }
