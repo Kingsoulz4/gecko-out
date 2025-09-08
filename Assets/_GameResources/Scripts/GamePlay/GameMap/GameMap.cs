@@ -222,7 +222,7 @@ namespace Geckout
                     obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, _tilesContainer));
                     
 #else
-                    obj = Instantiate(prefab, pos, Quaternion.identity, _tilesContainer);
+                    obj = Instantiate(prefab, _tilesContainer);
 #endif
                     obj.SetCoordinate(c.x, c.y);
                     obj.transform.localPosition = pos;
@@ -282,7 +282,7 @@ namespace Geckout
                 
                 obj.name = $"Tile_{c.x}_{c.y}_{tile.type}";
 #else
-            obj = Instantiate(prefab, pos, Quaternion.identity, _tilesContainer);
+            obj = Instantiate(prefab, _tilesContainer);
 #endif
                 obj.SetCoordinate(c.x, c.y);
                 obj.transform.localPosition = pos;
@@ -345,15 +345,12 @@ namespace Geckout
             GameObject obj;
 #if UNITY_EDITOR
             obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, m_wallContainer)).gameObject;
+#else
+            obj = Instantiate(prefab.gameObject, m_wallContainer);
+#endif
+            obj.name = name;
             obj.transform.localPosition = pos;
             obj.transform.localScale = Vector3.one * cubeSize;
-            obj.name = name;
-#else
-            obj = Instantiate(prefab.gameObject, pos, Quaternion.identity, m_wallContainer);
-            obj.transform.localScale = Vector3.one * cubeSize;
-            obj.name = name;
-#endif
-
             obj.transform.localRotation = Quaternion.Euler(localRotation);
         }
 
