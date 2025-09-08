@@ -42,7 +42,7 @@ namespace Geckout
             {
                 buttonColorPicked.OnClick = OnClickSelectColorPicked;
             }
-            UpdateUI(DogData);
+            //UpdateUI(DogData);
         }
 
         public void UpdateUI(DogData dogData)

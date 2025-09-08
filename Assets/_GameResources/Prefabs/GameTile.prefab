@@ -360,6 +360,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Portal (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2e87de4806b9daa48a679b845c37236f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2679351552287522111, guid: 2e87de4806b9daa48a679b845c37236f, type: 3}
       propertyPath: m_CastShadows
       value: 1
@@ -584,7 +588,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1513113994912690, guid: fdec7e39d3d55fc4c8234e9951d6edfe, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1520005267689272, guid: fdec7e39d3d55fc4c8234e9951d6edfe, type: 3}
       propertyPath: m_Name
