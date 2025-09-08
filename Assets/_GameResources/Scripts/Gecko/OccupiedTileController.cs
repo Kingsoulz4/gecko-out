@@ -107,7 +107,7 @@ namespace Geckout
 
         public void UpdateAllSegmentPositions(bool isChangeTileColor = true)
         {
-            var orderedSegments = bodyController.GetOrderedSegmentsForTileUpdate();
+            var orderedSegments = bodyController.GetOrderedSegments();
             var segments = bodyController.Segments;
 
             for (int i = 0; i < orderedSegments.Count; i++)

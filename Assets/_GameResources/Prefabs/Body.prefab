@@ -488,7 +488,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   length: 5
-  moveSpeed: 12
+  moveSpeed: 18
   minSampleStep: 0.02
   movementCurve:
     serializedVersion: 2
