@@ -1,9 +1,10 @@
-using Geckout.Data;
+﻿using Geckout.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 namespace Geckout
 {
@@ -15,12 +16,18 @@ namespace Geckout
         [SerializeField] private GameObject m_tileCornerPrefab;
         [SerializeField] private GameObject m_tileEdgePrefab;
         [SerializeField] private GameObject m_tileCenterPrefab;
+        [SerializeField] private GameObject m_tileCorner3EdgePrefab;
+        [SerializeField] private GameObject m_tile2EdgePrefab;
+        [SerializeField] private GameObject m_tile4EdgePrefab;
+        
 
         private WayDirection wayDirection = WayDirection.Horizontal;
-        private MovableBoxData movableBoxData;
+        private MovableBoxData movableBoxData = new();
+        private List<MovableBoxTile> listMovableBoxTile = new();
 
         public void Init(MovableBoxData movableBoxData)
         {
+            this.movableBoxData = movableBoxData;
             SpawnTiles();
         }
 
@@ -28,92 +35,183 @@ namespace Geckout
         {
             var boxSize = movableBoxData.boxSize;
             float cellSize = 1;
-            Vector3 centerOffset = new Vector3(
-                (boxSize.x - 1) * cellSize * 0.5f,
-                (boxSize.y - 1) * cellSize * 0.5f,
-                0
-            );
 
-            for (int x = 0; x < boxSize.x; x++)
+            if (movableBoxData.boxSize.x == 1 && movableBoxData.boxSize.y == 1)
             {
-                for (int y = 0; y < boxSize.y; y++)
+                GameObject obj;
+
+                obj = Instantiate(m_tile4EdgePrefab, transform);
+
+                obj.transform.localPosition = Vector3.zero;
+                obj.transform.localScale = Vector3.one * 1;
+                obj.name = $"Tile";
+                obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
+            }
+            else if (movableBoxData.boxSize.x == 1)
+            {
+                Vector3 centerOffset = new Vector3(
+                    (boxSize.x - 1) * cellSize * 0.5f,
+                    (boxSize.y - 1) * cellSize * 0.5f,
+                    0
+                );
+                for (int x = 0; x < boxSize.x; x++)
                 {
-                    Vector2Int c = new Vector2Int(x, y);
+                    for (int y = 0; y < boxSize.y; y++)
+                    {
+                        Vector2Int c = new Vector2Int(x, y);
+                        var prefab = m_tile2EdgePrefab;
+                        if(y == 0 && y == boxSize.y - 1)
+                        {
+                            prefab = m_tileCorner3EdgePrefab;
+                        }
 
-                    // matrix coordinate ? world position
-                    Vector3 pos = new Vector3(c.x * cellSize, c.y * cellSize, 0);
-                    pos -= centerOffset; // center grid
+                        // matrix coordinate → world position
+                        Vector3 pos = new Vector3(c.x * cellSize, c.y * cellSize, 0);
+                        pos -= centerOffset; // center grid
 
-                    GameObject obj;
-#if UNITY_EDITOR
-                    obj = ((GameObject)PrefabUtility.InstantiatePrefab(m_tileCenterPrefab, transform));
-#else
-                    obj = Instantiate(prefab, _tilesContainer);
-#endif
+                        GameObject obj;
 
-                    obj.transform.localPosition = pos;
-                    obj.transform.localScale = Vector3.one * 1;
-                    obj.name = $"Tile_{c.x}_{c.y}";
+                        obj = Instantiate(prefab, transform);
 
+                        obj.transform.localPosition = pos;
+                        obj.transform.localScale = Vector3.one * 1;
+                        obj.name = $"Tile_{c.x}_{c.y}";
+                        obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
+                        var movableBoxTile = obj.AddComponent<MovableBoxTile>();
+                        movableBoxTile.Coordinate = tile.MapTileData.coordinate;
+                        listMovableBoxTile.Add(movableBoxTile);
+                    }
                 }
             }
+            else if (movableBoxData.boxSize.y == 1)
+            {
+                Vector3 centerOffset = new Vector3(
+                    (boxSize.x - 1) * cellSize * 0.5f,
+                    (boxSize.y - 1) * cellSize * 0.5f,
+                    0
+                );
+                for (int x = 0; x < boxSize.x; x++)
+                {
+                    for (int y = 0; y < boxSize.y; y++)
+                    {
+                        Vector2Int c = new Vector2Int(x, y);
+                        var prefab = m_tile2EdgePrefab;
+                        if (x == 0 && x == boxSize.x - 1)
+                        {
+                            prefab = m_tileCorner3EdgePrefab;
+                        }
 
-            SpawnBorders(boxSize, 1, 1, centerOffset);
+                        LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(movableBoxData.rootCoordinate.x + c.x, movableBoxData.rootCoordinate.y + c.y), out var tile);
+
+                        // matrix coordinate → world position
+                        Vector3 pos = new Vector3(c.x * cellSize, c.y * cellSize, 0);
+                        pos -= centerOffset; // center grid
+
+                        GameObject obj;
+
+                        obj = Instantiate(prefab, transform);
+
+                        obj.transform.localPosition = pos;
+                        obj.transform.localScale = Vector3.one * 1;
+                        obj.name = $"Tile_{c.x}_{c.y}";
+                        obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
+                        var movableBoxTile = obj.AddComponent<MovableBoxTile>();
+                        movableBoxTile.Coordinate = tile.MapTileData.coordinate;
+                        listMovableBoxTile.Add(movableBoxTile);
+                    }
+                }
+            }
+            else
+            {
+                for (int x = 0; x < boxSize.x; x++)
+                {
+                    for (int y = 0; y < boxSize.y; y++)
+                    {
+                        Vector2Int c = new Vector2Int(x, y);
+
+                        LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(movableBoxData.rootCoordinate.x + c.x, movableBoxData.rootCoordinate.y + c.y), out var tile);
+
+                        GameObject obj = null;
+
+                        if (x == 0 && y == 0)
+                        {
+                            obj = Instantiate(m_tileCornerPrefab, transform);
+                            var angleCornerBottomLeft = new Vector3(0, 90, -90);
+                            obj.transform.localRotation = Quaternion.Euler(angleCornerBottomLeft);
+                        }
+                        else if (x == 0 && y == boxSize.y -1)
+                        {
+                            obj = Instantiate(m_tileCornerPrefab, transform);
+                            var angleCornerTopLeft = new Vector3(90, 90, -90);
+                            obj.transform.localRotation = Quaternion.Euler(angleCornerTopLeft);
+                        }
+                        else if(x == boxSize.x -1 && y == 0)
+                        {
+                            obj = Instantiate(m_tileCornerPrefab, transform);
+                            var angleCornerBottomRight = new Vector3(-90, -90, 90);
+                            obj.transform.localRotation = Quaternion.Euler(angleCornerBottomRight);
+                        }
+                        else if(x== boxSize.x - 1 && y == boxSize.y -1)
+                        {
+                            obj = Instantiate(m_tileCornerPrefab, transform);
+                            var angleCornerTopRight = new Vector3(0, -90, 90);
+                            obj.transform.localRotation = Quaternion.Euler(angleCornerTopRight);
+                        }
+                        else if(x == 0 && (y != 0 && y != boxSize.y -1))
+                        {
+                            obj = Instantiate(m_tileEdgePrefab, transform);
+                            var angleLeftEdge = new Vector3(90, 90, -90);
+                            obj.transform.localRotation = Quaternion.Euler(angleLeftEdge);
+                        }
+                        else if (x == boxSize.x -1 && (y != 0 && y != boxSize.y - 1))
+                        {
+                            obj = Instantiate(m_tileEdgePrefab, transform);
+                            var angleRightEdge = new Vector3(-90, -90, 90);
+                            obj.transform.localRotation = Quaternion.Euler(angleRightEdge);
+                        }
+                        else if (y == 0 && (x != 0 && x != boxSize.x - 1))
+                        {
+                            obj = Instantiate(m_tileEdgePrefab, transform);
+                            var angleBottomEdge = new Vector3(-180, -90, 90);
+                            obj.transform.localRotation = Quaternion.Euler(angleBottomEdge);
+                        }
+                        else if (y == boxSize.y -1 && (x != 0 && x != boxSize.x - 1))
+                        {
+                            obj = Instantiate(m_tileEdgePrefab, transform);
+                            var angleTopEdge = new Vector3(-180, 90, -90);
+                            obj.transform.localRotation = Quaternion.Euler(angleTopEdge);
+                        }
+                        else
+                        {
+                            obj = Instantiate(m_tileCenterPrefab, transform);
+                            obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
+                        }
+
+                        //obj.transform.localPosition = pos;
+                        obj.transform.position = tile.transform.position;
+                        obj.transform.localScale = Vector3.one * 1;
+                        obj.name = $"Tile_{c.x}_{c.y}";
+                        var movableBoxTile = obj.AddComponent<MovableBoxTile>();
+                        movableBoxTile.Coordinate = tile.MapTileData.coordinate;
+                        listMovableBoxTile.Add(movableBoxTile);
+
+                    }
+                }
+
+            }
 
         }
 
-        private void SpawnBorders(Vector2Int gridSize, float cellSize, float cubeSize, Vector3 centerOffset)
+        public void MoveByOffset(Vector2Int offset)
         {
-            // Corners
-            var wallCornerPrefab = m_tileCornerPrefab;
-            var wallEdgePrefab = m_tileEdgePrefab;
-
-            var angleCornerBottomLeft = new Vector3(270, -90, 90);
-            PlaceBorder(wallCornerPrefab, new Vector2Int(-1, -1), cellSize, cubeSize, centerOffset, "Corner_BottomLeft", angleCornerBottomLeft);
-            var angleCornerBottomRight = new Vector3(0, -90, 90);
-            PlaceBorder(wallCornerPrefab, new Vector2Int(gridSize.x, -1), cellSize, cubeSize, centerOffset, "Corner_BottomRight", angleCornerBottomRight);
-            var angleCornerTopLeft = new Vector3(0, 90, -90);
-            PlaceBorder(wallCornerPrefab, new Vector2Int(-1, gridSize.y), cellSize, cubeSize, centerOffset, "Corner_TopLeft", angleCornerTopLeft);
-            var angleCornerTopRight = new Vector3(90, -90, 90);
-            PlaceBorder(wallCornerPrefab, new Vector2Int(gridSize.x, gridSize.y), cellSize, cubeSize, centerOffset, "Corner_TopRight", angleCornerTopRight);
-
-            // Bottom edge
-            var angleBottomEdge = new Vector3(180, 90, -90);
-            for (int x = 0; x < gridSize.x; x++)
-                PlaceBorder(wallEdgePrefab, new Vector2Int(x, -1), cellSize, cubeSize, centerOffset, $"Wall_Bottom_{x}", angleBottomEdge);
-
-            // Top edge
-            var angleTopEdge = new Vector3(0, 90, -90);
-            for (int x = 0; x < gridSize.x; x++)
-                PlaceBorder(wallEdgePrefab, new Vector2Int(x, gridSize.y), cellSize, cubeSize, centerOffset, $"Wall_Top_{x}", angleTopEdge);
-
-            // Left edge
-            var angleLeftEdge = new Vector3(270, -90, 90);
-            for (int y = 0; y < gridSize.y; y++)
-                PlaceBorder(wallEdgePrefab, new Vector2Int(-1, y), cellSize, cubeSize, centerOffset, $"Wall_Left_{y}", angleLeftEdge);
-
-            // Right edge
-            var angleRightEdge = new Vector3(90, -90, 90);
-            for (int y = 0; y < gridSize.y; y++)
-                PlaceBorder(wallEdgePrefab, new Vector2Int(gridSize.x, y), cellSize, cubeSize, centerOffset, $"Wall_Right_{y}", angleRightEdge);
-        }
-
-        private void PlaceBorder(GameObject prefab, Vector2Int c, float cellSize, float cubeSize, Vector3 centerOffset, string name, Vector3 localRotation)
-        {
-            if (prefab == null) return;
-
-            Vector3 pos = new Vector3(c.x * cellSize, c.y * cellSize, 0) - centerOffset;
-
-            GameObject obj;
-#if UNITY_EDITOR
-            obj = (GameObject)PrefabUtility.InstantiatePrefab(prefab, transform);
-#else
-            obj = Instantiate(prefab.gameObject, m_wallContainer);
-#endif
-            obj.name = name;
-            obj.transform.localPosition = pos;
-            obj.transform.localScale = Vector3.one * cubeSize;
-            obj.transform.localRotation = Quaternion.Euler(localRotation);
+            foreach(var tileMove in listMovableBoxTile)
+            {
+                var newCoordinate = new Vector2Int(tileMove.Coordinate.x + offset.x, tileMove.Coordinate.y + offset.y);
+                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(newCoordinate, out var tile);
+                tileMove.transform.position = tile.transform.position;
+                tileMove.Coordinate = newCoordinate;
+            }
+            movableBoxData.rootCoordinate += offset;
         }
 
         private void Move()

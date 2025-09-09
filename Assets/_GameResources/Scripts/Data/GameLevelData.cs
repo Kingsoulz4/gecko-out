@@ -141,7 +141,7 @@ namespace Geckout.Data
     public class MovableBoxData
     {
         public Vector2Int boxSize;
-        public Vector2Int offsetCenter;
+        public Vector2Int rootCoordinate;
         
     }
 

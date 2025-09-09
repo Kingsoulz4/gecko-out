@@ -90,6 +90,7 @@ namespace Geckout
         public void OnClickEditBoxes()
         {
             HideAllTabs();
+            m_editBoxesTab.LevelGame = LevelGame;
             m_buttonEditBoxes.GetComponent<ButtonToolTab>().SetSelected(true);
             m_editBoxesTab.gameObject.SetActive(true);
         }
@@ -164,6 +165,8 @@ namespace Geckout
             {
                 LevelGame = Instantiate(m_levelRootPrefab);
             }
+
+            LevelManager.Instance.LevelGame = LevelGame;
 
             var levelData = Resources.Load<GameLevelData>($"Levels/{m_inputLevelIndex.text}/Level{m_inputLevelNum.text}");
             
@@ -252,7 +255,7 @@ namespace Geckout
 
             if (LevelGame != null)
             {
-                //LevelGame.ClearAllSelected();
+                LevelGame.ClearAllSelected();
             }
         }
     }

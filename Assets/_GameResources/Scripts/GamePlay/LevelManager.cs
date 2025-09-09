@@ -22,6 +22,10 @@ namespace Geckout
                 }
                 return levelGame;
             }
+            set
+            {
+                levelGame = value;
+            }
         }   
 
         public int CurrentLevelNum
