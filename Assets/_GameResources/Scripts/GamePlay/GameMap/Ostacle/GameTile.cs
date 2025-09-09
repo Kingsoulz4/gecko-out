@@ -20,17 +20,6 @@ namespace Geckout
         [SerializeField] private SerializedDictionary<MapTileType, GameObject> m_tilesTypeDisplay;
         [SerializeField] private GameObject m_displayObject;
 
-        private LevelManager levelGame;
-
-        private LevelManager LevelGame
-        {
-            get
-            {
-                if (levelGame == null) levelGame = GetComponentInParent<LevelManager>();
-                return levelGame;
-            }
-        }
-
         public MapTileData MapTileData { get; set; } = new();
 
         public Vector2Int Coordinate {
@@ -38,11 +27,8 @@ namespace Geckout
             {
                 return MapTileData.coordinate;
             }
-            
-            set
-            {
 
-            }
+            set { }
         }
 
         private void Awake()
