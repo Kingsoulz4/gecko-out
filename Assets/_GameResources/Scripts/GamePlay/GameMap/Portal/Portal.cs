@@ -15,7 +15,7 @@ namespace Geckout
 
         private void Awake()
         {
-            bodyPartColorChangers = GetComponentsInChildren<BodyPartColorChanger>().ToList();
+            //bodyPartColorChangers = GetComponentsInChildren<BodyPartColorChanger>().ToList();
         }
 
         private void Start()

@@ -188,25 +188,43 @@ namespace Geckout
         public void AddNewPortal()
         {
             ChangeTypeSelectedTiles(MapTileType.Portal);
+            //for (int i = 0; i < listSelectedTile.Count; i++)
+            //{
+            //    var tileSelected = listSelectedTile.ElementAt(i);
+            //    var newPortalData = new PortalData();
+            //    newPortalData.Coordinate = new Vector2Int(tileSelected.Coordinate.x, tileSelected.Coordinate.y);
+            //    var newPortal = tileSelected.gameObject.AddComponent<Portal>();
+            //    GameLevelData.listPortalData.Add(newPortalData);
+            //    newPortal.PortalData = newPortalData;
+            //}
+
             for (int i = 0; i < listSelectedTile.Count; i++)
             {
                 var tileSelected = listSelectedTile.ElementAt(i);
                 var newPortalData = new PortalData();
                 newPortalData.Coordinate = new Vector2Int(tileSelected.Coordinate.x, tileSelected.Coordinate.y);
-                var newPortal = tileSelected.gameObject.AddComponent<Portal>();
-                GameLevelData.listPortalData.Add(newPortalData);
-                newPortal.PortalData = newPortalData;
+                LevelManager.Instance.LevelGame.GameMap.SpawnPortal(newPortalData);
             }
         }
 
         public void RemoveAllSelectedPortals()
         {
             var listPortal = listSelectedTile.ToList().FindAll(x => x.MapTileData.type == MapTileType.Portal);
-            for (int i = 0; i < listPortal.Count; i++)
+
+            var listPortalObject = new List<Portal>();
+
+            foreach (var portal in listPortal)
             {
-                var portalSelected = listPortal[i].GetComponent<Portal>();
+                LevelManager.Instance.LevelGame.GameMap.TryGetPortalAtCoord(portal.Coordinate, out var portalObject);
+                listPortalObject.Add(portalObject);
+            }
+
+            for (int i = 0; i < listPortalObject.Count; i++)
+            {
+                var portalSelected = listPortalObject[i];
                 GameLevelData.listPortalData.Remove(portalSelected.PortalData);
                 listPortal[i].SetTileType(MapTileType.Normal);
+                Destroy(portalSelected);
             }
 
         }

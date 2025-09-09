@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bca4ec1128b1ac4b9c039b689505815, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bodyPartColorChangers: []
+  bodyPartColorChangers:
+  - {fileID: 5929815014859267425}
 --- !u!1001 &1126171426092868073
 PrefabInstance:
   m_ObjectHideFlags: 0

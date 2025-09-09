@@ -35,6 +35,7 @@ namespace Geckout
 
         private void OnClickDelete()
         {
+            //LevelGame.RemoveAllSelectedPortals();
             LevelGame.ChangeTypeSelectedTiles(MapTileType.Normal);
         }
 

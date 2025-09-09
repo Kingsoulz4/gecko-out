@@ -169,8 +169,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_gameLevelData: {fileID: 0}
   m_gameMap: {fileID: 8946495759869636908}
-  m_dogPrefab: {fileID: 3655932188227585431, guid: 07f41c8bbaf563446979281513016b18, type: 3}
-  m_listDogContainer: {fileID: 8024906829326578474}
+  m_bodyPrefab: {fileID: 3655932188227585431, guid: 07f41c8bbaf563446979281513016b18, type: 3}
+  m_bodyParent: {fileID: 8024906829326578474}
 --- !u!1 &8441383518699484488
 GameObject:
   m_ObjectHideFlags: 0

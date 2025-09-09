@@ -95,9 +95,13 @@ namespace Geckout
             }
             MapTileData.type = tileType;
             IsOccupied = tileType != MapTileType.Normal;
-            m_displayObject = m_tilesTypeDisplay[tileType];
-            m_displayObject.SetActive(true);
-            m_displayObject.transform.localRotation = Quaternion.Euler(MapTileData.rotation);
+            IsObstacle = tileType != MapTileType.Normal;
+            if (m_tilesTypeDisplay.ContainsKey(tileType))
+            {
+                m_displayObject = m_tilesTypeDisplay[tileType];
+                m_displayObject.SetActive(true);
+                m_displayObject.transform.localRotation = Quaternion.Euler(MapTileData.rotation);
+            }
             m_tilesTypeDisplay[MapTileType.Normal].SetActive(true);
             
         }

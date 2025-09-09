@@ -113,6 +113,20 @@ namespace Geckout
             return  result != null;
         }
 
+        public bool TryGetPortalAtCoord(Vector2Int coordinate, out Portal result)
+        {
+            var x = coordinate.x;
+            var y = coordinate.y;
+            if (x < 0 || y < 0 || x >= levelData.mapSize.x || y >= levelData.mapSize.y)
+            {
+                result = null;
+                return false;
+            }
+
+            result = listPortal.Find(x => x.PortalData.Coordinate == coordinate);
+            return result != null;
+        }
+
         public static bool TryGetTileAt(Vector2Int coordinate, out GameTile result)
         {
             var x= coordinate.x;
@@ -170,6 +184,8 @@ namespace Geckout
             }
 
             GetAllTilesTest(levelData);
+
+            SpawnPortals();
         }
 
         [ContextMenu("Test SpawnTiles")]
@@ -182,10 +198,21 @@ namespace Geckout
 #endif
         }    
 
-        void SpawnPortal(PortalData portalData)
+        public void SpawnPortal(PortalData portalData)
         {
             var portal = Instantiate(m_portalPrefab, m_portalsContainer);
+            TryGetTileAtCoord(portalData.Coordinate, out var tile);
+            portal.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y, portal.transform.position.z);
             portal.Initialize(portalData);
+            listPortal.Add(portal);
+        }
+
+        void SpawnPortals()
+        {
+            foreach(var portal in levelData.listPortalData)
+            {
+                SpawnPortal(portal);
+            }
         }
 
         void SpawnAllTiles()
@@ -243,8 +270,8 @@ namespace Geckout
                     obj.Initialize(tile);
                     if (tile.type == MapTileType.Portal)
                     {
-                        var portal = obj.gameObject.AddComponent<Portal>();
-                        portal.Initialize(levelData.listPortalData.Find(x => x.Coordinate == tile.coordinate));
+                        //var portal = obj.gameObject.AddComponent<Portal>();
+                        //portal.Initialize(levelData.listPortalData.Find(x => x.Coordinate == tile.coordinate));
                         //SpawnPortal(levelData.listPortalData.Find(x => x.Coordinate == tile.coordinate));
                     }
 
@@ -252,6 +279,8 @@ namespace Geckout
             }
 
             SpawnWalls(gridSize, cellSize, cubeSize, centerOffset);
+
+            //SpawnPortals();
         }
 
         void SpawnAllTiles(List<MapTileData> mapTileData)
@@ -303,13 +332,16 @@ namespace Geckout
                 obj.Initialize(tile);
                 if (tile.type == MapTileType.Portal)
                 {
-                    var portal = obj.gameObject.AddComponent<Portal>();
-                    portal.Initialize(levelData.listPortalData.Find(x => x.Coordinate == tile.coordinate));
+                    //var portal = obj.gameObject.AddComponent<Portal>();
+                    //portal.Initialize(levelData.listPortalData.Find(x => x.Coordinate == tile.coordinate));
+                    //SpawnPortal(levelData.listPortalData.Find(x => x.Coordinate == tile.coordinate));
                 }
 
             }
 
             SpawnWalls(gridSize, cellSize, cubeSize, centerOffset);
+
+            //SpawnPortals();
         }
 
 
