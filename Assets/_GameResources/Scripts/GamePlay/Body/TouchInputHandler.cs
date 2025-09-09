@@ -329,8 +329,8 @@ namespace Geckout
         {
             if (bodyController == null) return;
 
-            var headPos = bodyController.OccupiedTileController.WorldToGridPositionForward(bodyController.Segments[0].transform.position);
-            var tailPos = bodyController.OccupiedTileController.WorldToGridPositionForward(bodyController.Segments[bodyController.Segments.Count - 1].transform.position);
+            var headPos = GameMap.WorldToGridPositionForward(bodyController.Segments[0].transform.position, bodyController);
+            var tailPos = GameMap.WorldToGridPositionForward(bodyController.Segments[bodyController.Segments.Count - 1].transform.position, bodyController);
             Vector2Int startPos = isDraggingFromHead ? headPos : tailPos;
             startPosCache = startPos;
 

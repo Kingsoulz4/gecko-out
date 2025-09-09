@@ -139,19 +139,6 @@ namespace Geckout
             }
         }
 
-        public Vector2Int WorldToGridPosition(Vector3 worldPos)
-        {
-            float gridX = worldPos.x + gridOffset.x;
-            float gridY = worldPos.y + gridOffset.y;
-
-            Vector2Int result = new Vector2Int(
-                Mathf.RoundToInt(gridX),
-                Mathf.RoundToInt(gridY)
-            );
-
-            return result;
-        }
-
         void UpdateSegmentTile(int segmentIndex, Vector2Int gridPos, bool changeTileColor)
         {
             var segment = bodyController.Segments[segmentIndex];
