@@ -34,7 +34,7 @@ namespace Geckout
 
         public void UpdateColor()
         {
-            _bodyRenderer.UpdateDogColor();
+            _bodyRenderer.UpdateBodyColor();
         }
 
         #endregion

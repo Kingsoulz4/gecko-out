@@ -21,7 +21,7 @@ namespace Geckout.Data
         public int time;
         public LevelType type;
         public List<MapTileData> mapTileDatas = new();
-        public List<DogData> listDogData = new();
+        public List<BodyData> listDogData = new();
         public List<PortalData> listPortalData = new();
         public List<MovableBoxData> listMovableBoxData = new();
         public ColorAndMaterialData colorAndMaterialData;
@@ -130,7 +130,7 @@ namespace Geckout.Data
         Portal
     }
 
-    public enum DogType
+    public enum BodyType
     {
         Normal,
         DoubleColor,
@@ -148,6 +148,13 @@ namespace Geckout.Data
         Ice = 1,
     }
 
+    public enum WayDirection
+    {
+        Horizontal = 0,
+        Vertical = 1,
+        All = 2,
+    }
+
     [Serializable]
     public class PortalData
     {
@@ -157,20 +164,20 @@ namespace Geckout.Data
     }
 
     [Serializable]
-    public class DogData
+    public class BodyData
     {
-        public DogType dogType;
+        public BodyType bodyType;
         public List<ColorType> listColor = new() { ColorType.Red };
         public List<Vector2Int> listCoordinate = new();
 
-        public DogData()
+        public BodyData()
         { }
 
-        public DogData(DogData dogData)
+        public BodyData(BodyData bodyData)
         {
-            this.dogType = dogData.dogType;
-            this.listColor = new List<ColorType>(dogData.listColor);
-            this.listCoordinate = new List<Vector2Int>(dogData.listCoordinate);
+            this.bodyType = bodyData.bodyType;
+            this.listColor = new List<ColorType>(bodyData.listColor);
+            this.listCoordinate = new List<Vector2Int>(bodyData.listCoordinate);
         }
     }
 
@@ -181,8 +188,4 @@ namespace Geckout.Data
         public MapTileType type;
         public Vector3Int rotation = new Vector3Int(0, 90, -90);
     }
-
-
-
-
 }

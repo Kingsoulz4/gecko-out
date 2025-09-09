@@ -19,17 +19,17 @@ namespace Geckout
 
         private int currentSelectedColorIndex = 0;
 
-        private DogData dogData;
+        private BodyData bodyData;
 
-        private DogData DogData
+        private BodyData BodyData
         {
             get
             {
-                if (dogData == null)
+                if (bodyData == null)
                 {
-                    dogData = new DogData();
+                    bodyData = new BodyData();
                 }
-                return LevelGame != null && LevelGame.selectedDog != null ? LevelGame.selectedDog.DogData : dogData;
+                return LevelGame != null && LevelGame.selectedBody != null ? LevelGame.selectedBody.BodyData : bodyData;
             
             }
         }
@@ -45,7 +45,7 @@ namespace Geckout
             //UpdateUI(DogData);
         }
 
-        public void UpdateUI(DogData dogData)
+        public void UpdateUI(BodyData dogData)
         {
             var listColorData = LevelGame.GameLevelData.colorAndMaterialData.listColor;
             for (int i=0; i< m_listButtonColorPicked.Count; i++)
@@ -77,18 +77,18 @@ namespace Geckout
                     
                     m_listButtonColorPicked[currentSelectedColorIndex].SetColor(color.Value);
                     m_listButtonColorPicked[currentSelectedColorIndex].SetEmpty(false);
-                    if (currentSelectedColorIndex >= DogData.listColor.Count)
+                    if (currentSelectedColorIndex >= BodyData.listColor.Count)
                     {
-                        DogData.listColor.Add(color.Key);
+                        BodyData.listColor.Add(color.Key);
                     }
                     else
                     {
-                        DogData.listColor[currentSelectedColorIndex] = color.Key;
+                        BodyData.listColor[currentSelectedColorIndex] = color.Key;
                     }
 
-                    if (LevelGame.selectedDog != null)
+                    if (LevelGame.selectedBody != null)
                     {
-                        LevelGame.selectedDog.UpdateColor();
+                        LevelGame.selectedBody.UpdateColor();
                     }
                         
                 });
@@ -97,14 +97,14 @@ namespace Geckout
 
         private void OnClickDelete()
         {
-            LevelGame.DeleteSelectedDog();
+            LevelGame.DeleteSelectedBody();
             LevelGame.ClearAllSelectedTiles();
         }
 
         private void OnClickGenerate()
         {
-            var newDogData = new DogData(DogData);
-            var newDog = LevelGame.GenerateNewDog(newDogData);
+            var newDogData = new BodyData(BodyData);
+            var newDog = LevelGame.GenerateNewBody(newDogData);
             LevelGame.SelectDog(newDog);
             UpdateUI(newDogData);
             LevelGame.ClearAllSelectedTiles();
@@ -115,9 +115,9 @@ namespace Geckout
         {
             var listColorData = LevelGame.GameLevelData.colorAndMaterialData.listColor;
 
-            if (DogData.listColor.Count <= index)
+            if (BodyData.listColor.Count <= index)
             {
-                DogData.listColor.Add(ColorType.Red);
+                BodyData.listColor.Add(ColorType.Red);
                 m_listButtonColorPicked[index].SetEmpty(false);
                 m_listButtonColorPicked[index].SetColor(listColorData[ColorType.Red]);
             }

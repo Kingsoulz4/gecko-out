@@ -74,7 +74,7 @@ namespace Geckout
 
         private void OnPressDelete()
         {
-            LevelGame.DeleteSelectedDog();
+            LevelGame.DeleteSelectedBody();
             LevelGame.ChangeTypeSelectedTiles(MapTileType.Normal);
             HideAllTabs();
         }
@@ -117,9 +117,9 @@ namespace Geckout
             m_buttonDesignDog.GetComponent<ButtonToolTab>().SetSelected(true);
             m_designDogTab.gameObject.SetActive(true);
             m_designDogTab.LevelGame = LevelGame;
-            if (LevelGame != null && LevelGame.selectedDog != null)
+            if (LevelGame != null && LevelGame.selectedBody != null)
             {
-                m_designDogTab.UpdateUI(LevelGame.selectedDog.DogData);
+                m_designDogTab.UpdateUI(LevelGame.selectedBody.BodyData);
             }
             else
             {
