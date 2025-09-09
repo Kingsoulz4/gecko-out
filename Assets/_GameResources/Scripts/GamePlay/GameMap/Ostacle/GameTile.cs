@@ -9,7 +9,6 @@ using UnityEngine.EventSystems;
 
 namespace Geckout
 {
-    
 
     public class GameTile : MonoBehaviour
     {
@@ -19,6 +18,12 @@ namespace Geckout
         [SerializeField] private Outline m_outLine;
         [SerializeField] private SerializedDictionary<MapTileType, GameObject> m_tilesTypeDisplay;
         [SerializeField] private GameObject m_displayObject;
+
+        private bool IsObstacle
+        {
+            get;
+            set;
+        }
 
         public MapTileData MapTileData { get; set; } = new();
 

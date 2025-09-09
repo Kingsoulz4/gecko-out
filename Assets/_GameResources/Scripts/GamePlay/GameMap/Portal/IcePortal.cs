@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace Geckout
 {
+
     public class IcePortal : Portal
     {
-        
+
     }
 }

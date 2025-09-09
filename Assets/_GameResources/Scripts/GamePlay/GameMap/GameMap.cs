@@ -17,10 +17,14 @@ namespace Geckout
         [SerializeField] private float offsetFactor = 1f;
 
         [Header("Tiles")]
-        [SerializeField] private Transform _tilesContainer;
-        [SerializeField] private Transform m_wallContainer;
         [SerializeField] private GameTile m_tileWallEdge;
         [SerializeField] private GameTile m_tileWallCorner;
+        [SerializeField] private Portal m_portalPrefab;
+
+        [Header("Containers")]
+        [SerializeField] private Transform _tilesContainer;
+        [SerializeField] private Transform m_wallContainer;
+        [SerializeField] private Transform m_portalsContainer;
 
         [Header("Material Management")]
         [SerializeField] private Material defaultMaterial;
@@ -28,6 +32,8 @@ namespace Geckout
         private Transform _entitiesContainer;
         private GameTile[] tiles;
         private Vector2Int _mapSize;
+        private List<Portal> listPortal = new();
+
         public static Vector2Int MapSize => _instance._mapSize;
 
         public bool IsDebug { get => isDebug;}
@@ -176,6 +182,12 @@ namespace Geckout
 #endif
         }    
 
+        void SpawnPortal(PortalData portalData)
+        {
+            var portal = Instantiate(m_portalPrefab, m_portalsContainer);
+            portal.Initialize(portalData);
+        }
+
         void SpawnAllTiles()
         {
             if (_tilesContainer.transform.childCount > 0)
@@ -233,6 +245,7 @@ namespace Geckout
                     {
                         var portal = obj.gameObject.AddComponent<Portal>();
                         portal.Initialize(levelData.listPortalData.Find(x => x.Coordinate == tile.coordinate));
+                        //SpawnPortal(levelData.listPortalData.Find(x => x.Coordinate == tile.coordinate));
                     }
 
                 }

@@ -20,9 +20,9 @@ namespace Geckout
 
         private void Update()
         {
-            if (GamePlayManager.Instance.LevelGame != null && GamePlayManager.Instance.LevelGame.GameLevelData != null)
+            if (LevelManager.Instance.LevelGame != null && LevelManager.Instance.LevelGame.GameLevelData != null)
             {
-                var timeSecond = GamePlayManager.Instance.LevelGame.GameLevelData.time;
+                var timeSecond = LevelManager.Instance.LevelGame.GameLevelData.time;
                 m_textTime.text = $"{timeSecond / 60}:{timeSecond % 60}";
             }
         }

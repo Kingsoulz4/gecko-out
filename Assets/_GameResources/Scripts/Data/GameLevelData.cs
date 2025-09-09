@@ -23,6 +23,7 @@ namespace Geckout.Data
         public List<MapTileData> mapTileDatas = new();
         public List<DogData> listDogData = new();
         public List<PortalData> listPortalData = new();
+        public List<MovableBoxData> listMovableBoxData = new();
         public ColorAndMaterialData colorAndMaterialData;
 
         public void GenerateDefaultMap()
@@ -138,7 +139,7 @@ namespace Geckout.Data
 
     public class MovableBoxData
     {
-
+        
     }
 
     public enum PortalType
