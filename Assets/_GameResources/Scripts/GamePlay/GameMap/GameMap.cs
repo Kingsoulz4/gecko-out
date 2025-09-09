@@ -28,6 +28,8 @@ namespace Geckout
         private Transform _entitiesContainer;
         private GameTile[] tiles;
         private Vector2Int _mapSize;
+        private static Vector2 gridOffset;
+
         public static Vector2Int MapSize => _instance._mapSize;
 
         public bool IsDebug { get => isDebug;}
@@ -144,6 +146,8 @@ namespace Geckout
                     i++;
                 }
             }
+
+            gridOffset = new Vector2(MapSize.x - 1, MapSize.y - 1) * 0.5f;
         }
 
         public void SetLevelData(GameLevelData levelData)
@@ -299,7 +303,18 @@ namespace Geckout
             SpawnWalls(gridSize, cellSize, cubeSize, centerOffset);
         }
 
+        public static Vector2Int WorldToGridPosition(Vector3 worldPos)
+        {
+            float gridX = worldPos.x + gridOffset.x;
+            float gridY = worldPos.y + gridOffset.y;
 
+            Vector2Int result = new Vector2Int(
+                Mathf.RoundToInt(gridX),
+                Mathf.RoundToInt(gridY)
+            );
+
+            return result;
+        }
         private void SpawnWalls(Vector2Int gridSize, float cellSize, float cubeSize, Vector3 centerOffset)
         {
             // Corners

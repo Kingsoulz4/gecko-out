@@ -172,9 +172,9 @@ namespace Geckout
             {
                 if (body.IsMoving) continue; // Skip gecko đang di chuyển
 
-                var headPos = body.OccupiedTileController.WorldToGridPosition(
+                var headPos = GameMap.WorldToGridPosition(
                     body.Segments[0].transform.position);
-                var tailPos = body.OccupiedTileController.WorldToGridPosition(
+                var tailPos = GameMap.WorldToGridPosition(
                     body.Segments[body.Segments.Count - 1].transform.position);
 
                 // Kiểm tra head có adjacent với target không

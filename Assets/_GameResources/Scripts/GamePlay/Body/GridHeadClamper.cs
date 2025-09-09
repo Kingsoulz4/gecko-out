@@ -98,7 +98,7 @@ namespace Geckout
 
             // Use the actual world position and convert to grid coordinate
             Vector3 worldPos = controllingSegment.transform.position;
-            Vector2Int gridPos = bodyController.OccupiedTileController.WorldToGridPosition(worldPos);
+            Vector2Int gridPos = GameMap.WorldToGridPosition(worldPos);
 
             DebugLog($"Controlling segment coordinate: {gridPos} (world: {worldPos})");
             return gridPos;
@@ -304,7 +304,7 @@ namespace Geckout
             // Anchor = phần tử đầu tiên (controlling segment)
             var anchorSegment = orderedSegments[0];
 
-            Vector2Int anchorCoord = bodyController.OccupiedTileController.WorldToGridPosition(
+            Vector2Int anchorCoord = GameMap.WorldToGridPosition(
                 anchorSegment.transform.position);
 
             return anchorCoord == tileCoord;

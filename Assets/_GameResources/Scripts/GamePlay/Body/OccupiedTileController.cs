@@ -116,7 +116,7 @@ namespace Geckout
                 int rawIndex = segments.IndexOf(segment);
 
                 Vector3 worldPos = segment.transform.position;
-                Vector2Int gridPos = WorldToGridPosition(worldPos);
+                Vector2Int gridPos = GameMap.WorldToGridPosition(worldPos);
                 
                 UpdateSegmentTile(rawIndex, gridPos, isChangeTileColor);
                 lastGridPositions[rawIndex] = gridPos;
