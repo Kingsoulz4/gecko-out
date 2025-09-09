@@ -10,7 +10,7 @@ namespace Geckout
     public class Portal : MonoBehaviour
     {
         [SerializeField] private List<BodyPartColorChanger> bodyPartColorChangers = new();
-        
+
         public PortalData PortalData { get; set; }
 
         private void Awake()

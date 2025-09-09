@@ -1,65 +1,95 @@
 using Geckout.Data;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using System.Linq;
 
 namespace Geckout
 {
-    public partial class LevelManager : MonoBehaviour
+    public class LevelManager : SingletonDontDestroyMono<LevelManager>, IGameState
     {
-        [SerializeField] protected GameLevelData m_gameLevelData;
-        [SerializeField] protected GameMap m_gameMap;
-        [SerializeField] protected BodyController m_dogPrefab;
-        [SerializeField] protected Transform m_listDogContainer;
+        [SerializeField] private LevelController m_levelGameOriginal;
 
-        private List<BodyController> listBody = new();
+        public bool IsEdittingLevel { get; set; } = false;
 
-        public GameLevelData GameLevelData => m_gameLevelData;
+        private LevelController levelGame;
 
-        public GameMap GameMap => m_gameMap;
-
-        public List<BodyController> ListBody { get => listBody;}
-
-        public void SetLevelData(GameLevelData gameLevelData)
-        {
-            m_gameLevelData = gameLevelData;
-            m_gameMap.SetLevelData(gameLevelData);
-            Utils.RemoveAllChilds(m_listDogContainer);
-            foreach(var dogData in gameLevelData.listDogData)
+        public LevelController LevelGame { 
+            get
             {
-                ListBody.Add(SpawnDog(dogData));
+                if(levelGame == null)
+                {
+                    levelGame = Instantiate(m_levelGameOriginal);
+                }
+                return levelGame;
             }
-#if UNITY_EDITOR
-            EditorUtility.SetDirty(this.gameObject);   
-#endif
-        }
+        }   
 
-        public void OnBodyMoveToHole(BodyController body)
+        public int CurrentLevelNum
         {
-            if (listBody.Contains(body))
+            get
             {
-                listBody.Remove(body);
+                return PlayerPrefs.GetInt("CurrentLevelNum", 2);
+            }
+            set
+            {
+                PlayerPrefs.SetInt("CurrentLevelNum", value);
             }
         }
 
-        private void Update()
+        public int CurrentLevelIndex
         {
-            
+            get
+            {
+                return PlayerPrefs.GetInt("CurrentLevelIndex", 0);
+            }
+            set
+            {
+                PlayerPrefs.SetInt("CurrentLevelIndex", value);
+            }
         }
 
-        public BodyController SpawnDog(DogData dogData)
+        public void StartCurrentLevel()
         {
-
-#if UNITY_EDITOR
-            var newDog = (BodyController)PrefabUtility.InstantiatePrefab(m_dogPrefab, m_listDogContainer);
-#else
-            var newDog = Instantiate(m_dogPrefab, m_listDogContainer);
-#endif
-            newDog.Initialize(dogData);
-            return newDog;
+            StartLevel(CurrentLevelNum, CurrentLevelIndex);
         }
 
+        public void StartLevel(int levelNum, int levelIndex)
+        {
+            var levelData = LoadLevel(CurrentLevelNum, CurrentLevelIndex);
+            LevelGame.SetLevelData(levelData);
+        }
+
+        public GameLevelData LoadLevel(int levelNum, int levelIndex)
+        {
+            var levelData = Resources.Load<GameLevelData>($"Levels/{levelIndex}/Level{levelNum}");
+            if(levelData == null)
+            {
+                levelData = Resources.Load<GameLevelData>($"Levels/0/Level1");
+            }
+
+            return levelData;   
+        }    
+
+        #region GameState
+        public void OnEndGame()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnPauseGame()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnPlayingGame()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnStartGame()
+        {
+            throw new System.NotImplementedException();
+        }
+        #endregion
     }
 }

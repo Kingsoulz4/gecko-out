@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Geckout
 {
-    public partial class GameMap 
+    public class DoubleColorBody : BodyController
     {
         
     }
