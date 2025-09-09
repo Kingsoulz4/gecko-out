@@ -57,49 +57,6 @@ namespace Geckout
             });
         }
 
-        public Vector2Int WorldToGridPositionForward(Vector3 worldPos)
-        {
-            float gridX = worldPos.x + gridOffset.x;
-            float gridY = worldPos.y + gridOffset.y;
-
-            Vector2Int currentTile = new Vector2Int(Mathf.RoundToInt(gridX), Mathf.RoundToInt(gridY));
-            var movementDirection = bodyController.GridClamper.CurrentDirection;
-            if (movementDirection == Vector2Int.zero)
-                return currentTile;
-
-            Vector3 currentTileCenter = new Vector3(
-                currentTile.x - gridOffset.x,
-                currentTile.y - gridOffset.y,
-                0
-            );
-
-            bool crossedCenter = false;
-
-            if (movementDirection.x > 0)
-            {
-                crossedCenter = worldPos.x > currentTileCenter.x;
-            }
-            else if (movementDirection.x < 0)
-            {
-                crossedCenter = worldPos.x < currentTileCenter.x;
-            }
-            else if (movementDirection.y > 0)
-            {
-                crossedCenter = worldPos.y > currentTileCenter.y;
-            }
-            else if (movementDirection.y < 0)
-            {
-                crossedCenter = worldPos.y < currentTileCenter.y;
-            }
-
-            if (crossedCenter)
-            {
-                return currentTile + movementDirection;
-            }
-
-            return currentTile;
-        }
-
         public void UpdateAllSegmentPositions(bool isChangeTileColor = true)
         {
             var orderedSegments = bodyController.GetOrderedSegments();
