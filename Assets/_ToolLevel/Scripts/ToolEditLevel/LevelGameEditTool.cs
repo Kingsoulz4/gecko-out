@@ -233,10 +233,11 @@ namespace Geckout
         {
             listSelectedTile.ToList().ForEach(x =>
             {
-                if (!x.IsOccupied)
+                if ((!x.IsOccupied && tileType != MapTileType.Normal) || tileType == MapTileType.Normal)
                 {
                     x.SetTileType(tileType);
                 }
+
             }
             );
             if(tileType == MapTileType.Normal)

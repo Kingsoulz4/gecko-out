@@ -137,8 +137,11 @@ namespace Geckout.Data
         TripleColor
     }
 
+    [Serializable]
     public class MovableBoxData
     {
+        public Vector2Int boxSize;
+        public Vector2Int offsetCenter;
         
     }
 

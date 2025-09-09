@@ -20,11 +20,13 @@ namespace Geckout
         [SerializeField] private GameTile m_tileWallEdge;
         [SerializeField] private GameTile m_tileWallCorner;
         [SerializeField] private Portal m_portalPrefab;
+        [SerializeField] private BoxMove m_boxMovePrefab;
 
         [Header("Containers")]
         [SerializeField] private Transform _tilesContainer;
         [SerializeField] private Transform m_wallContainer;
         [SerializeField] private Transform m_portalsContainer;
+        [SerializeField] private Transform m_movableBoxContainer;
 
         [Header("Material Management")]
         [SerializeField] private Material defaultMaterial;
@@ -207,6 +209,13 @@ namespace Geckout
             listPortal.Add(portal);
         }
 
+        public void SpawnBoxMove(MovableBoxData movableBoxData)
+        {
+            var newMovableBox = Instantiate(m_boxMovePrefab, m_movableBoxContainer);
+            newMovableBox.Init(movableBoxData);
+            
+        }
+
         void SpawnPortals()
         {
             foreach(var portal in levelData.listPortalData)
@@ -343,7 +352,6 @@ namespace Geckout
 
             //SpawnPortals();
         }
-
 
         private void SpawnWalls(Vector2Int gridSize, float cellSize, float cubeSize, Vector3 centerOffset)
         {
