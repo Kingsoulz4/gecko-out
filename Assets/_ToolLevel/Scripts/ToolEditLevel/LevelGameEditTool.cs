@@ -33,6 +33,11 @@ namespace Geckout
             }
         }
 
+        public BoxMove SelectedBoxMove
+        {
+            get; set;
+        }
+
         private ToolEditLevelManager toolEditLevelManager;
         public ToolEditLevelManager ToolEditLevelManager
         {
@@ -58,6 +63,11 @@ namespace Geckout
                     {
                         SelectTile(tile);
                         return;
+                    }
+
+                    if(hitInfo.transform.TryGetComponent<BoxMove>(out var boxMove))
+                    {
+                        SelectBoxMove(boxMove);
                     }
 
                     var dogBody = hitInfo.transform.GetComponentInParent<BodyController>();
@@ -88,6 +98,16 @@ namespace Geckout
             {
                 ClearAllSelected();
             }
+        }
+
+        public void SelectBoxMove(BoxMove boxMove)
+        {
+            if(SelectedBoxMove != null)
+            {
+                SelectedBoxMove.SetSelected(false);
+            }
+            SelectedBoxMove = boxMove;
+            SelectedBoxMove.SetSelected(true);
         }
 
         public void SelectTile(GameTile tile)

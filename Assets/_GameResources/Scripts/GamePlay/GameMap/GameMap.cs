@@ -211,11 +211,12 @@ namespace Geckout
             listPortal.Add(portal);
         }
 
-        public void SpawnBoxMove(MovableBoxData movableBoxData)
+        public BoxMove SpawnBoxMove(MovableBoxData movableBoxData)
         {
             var newMovableBox = Instantiate(m_boxMovePrefab, m_movableBoxContainer);
             newMovableBox.Init(movableBoxData);
-            
+            levelData.listMovableBoxData.Add(movableBoxData);
+            return newMovableBox;
         }
 
         void SpawnPortals()

@@ -9,7 +9,6 @@ namespace Geckout
         [HideInInspector]
         [Header("Tool")]
         [SerializeField] private Outline m_outlineSelected;
-
         private Outline OutlineSelected
         {
             get
@@ -21,6 +20,7 @@ namespace Geckout
                     m_outlineSelected.OutlineWidth = 8;
 
                 }
+                //m_outlineSelected.gameObject.SetActive(true);
                 return m_outlineSelected;
             }
         }

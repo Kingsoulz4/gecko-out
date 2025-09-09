@@ -33,7 +33,6 @@ namespace Geckout
         public ControlAnchor controlAnchor = ControlAnchor.Head;
 
 
-
         // Movement events
         public Action OnStartMove;
         public Action OnEndMove;

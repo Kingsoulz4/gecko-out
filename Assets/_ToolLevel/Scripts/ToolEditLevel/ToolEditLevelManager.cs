@@ -120,6 +120,7 @@ namespace Geckout
             m_designDogTab.LevelGame = LevelGame;
             if (LevelGame != null && LevelGame.selectedBody != null)
             {
+                LevelGame.ClearAllSelectedTiles();
                 m_designDogTab.UpdateUI(LevelGame.selectedBody.BodyData);
             }
             else
@@ -253,10 +254,7 @@ namespace Geckout
             m_buttonEditBoxes.GetComponent<ButtonToolTab>().SetSelected(false);
             m_buttonDesignDog.GetComponent<ButtonToolTab>().SetSelected(false);
 
-            if (LevelGame != null)
-            {
-                LevelGame.ClearAllSelected();
-            }
+            
         }
     }
 }

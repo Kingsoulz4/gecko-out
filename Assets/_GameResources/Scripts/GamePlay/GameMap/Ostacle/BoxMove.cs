@@ -10,7 +10,7 @@ namespace Geckout
 {
     
 
-    public class BoxMove : MonoBehaviour
+    public partial class BoxMove : MonoBehaviour
     {
         [SerializeField] private LayerMask moveBoxLayer;
         [SerializeField] private GameObject m_tileCornerPrefab;
@@ -29,6 +29,8 @@ namespace Geckout
         {
             this.movableBoxData = movableBoxData;
             SpawnTiles();
+            var collider = gameObject.AddComponent<BoxCollider>();
+            collider.size = new Vector3(movableBoxData.boxSize.x, movableBoxData.boxSize.y, 1);
         }
 
         void SpawnTiles()
@@ -49,34 +51,39 @@ namespace Geckout
             }
             else if (movableBoxData.boxSize.x == 1)
             {
-                Vector3 centerOffset = new Vector3(
-                    (boxSize.x - 1) * cellSize * 0.5f,
-                    (boxSize.y - 1) * cellSize * 0.5f,
-                    0
-                );
                 for (int x = 0; x < boxSize.x; x++)
                 {
                     for (int y = 0; y < boxSize.y; y++)
                     {
                         Vector2Int c = new Vector2Int(x, y);
                         var prefab = m_tile2EdgePrefab;
-                        if(y == 0 && y == boxSize.y - 1)
+                        if (y == 0 || y == boxSize.y - 1)
                         {
                             prefab = m_tileCorner3EdgePrefab;
                         }
 
-                        // matrix coordinate → world position
-                        Vector3 pos = new Vector3(c.x * cellSize, c.y * cellSize, 0);
-                        pos -= centerOffset; // center grid
-
+                        LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(movableBoxData.rootCoordinate.x + c.x, movableBoxData.rootCoordinate.y + c.y), out var tile);
                         GameObject obj;
 
                         obj = Instantiate(prefab, transform);
 
-                        obj.transform.localPosition = pos;
+                        obj.transform.position = tile.transform.position;
                         obj.transform.localScale = Vector3.one * 1;
                         obj.name = $"Tile_{c.x}_{c.y}";
-                        obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
+                        //obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
+                        if(y == 0)
+                        {
+                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(0, 90, -90));
+                        }
+                        else if(y == boxSize.y - 1)
+                        {
+                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(0, -90, 90));
+                        }
+                        else
+                        {
+                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(0, 90, -90));
+                        }
+
                         var movableBoxTile = obj.AddComponent<MovableBoxTile>();
                         movableBoxTile.Coordinate = tile.MapTileData.coordinate;
                         listMovableBoxTile.Add(movableBoxTile);
@@ -85,18 +92,14 @@ namespace Geckout
             }
             else if (movableBoxData.boxSize.y == 1)
             {
-                Vector3 centerOffset = new Vector3(
-                    (boxSize.x - 1) * cellSize * 0.5f,
-                    (boxSize.y - 1) * cellSize * 0.5f,
-                    0
-                );
+
                 for (int x = 0; x < boxSize.x; x++)
                 {
                     for (int y = 0; y < boxSize.y; y++)
                     {
                         Vector2Int c = new Vector2Int(x, y);
                         var prefab = m_tile2EdgePrefab;
-                        if (x == 0 && x == boxSize.x - 1)
+                        if (x == 0 || x == boxSize.x - 1)
                         {
                             prefab = m_tileCorner3EdgePrefab;
                         }
@@ -104,17 +107,27 @@ namespace Geckout
                         LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(movableBoxData.rootCoordinate.x + c.x, movableBoxData.rootCoordinate.y + c.y), out var tile);
 
                         // matrix coordinate → world position
-                        Vector3 pos = new Vector3(c.x * cellSize, c.y * cellSize, 0);
-                        pos -= centerOffset; // center grid
 
                         GameObject obj;
 
                         obj = Instantiate(prefab, transform);
 
-                        obj.transform.localPosition = pos;
+                        obj.transform.position = tile.transform.position;
                         obj.transform.localScale = Vector3.one * 1;
                         obj.name = $"Tile_{c.x}_{c.y}";
-                        obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
+                        if (x == 0)
+                        {
+                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(90, 90, -90));
+                        }
+                        else if (x == boxSize.x - 1)
+                        {
+                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(-90, -90, 90));
+                        }
+                        else
+                        {
+                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(90, 90, -90));
+                        }
+
                         var movableBoxTile = obj.AddComponent<MovableBoxTile>();
                         movableBoxTile.Coordinate = tile.MapTileData.coordinate;
                         listMovableBoxTile.Add(movableBoxTile);
