@@ -213,7 +213,14 @@ namespace Geckout
 
         public void ChangeTypeSelectedTiles(MapTileType tileType)
         {
-            listSelectedTile.ToList().ForEach(x => x.SetTileType(tileType));
+            listSelectedTile.ToList().ForEach(x =>
+            {
+                if (!x.IsOccupied)
+                {
+                    x.SetTileType(tileType);
+                }
+            }
+            );
             if(tileType == MapTileType.Normal)
             {
                 ClearAllSelectedTiles();
