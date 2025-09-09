@@ -257,7 +257,20 @@ namespace Geckout
             Vector2Int nextTileCoord = currentTileCoord + currentDirection;
             if (!GameMap.TryGetTileAt(nextTileCoord, out GameTile nextTile))
             {
-                return targetPos;
+                return currentPos; // Invalid tile
+            }
+
+            // Check nếu occupied bởi static obstacle
+            if (nextTile.IsOccupied)
+            {
+                // Kiểm tra có phải own body segment không
+                bool isOwnBodySegment = IsAnchorSegment(nextTileCoord);
+
+                if (!isOwnBodySegment)
+                {
+                    // Static obstacle - block movement
+                    return currentPos;
+                }
             }
 
             Vector3 nextTileCenter = nextTile.transform.position;
@@ -284,7 +297,18 @@ namespace Geckout
 
             return precisePosition;
         }
+        bool IsAnchorSegment(Vector2Int tileCoord)
+        {
+            var orderedSegments = bodyController.GetOrderedSegments();
 
+            // Anchor = phần tử đầu tiên (controlling segment)
+            var anchorSegment = orderedSegments[0];
+
+            Vector2Int anchorCoord = bodyController.OccupiedTileController.WorldToGridPosition(
+                anchorSegment.transform.position);
+
+            return anchorCoord == tileCoord;
+        }
         private void DebugLog(string message)
         {
             if (enableDebugLogs)

@@ -117,7 +117,7 @@ namespace Geckout
 
                 Vector3 worldPos = segment.transform.position;
                 Vector2Int gridPos = WorldToGridPosition(worldPos);
-
+                
                 UpdateSegmentTile(rawIndex, gridPos, isChangeTileColor);
                 lastGridPositions[rawIndex] = gridPos;
             }
@@ -169,6 +169,7 @@ namespace Geckout
             {
                 previousTile.RemoveOccupant();
                 currentOccupiedTiles[segmentIndex].SetOccupied(false);
+                
             }
 
             // Add to new tile

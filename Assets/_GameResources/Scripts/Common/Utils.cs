@@ -11,6 +11,12 @@ namespace Geckout
 {
     public class Utils
     {
+        public static void LogList<T>( List<T> list, string label = "")
+        {
+            string content = string.Join(", ", list);
+            Debug.Log($"{label} [{list.Count}]: {content}");
+        }
+
         public static void RemoveAllChilds(Transform parent)
         {
             for (int i = parent.childCount - 1; i >= 0; i--)
