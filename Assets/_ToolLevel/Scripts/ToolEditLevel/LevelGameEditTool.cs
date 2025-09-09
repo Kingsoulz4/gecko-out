@@ -205,7 +205,7 @@ namespace Geckout
                 var tileSelected = listSelectedTile.ElementAt(i);
                 var newPortalData = new PortalData();
                 newPortalData.Coordinate = new Vector2Int(tileSelected.Coordinate.x, tileSelected.Coordinate.y);
-                LevelManager.Instance.LevelGame.GameMap.SpawnPortal(newPortalData);
+                GameMap.SpawnPortal(newPortalData);
             }
         }
 
