@@ -22,10 +22,12 @@ namespace Geckout
             {
                 //var listt = listSelectedTile.ToList();
                 var tile = listSelectedTile.ToList().Find(x => x.MapTileData.type == MapTileType.Portal);
+                if (listSelectedTile.Count <= 0) return null;
+                GameMap.TryGetPortalAtCoord(listSelectedTile.First().MapTileData.coordinate, out var portal);
 
                 if (tile != null)
                 {
-                    return tile.TryGetComponent<Portal>(out var portal) ? portal : null;
+                    return portal ? portal : null;
                 }
                 return null;
             }

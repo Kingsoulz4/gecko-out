@@ -38,6 +38,8 @@ namespace Geckout
 
         public static Vector2Int MapSize => _instance._mapSize;
 
+        public List<Portal> ListPortal { get => listPortal; }
+
         public bool IsDebug { get => isDebug;}
 
         private void Awake()
