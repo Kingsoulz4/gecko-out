@@ -324,7 +324,7 @@ namespace Geckout
 
             return Vector2Int.zero;
         }
-
+        Vector2Int startPosCache;
         void FindAndSetSmoothPath(Vector2Int targetTile)
         {
             if (bodyController == null) return;
@@ -332,6 +332,7 @@ namespace Geckout
             var headPos = bodyController.OccupiedTileController.WorldToGridPositionForward(bodyController.Segments[0].transform.position);
             var tailPos = bodyController.OccupiedTileController.WorldToGridPositionForward(bodyController.Segments[bodyController.Segments.Count - 1].transform.position);
             Vector2Int startPos = isDraggingFromHead ? headPos : tailPos;
+            startPosCache = startPos;
 
             if (startPos == targetTile) return;
 
@@ -341,21 +342,10 @@ namespace Geckout
             // Block tiles occupied by gecko segments
             for (int i = 0; i < bodyController.Segments.Count; i++)
             {
-                Vector3 worldPos = bodyController.Segments[i].transform.position;
-                Vector2Int gridPos = bodyController.OccupiedTileController.WorldToGridPosition(worldPos);
-
-                int index = gridPos.y * GameMap.MapSize.x + gridPos.x;
-                if (index >= 0 && index < mapState.Length)
+                if (i % bodyController.SubLength != 0 && i != 0 && i != bodyController.Segments.Count - 1)
                 {
-                    mapState[index] = false; // Block occupied tiles
+                    continue;
                 }
-            }
-
-            // Only unblock the start tile (head or tail depending on control)
-            int startIndex = startPos.y * GameMap.MapSize.x + startPos.x;
-            if (startIndex >= 0 && startIndex < mapState.Length)
-            {
-                mapState[startIndex] = true;
             }
 
             // Create pathfinder with updated grid
@@ -378,14 +368,11 @@ namespace Geckout
 
             // Convert to coordinate list and remove starting position
             smoothPath.Clear();
-            var headPos = bodyController.OccupiedTileController.WorldToGridPositionForward(bodyController.Segments[0].transform.position);
-            var tailPos = bodyController.OccupiedTileController.WorldToGridPositionForward(bodyController.Segments[bodyController.Segments.Count - 1].transform.position);
-            Vector2Int startPos = isDraggingFromHead ? headPos : tailPos;
-
+            
             foreach (var node in path)
             {
                 // Skip the starting position to avoid immediate completion
-                if (node.Position != startPos)
+                if (node.Position != startPosCache)
                 {
                     smoothPath.Add(node.Position);
                 }
