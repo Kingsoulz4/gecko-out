@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Geckout
@@ -27,7 +28,6 @@ namespace Geckout
 
         private void OnEndMoveHandle()
         {
-            UpdateAllSegmentPositions();
             ForceRestoreAll();
         }
 
