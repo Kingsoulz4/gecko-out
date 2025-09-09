@@ -346,7 +346,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_designLevel: {fileID: 29857791586879809}
-  m_textTime: {fileID: 0}
+  m_textTime: {fileID: 7153897114709725521}
 --- !u!1 &9019094468817973139
 GameObject:
   m_ObjectHideFlags: 0
