@@ -11,8 +11,8 @@ namespace Geckout
     {
         [SerializeField] protected GameLevelData m_gameLevelData;
         [SerializeField] protected GameMap m_gameMap;
-        [SerializeField] protected BodyController m_dogPrefab;
-        [SerializeField] protected Transform m_listDogContainer;
+        [SerializeField] protected BodyController m_bodyPrefab;
+        [SerializeField] protected Transform m_bodyParent;
 
         private List<BodyController> listBody = new();
 
@@ -26,10 +26,10 @@ namespace Geckout
         {
             m_gameLevelData = gameLevelData;
             m_gameMap.SetLevelData(gameLevelData);
-            Utils.RemoveAllChilds(m_listDogContainer);
+            Utils.RemoveAllChilds(m_bodyParent);
             foreach(var dogData in gameLevelData.listDogData)
             {
-                ListBody.Add(SpawnDog(dogData));
+                ListBody.Add(SpawnBody(dogData));
             }
 #if UNITY_EDITOR
             EditorUtility.SetDirty(this.gameObject);   
@@ -49,16 +49,16 @@ namespace Geckout
             
         }
 
-        public BodyController SpawnDog(DogData dogData)
+        public BodyController SpawnBody(BodyData bodyData)
         {
 
 #if UNITY_EDITOR
-            var newDog = (BodyController)PrefabUtility.InstantiatePrefab(m_dogPrefab, m_listDogContainer);
+            var newBody = (BodyController)PrefabUtility.InstantiatePrefab(m_bodyPrefab, m_bodyParent);
 #else
-            var newDog = Instantiate(m_dogPrefab, m_listDogContainer);
+            var newBody = Instantiate(m_bodyPrefab, m_bodyParent);
 #endif
-            newDog.Initialize(dogData);
-            return newDog;
+            newBody.Initialize(bodyData);
+            return newBody;
         }
 
     }

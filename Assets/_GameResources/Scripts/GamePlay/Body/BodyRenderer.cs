@@ -35,12 +35,12 @@ namespace Geckout
         private void Start()
         {
             bodyPartColorChangers = GetComponentsInChildren<BodyPartColorChanger>().ToList();
-            UpdateDogColor();
+            UpdateBodyColor();
         }
 
-        public void UpdateDogColor()
+        public void UpdateBodyColor()
         {
-            bodyPartColorChangers.ForEach(x => x.UpdateColor(BodyController.DogData.listColor.First()));
+            bodyPartColorChangers.ForEach(x => x.UpdateColor(BodyController.BodyData.listColor.First()));
         }
 
         public void Initialize(List<Segment> segments)

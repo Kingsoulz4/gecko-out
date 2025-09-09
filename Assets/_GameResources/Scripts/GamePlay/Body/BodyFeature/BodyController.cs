@@ -63,7 +63,7 @@ namespace Geckout
 
         public GridHeadClamper GridClamper { get => gridClamper; set => gridClamper = value; }
 
-        public DogData DogData { get; set; }
+        public BodyData BodyData { get; set; }
         public int SubLength => subLength;
 
 
@@ -73,9 +73,9 @@ namespace Geckout
             //Init();
         }
 
-        public void Initialize(DogData dogData)
+        public void Initialize(BodyData dogData)
         {
-            DogData = dogData;
+            BodyData = dogData;
             List<Vector2Int> listDefaultCoordinate = dogData.listCoordinate;
             Segments = new List<Segment>();
 

@@ -14,7 +14,7 @@ namespace Geckout
 
         public List<GameTile> ListSelectedTile { get => listSelectedTile.ToList(); }
 
-        public BodyController selectedDog { get; set; }
+        public BodyController selectedBody { get; set; }
 
         public Portal selectedPortal
         {
@@ -92,7 +92,7 @@ namespace Geckout
         {
             if(tile.MapTileData.type == MapTileType.Portal)
             {
-                ClearSelectedDog();
+                ClearSelectedBody();
                 ToolEditLevelManager.OnClickEditPortals();
             }
             else if(tile.MapTileData.type == MapTileType.Normal)
@@ -101,7 +101,7 @@ namespace Geckout
             }
             else
             {
-                ClearSelectedDog();
+                ClearSelectedBody();
                 ToolEditLevelManager.OnClickEditWalls();
             }
 
@@ -111,17 +111,17 @@ namespace Geckout
 
         public void SelectDog(BodyController dogBody)
         {
-            if (selectedDog != null)
+            if (selectedBody != null)
             {
-                selectedDog.SetSelected(false);
+                selectedBody.SetSelected(false);
             }
             ClearAllSelectedTiles();
-            selectedDog = dogBody;
+            selectedBody = dogBody;
             dogBody.SetSelected(true);
             ToolEditLevelManager.OnClickDesignDog();
         }
 
-        public BodyController GenerateNewDog(DogData dogData)
+        public BodyController GenerateNewBody(BodyData dogData)
         {
             if(listSelectedTile.Count < 3)
             {
@@ -151,31 +151,31 @@ namespace Geckout
             }
                 
             dogData.listCoordinate = new List<Vector2Int>(listSelectedTile.Select(x => x.Coordinate).ToList());
-            return SpawnDog(dogData);
+            return SpawnBody(dogData);
         }
 
-        public void DeleteSelectedDog()
+        public void DeleteSelectedBody()
         {
-            if (selectedDog == null)
+            if (selectedBody == null)
             {
                 return;
             }
-            GameLevelData.listDogData.Remove(selectedDog.DogData);
-            Destroy(selectedDog.gameObject);
+            GameLevelData.listDogData.Remove(selectedBody.BodyData);
+            Destroy(selectedBody.gameObject);
         }
 
         public void ClearAllSelected()
         {
             ClearAllSelectedTiles();
-            ClearSelectedDog();
+            ClearSelectedBody();
         }
 
-        public void ClearSelectedDog()
+        public void ClearSelectedBody()
         {
-            if (selectedDog != null)
+            if (selectedBody != null)
             {
-                selectedDog.SetSelected(false);
-                selectedDog = null;
+                selectedBody.SetSelected(false);
+                selectedBody = null;
             }
         }
 

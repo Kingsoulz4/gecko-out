@@ -1,21 +1,39 @@
+using Geckout.Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Geckout
 {
+    
+
     public class BoxMove : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        [SerializeField] private LayerMask moveBoxLayer;
+        private WayDirection wayDirection = WayDirection.Horizontal;
+
+        public void Init()
         {
-        
+
         }
 
-        // Update is called once per frame
-        void Update()
+        private void Move()
         {
-        
+            // check way direction
+            switch (wayDirection)
+            {
+                case WayDirection.Horizontal:
+                    // move left or right
+                    break;
+                case WayDirection.Vertical:
+                    // move up or down
+                    break;
+                case WayDirection.All:
+                    // move in any direction
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
