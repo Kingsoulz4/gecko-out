@@ -131,6 +131,7 @@ namespace Geckout
             axisLocked = false;
             hasDragTarget = false;
 
+
             dragStartPosition = inputPosition;
             dragStartCoordinate = movableBoxData.rootCoordinate;
 
@@ -148,6 +149,7 @@ namespace Geckout
                 DebugLog("Skipping DragTick - auto-moving to previous target");
                 return;
             }
+
 
             Vector2Int hoveredForSelected = ScreenToGridCoordinate(currentInputPos);
             Vector2Int constrainedForSelected = hoveredForSelected;
@@ -200,7 +202,6 @@ namespace Geckout
             }
             else
             {
-                hasDragTarget = false;
                 DebugLog("rootTarget != movableBoxData.rootCoordina");
                 if (rootTarget == movableBoxData.rootCoordinate)
                 {
