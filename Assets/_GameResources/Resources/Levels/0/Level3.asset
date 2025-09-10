@@ -318,4 +318,8 @@ MonoBehaviour:
   - boxSize: {x: 3, y: 1}
     rootCoordinate: {x: 4, y: 1}
     wayDirection: 1
+  listCrateData:
+  - boxSize: {x: 3, y: 3}
+    rootCoordinate: {x: 0, y: 7}
+    difusionCount: 0
   colorAndMaterialData: {fileID: 11400000, guid: bea4b031ece8d284482119e23bace87e, type: 2}

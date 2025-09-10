@@ -87,32 +87,68 @@ namespace Geckout
 
         private void OnClickPlace()
         {
-            LevelGame.SelectedBoxMove.PlaceMoveBox();
+            if (m_dropDownBoxType.value == 0)
+            {
+                LevelGame.SelectedBoxMove.PlaceMoveBox();
+            }
+            else if (m_dropDownBoxType.value == 1)
+            {
+                LevelGame.SelectedCrate.PlaceMoveBox();
+            }
         }
 
         private void OnClickMoveLeft()
         {
-            LevelGame.SelectedBoxMove.MoveByOffset(Vector2Int.left);
+            if (m_dropDownBoxType.value == 0)
+            {
+                LevelGame.SelectedBoxMove.MoveByOffset(Vector2Int.left);
+            }
+            else if (m_dropDownBoxType.value == 1)
+            {
+                LevelGame.SelectedCrate.MoveByOffset(Vector2Int.left);
+            }
         }
 
         private void OnClickMoveRight()
         {
-            LevelGame.SelectedBoxMove.MoveByOffset(Vector2Int.right);
+            if (m_dropDownBoxType.value == 0)
+            {
+                LevelGame.SelectedBoxMove.MoveByOffset(Vector2Int.right);
+            }
+            else if (m_dropDownBoxType.value == 1)
+            {
+                LevelGame.SelectedCrate.MoveByOffset(Vector2Int.right);
+            }
         }
 
         private void OnClickMoveUp()
         {
-            LevelGame.SelectedBoxMove.MoveByOffset(Vector2Int.up);
+            if (m_dropDownBoxType.value == 0)
+            {
+                LevelGame.SelectedBoxMove.MoveByOffset(Vector2Int.up);
+            }
+            else if (m_dropDownBoxType.value == 1)
+            {
+                LevelGame.SelectedCrate.MoveByOffset(Vector2Int.up);
+            }
         }
 
         private void OnClickMoveDown()
         {
-            LevelGame.SelectedBoxMove.MoveByOffset(Vector2Int.down);
+            if (m_dropDownBoxType.value == 0)
+            {
+                LevelGame.SelectedBoxMove.MoveByOffset(Vector2Int.down);
+            }
+            else if (m_dropDownBoxType.value == 1)
+            {
+                LevelGame.SelectedCrate.MoveByOffset(Vector2Int.down);
+            }
+
         }
 
         private void OnClickGenerate()
         {
-            if (BoxBaseData is MovableBoxData)
+            if (m_dropDownBoxType.value == 0)
             {
                 var boxMoveData = (MovableBoxData)BoxBaseData;
                 boxMoveData = new MovableBoxData();
@@ -121,7 +157,7 @@ namespace Geckout
                 var moveBox = LevelGame.GameMap.SpawnBoxMove(boxMoveData);
                 LevelGame.SelectMovableBox(moveBox);
             }
-            else if (BoxBaseData is CrateData)
+            else if (m_dropDownBoxType.value == 1)
             {
                 CrateData = new CrateData();
                 CrateData.boxSize = new Vector2Int(int.Parse(m_inputWidth.text), int.Parse(m_inputHeight.text));
