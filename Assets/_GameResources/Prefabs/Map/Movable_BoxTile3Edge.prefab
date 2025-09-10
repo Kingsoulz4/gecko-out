@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2694700396164870678}
   - component: {fileID: -6765984459558599157}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Movable_BoxTile3Edge
   m_TagString: Untagged
   m_Icon: {fileID: 0}

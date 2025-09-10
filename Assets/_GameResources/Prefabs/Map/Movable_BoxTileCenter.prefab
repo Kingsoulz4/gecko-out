@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6715476595054641577}
   - component: {fileID: 4246822342421774102}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Movable_BoxTileCenter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
