@@ -75,11 +75,11 @@ namespace Geckout
                         //obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
                         if(y == 0)
                         {
-                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(0, 90, -90));
+                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(180, 90, -90));
                         }
                         else if(y == boxSize.y - 1)
                         {
-                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(0, -90, 90));
+                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(180, -90, 90));
                         }
                         else
                         {
@@ -118,15 +118,15 @@ namespace Geckout
                         obj.name = $"Tile_{c.x}_{c.y}";
                         if (x == 0)
                         {
-                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(90, 90, -90));
+                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(-90, 90, -90));
                         }
                         else if (x == boxSize.x - 1)
                         {
-                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(-90, -90, 90));
+                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(90, -90, 90));
                         }
                         else
                         {
-                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(90, 90, -90));
+                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(-90, 90, -90));
                         }
 
                         var movableBoxTile = obj.AddComponent<MovableBoxTile>();
