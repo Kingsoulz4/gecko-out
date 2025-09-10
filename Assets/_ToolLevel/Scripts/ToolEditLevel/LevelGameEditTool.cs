@@ -53,6 +53,8 @@ namespace Geckout
 
         private void Update()
         {
+            if (!LevelManager.Instance.IsEdittingLevel) return;
+
             if (Input.GetMouseButton(0))
             {
                 var screenPoint = Input.mousePosition;
@@ -65,7 +67,7 @@ namespace Geckout
                         return;
                     }
 
-                    if(hitInfo.transform.TryGetComponent<BoxMove>(out var boxMove))
+                    if(hitInfo.transform.parent.TryGetComponent<BoxMove>(out var boxMove))
                     {
                         SelectBoxMove(boxMove);
                     }

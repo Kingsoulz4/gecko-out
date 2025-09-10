@@ -193,6 +193,8 @@ namespace Geckout
             GetAllTilesTest(levelData);
 
             SpawnPortals();
+
+            SpawnMovableBoxes();
         }
 
         [ContextMenu("Test SpawnTiles")]
@@ -218,8 +220,17 @@ namespace Geckout
         {
             var newMovableBox = Instantiate(m_boxMovePrefab, m_movableBoxContainer);
             newMovableBox.Init(movableBoxData);
-            levelData.listMovableBoxData.Add(movableBoxData);
+            //levelData.listMovableBoxData.Add(movableBoxData);
             return newMovableBox;
+        }
+
+        void SpawnMovableBoxes()
+        {
+            foreach (var movableBox in levelData.listMovableBoxData)
+            {
+                SpawnBoxMove(movableBox);
+            }
+
         }
 
         void SpawnPortals()

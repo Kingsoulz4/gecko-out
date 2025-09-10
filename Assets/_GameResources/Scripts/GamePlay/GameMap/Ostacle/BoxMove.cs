@@ -29,13 +29,13 @@ namespace Geckout
         {
             this.movableBoxData = movableBoxData;
             SpawnTiles();
-            var collider = gameObject.AddComponent<BoxCollider>();
-            collider.size = new Vector3(movableBoxData.boxSize.x, movableBoxData.boxSize.y, 1);
         }
 
         void SpawnTiles()
         {
             var boxSize = movableBoxData.boxSize;
+            bool needSetOccupied = false;
+            if(LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Contains(movableBoxData)) needSetOccupied = true;
 
             if (movableBoxData.boxSize.x == 1 && movableBoxData.boxSize.y == 1)
             {
@@ -49,6 +49,7 @@ namespace Geckout
                 obj.transform.localScale = Vector3.one * 1;
                 obj.name = $"Tile";
                 obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
+                if(needSetOccupied) tile.IsOccupied = true;
             }
             else if (movableBoxData.boxSize.x == 1)
             {
@@ -88,7 +89,7 @@ namespace Geckout
                         var movableBoxTile = obj.AddComponent<MovableBoxTile>();
                         movableBoxTile.Coordinate = tile.MapTileData.coordinate;
                         listMovableBoxTile.Add(movableBoxTile);
-                        tile.IsOccupied = true;
+                        if (needSetOccupied) tile.IsOccupied = true;
                     }
                 }
             }
@@ -131,7 +132,7 @@ namespace Geckout
                         var movableBoxTile = obj.AddComponent<MovableBoxTile>();
                         movableBoxTile.Coordinate = tile.MapTileData.coordinate;
                         listMovableBoxTile.Add(movableBoxTile);
-                        tile.IsOccupied = true;
+                        if (needSetOccupied) tile.IsOccupied = true;
                     }
                 }
             }
@@ -207,24 +208,52 @@ namespace Geckout
                         var movableBoxTile = obj.AddComponent<MovableBoxTile>();
                         movableBoxTile.Coordinate = tile.MapTileData.coordinate;
                         listMovableBoxTile.Add(movableBoxTile);
-                        tile.IsOccupied = true;
+                        if (needSetOccupied) tile.IsOccupied = true;
                     }
                 }
             }
-
         }
 
         public void MoveByOffset(Vector2Int offset)
         {
-            foreach(var tileMove in listMovableBoxTile)
+            foreach (var tileMove in listMovableBoxTile)
+            {
+                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
+                //oldTile.IsOccupied = false;
+            }
+
+            foreach (var tileMove in listMovableBoxTile)
             {
                 var newCoordinate = new Vector2Int(tileMove.Coordinate.x + offset.x, tileMove.Coordinate.y + offset.y);
-                
+                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
                 LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(newCoordinate, out var tile);
+                //oldTile.IsOccupied = false;
                 tileMove.transform.position = tile.transform.position;
                 tileMove.Coordinate = newCoordinate;
             }
             movableBoxData.rootCoordinate += offset;
+        }
+
+        public void PlaceMoveBox()
+        {
+            foreach (var tileMove in listMovableBoxTile)
+            {
+                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
+                if (tile.IsOccupied)
+                {
+                    Debug.LogError("Cannot place tile");
+                    return;
+                }
+            }
+
+            foreach (var tileMove in listMovableBoxTile)
+            {
+                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
+                tile.IsOccupied = true;
+            }
+
+            Debug.Log("Move Success");
+            LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Add(movableBoxData);
         }
 
         private void Move()

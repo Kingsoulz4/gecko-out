@@ -15,6 +15,9 @@ namespace Geckout
         [SerializeField] private Button m_buttonMoveRight;
         [SerializeField] private Button m_buttonMoveUp;
         [SerializeField] private Button m_buttonMoveDown;
+        [SerializeField] private Button m_buttonPlace;
+        [SerializeField] private Button m_buttonDelete;
+        [SerializeField] private TMP_Dropdown m_dropDownMoveType;
 
         [SerializeField] private TMP_InputField m_inputWidth;
         [SerializeField] private TMP_InputField m_inputHeight;
@@ -30,6 +33,12 @@ namespace Geckout
             m_buttonMoveUp.onClick.AddListener(OnClickMoveUp);
             m_buttonMoveRight.onClick.AddListener(OnClickMoveRight);
             m_buttonMoveLeft.onClick.AddListener(OnClickMoveLeft);
+            m_buttonPlace.onClick.AddListener(OnClickPlace);
+        }
+
+        private void OnClickPlace()
+        {
+            LevelGame.SelectedBoxMove.PlaceMoveBox();
         }
 
         private void OnClickMoveLeft()
@@ -55,6 +64,7 @@ namespace Geckout
         private void OnClickGenerate()
         {
             movableBoxData = new MovableBoxData();
+            movableBoxData.wayDirection = (WayDirection)m_dropDownMoveType.value;
             movableBoxData.boxSize = new Vector2Int(int.Parse(m_inputWidth.text), int.Parse(m_inputHeight.text));
             var moveBox = LevelGame.GameMap.SpawnBoxMove(movableBoxData);
             LevelGame.SelectBoxMove(moveBox);
