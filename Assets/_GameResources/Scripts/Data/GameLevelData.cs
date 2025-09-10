@@ -7,6 +7,7 @@ namespace Geckout.Data
 {
     public enum LevelType
     {
+        EASY,
         NORMAL,
         HARD,
         SUPER_HARD
@@ -20,8 +21,9 @@ namespace Geckout.Data
         public int time;
         public LevelType type;
         public List<MapTileData> mapTileDatas = new();
-        public List<DogData> listDogData = new();
+        public List<BodyData> listDogData = new();
         public List<PortalData> listPortalData = new();
+        public List<MovableBoxData> listMovableBoxData = new();
         public ColorAndMaterialData colorAndMaterialData;
 
         public void GenerateDefaultMap()
@@ -77,7 +79,7 @@ namespace Geckout.Data
 
         private void OnValidate()
         {
-            if(colorAndMaterialData == null)
+            if (colorAndMaterialData == null)
             {
                 colorAndMaterialData = Resources.Load<ColorAndMaterialData>("ColorsAndMaterials/ColorAndMaterialData");
             }
@@ -98,23 +100,23 @@ namespace Geckout.Data
         }
     }
 
-    public enum ColorList
+    public enum ColorType
     {
-        Red,
-        Orange,
-        Yellow,
-        Green,
-        Blue,
-        Violet,
-        Pink,
-        Brown,
-        White,
-        Black,
-        Cyan,
-        Grey,
-        Purple,
-        BabyPink,
-        RedWine
+        Red = 0,
+        Orange = 1,
+        Yellow = 2,
+        Green = 3,
+        Blue = 4,
+        Violet = 5,
+        Pink = 6,
+        Brown = 7,
+        White = 8,
+        Black = 9,
+        Cyan = 10,
+        Grey = 11,
+        Purple = 12,
+        BabyPink = 13,
+        RedWine = 14
     }
 
     public enum MapTileType
@@ -128,37 +130,59 @@ namespace Geckout.Data
         Portal
     }
 
-    public enum DogType
+    public enum BodyType
     {
         Normal,
         DoubleColor,
         TripleColor
     }
 
+    [Serializable]
     public class MovableBoxData
     {
+        public Vector2Int boxSize;
+        public Vector2Int rootCoordinate;
+        public WayDirection wayDirection = WayDirection.All;
 
     }
 
     public enum PortalType
     {
-        Normal,
+        Normal = 0,
+        Ice = 1,
     }
 
+    public enum WayDirection
+    {
+        Horizontal = 0,
+        Vertical = 1,
+        All = 2,
+    }
+
+    [Serializable]
     public class PortalData
     {
         public PortalType portalType;
         public Vector2Int Coordinate;
-        public List<ColorList> listColor = new() { ColorList.Red };
+        public List<ColorType> listColor = new() { ColorType.Red };
     }
 
     [Serializable]
-    public class DogData
+    public class BodyData
     {
-        public DogType dogType;
-        public List<ColorList> listColor = new() { ColorList.Red};
+        public BodyType bodyType;
+        public List<ColorType> listColor = new() { ColorType.Red };
         public List<Vector2Int> listCoordinate = new();
 
+        public BodyData()
+        { }
+
+        public BodyData(BodyData bodyData)
+        {
+            this.bodyType = bodyData.bodyType;
+            this.listColor = new List<ColorType>(bodyData.listColor);
+            this.listCoordinate = new List<Vector2Int>(bodyData.listCoordinate);
+        }
     }
 
     [Serializable]
@@ -168,8 +192,4 @@ namespace Geckout.Data
         public MapTileType type;
         public Vector3Int rotation = new Vector3Int(0, 90, -90);
     }
-
-
-    
-    
 }

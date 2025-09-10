@@ -6,13 +6,16 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_GameResources/Scenes/GameSceneTestLevel.unity
+    guid: f8e15a62417fd9f43a6741ae7f1da86e
+  - enabled: 0
     path: Assets/_GameResources/Scenes/GameSceneTestMap.unity
     guid: 2cd946cddbf5b704ea76640dbc83dcab
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/_GameResources/Scenes/GameSceneTestLevel.unity
-    guid: f8e15a62417fd9f43a6741ae7f1da86e
+    path: Assets/_ToolLevel/Scenes/ToolEditLevel.unity
+    guid: 001e3ed2f4a954c40ad1a613883ce4b4
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

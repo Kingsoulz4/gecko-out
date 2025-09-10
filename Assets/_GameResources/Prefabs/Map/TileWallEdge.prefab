@@ -70,6 +70,10 @@ MonoBehaviour:
   tileRenderer: {fileID: 313871152583949716}
   IsOccupied: 1
   tileCollider: {fileID: 7480928374373256390}
+  m_outLine: {fileID: 0}
+  m_tilesTypeDisplay:
+    _serializedList: []
+  m_displayObject: {fileID: 0}
 --- !u!1 &5512702437846110266
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,7 +101,7 @@ Transform:
   m_GameObject: {fileID: 5512702437846110266}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.035, y: 0, z: 0}
   m_LocalScale: {x: 19, y: 19, z: 15.55}
   m_ConstrainProportionsScale: 0
   m_Children: []
