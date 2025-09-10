@@ -47,8 +47,8 @@ MonoBehaviour:
   moveBoxLayer:
     serializedVersion: 2
     m_Bits: 256
-  moveSpeed: 10
-  inputThreshold: 0.3
+  moveSpeed: 15
+  inputThreshold: 0.1
   enableDebugLogs: 1
   m_tileCornerPrefab: {fileID: 669604532541368859, guid: 530cfdb060e2f184c91b3d0f62f0a752, type: 3}
   m_tileEdgePrefab: {fileID: 8288943744864670536, guid: e6752995896a6284499c7743498d1f4f, type: 3}
