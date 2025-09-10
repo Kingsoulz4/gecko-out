@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100174093190405237
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2091937477640027912}
+  m_Layer: 0
+  m_Name: MovableBoxesContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2091937477640027912
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100174093190405237}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2062647947501416683}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3778204450190434973
 GameObject:
   m_ObjectHideFlags: 0
@@ -33,6 +64,7 @@ Transform:
   - {fileID: 4655650912071065848}
   - {fileID: 15752251296675440}
   - {fileID: 1153484657752392825}
+  - {fileID: 2091937477640027912}
   m_Father: {fileID: 7072393982718881304}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8946495759869636908
@@ -54,9 +86,11 @@ MonoBehaviour:
   m_tileWallEdge: {fileID: 2424358606838639240, guid: 354325ad6c70f52458b5d0f172e2634e, type: 3}
   m_tileWallCorner: {fileID: 5415367166614964074, guid: 744ed41814ff14343a38e2b106f272a2, type: 3}
   m_portalPrefab: {fileID: -793955662842280384, guid: 5a57a1a5f57db114f8d10db726fdcbd6, type: 3}
+  m_boxMovePrefab: {fileID: 5003617613351051986, guid: 7dc5f1a3affb9264a821e80159b03dbd, type: 3}
   _tilesContainer: {fileID: 15752251296675440}
   m_wallContainer: {fileID: 4655650912071065848}
   m_portalsContainer: {fileID: 1153484657752392825}
+  m_movableBoxContainer: {fileID: 2091937477640027912}
   defaultMaterial: {fileID: 2100000, guid: 07711bf15d913b74f9905ffe65dc1f4e, type: 2}
   moveMaterial: {fileID: 2100000, guid: 4d442cd59cb090840b7022249cd82da6, type: 2}
 --- !u!1 &4088674694960204547
