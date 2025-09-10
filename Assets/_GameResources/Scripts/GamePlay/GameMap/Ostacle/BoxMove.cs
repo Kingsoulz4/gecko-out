@@ -45,7 +45,7 @@ namespace Geckout
 
                 obj = Instantiate(m_tile4EdgePrefab, transform);
 
-                obj.transform.position = tile.transform.position;
+                obj.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y, obj.transform.position.z);
                 obj.transform.localScale = Vector3.one * 1;
                 obj.name = $"Tile";
                 obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
@@ -69,7 +69,7 @@ namespace Geckout
 
                         obj = Instantiate(prefab, transform);
 
-                        obj.transform.position = tile.transform.position;
+                        obj.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y, obj.transform.position.z);
                         obj.transform.localScale = Vector3.one * 1;
                         obj.name = $"Tile_{c.x}_{c.y}";
                         //obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
@@ -113,7 +113,7 @@ namespace Geckout
 
                         obj = Instantiate(prefab, transform);
 
-                        obj.transform.position = tile.transform.position;
+                        obj.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y, obj.transform.position.z);
                         obj.transform.localScale = Vector3.one * 1;
                         obj.name = $"Tile_{c.x}_{c.y}";
                         if (x == 0)
@@ -202,7 +202,7 @@ namespace Geckout
                             obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
                         }
 
-                        obj.transform.position = tile.transform.position;
+                        obj.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y, obj.transform.position.z);
                         obj.transform.localScale = Vector3.one * 1;
                         obj.name = $"Tile_{c.x}_{c.y}";
                         var movableBoxTile = obj.AddComponent<MovableBoxTile>();
@@ -212,49 +212,6 @@ namespace Geckout
                     }
                 }
             }
-        }
-
-        public void MoveByOffset(Vector2Int offset)
-        {
-            foreach (var tileMove in listMovableBoxTile)
-            {
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
-                //oldTile.IsOccupied = false;
-            }
-
-            foreach (var tileMove in listMovableBoxTile)
-            {
-                var newCoordinate = new Vector2Int(tileMove.Coordinate.x + offset.x, tileMove.Coordinate.y + offset.y);
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(newCoordinate, out var tile);
-                //oldTile.IsOccupied = false;
-                tileMove.transform.position = tile.transform.position;
-                tileMove.Coordinate = newCoordinate;
-            }
-            movableBoxData.rootCoordinate += offset;
-        }
-
-        public void PlaceMoveBox()
-        {
-            foreach (var tileMove in listMovableBoxTile)
-            {
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
-                if (tile.IsOccupied)
-                {
-                    Debug.LogError("Cannot place tile");
-                    return;
-                }
-
-            }
-
-            foreach (var tileMove in listMovableBoxTile)
-            {
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
-                tile.IsOccupied = true;
-            }
-
-            Debug.Log("Move Success");
-            LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Add(movableBoxData);
         }
 
         private void Move()

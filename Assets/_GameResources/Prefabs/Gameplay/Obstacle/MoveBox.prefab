@@ -53,3 +53,4 @@ MonoBehaviour:
   m_tileCorner3EdgePrefab: {fileID: 14565045358643500, guid: 2eea291330838664aa6c926f39a85c33, type: 3}
   m_tile2EdgePrefab: {fileID: 5582116825612221933, guid: 5995ea037f2f35244978ae405c9a9240, type: 3}
   m_tile4EdgePrefab: {fileID: 2263324330373023107, guid: 7696b66814ab7fe47bfa231018ea00bd, type: 3}
+  m_outlineSelected: {fileID: 0}
