@@ -35,6 +35,7 @@ namespace Geckout
         private GameTile[] tiles;
         private Vector2Int _mapSize;
         private List<Portal> listPortal = new();
+        private static Vector2 gridOffset;
 
         public static Vector2Int MapSize => _instance._mapSize;
 
@@ -168,6 +169,8 @@ namespace Geckout
                     i++;
                 }
             }
+
+            gridOffset = new Vector2(MapSize.x - 1, MapSize.y - 1) * 0.5f;
         }
 
         public void SetLevelData(GameLevelData levelData)
@@ -355,7 +358,18 @@ namespace Geckout
 
             //SpawnPortals();
         }
+        public static Vector2Int WorldToGridPosition(Vector3 worldPos)
+        {
+            float gridX = worldPos.x + gridOffset.x;
+            float gridY = worldPos.y + gridOffset.y;
 
+            Vector2Int result = new Vector2Int(
+                Mathf.RoundToInt(gridX),
+                Mathf.RoundToInt(gridY)
+            );
+
+            return result;
+        }
         private void SpawnWalls(Vector2Int gridSize, float cellSize, float cubeSize, Vector3 centerOffset)
         {
             // Corners
@@ -430,6 +444,48 @@ namespace Geckout
             }
         }
 
+        public static Vector2Int WorldToGridPositionForward(Vector3 worldPos,BodyController bodyController)
+        {
+            float gridX = worldPos.x + gridOffset.x;
+            float gridY = worldPos.y + gridOffset.y;
+
+            Vector2Int currentTile = new Vector2Int(Mathf.RoundToInt(gridX), Mathf.RoundToInt(gridY));
+            var movementDirection = bodyController.GridClamper.CurrentDirection;
+            if (movementDirection == Vector2Int.zero)
+                return currentTile;
+
+            Vector3 currentTileCenter = new Vector3(
+                currentTile.x - gridOffset.x,
+                currentTile.y - gridOffset.y,
+                0
+            );
+
+            bool crossedCenter = false;
+
+            if (movementDirection.x > 0)
+            {
+                crossedCenter = worldPos.x > currentTileCenter.x;
+            }
+            else if (movementDirection.x < 0)
+            {
+                crossedCenter = worldPos.x < currentTileCenter.x;
+            }
+            else if (movementDirection.y > 0)
+            {
+                crossedCenter = worldPos.y > currentTileCenter.y;
+            }
+            else if (movementDirection.y < 0)
+            {
+                crossedCenter = worldPos.y < currentTileCenter.y;
+            }
+
+            if (crossedCenter)
+            {
+                return currentTile + movementDirection;
+            }
+
+            return currentTile;
+        }
         public static bool[] GetCurrentMapState()
         {
             bool[] mapState = new bool[_instance.tiles.Length];

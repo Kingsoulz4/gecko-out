@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Geckout
@@ -27,7 +28,6 @@ namespace Geckout
 
         private void OnEndMoveHandle()
         {
-            UpdateAllSegmentPositions();
             ForceRestoreAll();
         }
 
@@ -57,49 +57,6 @@ namespace Geckout
             });
         }
 
-        public Vector2Int WorldToGridPositionForward(Vector3 worldPos)
-        {
-            float gridX = worldPos.x + gridOffset.x;
-            float gridY = worldPos.y + gridOffset.y;
-
-            Vector2Int currentTile = new Vector2Int(Mathf.RoundToInt(gridX), Mathf.RoundToInt(gridY));
-            var movementDirection = bodyController.GridClamper.CurrentDirection;
-            if (movementDirection == Vector2Int.zero)
-                return currentTile;
-
-            Vector3 currentTileCenter = new Vector3(
-                currentTile.x - gridOffset.x,
-                currentTile.y - gridOffset.y,
-                0
-            );
-
-            bool crossedCenter = false;
-
-            if (movementDirection.x > 0)
-            {
-                crossedCenter = worldPos.x > currentTileCenter.x;
-            }
-            else if (movementDirection.x < 0)
-            {
-                crossedCenter = worldPos.x < currentTileCenter.x;
-            }
-            else if (movementDirection.y > 0)
-            {
-                crossedCenter = worldPos.y > currentTileCenter.y;
-            }
-            else if (movementDirection.y < 0)
-            {
-                crossedCenter = worldPos.y < currentTileCenter.y;
-            }
-
-            if (crossedCenter)
-            {
-                return currentTile + movementDirection;
-            }
-
-            return currentTile;
-        }
-
         public void UpdateAllSegmentPositions(bool isChangeTileColor = true)
         {
             var orderedSegments = bodyController.GetOrderedSegments();
@@ -116,8 +73,8 @@ namespace Geckout
                 int rawIndex = segments.IndexOf(segment);
 
                 Vector3 worldPos = segment.transform.position;
-                Vector2Int gridPos = WorldToGridPosition(worldPos);
-
+                Vector2Int gridPos = GameMap.WorldToGridPosition(worldPos);
+                
                 UpdateSegmentTile(rawIndex, gridPos, isChangeTileColor);
                 lastGridPositions[rawIndex] = gridPos;
             }
@@ -139,19 +96,6 @@ namespace Geckout
             }
         }
 
-        public Vector2Int WorldToGridPosition(Vector3 worldPos)
-        {
-            float gridX = worldPos.x + gridOffset.x;
-            float gridY = worldPos.y + gridOffset.y;
-
-            Vector2Int result = new Vector2Int(
-                Mathf.RoundToInt(gridX),
-                Mathf.RoundToInt(gridY)
-            );
-
-            return result;
-        }
-
         void UpdateSegmentTile(int segmentIndex, Vector2Int gridPos, bool changeTileColor)
         {
             var segment = bodyController.Segments[segmentIndex];
@@ -169,6 +113,7 @@ namespace Geckout
             {
                 previousTile.RemoveOccupant();
                 currentOccupiedTiles[segmentIndex].SetOccupied(false);
+                
             }
 
             // Add to new tile
