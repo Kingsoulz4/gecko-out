@@ -27,6 +27,48 @@ namespace Geckout
 
         #region Tool
 
+        public void MoveByOffset(Vector2Int offset)
+        {
+            foreach (var tileMove in listMovableBoxTile)
+            {
+                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
+                //oldTile.IsOccupied = false;
+            }
+
+            foreach (var tileMove in listMovableBoxTile)
+            {
+                var newCoordinate = new Vector2Int(tileMove.Coordinate.x + offset.x, tileMove.Coordinate.y + offset.y);
+                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
+                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(newCoordinate, out var tile);
+                //oldTile.IsOccupied = false;
+                tileMove.transform.position = tile.transform.position;
+                tileMove.Coordinate = newCoordinate;
+            }
+            movableBoxData.rootCoordinate += offset;
+        }
+
+        public void PlaceMoveBox()
+        {
+            foreach (var tileMove in listMovableBoxTile)
+            {
+                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
+                if (tile.IsOccupied)
+                {
+                    Debug.LogError("Cannot place tile");
+                    return;
+                }
+            }
+
+            foreach (var tileMove in listMovableBoxTile)
+            {
+                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
+                tile.IsOccupied = true;
+            }
+
+            Debug.Log("Move Success");
+            LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Add(movableBoxData);
+        }
+
         public void SetSelected(bool selected)
         {
             OutlineSelected.enabled = selected;

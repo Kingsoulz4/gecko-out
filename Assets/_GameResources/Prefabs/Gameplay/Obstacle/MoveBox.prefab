@@ -46,10 +46,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveBoxLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
+  moveSpeed: 10
+  inputThreshold: 0.3
+  enableDebugLogs: 1
   m_tileCornerPrefab: {fileID: 669604532541368859, guid: 530cfdb060e2f184c91b3d0f62f0a752, type: 3}
   m_tileEdgePrefab: {fileID: 8288943744864670536, guid: e6752995896a6284499c7743498d1f4f, type: 3}
   m_tileCenterPrefab: {fileID: 8302818526664965620, guid: 02a576666bf07d24d9dceb8eb757063a, type: 3}
   m_tileCorner3EdgePrefab: {fileID: 14565045358643500, guid: 2eea291330838664aa6c926f39a85c33, type: 3}
   m_tile2EdgePrefab: {fileID: 5582116825612221933, guid: 5995ea037f2f35244978ae405c9a9240, type: 3}
   m_tile4EdgePrefab: {fileID: 2263324330373023107, guid: 7696b66814ab7fe47bfa231018ea00bd, type: 3}
+  enablePositionDebug: 1
+  wayDirection: 2
+  m_outlineSelected: {fileID: 0}

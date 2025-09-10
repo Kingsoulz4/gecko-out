@@ -32,7 +32,7 @@ namespace Geckout
         {
             get
             {
-                return PlayerPrefs.GetInt("CurrentLevelNum", 2);
+                return PlayerPrefs.GetInt("CurrentLevelNum", 3);
             }
             set
             {
