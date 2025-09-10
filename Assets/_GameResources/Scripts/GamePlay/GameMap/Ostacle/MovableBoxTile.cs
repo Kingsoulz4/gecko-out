@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace Geckout
 {
-    public class MovableBoxTile : MonoBehaviour
+    public class MovableBoxTile : BoxBaseTile
     {
-        public Vector2Int Coordinate { get; set; }
     }
 }

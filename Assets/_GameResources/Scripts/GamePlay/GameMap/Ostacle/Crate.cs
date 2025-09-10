@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Geckout
 {
-    public class Crate : BoxBase<CrateTile, CrateData>
+    public partial class Crate : BoxBase<CrateTile, CrateData>
     {
         protected override Vector2Int RootCoordinate => Data.rootCoordinate;
         protected override Vector2Int BoxSize => Data.boxSize;

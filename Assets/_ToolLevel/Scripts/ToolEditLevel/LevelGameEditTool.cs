@@ -1,9 +1,8 @@
 using Geckout.Data;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using System.Linq;
 
 namespace Geckout
 {
@@ -38,7 +37,7 @@ namespace Geckout
             get; set;
         }
 
-        private Crate SelectedCrate
+        public Crate SelectedCrate
         {
             get; set;
         }
@@ -74,7 +73,12 @@ namespace Geckout
 
                     if(hitInfo.transform.parent.TryGetComponent<BoxMove>(out var boxMove))
                     {
-                        SelectBoxMove(boxMove);
+                        SelectMovableBox(boxMove);
+                    }
+
+                    if (hitInfo.transform.parent.TryGetComponent<Crate>(out var crate))
+                    {
+                        SelectCrateBox(crate);
                     }
 
                     var dogBody = hitInfo.transform.GetComponentInParent<BodyController>();
@@ -113,14 +117,27 @@ namespace Geckout
             }
         }
 
-        public void SelectBoxMove(BoxMove boxMove)
+        public void SelectMovableBox(BoxMove boxBase) 
         {
             if(SelectedBoxMove != null)
             {
                 SelectedBoxMove.SetSelected(false);
             }
-            SelectedBoxMove = boxMove;
+           
+            SelectedBoxMove = boxBase;
             SelectedBoxMove.SetSelected(true);
+            ToolEditLevelManager.OnClickEditBoxes();
+        }
+
+        public void SelectCrateBox(Crate crate)
+        {
+            if (SelectedCrate != null)
+            {
+                SelectedCrate.SetSelected(false);
+            }
+
+            SelectedCrate = crate;
+            SelectedCrate.SetSelected(true);
             ToolEditLevelManager.OnClickEditBoxes();
         }
 

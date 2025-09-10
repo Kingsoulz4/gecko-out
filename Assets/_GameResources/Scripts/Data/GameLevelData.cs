@@ -139,18 +139,21 @@ namespace Geckout.Data
     }
 
     [Serializable]
-    public class MovableBoxData
+    public class BoxBaseData
     {
         public Vector2Int boxSize;
         public Vector2Int rootCoordinate;
+    }
+
+    [Serializable]
+    public class MovableBoxData: BoxBaseData
+    {
         public WayDirection wayDirection = WayDirection.All;
     }
 
     [Serializable]
-    public class CrateData
+    public class CrateData:BoxBaseData
     {
-        public Vector2Int boxSize;
-        public Vector2Int rootCoordinate;
         public int difusionCount;
     }
 

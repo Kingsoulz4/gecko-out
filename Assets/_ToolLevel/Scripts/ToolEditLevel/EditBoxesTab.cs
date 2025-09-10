@@ -25,7 +25,7 @@ namespace Geckout
 
         public LevelGameEditTool LevelGame { get; set; }
 
-        private MovableBoxData MovableBoxData { get; set; } = new();
+        private BoxBaseData BoxBaseData { get; set; } = new();
 
         private CrateData CrateData { get; set; } = new();
 
@@ -44,14 +44,21 @@ namespace Geckout
         {
             if (LevelGame != null && LevelGame.SelectedBoxMove != null)
             {
-                MovableBoxData = LevelGame.SelectedBoxMove.Data;
-                m_dropDownMoveType.value = (int)MovableBoxData.wayDirection;
+                BoxBaseData = LevelGame.SelectedBoxMove.Data;
+                if (BoxBaseData is MovableBoxData)
+                {
+                    m_dropDownMoveType.value = (int)((MovableBoxData)BoxBaseData).wayDirection;
+                }
             }
         }
 
         private void OnDropDownMoveTypeChangeValue(int arg0)
         {
-            MovableBoxData.wayDirection = (WayDirection)m_dropDownMoveType.value;
+            if (BoxBaseData is MovableBoxData)
+            {
+                ((MovableBoxData)BoxBaseData).wayDirection = (WayDirection)m_dropDownMoveType.value;
+            }
+            
             LevelGame.SelectedBoxMove.UpdateVisual();
         }
 
@@ -105,19 +112,21 @@ namespace Geckout
 
         private void OnClickGenerate()
         {
-            if (m_dropDownBoxType.value == 0)
+            if (BoxBaseData is MovableBoxData)
             {
-                MovableBoxData = new MovableBoxData();
-                MovableBoxData.wayDirection = (WayDirection)m_dropDownMoveType.value;
-                MovableBoxData.boxSize = new Vector2Int(int.Parse(m_inputWidth.text), int.Parse(m_inputHeight.text));
-                var moveBox = LevelGame.GameMap.SpawnBoxMove(MovableBoxData);
-                LevelGame.SelectBoxMove(moveBox);
+                var boxMoveData = (MovableBoxData)BoxBaseData;
+                boxMoveData = new MovableBoxData();
+                boxMoveData.wayDirection = (WayDirection)m_dropDownMoveType.value;
+                BoxBaseData.boxSize = new Vector2Int(int.Parse(m_inputWidth.text), int.Parse(m_inputHeight.text));
+                var moveBox = LevelGame.GameMap.SpawnBoxMove(boxMoveData);
+                LevelGame.SelectMovableBox(moveBox);
             }
-            else if(m_dropDownBoxType.value == 1)
+            else if (BoxBaseData is CrateData)
             {
                 CrateData = new CrateData();
                 CrateData.boxSize = new Vector2Int(int.Parse(m_inputWidth.text), int.Parse(m_inputHeight.text));
                 var newCrate = LevelGame.GameMap.SpawnCrate(CrateData);
+                LevelGame.SelectCrateBox(newCrate);
             }
         }
     }

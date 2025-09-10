@@ -4,9 +4,14 @@ using UnityEngine;
 
 namespace Geckout
 {
-    public abstract class BoxBase<TTile, TData> : MonoBehaviour
-        where TTile : MonoBehaviour
-        where TData : class
+    //public abstract class BoxBase: MonoBehaviour
+    //{
+    //    public abstract void SetSelected(bool selected);
+    //}
+
+    public partial class BoxBase<TTile, TData> : MonoBehaviour /*BoxBase*/
+        where TTile : BoxBaseTile
+        where TData : BoxBaseData
     {
         [SerializeField] protected GameObject m_tileCornerPrefab;
         [SerializeField] protected GameObject m_tileEdgePrefab;
@@ -26,10 +31,10 @@ namespace Geckout
             UpdateVisual();
         }
 
-        protected abstract Vector2Int RootCoordinate { get; }
-        protected abstract Vector2Int BoxSize { get; }
-        protected abstract bool ShouldSetOccupied();
-        protected abstract void AddTileComponent(GameObject obj, Vector2Int coord);
+        protected virtual Vector2Int RootCoordinate { get; }
+        protected virtual Vector2Int BoxSize { get; }
+        protected virtual bool ShouldSetOccupied() { return false; }
+        protected virtual void AddTileComponent(GameObject obj, Vector2Int coord) { }
 
         public virtual void UpdateVisual()
         {
