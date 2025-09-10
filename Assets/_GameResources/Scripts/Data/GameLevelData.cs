@@ -142,7 +142,8 @@ namespace Geckout.Data
     {
         public Vector2Int boxSize;
         public Vector2Int rootCoordinate;
-        
+        public WayDirection wayDirection = WayDirection.All;
+
     }
 
     public enum PortalType
