@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9036015693858767449}
   - component: {fileID: -6364346117175287478}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Movable_BoxTile2Edge
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -775,7 +775,8 @@ PrefabInstance:
       propertyPath: m_UseColorTemperature
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8693015834874055601, guid: 53ab0c9f8001fd44cae1bb4ed18f3431, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -944,6 +945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_designLevel: {fileID: 1853599247}
+  m_textTime: {fileID: 2004080569}
 --- !u!114 &1069335265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1329,7 +1331,8 @@ PrefabInstance:
       propertyPath: m_Shadows.m_Type
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8693015834874055601, guid: 53ab0c9f8001fd44cae1bb4ed18f3431, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1678,7 +1681,8 @@ PrefabInstance:
       propertyPath: m_Shadows.m_Type
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8693015834874055601, guid: 53ab0c9f8001fd44cae1bb4ed18f3431, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -4041,7 +4045,7 @@ Transform:
   m_GameObject: {fileID: 2436434912415835705}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0544, y: 0.016867306, z: 0.0055}
+  m_LocalPosition: {x: -0.0544, y: 0.167, z: 0.0055}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5299,7 +5303,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &8187233749712672884
 GameObject:
   m_ObjectHideFlags: 0
