@@ -34,13 +34,13 @@ namespace Geckout
 
         public void MoveByOffset(Vector2Int offset)
         {
-            foreach (var tileMove in listMovableBoxTile)
+            foreach (var tileMove in spawnedTiles)
             {
                 LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
                 //oldTile.IsOccupied = false;
             }
 
-            foreach (var tileMove in listMovableBoxTile)
+            foreach (var tileMove in spawnedTiles)
             {
                 var newCoordinate = new Vector2Int(tileMove.Coordinate.x + offset.x, tileMove.Coordinate.y + offset.y);
                 LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
@@ -49,12 +49,13 @@ namespace Geckout
                 tileMove.transform.position = tile.transform.position;
                 tileMove.Coordinate = newCoordinate;
             }
-            MovableBoxData.rootCoordinate += offset;
+            Data.rootCoordinate += offset;
+            UpdateVisual();
         }
 
         public void PlaceMoveBox()
         {
-            foreach (var tileMove in listMovableBoxTile)
+            foreach (var tileMove in spawnedTiles)
             {
                 LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
                 if (tile.IsOccupied)
@@ -65,14 +66,14 @@ namespace Geckout
 
             }
 
-            foreach (var tileMove in listMovableBoxTile)
+            foreach (var tileMove in spawnedTiles)
             {
                 LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
                 tile.IsOccupied = true;
             }
 
             Debug.Log("Move Success");
-            LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Add(MovableBoxData);
+            LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Add(Data);
         }
 
         

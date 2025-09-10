@@ -16,17 +16,19 @@ namespace Geckout
         [SerializeField] private bool isDebug = false;
         [SerializeField] private float offsetFactor = 1f;
 
-        [Header("Tiles")]
+        [Header("Tiles And Blocks")]
         [SerializeField] private GameTile m_tileWallEdge;
         [SerializeField] private GameTile m_tileWallCorner;
         [SerializeField] private Portal m_portalPrefab;
         [SerializeField] private BoxMove m_boxMovePrefab;
+        [SerializeField] private Crate m_cratePrefab;
 
         [Header("Containers")]
         [SerializeField] private Transform _tilesContainer;
         [SerializeField] private Transform m_wallContainer;
         [SerializeField] private Transform m_portalsContainer;
         [SerializeField] private Transform m_movableBoxContainer;
+        [SerializeField] private Transform m_crateContainer;
 
         [Header("Material Management")]
         [SerializeField] private Material defaultMaterial;
@@ -195,6 +197,8 @@ namespace Geckout
             SpawnPortals();
 
             SpawnMovableBoxes();
+
+            SpawnCrates();
         }
 
         [ContextMenu("Test SpawnTiles")]
@@ -216,11 +220,17 @@ namespace Geckout
             listPortal.Add(portal);
         }
 
+        public Crate SpawnCrate(CrateData crateData)
+        {
+            var newCrate = Instantiate(m_cratePrefab, m_movableBoxContainer);
+            newCrate.Init(crateData);
+            return newCrate;
+        }
+
         public BoxMove SpawnBoxMove(MovableBoxData movableBoxData)
         {
             var newMovableBox = Instantiate(m_boxMovePrefab, m_movableBoxContainer);
             newMovableBox.Init(movableBoxData);
-            //levelData.listMovableBoxData.Add(movableBoxData);
             return newMovableBox;
         }
 
@@ -240,6 +250,15 @@ namespace Geckout
             foreach(var portal in levelData.listPortalData)
             {
                 SpawnPortal(portal);
+            }
+        }
+
+        void SpawnCrates()
+        {
+            Utils.RemoveAllChilds(m_crateContainer);
+            foreach (var crateData in levelData.listCrateData)
+            {
+                SpawnCrate(crateData);
             }
         }
 

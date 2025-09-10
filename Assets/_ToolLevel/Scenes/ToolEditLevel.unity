@@ -1402,7 +1402,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Starred
+  m_text: Movable
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2141,6 +2141,7 @@ MonoBehaviour:
   m_buttonPlace: {fileID: 1243475805}
   m_buttonDelete: {fileID: 420109590}
   m_dropDownMoveType: {fileID: 1679087035}
+  m_dropDownBoxType: {fileID: 304323107}
   m_inputWidth: {fileID: 1888408747}
   m_inputHeight: {fileID: 658988093}
 --- !u!1 &156476952
@@ -4241,9 +4242,9 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: Starred
-      m_Image: {fileID: 0}
     - m_Text: Movable
+      m_Image: {fileID: 0}
+    - m_Text: Crate
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

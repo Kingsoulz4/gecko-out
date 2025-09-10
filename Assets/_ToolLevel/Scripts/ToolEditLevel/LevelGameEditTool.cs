@@ -38,6 +38,11 @@ namespace Geckout
             get; set;
         }
 
+        private Crate SelectedCrate
+        {
+            get; set;
+        }
+
         private ToolEditLevelManager toolEditLevelManager;
         public ToolEditLevelManager ToolEditLevelManager
         {

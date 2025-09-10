@@ -24,6 +24,7 @@ namespace Geckout.Data
         public List<BodyData> listDogData = new();
         public List<PortalData> listPortalData = new();
         public List<MovableBoxData> listMovableBoxData = new();
+        public List<CrateData> listCrateData = new();
         public ColorAndMaterialData colorAndMaterialData;
 
         public void GenerateDefaultMap()
@@ -143,7 +144,14 @@ namespace Geckout.Data
         public Vector2Int boxSize;
         public Vector2Int rootCoordinate;
         public WayDirection wayDirection = WayDirection.All;
+    }
 
+    [Serializable]
+    public class CrateData
+    {
+        public Vector2Int boxSize;
+        public Vector2Int rootCoordinate;
+        public int difusionCount;
     }
 
     public enum PortalType
