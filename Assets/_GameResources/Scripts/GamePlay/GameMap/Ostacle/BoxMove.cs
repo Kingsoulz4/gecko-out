@@ -36,15 +36,16 @@ namespace Geckout
         void SpawnTiles()
         {
             var boxSize = movableBoxData.boxSize;
-            float cellSize = 1;
 
             if (movableBoxData.boxSize.x == 1 && movableBoxData.boxSize.y == 1)
             {
+                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(movableBoxData.rootCoordinate.x, movableBoxData.rootCoordinate.y), out var tile);
+
                 GameObject obj;
 
                 obj = Instantiate(m_tile4EdgePrefab, transform);
 
-                obj.transform.localPosition = Vector3.zero;
+                obj.transform.position = tile.transform.position;
                 obj.transform.localScale = Vector3.one * 1;
                 obj.name = $"Tile";
                 obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
@@ -87,6 +88,7 @@ namespace Geckout
                         var movableBoxTile = obj.AddComponent<MovableBoxTile>();
                         movableBoxTile.Coordinate = tile.MapTileData.coordinate;
                         listMovableBoxTile.Add(movableBoxTile);
+                        tile.IsOccupied = true;
                     }
                 }
             }
@@ -105,8 +107,6 @@ namespace Geckout
                         }
 
                         LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(movableBoxData.rootCoordinate.x + c.x, movableBoxData.rootCoordinate.y + c.y), out var tile);
-
-                        // matrix coordinate → world position
 
                         GameObject obj;
 
@@ -131,6 +131,7 @@ namespace Geckout
                         var movableBoxTile = obj.AddComponent<MovableBoxTile>();
                         movableBoxTile.Coordinate = tile.MapTileData.coordinate;
                         listMovableBoxTile.Add(movableBoxTile);
+                        tile.IsOccupied = true;
                     }
                 }
             }
@@ -200,17 +201,15 @@ namespace Geckout
                             obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
                         }
 
-                        //obj.transform.localPosition = pos;
                         obj.transform.position = tile.transform.position;
                         obj.transform.localScale = Vector3.one * 1;
                         obj.name = $"Tile_{c.x}_{c.y}";
                         var movableBoxTile = obj.AddComponent<MovableBoxTile>();
                         movableBoxTile.Coordinate = tile.MapTileData.coordinate;
                         listMovableBoxTile.Add(movableBoxTile);
-
+                        tile.IsOccupied = true;
                     }
                 }
-
             }
 
         }
@@ -220,6 +219,7 @@ namespace Geckout
             foreach(var tileMove in listMovableBoxTile)
             {
                 var newCoordinate = new Vector2Int(tileMove.Coordinate.x + offset.x, tileMove.Coordinate.y + offset.y);
+                
                 LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(newCoordinate, out var tile);
                 tileMove.transform.position = tile.transform.position;
                 tileMove.Coordinate = newCoordinate;
