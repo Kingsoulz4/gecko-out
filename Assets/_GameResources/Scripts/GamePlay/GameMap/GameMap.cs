@@ -226,6 +226,7 @@ namespace Geckout
 
         void SpawnMovableBoxes()
         {
+            Utils.RemoveAllChilds(m_movableBoxContainer);
             foreach (var movableBox in levelData.listMovableBoxData)
             {
                 SpawnBoxMove(movableBox);
@@ -235,6 +236,7 @@ namespace Geckout
 
         void SpawnPortals()
         {
+            Utils.RemoveAllChilds(m_portalsContainer);
             foreach(var portal in levelData.listPortalData)
             {
                 SpawnPortal(portal);
