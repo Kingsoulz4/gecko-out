@@ -90,6 +90,7 @@ namespace Geckout
         public void OnClickEditBoxes()
         {
             HideAllTabs();
+            LevelGame.ClearSelectedBody();
             m_editBoxesTab.LevelGame = LevelGame;
             m_buttonEditBoxes.GetComponent<ButtonToolTab>().SetSelected(true);
             m_editBoxesTab.gameObject.SetActive(true);
@@ -98,7 +99,8 @@ namespace Geckout
         public void OnClickEditPortals()
         {
             HideAllTabs();
-            
+            LevelGame.ClearSelectedBody();
+            LevelGame.ClearSelectedMovableBox();
             m_buttonEditPortals.GetComponent<ButtonToolTab>().SetSelected(true);
             m_editPortalTab.gameObject.SetActive(true);
             m_editPortalTab.LevelGame = LevelGame;
@@ -121,6 +123,7 @@ namespace Geckout
             if (LevelGame != null && LevelGame.selectedBody != null)
             {
                 LevelGame.ClearAllSelectedTiles();
+                LevelGame.ClearSelectedMovableBox();
                 m_designDogTab.UpdateUI(LevelGame.selectedBody.BodyData);
             }
             else
@@ -132,6 +135,7 @@ namespace Geckout
         public void OnClickEditWalls()
         {
             HideAllTabs();
+            LevelGame.ClearSelectedBody();
             m_buttonEditWalls.GetComponent<ButtonToolTab>().SetSelected(true);
             m_editWallsTab.gameObject.SetActive(true);
             m_editWallsTab.LevelGame = LevelGame;

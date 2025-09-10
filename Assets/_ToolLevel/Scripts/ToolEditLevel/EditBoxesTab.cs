@@ -34,6 +34,45 @@ namespace Geckout
             m_buttonMoveRight.onClick.AddListener(OnClickMoveRight);
             m_buttonMoveLeft.onClick.AddListener(OnClickMoveLeft);
             m_buttonPlace.onClick.AddListener(OnClickPlace);
+            m_dropDownMoveType.onValueChanged.AddListener(OnDropDownMoveTypeChangeValue);
+        }
+
+        private void OnEnable()
+        {
+            if (LevelGame != null && LevelGame.SelectedBoxMove != null)
+            {
+                movableBoxData = LevelGame.SelectedBoxMove.MovableBoxData;
+                m_dropDownMoveType.value = (int)movableBoxData.wayDirection;
+            }
+        }
+
+        private void OnDropDownMoveTypeChangeValue(int arg0)
+        {
+            movableBoxData.wayDirection = (WayDirection)m_dropDownMoveType.value;
+            LevelGame.SelectedBoxMove.UpdateVisual();
+        }
+
+        private void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                OnClickMoveUp();
+            }
+
+            if(Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                OnClickMoveDown();
+            }
+
+            if(Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                OnClickMoveLeft();
+            }
+
+            if(Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                OnClickMoveRight();
+            }
         }
 
         private void OnClickPlace()

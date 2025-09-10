@@ -91,6 +91,12 @@ namespace Geckout
                         tile.SetSelected(false);
                         listSelectedTile.Remove(tile);
                     }
+
+                    if (hitInfo.transform.parent.TryGetComponent<BoxMove>(out var boxMove))
+                    {
+                        SelectedBoxMove.SetSelected(false);
+                        SelectedBoxMove = null;
+                    }
                 }
             }
 
@@ -110,6 +116,7 @@ namespace Geckout
             }
             SelectedBoxMove = boxMove;
             SelectedBoxMove.SetSelected(true);
+            ToolEditLevelManager.OnClickEditBoxes();
         }
 
         public void SelectTile(GameTile tile)
@@ -192,6 +199,7 @@ namespace Geckout
         {
             ClearAllSelectedTiles();
             ClearSelectedBody();
+            ClearSelectedMovableBox();
         }
 
         public void ClearSelectedBody()
@@ -202,6 +210,13 @@ namespace Geckout
                 selectedBody = null;
             }
         }
+
+        public void ClearSelectedMovableBox()
+        {
+            if(SelectedBoxMove != null) SelectedBoxMove.SetSelected(false);
+            SelectedBoxMove = null; 
+        }
+            
 
         public void ClearAllSelectedTiles()
         {

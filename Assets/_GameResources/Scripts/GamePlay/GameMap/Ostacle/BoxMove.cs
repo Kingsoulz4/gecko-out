@@ -19,27 +19,32 @@ namespace Geckout
         [SerializeField] private GameObject m_tileCorner3EdgePrefab;
         [SerializeField] private GameObject m_tile2EdgePrefab;
         [SerializeField] private GameObject m_tile4EdgePrefab;
-        
+
+        [SerializeField] private GameObject m_arrowHorizontal;
+        [SerializeField] private GameObject m_arrowVertical;
 
         private WayDirection wayDirection = WayDirection.Horizontal;
-        private MovableBoxData movableBoxData = new();
+        public MovableBoxData MovableBoxData { get; private set; } = new();
         private List<MovableBoxTile> listMovableBoxTile = new();
 
         public void Init(MovableBoxData movableBoxData)
         {
-            this.movableBoxData = movableBoxData;
+            this.MovableBoxData = movableBoxData;
+            
             SpawnTiles();
+
+            UpdateVisual();
         }
 
         void SpawnTiles()
         {
-            var boxSize = movableBoxData.boxSize;
+            var boxSize = MovableBoxData.boxSize;
             bool needSetOccupied = false;
-            if(LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Contains(movableBoxData)) needSetOccupied = true;
+            if(LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Contains(MovableBoxData)) needSetOccupied = true;
 
-            if (movableBoxData.boxSize.x == 1 && movableBoxData.boxSize.y == 1)
+            if (MovableBoxData.boxSize.x == 1 && MovableBoxData.boxSize.y == 1)
             {
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(movableBoxData.rootCoordinate.x, movableBoxData.rootCoordinate.y), out var tile);
+                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(MovableBoxData.rootCoordinate.x, MovableBoxData.rootCoordinate.y), out var tile);
 
                 GameObject obj;
 
@@ -51,7 +56,7 @@ namespace Geckout
                 obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
                 if(needSetOccupied) tile.IsOccupied = true;
             }
-            else if (movableBoxData.boxSize.x == 1)
+            else if (MovableBoxData.boxSize.x == 1)
             {
                 for (int x = 0; x < boxSize.x; x++)
                 {
@@ -64,7 +69,7 @@ namespace Geckout
                             prefab = m_tileCorner3EdgePrefab;
                         }
 
-                        LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(movableBoxData.rootCoordinate.x + c.x, movableBoxData.rootCoordinate.y + c.y), out var tile);
+                        LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(MovableBoxData.rootCoordinate.x + c.x, MovableBoxData.rootCoordinate.y + c.y), out var tile);
                         GameObject obj;
 
                         obj = Instantiate(prefab, transform);
@@ -93,7 +98,7 @@ namespace Geckout
                     }
                 }
             }
-            else if (movableBoxData.boxSize.y == 1)
+            else if (MovableBoxData.boxSize.y == 1)
             {
 
                 for (int x = 0; x < boxSize.x; x++)
@@ -107,7 +112,7 @@ namespace Geckout
                             prefab = m_tileCorner3EdgePrefab;
                         }
 
-                        LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(movableBoxData.rootCoordinate.x + c.x, movableBoxData.rootCoordinate.y + c.y), out var tile);
+                        LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(MovableBoxData.rootCoordinate.x + c.x, MovableBoxData.rootCoordinate.y + c.y), out var tile);
 
                         GameObject obj;
 
@@ -144,7 +149,7 @@ namespace Geckout
                     {
                         Vector2Int c = new Vector2Int(x, y);
 
-                        LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(movableBoxData.rootCoordinate.x + c.x, movableBoxData.rootCoordinate.y + c.y), out var tile);
+                        LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(MovableBoxData.rootCoordinate.x + c.x, MovableBoxData.rootCoordinate.y + c.y), out var tile);
 
                         GameObject obj = null;
 
@@ -231,6 +236,48 @@ namespace Geckout
                 default:
                     break;
             }
+        }
+
+        public void UpdateVisual()
+        {
+            SetCenterPos();
+            m_arrowHorizontal.transform.localPosition = Vector3.forward * -0.4f;
+            m_arrowVertical.transform.localPosition = Vector3.forward * -0.4f;
+            m_arrowHorizontal.SetActive(MovableBoxData.wayDirection == WayDirection.Horizontal || MovableBoxData.wayDirection == WayDirection.All);
+            m_arrowVertical.SetActive(MovableBoxData.wayDirection == WayDirection.Vertical || MovableBoxData.wayDirection == WayDirection.All);
+        }
+
+        public void SetCenterPos()
+        {
+            SetPivotAndPosition(GetCenterWorldPos());
+        }
+
+        public Vector3 GetCenterWorldPos()
+        {
+            LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(MovableBoxData.rootCoordinate, out var tileLeft);
+            var rightCoord = new Vector2Int(MovableBoxData.rootCoordinate.x + MovableBoxData.boxSize.x - 1, MovableBoxData.rootCoordinate.y);
+            LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(rightCoord, out var tileRight);
+            var topCoord = new Vector2Int(MovableBoxData.rootCoordinate.x, MovableBoxData.rootCoordinate.y + MovableBoxData.boxSize.y - 1);
+            LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(topCoord, out var tileTop);
+            var centerPos = new Vector3((tileLeft.transform.position.x + tileRight.transform.position.x) / 2, (tileLeft.transform.position.y + tileTop.transform.position.y) / 2, tileLeft.transform.position.z);
+            return centerPos;
+
+        }
+
+        public void SetPivotAndPosition(Vector3 newPivotWorldPos)
+        {
+            // Calculate how much the pivot moves in world space
+            Vector3 pivotDelta = transform.position - newPivotWorldPos;
+
+            // Move each child so its world position stays the same
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Transform child = transform.GetChild(i);
+                child.position += pivotDelta;
+            }
+
+            // Finally, move parent pivot
+            transform.position = newPivotWorldPos;
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Geckout
                 tileMove.transform.position = tile.transform.position;
                 tileMove.Coordinate = newCoordinate;
             }
-            movableBoxData.rootCoordinate += offset;
+            MovableBoxData.rootCoordinate += offset;
         }
 
         public void PlaceMoveBox()
@@ -72,10 +72,10 @@ namespace Geckout
             }
 
             Debug.Log("Move Success");
-            LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Add(movableBoxData);
+            LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Add(MovableBoxData);
         }
 
-
+        
 
         #endregion
     }
