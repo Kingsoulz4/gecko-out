@@ -4,21 +4,13 @@ using UnityEngine;
 
 namespace Geckout
 {
-    public partial class BoxMove : MonoBehaviour
+    public partial class BoxMove : BoxBase<MovableBoxTile, MovableBoxData>
     {
         [Header("Movement Settings")]
         [SerializeField] private LayerMask moveBoxLayer;
         [SerializeField] private float moveSpeed = 5f;
         [SerializeField] private float inputThreshold = 0.5f;
         [SerializeField] private bool enableDebugLogs = true;
-
-        [Header("Visual Prefabs")]
-        [SerializeField] private GameObject m_tileCornerPrefab;
-        [SerializeField] private GameObject m_tileEdgePrefab;
-        [SerializeField] private GameObject m_tileCenterPrefab;
-        [SerializeField] private GameObject m_tileCorner3EdgePrefab;
-        [SerializeField] private GameObject m_tile2EdgePrefab;
-        [SerializeField] private GameObject m_tile4EdgePrefab;
 
         [Header("Debug")]
         [SerializeField] private bool enablePositionDebug = true;
@@ -367,7 +359,7 @@ namespace Geckout
 
         #region Public API
 
-        public void Init(MovableBoxData data)
+        public override void Init(MovableBoxData data)
         {
             movableBoxData = data;
             SpawnTiles();

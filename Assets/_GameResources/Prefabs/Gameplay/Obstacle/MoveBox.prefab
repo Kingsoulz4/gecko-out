@@ -46,18 +46,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1bd7ff28d34c3c44ab466bc49479cb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveBoxLayer:
-    serializedVersion: 2
-    m_Bits: 0
   m_tileCornerPrefab: {fileID: 669604532541368859, guid: 530cfdb060e2f184c91b3d0f62f0a752, type: 3}
   m_tileEdgePrefab: {fileID: 8288943744864670536, guid: e6752995896a6284499c7743498d1f4f, type: 3}
   m_tileCenterPrefab: {fileID: 8302818526664965620, guid: 02a576666bf07d24d9dceb8eb757063a, type: 3}
   m_tileCorner3EdgePrefab: {fileID: 14565045358643500, guid: 2eea291330838664aa6c926f39a85c33, type: 3}
   m_tile2EdgePrefab: {fileID: 5582116825612221933, guid: 5995ea037f2f35244978ae405c9a9240, type: 3}
   m_tile4EdgePrefab: {fileID: 2263324330373023107, guid: 7696b66814ab7fe47bfa231018ea00bd, type: 3}
-  m_arrowHorizontal: {fileID: 2727852468959812973}
-  m_arrowVertical: {fileID: 2650906858928129092}
   m_outlineSelected: {fileID: 0}
+  moveBoxLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  moveSpeed: 5
+  inputThreshold: 0.5
+  enableDebugLogs: 1
+  enablePositionDebug: 1
+  wayDirection: 2
 --- !u!1001 &2259996385816604427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -115,11 +118,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 735b749f2dbbcda49afab5d1f410ce53, type: 3}
---- !u!1 &2727852468959812973 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4217156932810994278, guid: 735b749f2dbbcda49afab5d1f410ce53, type: 3}
-  m_PrefabInstance: {fileID: 2259996385816604427}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5899906289763741107 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5673888192398754488, guid: 735b749f2dbbcda49afab5d1f410ce53, type: 3}
@@ -185,10 +183,5 @@ PrefabInstance:
 --- !u!4 &2116693128100861571 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6737302514881786017, guid: 9b370469ef60ab14c8f02c19949d5a4a, type: 3}
-  m_PrefabInstance: {fileID: 4620611709557122594}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2650906858928129092 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7266096617573802598, guid: 9b370469ef60ab14c8f02c19949d5a4a, type: 3}
   m_PrefabInstance: {fileID: 4620611709557122594}
   m_PrefabAsset: {fileID: 0}

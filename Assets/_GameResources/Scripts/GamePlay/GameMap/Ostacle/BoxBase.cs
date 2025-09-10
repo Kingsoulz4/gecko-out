@@ -24,7 +24,7 @@ namespace Geckout
 
         public TData Data { get; private set; }
 
-        public void Init(TData data)
+        public virtual void Init(TData data)
         {
             Data = data;
             SpawnTiles();
@@ -38,7 +38,7 @@ namespace Geckout
 
         public virtual void UpdateVisual()
         {
-            SetCenterPos();
+            //SetCenterPos();
         }
 
         protected void SetCenterPos()
