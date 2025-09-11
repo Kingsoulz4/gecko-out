@@ -8,6 +8,7 @@ namespace Geckout
     public class LevelManager : SingletonDontDestroyMono<LevelManager>, IGameState
     {
         [SerializeField] private LevelController m_levelGameOriginal;
+        [SerializeField] private int levelTest;
 
         public bool IsEdittingLevel { get; set; } = false;
 
@@ -32,7 +33,7 @@ namespace Geckout
         {
             get
             {
-                return PlayerPrefs.GetInt("CurrentLevelNum", 3);
+                return PlayerPrefs.GetInt("CurrentLevelNum", levelTest);
             }
             set
             {

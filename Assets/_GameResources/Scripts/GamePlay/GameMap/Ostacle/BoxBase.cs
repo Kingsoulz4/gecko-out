@@ -49,13 +49,13 @@ namespace Geckout
         protected Vector3 GetCenterWorldPos()
         {
             var root = RootCoordinate;
-            LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(root, out var tileLeft);
+            GameMap.TryGetTileAtCoord(root, out var tileLeft);
 
             var rightCoord = new Vector2Int(root.x + BoxSize.x - 1, root.y);
-            LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(rightCoord, out var tileRight);
+            GameMap.TryGetTileAtCoord(rightCoord, out var tileRight);
 
             var topCoord = new Vector2Int(root.x, root.y + BoxSize.y - 1);
-            LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(topCoord, out var tileTop);
+            GameMap.TryGetTileAtCoord(topCoord, out var tileTop);
 
             return new Vector3(
                 (tileLeft.transform.position.x + tileRight.transform.position.x) / 2,
@@ -84,7 +84,7 @@ namespace Geckout
 
             if (BoxSize.x == 1 && BoxSize.y == 1)
             {
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(RootCoordinate.x, RootCoordinate.y), out var tile);
+                GameMap.TryGetTileAtCoord(new Vector2Int(RootCoordinate.x, RootCoordinate.y), out var tile);
 
                 GameObject obj;
 
@@ -109,7 +109,7 @@ namespace Geckout
                             prefab = m_tileCorner3EdgePrefab;
                         }
 
-                        LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(RootCoordinate.x + c.x, RootCoordinate.y + c.y), out var tile);
+                        GameMap.TryGetTileAtCoord(new Vector2Int(RootCoordinate.x + c.x, RootCoordinate.y + c.y), out var tile);
                         GameObject obj;
 
                         obj = Instantiate(prefab, transform);
@@ -150,7 +150,7 @@ namespace Geckout
                             prefab = m_tileCorner3EdgePrefab;
                         }
 
-                        LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(RootCoordinate.x + c.x, RootCoordinate.y + c.y), out var tile);
+                        GameMap.TryGetTileAtCoord(new Vector2Int(RootCoordinate.x + c.x, RootCoordinate.y + c.y), out var tile);
 
                         GameObject obj;
 
@@ -185,7 +185,7 @@ namespace Geckout
                     {
                         Vector2Int c = new Vector2Int(x, y);
 
-                        LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(RootCoordinate.x + c.x, RootCoordinate.y + c.y), out var tile);
+                        GameMap.TryGetTileAtCoord(new Vector2Int(RootCoordinate.x + c.x, RootCoordinate.y + c.y), out var tile);
 
                         GameObject obj = null;
 

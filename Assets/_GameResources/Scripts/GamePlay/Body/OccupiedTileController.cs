@@ -117,7 +117,7 @@ namespace Geckout
             }
 
             // Add to new tile
-            if (GameMap.TryGetTileAt(gridPos, out GameTile newTile))
+            if (GameMap.TryGetTileAtCoord(gridPos, out GameTile newTile))
             {
                 currentOccupiedTiles[segmentIndex] = newTile;
                 newTile.SetOccupied(true);

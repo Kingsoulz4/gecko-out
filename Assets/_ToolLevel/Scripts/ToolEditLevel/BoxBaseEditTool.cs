@@ -36,15 +36,15 @@ namespace Geckout
         {
             foreach (var tileMove in spawnedTiles)
             {
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
+                GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
                 //oldTile.IsOccupied = false;
             }
 
             foreach (var tileMove in spawnedTiles)
             {
                 var newCoordinate = new Vector2Int(tileMove.Coordinate.x + offset.x, tileMove.Coordinate.y + offset.y);
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(newCoordinate, out var tile);
+                GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
+                GameMap.TryGetTileAtCoord(newCoordinate, out var tile);
                 //oldTile.IsOccupied = false;
                 tileMove.transform.position = tile.transform.position;
                 tileMove.Coordinate = newCoordinate;
@@ -57,7 +57,7 @@ namespace Geckout
         {
             foreach (var tileMove in spawnedTiles)
             {
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
+                GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
                 if (tile.IsOccupied)
                 {
                     Debug.LogError("Cannot place tile");
@@ -68,7 +68,7 @@ namespace Geckout
 
             foreach (var tileMove in spawnedTiles)
             {
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
+                GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
                 tile.IsOccupied = true;
             }
 

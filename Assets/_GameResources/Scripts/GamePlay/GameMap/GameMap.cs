@@ -80,9 +80,10 @@ namespace Geckout
             //SpawnAllTiles(levelData);
             //GetAllTilesTest(levelData);
         }
+
         public static Vector3 GetTileWorldPosition(Vector2Int coord)
         {
-            if (TryGetTileAt(coord, out var tile))
+            if (TryGetTileAtCoord(coord, out var tile))
             {
                 return tile.transform.position;
             }
@@ -92,7 +93,8 @@ namespace Geckout
                 return Vector3.zero;
             }
         }
-        public static bool TryGetTileAt(int x, int y, out GameTile result)
+
+        private static bool TryGetTileAt(int x, int y, out GameTile result)
         {
             if (x < 0 || y < 0 || x >= _instance._mapSize.x || y >= _instance._mapSize.y)
             {
@@ -105,11 +107,11 @@ namespace Geckout
             return true;
         }
 
-        public bool TryGetTileAtCoord(Vector2Int coordinate, out GameTile result)
+        public static bool TryGetTileAtCoord(Vector2Int coordinate, out GameTile result)
         {
             var x = coordinate.x;
             var y = coordinate.y;
-            if (x < 0 || y < 0 || x >= levelData.mapSize.x || y >= levelData.mapSize.y)
+            if (x < 0 || y < 0 || x >= _instance.levelData.mapSize.x || y >= _instance.levelData.mapSize.y)
             {
                 result = null;
                 return false;
@@ -118,7 +120,7 @@ namespace Geckout
             //var index = x + y * levelData.mapSize.x;
             //result = tiles[index];
 
-            result = tiles.First(x => x.Coordinate == coordinate);
+            result = _instance.tiles.First(x => x.Coordinate == coordinate);
 
             return  result != null;
         }
@@ -135,21 +137,6 @@ namespace Geckout
 
             result = listPortal.Find(x => x.PortalData.Coordinate == coordinate);
             return result != null;
-        }
-
-        public static bool TryGetTileAt(Vector2Int coordinate, out GameTile result)
-        {
-            var x= coordinate.x;
-            var y = coordinate.y;
-            if (x < 0 || y < 0 || x >= _instance._mapSize.x || y >= _instance._mapSize.y)
-            {
-                result = null;
-                return false;
-            }
-
-            var index = x + y * _instance._mapSize.x;
-            result = _instance.tiles[index];
-            return true;
         }
 
         void GetAllTilesTest(GameLevelData levelData)

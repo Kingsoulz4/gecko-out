@@ -30,6 +30,7 @@ namespace Geckout
         [SerializeField] private OccupiedTileController occupiedTileController;
         [SerializeField] private BodyRenderer _bodyRenderer;
         [SerializeField] private GridHeadClamper gridClamper;
+        [SerializeField] private MoveToPortal moveToPortal;
 
         [Header("Mechanics")]
         [SerializeField] private MechanicsReferences m_mechanicReferences;
@@ -69,7 +70,36 @@ namespace Geckout
 
         public int SubLength => subLength;
 
+        public MoveToPortal MoveToPortal { get => moveToPortal;}
+
         private List<MechanicRendererBase> listMechanicRender = new();
+
+        [EditorButton]
+        private void SetRef()
+        {
+            if(_bodyRenderer == null)
+            {
+                _bodyRenderer = GetComponentInChildren<BodyRenderer>();
+            }
+            if(occupiedTileController == null)
+            {
+                occupiedTileController = GetComponent<OccupiedTileController>();
+            }
+            if(gridClamper == null)
+            {
+                gridClamper = GetComponent<GridHeadClamper>();
+            }
+            if(moveToPortal == null)
+            {
+                moveToPortal = GetComponent<MoveToPortal>();
+            }
+            if(m_mechanicReferences == null)
+            {
+                m_mechanicReferences = Resources.Load<MechanicsReferences>("Mechanics/MechanicsReferences");
+            }
+            
+        }
+
 
         private void Start()
         {
@@ -219,13 +249,14 @@ namespace Geckout
             currentPath.Clear();
         }
 
+        List<Vector3> worldPath = new List<Vector3>();
         IEnumerator StartMovePath()
         {
             if (currentPath.Count == 0) yield break;
 
             OnStartMove?.Invoke();
+            worldPath.Clear();
 
-            List<Vector3> worldPath = new List<Vector3>();
 
             // Get current anchor position (always the leading segment in ordered view)
             var orderedSegments = GetOrderedSegments();
@@ -233,7 +264,7 @@ namespace Geckout
 
             foreach (var coord in currentPath)
             {
-                if (GameMap.TryGetTileAt(coord, out var tile))
+                if (GameMap.TryGetTileAtCoord(coord, out var tile))
                     worldPath.Add(tile.transform.position);
             }
 
@@ -319,15 +350,6 @@ namespace Geckout
                 Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
                 orderedSegments[segIdx].transform.position = pos;
             }
-        }
-
-        public void MoveToPortal(Portal portal)
-        {
-            portal.Disappear();
-            gameObject.SetActive(false);
-            OccupiedTileController.ClearAllOccupied();
-            occupiedTileController.ForceRestoreAll();
-            LevelManager.Instance.LevelGame.OnBodyMoveToHole(this);
         }
 
         #region History system
@@ -545,7 +567,7 @@ namespace Geckout
                 var prefabRenderFreeze = m_mechanicReferences.listMechanicRenderer[MechanicNames.Freeze];
                 var newIceRenderer = (IceRenderer)Instantiate(prefabRenderFreeze, transform);
                 var listPos = BodyData.listCoordinate.Select(x => {
-                    LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(x, out var tile);
+                    GameMap.TryGetTileAtCoord(x, out var tile);
                     return tile.transform.position;
                 }).ToList();
                 newIceRenderer.GenerateIces(listPos);

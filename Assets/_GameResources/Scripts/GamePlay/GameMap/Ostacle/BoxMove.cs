@@ -184,7 +184,7 @@ namespace Geckout
             Debug.Log($"2 {CanMoveRootTo(rootTarget)}");
             if (rootTarget != Data.rootCoordinate && CanMoveRootTo(rootTarget))
             {
-                if (LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(rootTarget, out var targetTile))
+                if (GameMap.TryGetTileAtCoord(rootTarget, out var targetTile))
                 {
                     dragTargetRoot = rootTarget;
                     hasDragTarget = true;
@@ -304,7 +304,7 @@ namespace Geckout
 
         private bool IsTileOccupiedByOther(Vector2Int gridPos)
         {
-            if (LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(gridPos, out var tile))
+            if (GameMap.TryGetTileAtCoord(gridPos, out var tile))
             {
                 // Bỏ qua các tile thuộc chính box này
                 foreach (var boxTile in spawnedTiles)
@@ -319,7 +319,7 @@ namespace Geckout
 
         private Vector3 GetWorldPositionFromGridKeepZ(Vector2Int gridPos)
         {
-            if (LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(gridPos, out var tile))
+            if (GameMap.TryGetTileAtCoord(gridPos, out var tile))
             {
                 var p = tile.transform.position;              
                 return new Vector3(p.x, p.y, transform.position.z);
@@ -336,7 +336,7 @@ namespace Geckout
         {
             foreach (var boxTile in spawnedTiles)
             {
-                if (LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(boxTile.Coordinate, out var tile))
+                if (GameMap.TryGetTileAtCoord(boxTile.Coordinate, out var tile))
                 {
                     tile.IsOccupied = false;
                 }
@@ -351,7 +351,7 @@ namespace Geckout
             foreach (var boxTile in spawnedTiles)
             {
                 boxTile.Coordinate += offset;
-                if (LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(boxTile.Coordinate, out var tile))
+                if (GameMap.TryGetTileAtCoord(boxTile.Coordinate, out var tile))
                 {
                     tile.IsOccupied = true;
                 }
