@@ -9,7 +9,7 @@ namespace Geckout
     {
         [Header("Portal Movement Settings")]
         [SerializeField] private BodyController bodyController;
-        [SerializeField] private float animationDuration = 1f;
+        [SerializeField] private float animationDurationPerSegment = 0.3f;
         [SerializeField] private float portalEnterDistance = 0.4f;
         [SerializeField] private bool enableDebugLogs = false;
 
@@ -95,10 +95,8 @@ namespace Geckout
         private IEnumerator EnterPortalAnimation()
         {
             if (targetPortal == null || bodyController == null) yield break;
-
             Vector3 portalCenter = targetPortal.transform.position;
             var orderedSegments = bodyController.GetOrderedSegments();
-
             List<bool> segmentAnimated = new List<bool>(new bool[orderedSegments.Count]);
 
             while (!segmentAnimated.All(x => x))
@@ -106,36 +104,32 @@ namespace Geckout
                 for (int i = 0; i < orderedSegments.Count; i++)
                 {
                     if (segmentAnimated[i]) continue;
-
                     var segment = orderedSegments[i];
                     float distanceToPortal = Vector3.Distance(segment.transform.position, portalCenter);
-
                     if (distanceToPortal <= portalEnterDistance)
                     {
                         segmentAnimated[i] = true;
-                        StartCoroutine(AnimateSegmentDown(segment, portalCenter));
+                        StartCoroutine(AnimateSegmentDown(segment, portalCenter, i == orderedSegments.Count - 1));
                     }
                 }
-
                 yield return null;
             }
 
-            yield return new WaitForSeconds(animationDuration);
 
-            FinishMoveToPortal();
         }
-        private IEnumerator AnimateSegmentDown(Segment segment, Vector3 portalCenter)
+
+        private IEnumerator AnimateSegmentDown(Segment segment, Vector3 portalCenter, bool isLast = false)
         {
             Vector3 startPos = segment.transform.position;
             Vector3 targetPos = portalCenter + Vector3.back * -3f;
 
             float elapsed = 0f;
-            while (elapsed < animationDuration)
+            while (elapsed < animationDurationPerSegment)
             {
                 if (segment == null) yield break;
 
                 elapsed += Time.deltaTime;
-                float t = elapsed / animationDuration;
+                float t = elapsed / animationDurationPerSegment;
                 float curveT = Mathf.SmoothStep(0f, 1f, t);
 
                 Vector3 currentPos = startPos;
@@ -144,8 +138,12 @@ namespace Geckout
 
                 yield return null;
             }
+            if (isLast)
+            {
+                FinishMoveToPortal();
+            }
         }
-       
+
         private void FinishMoveToPortal()
         {
             if (targetPortal == null || bodyController == null) return;
@@ -155,7 +153,7 @@ namespace Geckout
             bodyController.OccupiedTileController.ClearAllOccupied();
             bodyController.OccupiedTileController.ForceRestoreAll();
             LevelManager.Instance.LevelGame.OnBodyMoveToPortal(bodyController);
-
+            DebugLog("Finish move portal");
             ResetPortalState();
         }
 
