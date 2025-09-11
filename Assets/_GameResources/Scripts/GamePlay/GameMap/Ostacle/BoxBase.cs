@@ -38,7 +38,7 @@ namespace Geckout
 
         public virtual void UpdateVisual()
         {
-            //SetCenterPos();
+            SetCenterPos();
         }
 
         protected void SetCenterPos()

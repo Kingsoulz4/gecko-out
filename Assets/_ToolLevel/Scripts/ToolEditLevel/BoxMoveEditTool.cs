@@ -23,7 +23,7 @@ namespace Geckout
         {
             base.PlaceMoveBox();
             Debug.Log("Move Success");
-            LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Add(Data);
+            LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Add(base.Data);
         }
 
         #endregion
