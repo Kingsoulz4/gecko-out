@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Geckout
 {
@@ -14,7 +15,7 @@ namespace Geckout
         [SerializeField] private MechanicsReferences m_mechanicReferences;
 
         private List<MechanicRendererBase> listMechanicRender = new();
-
+        bool isMovingToPortal = false;
 
         private void Awake()
         {
@@ -29,7 +30,27 @@ namespace Geckout
         public void Initialize(PortalData portalData)
         {
             PortalData = portalData;
-            InitVisual();   
+            InitVisual();
+            isMovingToPortal = false;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.TryGetComponent<Segment>(out var segment))
+            {
+                var bodyController = segment.Controller;
+                if (bodyController != null && bodyController.MoveToPortal != null)
+                {
+                    if (isMovingToPortal) return;
+                    GameMap.TryGetTileAtCoord(PortalData.Coordinate, out GameTile tile);
+                    if (tile != null)
+                    {
+                        tile.SetOccupied(false);
+                    }
+                    bodyController.MoveToPortal.InitiatePortalMovement(this);
+                    isMovingToPortal = true;
+                }
+            }
         }
 
         public void UpdateVisual()
@@ -39,7 +60,7 @@ namespace Geckout
 
         internal void Disappear()
         {
-            GetComponent<GameTile>().ChangeVisualToNormalTile();
+            this.gameObject.SetActive(false);
         }
 
         public void InitVisual()

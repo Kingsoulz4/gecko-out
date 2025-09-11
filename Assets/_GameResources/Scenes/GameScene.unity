@@ -3909,6 +3909,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelManager
       objectReference: {fileID: 0}
+    - target: {fileID: 1880588216581512870, guid: 70cf4e3dc4dda8e42ba3849616310e25, type: 3}
+      propertyPath: levelTest
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7581157857148785308, guid: 70cf4e3dc4dda8e42ba3849616310e25, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

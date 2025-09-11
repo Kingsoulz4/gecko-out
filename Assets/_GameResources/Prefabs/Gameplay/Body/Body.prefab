@@ -283,6 +283,7 @@ GameObject:
   - component: {fileID: 3655932188227585431}
   - component: {fileID: 6021424304399516285}
   - component: {fileID: 38492727839514911}
+  - component: {fileID: -5629423586080132934}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -553,6 +554,7 @@ MonoBehaviour:
   occupiedTileController: {fileID: 2788433321168617802}
   _bodyRenderer: {fileID: 4282819325411265969}
   gridClamper: {fileID: 4085413186241585128}
+  moveToPortal: {fileID: -5629423586080132934}
   m_mechanicReferences: {fileID: 11400000, guid: 02be985aef8091640a0461956780b270, type: 2}
   controlAnchor: 0
   m_outlineSelected: {fileID: 0}
@@ -615,3 +617,20 @@ MonoBehaviour:
       Value: {fileID: 2100000, guid: 5ed52e0df17dacc4aa4bb9096a28310c, type: 2}
     - Key: 14
       Value: {fileID: 2100000, guid: 213b53b2230c2344f86ace7cc8484aec, type: 2}
+--- !u!114 &-5629423586080132934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4970065939563323752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c170886c0c93ba4e88df5bad1fc711b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bodyController: {fileID: 3655932188227585431}
+  portalEnterDistance: 0.4
+  animationDuration: 0.3
+  segmentAnimationDelay: 0.05
+  enableDebugLogs: 1

@@ -512,6 +512,8 @@ MonoBehaviour:
   occupiedTileController: {fileID: 2788433321168617802}
   _bodyRenderer: {fileID: 4282819325411265969}
   gridClamper: {fileID: 4085413186241585128}
+  moveToPortal: {fileID: 0}
+  m_mechanicReferences: {fileID: 0}
   controlAnchor: 0
   m_outlineSelected: {fileID: 0}
 --- !u!114 &38492727839514911

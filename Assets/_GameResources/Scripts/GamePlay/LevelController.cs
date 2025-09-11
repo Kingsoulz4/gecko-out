@@ -36,7 +36,7 @@ namespace Geckout
 #endif
         }
 
-        public void OnBodyMoveToHole(BodyController body)
+        public void OnBodyMoveToPortal(BodyController body)
         {
             if (listBody.Contains(body))
             {
