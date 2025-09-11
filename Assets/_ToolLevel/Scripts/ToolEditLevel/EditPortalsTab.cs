@@ -121,6 +121,8 @@ namespace Geckout
 
                 });
             }
+            m_inputFreezeCount.text = PortalData.freezeTimeCount.ToString();
+
         }
 
         private void OnClickSelectColorPicked(int index)

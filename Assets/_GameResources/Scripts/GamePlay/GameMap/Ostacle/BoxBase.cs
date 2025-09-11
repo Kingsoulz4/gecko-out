@@ -94,6 +94,7 @@ namespace Geckout
                 obj.transform.localScale = Vector3.one * 1;
                 obj.name = $"Tile";
                 obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
+                AddTileComponent(obj, tile.MapTileData.coordinate);
                 if (needSetOccupied) tile.IsOccupied = true;
             }
             else if (BoxSize.x == 1)
