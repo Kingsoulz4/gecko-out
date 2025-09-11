@@ -34,6 +34,14 @@ namespace Geckout
 
         public virtual void MoveByOffset(Vector2Int offset)
         {
+            var newRoot = Data.rootCoordinate + Data.boxSize - Vector2Int.one + offset;
+            var mapSize = LevelManager.Instance.LevelGame.GameLevelData.mapSize;
+
+            if (newRoot.x >= mapSize.x || newRoot.x < 0 || newRoot.y >= mapSize.y || newRoot.y < 0)
+            {
+                return;
+            }
+
             foreach (var tileMove in spawnedTiles)
             {
                 var newCoordinate = new Vector2Int(tileMove.Coordinate.x + offset.x, tileMove.Coordinate.y + offset.y);
@@ -41,6 +49,7 @@ namespace Geckout
                 GameMap.TryGetTileAtCoord(newCoordinate, out var tile);
                 tileMove.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y, tileMove.transform.position.z);
                 tileMove.Coordinate = newCoordinate;
+                
             }
             Data.rootCoordinate += offset;
             UpdateVisual();
