@@ -19,10 +19,7 @@ namespace Geckout
 
         private void OnValidate()
         {
-            if(m_meshRenderer == null)
-            {
-                m_meshRenderer = GetComponent<Renderer>();
-            }
+            m_meshRenderer = GetComponent<Renderer>();   
         }
 
     }

@@ -36,17 +36,10 @@ namespace Geckout
         {
             foreach (var tileMove in spawnedTiles)
             {
-                GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
-                //oldTile.IsOccupied = false;
-            }
-
-            foreach (var tileMove in spawnedTiles)
-            {
                 var newCoordinate = new Vector2Int(tileMove.Coordinate.x + offset.x, tileMove.Coordinate.y + offset.y);
                 GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
                 GameMap.TryGetTileAtCoord(newCoordinate, out var tile);
-                //oldTile.IsOccupied = false;
-                tileMove.transform.position = tile.transform.position;
+                tileMove.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y, tileMove.transform.position.z);
                 tileMove.Coordinate = newCoordinate;
             }
             Data.rootCoordinate += offset;

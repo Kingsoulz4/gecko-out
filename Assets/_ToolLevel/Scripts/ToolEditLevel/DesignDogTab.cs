@@ -105,6 +105,8 @@ namespace Geckout
                         
                 });
             }
+
+            m_inputFreezeCount.text = BodyData.freezeTimeCount.ToString();
         }
 
         private void OnClickDelete()

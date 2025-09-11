@@ -40,7 +40,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1007474754095682976}
-  m_Mesh: {fileID: 1048259711176262175, guid: 77d1cb03bdd6d51479b41c0b4f9e48ea, type: 3}
+  m_Mesh: {fileID: 4300000, guid: fcf6bf86b58ccf54093836d68578d09b, type: 2}
 --- !u!23 &4003071093503985432
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -291,11 +291,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab557415571e453498a51b44c48f9459, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.0446637
+      value: 0.78
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab557415571e453498a51b44c48f9459, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.7061182
+      value: 0.537
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab557415571e453498a51b44c48f9459, type: 3}
       propertyPath: m_LocalRotation.w
@@ -327,7 +327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab557415571e453498a51b44c48f9459, type: 3}
       propertyPath: m_ConstrainProportionsScale
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -6167524688909099118, guid: ab557415571e453498a51b44c48f9459, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
