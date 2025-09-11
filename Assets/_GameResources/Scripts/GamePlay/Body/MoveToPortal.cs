@@ -42,21 +42,8 @@ namespace Geckout
 
             DebugLog($"Initiating portal movement to {portal.name}");
 
-            CreatePathToPortal(portal);
             StartPortalEnterAnimation();
-        }
-
-        private void CreatePathToPortal(Portal portal)
-        {
-            var orderedSegments = bodyController.GetOrderedSegments();
-            Vector3 currentPos = orderedSegments[0].transform.position;
-            Vector2Int currentCoord = GameMap.WorldToGridPosition(currentPos);
-            Vector2Int portalCoord = GameMap.WorldToGridPosition(portal.transform.position);
-
-
-            List<Vector2Int> pathToPortal = new List<Vector2Int> { portalCoord };
-
-            bodyController.SetMovementPath(pathToPortal);
+            bodyController.CanControl = false;
         }
 
         private void StartPortalEnterAnimation()
@@ -88,7 +75,7 @@ namespace Geckout
                     extendedPath.Add(portalCoord);
                 }
 
-                bodyController.SetMovementPath(extendedPath);
+                bodyController.StartMovePath(extendedPath);
             }
         }
 
@@ -98,7 +85,6 @@ namespace Geckout
             Vector3 portalCenter = targetPortal.transform.position;
             var orderedSegments = bodyController.GetOrderedSegments();
             List<bool> segmentAnimated = new List<bool>(new bool[orderedSegments.Count]);
-
             while (!segmentAnimated.All(x => x))
             {
                 for (int i = 0; i < orderedSegments.Count; i++)
@@ -114,8 +100,6 @@ namespace Geckout
                 }
                 yield return null;
             }
-
-
         }
 
         private IEnumerator AnimateSegmentDown(Segment segment, Vector3 portalCenter, bool isLast = false)
