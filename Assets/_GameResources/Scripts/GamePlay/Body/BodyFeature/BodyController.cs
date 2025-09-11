@@ -263,7 +263,6 @@ namespace Geckout
             yield return MovePath(worldPath);
 
             moveCoroutine = null;
-            Debug.Log("ClearPath()");
 
             OnEndMove?.Invoke();
             currentPath.Clear();
