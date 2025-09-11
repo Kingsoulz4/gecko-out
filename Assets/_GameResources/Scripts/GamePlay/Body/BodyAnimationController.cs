@@ -12,6 +12,10 @@ namespace Geckout
 
         private List<Animator> listAnimator = new();
 
+        private float clipLength = 24;
+
+        private float currentProgress = 0;
+
         private bool isMoving = false;
 
         private void Start()
@@ -24,8 +28,11 @@ namespace Geckout
             if (m_bodyController.IsMoving != isMoving)
             {
                 isMoving = m_bodyController.IsMoving;
-                listAnimator.ForEach(x => x.SetBool("isMoving", isMoving));
-                listAnimator.ForEach(x => x.speed = isMoving ? animSpeed : 1);
+                listAnimator.ForEach(x =>
+                {
+                    x.SetBool("isMoving", isMoving);
+                    x.speed = isMoving ? animSpeed : 1;
+                });
             }
 
         }
