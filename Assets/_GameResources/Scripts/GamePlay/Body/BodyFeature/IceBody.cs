@@ -6,6 +6,6 @@ namespace Geckout
 {
     public class IceBody : BodyController
     {
-       
+        [SerializeField] private IceRenderer m_iceRenderer;
     }
 }

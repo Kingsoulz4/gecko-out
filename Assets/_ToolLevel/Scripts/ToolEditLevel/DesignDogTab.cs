@@ -2,6 +2,7 @@ using Geckout.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ namespace Geckout
         [SerializeField] private Transform m_listColorPickContainer;
         [SerializeField] private Button m_colorPickPrefab;
         [SerializeField] private List<ButtonColorPicked> m_listButtonColorPicked;
+        [SerializeField] private TMP_InputField m_inputFreezeCount;
 
         public LevelGameEditTool LevelGame { get; set; }
 
@@ -42,7 +44,13 @@ namespace Geckout
             {
                 buttonColorPicked.OnClick = OnClickSelectColorPicked;
             }
+            m_inputFreezeCount.onSubmit.AddListener(OnEnterFreezeCount);
             //UpdateUI(DogData);
+        }
+
+        private void OnEnterFreezeCount(string arg0)
+        {
+            BodyData.freezeTimeCount = int.Parse(arg0);
         }
 
         public void UpdateUI(BodyData dogData)
