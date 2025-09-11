@@ -104,9 +104,9 @@ namespace Geckout
             m_buttonEditPortals.GetComponent<ButtonToolTab>().SetSelected(true);
             m_editPortalTab.gameObject.SetActive(true);
             m_editPortalTab.LevelGame = LevelGame;
-            if (LevelGame != null && LevelGame.selectedPortal != null)
+            if (LevelGame != null && LevelGame.SelectedPortal != null)
             {
-                m_editPortalTab.UpdateUI(LevelGame.selectedPortal.PortalData);
+                m_editPortalTab.UpdateUI(LevelGame.SelectedPortal.PortalData);
             }
             else
             {

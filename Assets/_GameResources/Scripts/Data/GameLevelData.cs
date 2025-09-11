@@ -175,6 +175,7 @@ namespace Geckout.Data
     {
         public PortalType portalType;
         public Vector2Int Coordinate;
+        public int freezeTimeCount;
         public List<ColorType> listColor = new() { ColorType.Red };
     }
 

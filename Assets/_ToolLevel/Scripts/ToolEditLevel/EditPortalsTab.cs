@@ -2,6 +2,7 @@ using Geckout.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ namespace Geckout
         [SerializeField] private List<ButtonColorPicked> m_listButtonColorPicked;
         [SerializeField] private Transform m_listColorPickContainer;
         [SerializeField] private Button m_colorPickPrefab;
+        [SerializeField] private TMP_InputField m_inputFreezeCount;
 
         public LevelGameEditTool LevelGame { get; set; }
 
@@ -29,7 +31,7 @@ namespace Geckout
                 {
                     portalData = new PortalData();
                 }
-                return LevelGame != null && LevelGame.selectedPortal != null ? LevelGame.selectedPortal.PortalData : portalData;
+                return LevelGame != null && LevelGame.SelectedPortal != null ? LevelGame.SelectedPortal.PortalData : portalData;
 
             }
         }
@@ -42,6 +44,7 @@ namespace Geckout
             {
                 buttonColorPicked.OnClick = OnClickSelectColorPicked;
             }
+            m_inputFreezeCount.onSubmit.AddListener(OnEnterFreezeCount);
         }
 
         private void Start()
@@ -59,6 +62,15 @@ namespace Geckout
         {
             //LevelGame.ChangeTypeSelectedTiles(Data.MapTileType.Portal);
             LevelGame.AddNewPortal();
+        }
+
+        private void OnEnterFreezeCount(string arg0)
+        {
+            PortalData.freezeTimeCount = int.Parse(arg0);
+            if (LevelGame != null && LevelGame.SelectedPortal != null)
+            {
+                LevelGame.SelectedPortal.InitVisual();
+            }
         }
 
         public void UpdateUI(PortalData dogData)
@@ -102,9 +114,9 @@ namespace Geckout
                         PortalData.listColor[currentSelectedColorIndex] = color.Key;
                     }
 
-                    if (LevelGame.selectedPortal != null)
+                    if (LevelGame.SelectedPortal != null)
                     {
-                        LevelGame.selectedPortal.UpdateVisual();
+                        LevelGame.SelectedPortal.UpdateVisual();
                     }
 
                 });

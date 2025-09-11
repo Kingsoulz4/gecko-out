@@ -15,7 +15,7 @@ namespace Geckout
 
         public BodyController selectedBody { get; set; }
 
-        public Portal selectedPortal
+        public Portal SelectedPortal
         {
             get
             {
@@ -103,8 +103,11 @@ namespace Geckout
 
                     if (hitInfo.transform.parent.TryGetComponent<BoxMove>(out var boxMove))
                     {
-                        SelectedBoxMove.SetSelected(false);
-                        SelectedBoxMove = null;
+                        if (SelectedBoxMove != null)
+                        {
+                            SelectedBoxMove.SetSelected(false);
+                            SelectedBoxMove = null;
+                        }
                     }
                 }
             }

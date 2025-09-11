@@ -51,6 +51,8 @@ namespace Geckout
 
         public BodyController SpawnBody(BodyData bodyData)
         {
+            var bodyPrefab = m_bodyPrefab;
+
 
 #if UNITY_EDITOR
             var newBody = (BodyController)PrefabUtility.InstantiatePrefab(m_bodyPrefab, m_bodyParent);

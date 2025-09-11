@@ -51,6 +51,10 @@ namespace Geckout
         private void OnEnterFreezeCount(string arg0)
         {
             BodyData.freezeTimeCount = int.Parse(arg0);
+            if(LevelGame != null && LevelGame.selectedBody != null)
+            {
+                LevelGame.selectedBody.InitVisual();
+            }
         }
 
         public void UpdateUI(BodyData dogData)
