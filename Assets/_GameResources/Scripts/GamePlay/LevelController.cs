@@ -44,11 +44,6 @@ namespace Geckout
             }
         }
 
-        private void Update()
-        {
-            
-        }
-
         public BodyController SpawnBody(BodyData bodyData)
         {
 
