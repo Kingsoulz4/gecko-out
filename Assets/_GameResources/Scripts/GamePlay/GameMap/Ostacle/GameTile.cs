@@ -225,22 +225,22 @@ namespace Geckout
 
         #endregion
 
-        public GameTile[] GetNeighbourTiles(int range)
-        {
-            List<GameTile> results = new();
-            for (int x = -range; x <= range; x++)
-            {
-                for (int y = -range; y <= range; y++)
-                {
-                    if (x == 0 && y == 0) continue;
-                    if (GameMap.TryGetTileAt(Coordinate.x + x, Coordinate.y + y, out GameTile tile))
-                    {
-                        results.Add(tile);
-                    }
-                }
-            }
-            return results.ToArray();
-        }
+        //public GameTile[] GetNeighbourTiles(int range)
+        //{
+        //    List<GameTile> results = new();
+        //    for (int x = -range; x <= range; x++)
+        //    {
+        //        for (int y = -range; y <= range; y++)
+        //        {
+        //            if (x == 0 && y == 0) continue;
+        //            if (GameMap.TryGetTileAt(Coordinate.x + x, Coordinate.y + y, out GameTile tile))
+        //            {
+        //                results.Add(tile);
+        //            }
+        //        }
+        //    }
+        //    return results.ToArray();
+        //}
 
         private void OnDrawGizmos()
         {

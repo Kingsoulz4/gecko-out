@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4770515698610696157}
   - component: {fileID: -793955662842280384}
+  - component: {fileID: 5679391752271151586}
   m_Layer: 0
   m_Name: Portal
   m_TagString: Untagged
@@ -48,6 +49,27 @@ MonoBehaviour:
   bodyPartColorChangers:
   - {fileID: 5929815014859267425}
   m_mechanicReferences: {fileID: 11400000, guid: 02be985aef8091640a0461956780b270, type: 2}
+--- !u!65 &5679391752271151586
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3259724457617232200}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.5, y: 2.5, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1126171426092868073
 PrefabInstance:
   m_ObjectHideFlags: 0

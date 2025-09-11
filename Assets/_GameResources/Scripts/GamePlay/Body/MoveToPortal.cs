@@ -1,0 +1,204 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+namespace Geckout
+{
+    public class MoveToPortal : MonoBehaviour
+    {
+        [Header("Portal Movement Settings")]
+        [SerializeField] private BodyController bodyController;
+        [SerializeField] private float animationDuration = 1f;
+        [SerializeField] private float portalEnterDistance = 0.4f;
+        [SerializeField] private bool enableDebugLogs = false;
+
+        private Portal targetPortal = null;
+        private bool isEnteringPortal = false;
+        private Coroutine portalMovementCoroutine = null;
+
+        private void Start()
+        {
+            if (bodyController == null)
+            {
+                bodyController = GetComponent<BodyController>();
+            }
+        }
+
+        public void InitiatePortalMovement(Portal portal)
+        {
+            if (isEnteringPortal)
+            {
+                return;
+            }
+
+            if (bodyController == null)
+            {
+                Debug.LogError("[MoveToPortal] BodyController is null!");
+                return;
+            }
+
+            targetPortal = portal;
+
+            DebugLog($"Initiating portal movement to {portal.name}");
+
+            CreatePathToPortal(portal);
+            StartPortalEnterAnimation();
+        }
+
+        private void CreatePathToPortal(Portal portal)
+        {
+            var orderedSegments = bodyController.GetOrderedSegments();
+            Vector3 currentPos = orderedSegments[0].transform.position;
+            Vector2Int currentCoord = GameMap.WorldToGridPosition(currentPos);
+            Vector2Int portalCoord = GameMap.WorldToGridPosition(portal.transform.position);
+
+
+            List<Vector2Int> pathToPortal = new List<Vector2Int> { portalCoord };
+
+            bodyController.SetMovementPath(pathToPortal);
+        }
+
+        private void StartPortalEnterAnimation()
+        {
+            if (isEnteringPortal) return;
+
+            isEnteringPortal = true;
+
+            if (portalMovementCoroutine != null)
+            {
+                StopCoroutine(portalMovementCoroutine);
+                portalMovementCoroutine = null;
+            }
+
+            ExtendPathToPortalCenter();
+            StartCoroutine(EnterPortalAnimation());
+
+            void ExtendPathToPortalCenter()
+            {
+                if (targetPortal == null) return;
+
+                Vector2Int portalCoord = GameMap.WorldToGridPosition(targetPortal.transform.position);
+
+                List<Vector2Int> extendedPath = new List<Vector2Int>();
+
+                int segmentCount = bodyController.GetOrderedSegments().Count;
+                for (int i = 0; i < segmentCount; i++)
+                {
+                    extendedPath.Add(portalCoord);
+                }
+
+                bodyController.SetMovementPath(extendedPath);
+            }
+        }
+
+        private IEnumerator EnterPortalAnimation()
+        {
+            if (targetPortal == null || bodyController == null) yield break;
+
+            Vector3 portalCenter = targetPortal.transform.position;
+            var orderedSegments = bodyController.GetOrderedSegments();
+
+            List<bool> segmentAnimated = new List<bool>(new bool[orderedSegments.Count]);
+
+            while (!segmentAnimated.All(x => x))
+            {
+                for (int i = 0; i < orderedSegments.Count; i++)
+                {
+                    if (segmentAnimated[i]) continue;
+
+                    var segment = orderedSegments[i];
+                    float distanceToPortal = Vector3.Distance(segment.transform.position, portalCenter);
+
+                    if (distanceToPortal <= portalEnterDistance)
+                    {
+                        segmentAnimated[i] = true;
+                        StartCoroutine(AnimateSegmentDown(segment, portalCenter));
+                    }
+                }
+
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(animationDuration);
+
+            FinishMoveToPortal();
+        }
+        private IEnumerator AnimateSegmentDown(Segment segment, Vector3 portalCenter)
+        {
+            Vector3 startPos = segment.transform.position;
+            Vector3 targetPos = portalCenter + Vector3.back * -3f;
+
+            float elapsed = 0f;
+            while (elapsed < animationDuration)
+            {
+                if (segment == null) yield break;
+
+                elapsed += Time.deltaTime;
+                float t = elapsed / animationDuration;
+                float curveT = Mathf.SmoothStep(0f, 1f, t);
+
+                Vector3 currentPos = startPos;
+                currentPos.z = Mathf.Lerp(startPos.z, targetPos.z, curveT);
+                segment.transform.position = currentPos;
+
+                yield return null;
+            }
+        }
+       
+        private void FinishMoveToPortal()
+        {
+            if (targetPortal == null || bodyController == null) return;
+
+            targetPortal.Disappear();
+            gameObject.SetActive(false);
+            bodyController.OccupiedTileController.ClearAllOccupied();
+            bodyController.OccupiedTileController.ForceRestoreAll();
+            LevelManager.Instance.LevelGame.OnBodyMoveToPortal(bodyController);
+
+            ResetPortalState();
+        }
+
+        private void ResetPortalState()
+        {
+            targetPortal = null;
+            isEnteringPortal = false;
+
+            if (portalMovementCoroutine != null)
+            {
+                StopCoroutine(portalMovementCoroutine);
+                portalMovementCoroutine = null;
+            }
+        }
+
+        private void DebugLog(string message)
+        {
+            if (enableDebugLogs)
+            {
+                Debug.Log($"[MoveToPortal] {message}");
+            }
+        }
+
+        private void OnDisable()
+        {
+            ResetPortalState();
+        }
+
+        private void OnDestroy()
+        {
+            ResetPortalState();
+        }
+
+        #region Editor Support
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (bodyController == null)
+            {
+                bodyController = GetComponent<BodyController>();
+            }
+        }
+#endif
+        #endregion
+    }
+}

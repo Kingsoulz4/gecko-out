@@ -56,8 +56,8 @@ MonoBehaviour:
   moveBoxLayer:
     serializedVersion: 2
     m_Bits: 256
-  moveSpeed: 5
-  inputThreshold: 0.5
+  moveSpeed: 15
+  inputThreshold: 0.1
   enableDebugLogs: 1
   enablePositionDebug: 1
   wayDirection: 2

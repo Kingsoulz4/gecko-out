@@ -77,7 +77,7 @@ namespace Geckout
             }
 
             // Kiểm tra tile trống + tìm head/tail adjacent
-            if (GameMap.TryGetTileAt(tileCoord.Value, out GameTile tile) && !tile.IsOccupied)
+            if (GameMap.TryGetTileAtCoord(tileCoord.Value, out GameTile tile) && !tile.IsOccupied)
             {
                 var adjacentResult = FindAdjacentGeckoAnchor(tileCoord.Value);
                 if (adjacentResult.HasValue)
