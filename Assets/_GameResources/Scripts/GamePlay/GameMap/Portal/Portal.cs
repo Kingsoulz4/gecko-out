@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.HableCurve;
 
 namespace Geckout
 {
@@ -38,18 +39,24 @@ namespace Geckout
         {
             if (other.TryGetComponent<Segment>(out var segment))
             {
-                var bodyController = segment.Controller;
-                if (bodyController != null && bodyController.MoveToPortal != null)
+                MoveToPortal(segment);
+            }
+        }
+
+        protected virtual void MoveToPortal(Segment segment)
+        {
+            var bodyController = segment.Controller;
+            if (bodyController != null && bodyController.MoveToPortal != null
+                && bodyController.BodyData.listColor[0] == PortalData.listColor[0])
+            {
+                if (isMovingToPortal) return;
+                GameMap.TryGetTileAtCoord(PortalData.Coordinate, out GameTile tile);
+                if (tile != null)
                 {
-                    if (isMovingToPortal) return;
-                    GameMap.TryGetTileAtCoord(PortalData.Coordinate, out GameTile tile);
-                    if (tile != null)
-                    {
-                        tile.SetOccupied(false);
-                    }
-                    bodyController.MoveToPortal.InitiatePortalMovement(this);
-                    isMovingToPortal = true;
+                    tile.SetOccupied(false);
                 }
+                bodyController.MoveToPortal.InitiatePortalMovement(this);
+                isMovingToPortal = true;
             }
         }
 
