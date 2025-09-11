@@ -11,6 +11,10 @@ namespace Geckout
     {
         [SerializeField] private List<BodyPartColorChanger> bodyPartColorChangers = new();
         public PortalData PortalData { get; private set; }
+        [SerializeField] private MechanicsReferences m_mechanicReferences;
+
+        private List<MechanicRendererBase> listMechanicRender = new();
+
 
         private void Awake()
         {
@@ -25,6 +29,7 @@ namespace Geckout
         public void Initialize(PortalData portalData)
         {
             PortalData = portalData;
+            InitVisual();   
         }
 
         public void UpdateVisual()
@@ -35,6 +40,28 @@ namespace Geckout
         internal void Disappear()
         {
             GetComponent<GameTile>().ChangeVisualToNormalTile();
+        }
+
+        public void InitVisual()
+        {
+            if (listMechanicRender.Count > 0)
+            {
+                foreach (var item in listMechanicRender)
+                {
+                    Destroy(item.gameObject);
+                }
+                listMechanicRender.Clear();
+            }
+
+            if (PortalData.freezeTimeCount > 0)
+            {
+                var prefabRenderFreeze = m_mechanicReferences.listMechanicRenderer[MechanicNames.Freeze];
+                var newIceRenderer = (IceRenderer)Instantiate(prefabRenderFreeze, transform);
+                newIceRenderer.GenerateIces(new List<Vector3>() { transform.position });
+                listMechanicRender.Add(newIceRenderer);
+            }
+
+
         }
     }
 }

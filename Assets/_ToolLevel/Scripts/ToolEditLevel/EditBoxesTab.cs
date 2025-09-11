@@ -1,7 +1,5 @@
 using Geckout.Data;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +8,7 @@ namespace Geckout
 {
     public class EditBoxesTab : MonoBehaviour
     {
+        [Header("Buttons")]
         [SerializeField] private Button m_buttonGenerate;
         [SerializeField] private Button m_buttonMoveLeft;
         [SerializeField] private Button m_buttonMoveRight;
@@ -17,152 +16,117 @@ namespace Geckout
         [SerializeField] private Button m_buttonMoveDown;
         [SerializeField] private Button m_buttonPlace;
         [SerializeField] private Button m_buttonDelete;
+
+        [Header("Dropdowns")]
         [SerializeField] private TMP_Dropdown m_dropDownMoveType;
         [SerializeField] private TMP_Dropdown m_dropDownBoxType;
 
+        [Header("Inputs")]
         [SerializeField] private TMP_InputField m_inputWidth;
         [SerializeField] private TMP_InputField m_inputHeight;
 
         public LevelGameEditTool LevelGame { get; set; }
 
         private BoxBaseData BoxBaseData { get; set; } = new();
-
         private CrateData CrateData { get; set; } = new();
 
         private void Awake()
         {
             m_buttonGenerate.onClick.AddListener(OnClickGenerate);
-            m_buttonMoveDown.onClick.AddListener(OnClickMoveDown);
-            m_buttonMoveUp.onClick.AddListener(OnClickMoveUp);
-            m_buttonMoveRight.onClick.AddListener(OnClickMoveRight);
-            m_buttonMoveLeft.onClick.AddListener(OnClickMoveLeft);
             m_buttonPlace.onClick.AddListener(OnClickPlace);
+
+            m_buttonMoveLeft.onClick.AddListener(() => OnClickMove(Vector2Int.left));
+            m_buttonMoveRight.onClick.AddListener(() => OnClickMove(Vector2Int.right));
+            m_buttonMoveUp.onClick.AddListener(() => OnClickMove(Vector2Int.up));
+            m_buttonMoveDown.onClick.AddListener(() => OnClickMove(Vector2Int.down));
+
             m_dropDownMoveType.onValueChanged.AddListener(OnDropDownMoveTypeChangeValue);
         }
 
         private void OnEnable()
         {
-            if (LevelGame != null && LevelGame.SelectedBoxMove != null)
+            if (LevelGame?.SelectedBoxMove != null)
             {
                 BoxBaseData = LevelGame.SelectedBoxMove.Data;
-                if (BoxBaseData is MovableBoxData)
+                if (BoxBaseData is MovableBoxData movable)
                 {
-                    m_dropDownMoveType.value = (int)((MovableBoxData)BoxBaseData).wayDirection;
+                    m_dropDownMoveType.value = (int)movable.wayDirection;
                 }
             }
         }
 
-        private void OnDropDownMoveTypeChangeValue(int arg0)
-        {
-            if (BoxBaseData is MovableBoxData)
-            {
-                ((MovableBoxData)BoxBaseData).wayDirection = (WayDirection)m_dropDownMoveType.value;
-            }
-            
-            LevelGame.SelectedBoxMove.UpdateVisual();
-        }
-
         private void Update()
         {
-            if(Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                OnClickMoveUp();
-            }
+            if (Input.GetKeyDown(KeyCode.UpArrow)) OnClickMove(Vector2Int.up);
+            if (Input.GetKeyDown(KeyCode.DownArrow)) OnClickMove(Vector2Int.down);
+            if (Input.GetKeyDown(KeyCode.LeftArrow)) OnClickMove(Vector2Int.left);
+            if (Input.GetKeyDown(KeyCode.RightArrow)) OnClickMove(Vector2Int.right);
+        }
 
-            if(Input.GetKeyDown(KeyCode.DownArrow))
+        private void OnDropDownMoveTypeChangeValue(int arg0)
+        {
+            if (BoxBaseData is MovableBoxData movable)
             {
-                OnClickMoveDown();
-            }
-
-            if(Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                OnClickMoveLeft();
-            }
-
-            if(Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                OnClickMoveRight();
+                movable.wayDirection = (WayDirection)m_dropDownMoveType.value;
+                LevelGame.SelectedBoxMove.UpdateVisual();
             }
         }
 
         private void OnClickPlace()
         {
-            if (m_dropDownBoxType.value == 0)
-            {
-                LevelGame.SelectedBoxMove.PlaceMoveBox();
-            }
-            else if (m_dropDownBoxType.value == 1)
-            {
-                LevelGame.SelectedCrate.PlaceMoveBox();
-            }
+            GetSelectedBoxAction(
+                onMoveBox: b => b.PlaceMoveBox(),
+                onCrate: c => c.PlaceMoveBox()
+            );
         }
 
-        private void OnClickMoveLeft()
+        private void OnClickMove(Vector2Int direction)
         {
-            if (m_dropDownBoxType.value == 0)
-            {
-                LevelGame.SelectedBoxMove.MoveByOffset(Vector2Int.left);
-            }
-            else if (m_dropDownBoxType.value == 1)
-            {
-                LevelGame.SelectedCrate.MoveByOffset(Vector2Int.left);
-            }
-        }
-
-        private void OnClickMoveRight()
-        {
-            if (m_dropDownBoxType.value == 0)
-            {
-                LevelGame.SelectedBoxMove.MoveByOffset(Vector2Int.right);
-            }
-            else if (m_dropDownBoxType.value == 1)
-            {
-                LevelGame.SelectedCrate.MoveByOffset(Vector2Int.right);
-            }
-        }
-
-        private void OnClickMoveUp()
-        {
-            if (m_dropDownBoxType.value == 0)
-            {
-                LevelGame.SelectedBoxMove.MoveByOffset(Vector2Int.up);
-            }
-            else if (m_dropDownBoxType.value == 1)
-            {
-                LevelGame.SelectedCrate.MoveByOffset(Vector2Int.up);
-            }
-        }
-
-        private void OnClickMoveDown()
-        {
-            if (m_dropDownBoxType.value == 0)
-            {
-                LevelGame.SelectedBoxMove.MoveByOffset(Vector2Int.down);
-            }
-            else if (m_dropDownBoxType.value == 1)
-            {
-                LevelGame.SelectedCrate.MoveByOffset(Vector2Int.down);
-            }
-
+            GetSelectedBoxAction(
+                onMoveBox: b => b.MoveByOffset(direction),
+                onCrate: c => c.MoveByOffset(direction)
+            );
         }
 
         private void OnClickGenerate()
         {
-            if (m_dropDownBoxType.value == 0)
+            Vector2Int size = new Vector2Int(
+                int.Parse(m_inputWidth.text),
+                int.Parse(m_inputHeight.text)
+            );
+
+            if (m_dropDownBoxType.value == 0) // Movable Box
             {
-                var boxMoveData = (MovableBoxData)BoxBaseData;
-                boxMoveData = new MovableBoxData();
-                boxMoveData.wayDirection = (WayDirection)m_dropDownMoveType.value;
-                BoxBaseData.boxSize = new Vector2Int(int.Parse(m_inputWidth.text), int.Parse(m_inputHeight.text));
+                var boxMoveData = new MovableBoxData
+                {
+                    wayDirection = (WayDirection)m_dropDownMoveType.value,
+                    boxSize = size
+                };
+
                 var moveBox = LevelGame.GameMap.SpawnBoxMove(boxMoveData);
                 LevelGame.SelectMovableBox(moveBox);
+                BoxBaseData = boxMoveData;
             }
-            else if (m_dropDownBoxType.value == 1)
+            else if (m_dropDownBoxType.value == 1) // Crate
             {
-                CrateData = new CrateData();
-                CrateData.boxSize = new Vector2Int(int.Parse(m_inputWidth.text), int.Parse(m_inputHeight.text));
-                var newCrate = LevelGame.GameMap.SpawnCrate(CrateData);
-                LevelGame.SelectCrateBox(newCrate);
+                CrateData = new CrateData { boxSize = size };
+                var crate = LevelGame.GameMap.SpawnCrate(CrateData);
+                LevelGame.SelectCrateBox(crate);
+            }
+        }
+
+        /// <summary>
+        /// Helper to avoid duplicate "if dropdown == 0/1" checks.
+        /// </summary>
+        private void GetSelectedBoxAction(Action<BoxMove> onMoveBox, Action<Crate> onCrate)
+        {
+            if (m_dropDownBoxType.value == 0 && LevelGame.SelectedBoxMove != null)
+            {
+                onMoveBox?.Invoke(LevelGame.SelectedBoxMove);
+            }
+            else if (m_dropDownBoxType.value == 1 && LevelGame.SelectedCrate != null)
+            {
+                onCrate?.Invoke(LevelGame.SelectedCrate);
             }
         }
     }

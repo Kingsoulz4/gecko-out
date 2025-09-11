@@ -17,9 +17,13 @@ namespace Geckout
 
         [SerializeField] private WayDirection wayDirection = WayDirection.All;
 
+        [Header("Visual")]
+        [SerializeField] private GameObject m_arrowHorizontal;
+        [SerializeField] private GameObject m_arrowVertical;
+
         // Data
-        private MovableBoxData movableBoxData = new();
-        private readonly List<MovableBoxTile> listMovableBoxTile = new();
+        protected override Vector2Int RootCoordinate => Data.rootCoordinate;
+        protected override Vector2Int BoxSize => Data.boxSize;
 
         // Input state
         private Camera gameCamera;
@@ -125,9 +129,9 @@ namespace Geckout
 
 
             dragStartPosition = inputPosition;
-            dragStartCoordinate = movableBoxData.rootCoordinate;
+            dragStartCoordinate = Data.rootCoordinate;
 
-            selectedTileOffset = clickedTile.Coordinate - movableBoxData.rootCoordinate;
+            selectedTileOffset = clickedTile.Coordinate - Data.rootCoordinate;
             baseSelectedTileCoord = dragStartCoordinate + selectedTileOffset;
 
             DebugLog($"StartDrag: root={dragStartCoordinate}, clicked={clickedTile.Coordinate}, offset={selectedTileOffset}");
@@ -176,9 +180,9 @@ namespace Geckout
             Vector2Int rootTarget = constrainedForSelected - selectedTileOffset;
 
             // Validation và set target
-            Debug.Log($"1 {rootTarget != movableBoxData.rootCoordinate}"  );
+            Debug.Log($"1 {rootTarget != Data.rootCoordinate}"  );
             Debug.Log($"2 {CanMoveRootTo(rootTarget)}");
-            if (rootTarget != movableBoxData.rootCoordinate && CanMoveRootTo(rootTarget))
+            if (rootTarget != Data.rootCoordinate && CanMoveRootTo(rootTarget))
             {
                 if (LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(rootTarget, out var targetTile))
                 {
@@ -195,7 +199,7 @@ namespace Geckout
             else
             {
                 DebugLog("rootTarget != movableBoxData.rootCoordina");
-                if (rootTarget == movableBoxData.rootCoordinate)
+                if (rootTarget == Data.rootCoordinate)
                 {
                     DebugLog("Target same as current position");
                 }
@@ -272,15 +276,15 @@ namespace Geckout
                 return gridCoord;
             }
 
-            return movableBoxData.rootCoordinate;
+            return Data.rootCoordinate;
         }
 
         private bool CanMoveRootTo(Vector2Int targetRootPos)
         {
             // Bounds check toàn khối
-            for (int x = 0; x < movableBoxData.boxSize.x; x++)
+            for (int x = 0; x < Data.boxSize.x; x++)
             {
-                for (int y = 0; y < movableBoxData.boxSize.y; y++)
+                for (int y = 0; y < Data.boxSize.y; y++)
                 {
                     Vector2Int check = targetRootPos + new Vector2Int(x, y);
                     if (!IsWithinMapBounds(check)) 
@@ -303,7 +307,7 @@ namespace Geckout
             if (LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(gridPos, out var tile))
             {
                 // Bỏ qua các tile thuộc chính box này
-                foreach (var boxTile in listMovableBoxTile)
+                foreach (var boxTile in spawnedTiles)
                 {
                     if (boxTile.Coordinate == gridPos)
                         return false; // occupied nhưng là của mình
@@ -330,7 +334,7 @@ namespace Geckout
 
         private void ClearCurrentOccupation()
         {
-            foreach (var boxTile in listMovableBoxTile)
+            foreach (var boxTile in spawnedTiles)
             {
                 if (LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(boxTile.Coordinate, out var tile))
                 {
@@ -341,10 +345,10 @@ namespace Geckout
 
         private void UpdateBoxLogicalPosition(Vector2Int newRootPos)
         {
-            Vector2Int offset = newRootPos - movableBoxData.rootCoordinate;
-            movableBoxData.rootCoordinate = newRootPos;
+            Vector2Int offset = newRootPos - Data.rootCoordinate;
+            Data.rootCoordinate = newRootPos;
 
-            foreach (var boxTile in listMovableBoxTile)
+            foreach (var boxTile in spawnedTiles)
             {
                 boxTile.Coordinate += offset;
                 if (LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(boxTile.Coordinate, out var tile))
@@ -362,188 +366,44 @@ namespace Geckout
 
         public override void Init(MovableBoxData data)
         {
-            movableBoxData = data;
-            SpawnTiles();
+            //Data = data;
+            //SpawnTiles();
+
+            base.Init(data);
 
             // Đặt transform về đúng tâm root tile (giữ Z hiện tại)
-            if (LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(movableBoxData.rootCoordinate, out var rootTile))
-            {
-                var p = rootTile.transform.position;
-                transform.position = new Vector3(p.x, p.y, transform.position.z);
-            }
+            //if (LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(Data.rootCoordinate, out var rootTile))
+            //{
+            //    var p = rootTile.transform.position;
+            //    transform.position = new Vector3(p.x, p.y, transform.position.z);
+            //}
         }
 
         #endregion
 
+        #region Visual 
+        public override void UpdateVisual()
+        {
+            base.UpdateVisual();
+            m_arrowHorizontal.transform.localPosition = Vector3.forward * -0.2f;
+            m_arrowVertical.transform.localPosition = Vector3.forward * -0.2f;
+            m_arrowHorizontal.SetActive(Data.wayDirection == WayDirection.Horizontal || Data.wayDirection == WayDirection.All);
+            m_arrowVertical.SetActive(Data.wayDirection == WayDirection.Vertical || Data.wayDirection == WayDirection.All);
+        }
+        #endregion
+
         #region Tile Spawning
 
-        private void SpawnTiles()
+        protected override bool ShouldSetOccupied()
         {
-            bool needSetOccupied = false;
-            if (LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Contains(movableBoxData))
-                needSetOccupied = true;
-
-            var size = movableBoxData.boxSize;
-
-            if (size.x == 1 && size.y == 1)
-                SpawnSingleTile(needSetOccupied);
-            else if (size.x == 1)
-                SpawnVerticalTiles(needSetOccupied);
-            else if (size.y == 1)
-                SpawnHorizontalTiles(needSetOccupied);
-            else
-                SpawnRectangleTiles(needSetOccupied);
+            return LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Contains(Data);
         }
 
-        private void SpawnSingleTile(bool needSetOccupied)
+        protected override void AddTileComponent(GameObject obj, Vector2Int coord)
         {
-            LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(movableBoxData.rootCoordinate, out var tile);
-            GameObject obj = Instantiate(m_tile4EdgePrefab, transform);
-
-            obj.transform.localPosition = Vector3.zero;
-            obj.transform.localScale = Vector3.one;
-            obj.name = "Tile";
-            obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
-
-            var mbt = obj.AddComponent<MovableBoxTile>();
-            mbt.Coordinate = tile.MapTileData.coordinate;
-            listMovableBoxTile.Add(mbt);
-            if (needSetOccupied) tile.IsOccupied = true;
-        }
-
-        private void SpawnVerticalTiles(bool needSetOccupied)
-        {
-            var size = movableBoxData.boxSize;
-            for (int y = 0; y < size.y; y++)
-            {
-                Vector2Int c = new Vector2Int(0, y);
-                var prefab = (y == 0 || y == size.y - 1) ? m_tileCorner3EdgePrefab : m_tile2EdgePrefab;
-
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(movableBoxData.rootCoordinate + c, out var tile);
-                GameObject obj = Instantiate(prefab, transform);
-
-                obj.transform.localPosition = new Vector3(c.x, c.y, 0);
-                obj.transform.localScale = Vector3.one;
-                obj.name = $"Tile_{c.x}_{c.y}";
-
-                if (y == 0)
-                    obj.transform.localRotation = Quaternion.Euler(new Vector3Int(0, 90, -90));
-                else if (y == size.y - 1)
-                    obj.transform.localRotation = Quaternion.Euler(new Vector3Int(0, -90, 90));
-                else
-                    obj.transform.localRotation = Quaternion.Euler(new Vector3Int(0, 90, -90));
-
-                var mbt = obj.AddComponent<MovableBoxTile>();
-                mbt.Coordinate = tile.MapTileData.coordinate;
-                listMovableBoxTile.Add(mbt);
-                if (needSetOccupied) tile.IsOccupied = true;
-            }
-        }
-
-        private void SpawnHorizontalTiles(bool needSetOccupied)
-        {
-            var size = movableBoxData.boxSize;
-            for (int x = 0; x < size.x; x++)
-            {
-                Vector2Int c = new Vector2Int(x, 0);
-                var prefab = (x == 0 || x == size.x - 1) ? m_tileCorner3EdgePrefab : m_tile2EdgePrefab;
-
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(movableBoxData.rootCoordinate + c, out var tile);
-                GameObject obj = Instantiate(prefab, transform);
-
-                obj.transform.localPosition = new Vector3(c.x, c.y, 0);
-                obj.transform.localScale = Vector3.one;
-                obj.name = $"Tile_{c.x}_{c.y}";
-
-                if (x == 0)
-                    obj.transform.localRotation = Quaternion.Euler(new Vector3Int(90, 90, -90));
-                else if (x == size.x - 1)
-                    obj.transform.localRotation = Quaternion.Euler(new Vector3Int(-90, -90, 90));
-                else
-                    obj.transform.localRotation = Quaternion.Euler(new Vector3Int(90, 90, -90));
-
-                var mbt = obj.AddComponent<MovableBoxTile>();
-                mbt.Coordinate = tile.MapTileData.coordinate;
-                listMovableBoxTile.Add(mbt);
-                if (needSetOccupied) tile.IsOccupied = true;
-            }
-        }
-
-        private void SpawnRectangleTiles(bool needSetOccupied)
-        {
-            var size = movableBoxData.boxSize;
-            for (int x = 0; x < size.x; x++)
-            {
-                for (int y = 0; y < size.y; y++)
-                {
-                    Vector2Int c = new Vector2Int(x, y);
-                    LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(movableBoxData.rootCoordinate + c, out var tile);
-
-                    GameObject obj = CreateTileForPosition(x, y, size);
-
-                    obj.transform.localPosition = new Vector3(c.x, c.y, 0);
-                    obj.transform.localScale = Vector3.one;
-                    obj.name = $"Tile_{c.x}_{c.y}";
-
-                    var mbt = obj.AddComponent<MovableBoxTile>();
-                    mbt.Coordinate = tile.MapTileData.coordinate;
-                    listMovableBoxTile.Add(mbt);
-                    if (needSetOccupied) tile.IsOccupied = true;
-                }
-            }
-        }
-
-        private GameObject CreateTileForPosition(int x, int y, Vector2Int boxSize)
-        {
-            GameObject obj;
-
-            if (x == 0 && y == 0)
-            {
-                obj = Instantiate(m_tileCornerPrefab, transform);
-                obj.transform.localRotation = Quaternion.Euler(0, 90, -90);
-            }
-            else if (x == 0 && y == boxSize.y - 1)
-            {
-                obj = Instantiate(m_tileCornerPrefab, transform);
-                obj.transform.localRotation = Quaternion.Euler(90, 90, -90);
-            }
-            else if (x == boxSize.x - 1 && y == 0)
-            {
-                obj = Instantiate(m_tileCornerPrefab, transform);
-                obj.transform.localRotation = Quaternion.Euler(-90, -90, 90);
-            }
-            else if (x == boxSize.x - 1 && y == boxSize.y - 1)
-            {
-                obj = Instantiate(m_tileCornerPrefab, transform);
-                obj.transform.localRotation = Quaternion.Euler(0, -90, 90);
-            }
-            else if (x == 0)
-            {
-                obj = Instantiate(m_tileEdgePrefab, transform);
-                obj.transform.localRotation = Quaternion.Euler(90, 90, -90);
-            }
-            else if (x == boxSize.x - 1)
-            {
-                obj = Instantiate(m_tileEdgePrefab, transform);
-                obj.transform.localRotation = Quaternion.Euler(-90, -90, 90);
-            }
-            else if (y == 0)
-            {
-                obj = Instantiate(m_tileEdgePrefab, transform);
-                obj.transform.localRotation = Quaternion.Euler(-180, -90, 90);
-            }
-            else if (y == boxSize.y - 1)
-            {
-                obj = Instantiate(m_tileEdgePrefab, transform);
-                obj.transform.localRotation = Quaternion.Euler(-180, 90, -90);
-            }
-            else
-            {
-                obj = Instantiate(m_tileCenterPrefab, transform);
-                obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
-            }
-
-            return obj;
+            var tile = obj.AddComponent<MovableBoxTile>();
+            tile.Coordinate = coord;
+            spawnedTiles.Add(tile);
         }
 
         #endregion

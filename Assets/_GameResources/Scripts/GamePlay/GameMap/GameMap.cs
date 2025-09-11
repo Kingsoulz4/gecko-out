@@ -37,6 +37,9 @@ namespace Geckout
         private GameTile[] tiles;
         private Vector2Int _mapSize;
         private List<Portal> listPortal = new();
+        private List<BoxMove> listMovableBox = new();
+        private List<Crate> listCrate = new();
+
         private static Vector2 gridOffset;
 
         public static Vector2Int MapSize => _instance._mapSize;
@@ -239,7 +242,7 @@ namespace Geckout
             Utils.RemoveAllChilds(m_movableBoxContainer);
             foreach (var movableBox in levelData.listMovableBoxData)
             {
-                SpawnBoxMove(movableBox);
+                listMovableBox.Add(SpawnBoxMove(movableBox));
             }
 
         }
@@ -258,7 +261,7 @@ namespace Geckout
             Utils.RemoveAllChilds(m_crateContainer);
             foreach (var crateData in levelData.listCrateData)
             {
-                SpawnCrate(crateData);
+                listCrate.Add(SpawnCrate(crateData));
             }
         }
 

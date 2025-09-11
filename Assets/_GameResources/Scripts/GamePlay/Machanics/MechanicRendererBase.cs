@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Geckout
 {
-    public class IceBody : BodyController
+    public class MechanicRendererBase : MonoBehaviour
     {
-        [SerializeField] private IceRenderer m_iceRenderer;
+        
     }
 }

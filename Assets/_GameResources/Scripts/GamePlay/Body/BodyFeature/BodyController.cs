@@ -30,8 +30,11 @@ namespace Geckout
         [SerializeField] private OccupiedTileController occupiedTileController;
         [SerializeField] private BodyRenderer _bodyRenderer;
         [SerializeField] private GridHeadClamper gridClamper;
-        public ControlAnchor controlAnchor = ControlAnchor.Head;
 
+        [Header("Mechanics")]
+        [SerializeField] private MechanicsReferences m_mechanicReferences;
+
+        public ControlAnchor controlAnchor = ControlAnchor.Head;
 
         // Movement events
         public Action OnStartMove;
@@ -63,9 +66,10 @@ namespace Geckout
         public GridHeadClamper GridClamper { get => gridClamper; set => gridClamper = value; }
 
         public BodyData BodyData { get; set; }
+
         public int SubLength => subLength;
 
-
+        private List<MechanicRendererBase> listMechanicRender = new();
 
         private void Start()
         {
@@ -159,6 +163,8 @@ namespace Geckout
             // ===== Initialize renderer =====
             if (_bodyRenderer != null)
                 _bodyRenderer.Initialize(Segments);
+
+            InitVisual();
 
             Debug.Log($"Body initialized: length={length}, subLength={SubLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
         }
@@ -518,6 +524,35 @@ namespace Geckout
                 }
                 return historyPoints.Last.Value;
             }
+        }
+        #endregion
+
+
+        #region Visualize
+        public void InitVisual()
+        {
+            if(listMechanicRender.Count > 0)
+            {
+                foreach(var item in listMechanicRender)
+                {
+                    Destroy(item.gameObject);
+                }
+                listMechanicRender.Clear();
+            }
+
+            if (BodyData.freezeTimeCount > 0)
+            {
+                var prefabRenderFreeze = m_mechanicReferences.listMechanicRenderer[MechanicNames.Freeze];
+                var newIceRenderer = (IceRenderer)Instantiate(prefabRenderFreeze, transform);
+                var listPos = BodyData.listCoordinate.Select(x => {
+                    LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(x, out var tile);
+                    return tile.transform.position;
+                }).ToList();
+                newIceRenderer.GenerateIces(listPos);
+                listMechanicRender.Add(newIceRenderer);
+            }
+
+
         }
         #endregion
     }

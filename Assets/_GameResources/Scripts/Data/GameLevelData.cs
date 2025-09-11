@@ -175,6 +175,7 @@ namespace Geckout.Data
     {
         public PortalType portalType;
         public Vector2Int Coordinate;
+        public int freezeTimeCount;
         public List<ColorType> listColor = new() { ColorType.Red };
     }
 
@@ -184,6 +185,8 @@ namespace Geckout.Data
         public BodyType bodyType;
         public List<ColorType> listColor = new() { ColorType.Red };
         public List<Vector2Int> listCoordinate = new();
+        public int freezeTimeCount = 0;
+
 
         public BodyData()
         { }
@@ -193,6 +196,7 @@ namespace Geckout.Data
             this.bodyType = bodyData.bodyType;
             this.listColor = new List<ColorType>(bodyData.listColor);
             this.listCoordinate = new List<Vector2Int>(bodyData.listCoordinate);
+            this.freezeTimeCount = bodyData.freezeTimeCount;
         }
     }
 
