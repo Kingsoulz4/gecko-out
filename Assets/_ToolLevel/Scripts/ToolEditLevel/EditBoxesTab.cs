@@ -27,8 +27,41 @@ namespace Geckout
         [SerializeField] private TMP_InputField m_inputDifuseCount;
 
         public LevelGameEditTool LevelGame { get; set; }
-        private BoxBaseData BoxBaseData { get; set; } = new();
-        private CrateData CrateData { get; set; } = new();
+
+        private BoxBaseData boxBaseData;
+
+        private BoxBaseData BoxBaseData { 
+            get 
+            {
+                Vector2Int size = new Vector2Int(
+                    int.Parse(m_inputWidth.text),
+                    int.Parse(m_inputHeight.text)
+                );
+                if (m_dropDownBoxType.value == 0 && LevelGame.SelectedBoxMove != null)
+                {
+                    boxBaseData = LevelGame.SelectedBoxMove.Data;
+                }
+                else if(m_dropDownBoxType.value == 0)
+                {
+                    boxBaseData = new MovableBoxData() { boxSize = size, wayDirection = (WayDirection)m_dropDownMoveType.value };
+                }
+                else if (m_dropDownBoxType.value == 1 && LevelGame.SelectedCrate != null)
+                {
+                    boxBaseData = LevelGame.SelectedCrate.Data;
+                }
+                else if(m_dropDownBoxType.value == 1)
+                {
+                    boxBaseData = new CrateData() { boxSize = size, difusionCount = int.Parse(m_inputDifuseCount.text) };
+                }
+                return boxBaseData;
+
+            } 
+            set
+            {
+
+            }
+        } 
+        //private CrateData CrateData { get; set; } = new();
 
         private void Awake()
         {
@@ -74,9 +107,9 @@ namespace Geckout
 
         private void OnEnterDifuseCount(string arg0)
         {
-            if(LevelGame.SelectedCrate != null && CrateData != null)
+            if(LevelGame.SelectedCrate != null && BoxBaseData != null)
             {
-                CrateData.difusionCount = int.Parse(arg0);
+                ((CrateData)BoxBaseData).difusionCount = int.Parse(arg0);
             }
         }
 
@@ -134,13 +167,16 @@ namespace Geckout
 
                 var moveBox = LevelGame.GameMap.SpawnBoxMove(boxMoveData);
                 LevelGame.SelectMovableBox(moveBox);
+
                 BoxBaseData = boxMoveData;
             }
             else if (m_dropDownBoxType.value == 1) // Crate
             {
-                CrateData = new CrateData { boxSize = size };
-                var crate = LevelGame.GameMap.SpawnCrate(CrateData);
+                BoxBaseData = new CrateData { boxSize = size , difusionCount = int.Parse(m_inputDifuseCount.text)};
+                var crate = LevelGame.GameMap.SpawnCrate((CrateData)BoxBaseData);
                 LevelGame.SelectCrateBox(crate);
+
+                
             }
         }
 

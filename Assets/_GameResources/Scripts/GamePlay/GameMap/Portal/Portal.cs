@@ -78,7 +78,7 @@ namespace Geckout
             {
                 var prefabRenderFreeze = m_mechanicReferences.listMechanicRenderer[MechanicNames.Freeze];
                 var newIceRenderer = (IceRenderer)Instantiate(prefabRenderFreeze, transform);
-                newIceRenderer.GenerateIces(new List<Vector3>() { transform.position });
+                newIceRenderer.GenerateIces(new List<Vector3>() { transform.position }, PortalData.freezeTimeCount);
                 listMechanicRender.Add(newIceRenderer);
             }
 

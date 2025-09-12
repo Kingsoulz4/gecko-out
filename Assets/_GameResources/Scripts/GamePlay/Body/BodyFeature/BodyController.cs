@@ -570,7 +570,7 @@ namespace Geckout
                     GameMap.TryGetTileAtCoord(x, out var tile);
                     return tile.transform.position;
                 }).ToList();
-                newIceRenderer.GenerateIces(listPos);
+                newIceRenderer.GenerateIces(listPos, BodyData.freezeTimeCount);
                 listMechanicRender.Add(newIceRenderer);
             }
 

@@ -30,7 +30,7 @@ namespace Geckout
         public virtual void SetSelected(bool selected)
         {
             OutlineSelected.enabled = selected;
-
+            if (ShouldSetOccupied() && selected) SetTilesOccupiedMap(false);
         }
         public virtual void MoveByOffset(Vector2Int offset)
         {
@@ -43,6 +43,11 @@ namespace Geckout
                 return;
             }
 
+            //if(CheckCanPlace())
+            //{
+            //    SetTilesOccupiedMap(false);
+            //}
+
             foreach (var tileMove in spawnedTiles)
             {
                 var newCoordinate = new Vector2Int(tileMove.Coordinate.x + offset.x, tileMove.Coordinate.y + offset.y);
@@ -52,10 +57,16 @@ namespace Geckout
                 tileMove.Coordinate = newCoordinate;
             }
             Data.rootCoordinate += offset;
+
+            //if(CheckCanPlace())
+            //{
+            //    SetTilesOccupiedMap(true);
+            //}
+
             UpdateVisual();
         }
 
-        public virtual bool PlaceMoveBox()
+        public bool CheckCanPlace()
         {
             foreach (var tileMove in spawnedTiles)
             {
@@ -67,12 +78,23 @@ namespace Geckout
                 }
 
             }
+            return true;
+        }
 
+        public void SetTilesOccupiedMap(bool isOccupied)
+        {
             foreach (var tileMove in spawnedTiles)
             {
                 GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
-                tile.IsOccupied = true;
+                tile.IsOccupied = isOccupied;
             }
+        }
+
+        public virtual bool PlaceMoveBox()
+        {
+            if (!CheckCanPlace()) return false;
+
+            SetTilesOccupiedMap(true);
 
             return true;
         }
