@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEngine.Rendering.HableCurve;
 
 namespace Geckout
 {
@@ -29,12 +30,6 @@ namespace Geckout
         {
             if (isEnteringPortal)
             {
-                return;
-            }
-
-            if (bodyController == null)
-            {
-                Debug.LogError("[MoveToPortal] BodyController is null!");
                 return;
             }
 
@@ -131,13 +126,13 @@ namespace Geckout
         private void FinishMoveToPortal()
         {
             if (targetPortal == null || bodyController == null) return;
-
-            targetPortal.Disappear();
-            gameObject.SetActive(false);
+            
             bodyController.OccupiedTileController.ClearAllOccupied();
             bodyController.OccupiedTileController.ForceRestoreAll();
-            LevelManager.Instance.LevelGame.OnBodyMoveToPortal(bodyController);
+            LevelEvent.OnMoveToPortalDone(bodyController, targetPortal);
             DebugLog("Finish move portal");
+            targetPortal.Disappear();
+            gameObject.SetActive(false);
             ResetPortalState();
         }
 

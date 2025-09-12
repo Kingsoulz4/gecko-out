@@ -2,12 +2,13 @@ using Geckout.Data;
 using TMPro;
 using UnityEngine;
 using TMPro;
+using System;
 namespace Geckout
 {
     public partial class Crate : BoxBase<CrateTile, CrateData>
     {
         [SerializeField] private TextMeshPro m_textCount;
-
+        private int currentCount = 0;
         protected override Vector2Int RootCoordinate => Data.rootCoordinate;
         protected override Vector2Int BoxSize => Data.boxSize;
 
@@ -21,6 +22,34 @@ namespace Geckout
         {
             base.UpdateVisual();
             m_textCount.transform.localPosition = Vector3.forward * -0.4f;
+            currentCount = data.difusionCount;
+            m_textCount.text = currentCount.ToString();
+        }
+
+        private void OnEnable()
+        {
+            LevelEvent.OnMoveToPortalDone += OnBodyMoveToPortalDone;
+        }
+
+        private void OnDisable()
+        {
+            LevelEvent.OnMoveToPortalDone -= OnBodyMoveToPortalDone;
+        }
+
+        private void OnBodyMoveToPortalDone(BodyController controller, Portal portal)
+        {
+            currentCount -= 1;
+            if (currentCount <= 0)
+            {
+                BreakCrate();
+            }
+            m_textCount.text = currentCount.ToString();
+        }
+
+        private void BreakCrate()
+        {
+            gameObject.SetActive(false);
+            //vfx
         }
 
         protected override bool ShouldSetOccupied()
