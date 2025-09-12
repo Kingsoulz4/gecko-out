@@ -30,6 +30,7 @@ namespace Geckout
         [SerializeField] private BodyRenderer _bodyRenderer;
         [SerializeField] private GridHeadClamper gridClamper;
         [SerializeField] private MoveToPortal moveToPortal;
+        [SerializeField] private IceBody iceBody;
 
         [Header("Mechanics")]
         [SerializeField] private MechanicsReferences m_mechanicReferences;
@@ -68,6 +69,9 @@ namespace Geckout
         public int SubLength => subLength;
         public MoveToPortal MoveToPortal { get => moveToPortal; }
         public bool CanControl { get => canControl; set => canControl = value; }
+        public MechanicsReferences MechanicReferences { get => m_mechanicReferences;}
+        public List<MechanicRendererBase> ListMechanicRender { get => listMechanicRender; set => listMechanicRender = value; }
+
         private List<MechanicRendererBase> listMechanicRender = new();
 
 #if UNITY_EDITOR
@@ -93,6 +97,10 @@ namespace Geckout
             if (m_mechanicReferences == null)
             {
                 m_mechanicReferences = Resources.Load<MechanicsReferences>("Mechanics/MechanicsReferences");
+            }
+            if (iceBody == null)
+            {
+                iceBody = FindUlti.FindChildDirect(transform,"IceBody").GetComponent<IceBody>();
             }
         }
 #endif
@@ -186,7 +194,7 @@ namespace Geckout
             if (_bodyRenderer != null)
                 _bodyRenderer.Initialize(Segments);
 
-            InitVisual();
+            InitMechanic();
 
             canControl = true;
             Debug.Log($"Body initialized: length={length}, subLength={SubLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
@@ -541,7 +549,7 @@ namespace Geckout
 
 
         #region Visualize
-        public void InitVisual()
+        public void InitMechanic()
         {
             if (listMechanicRender.Count > 0)
             {
@@ -554,17 +562,8 @@ namespace Geckout
 
             if (BodyData.freezeTimeCount > 0)
             {
-                var prefabRenderFreeze = m_mechanicReferences.listMechanicRenderer[MechanicNames.Freeze];
-                var newIceRenderer = (IceRenderer)Instantiate(prefabRenderFreeze, transform);
-                var listPos = BodyData.listCoordinate.Select(x =>
-                {
-                    GameMap.TryGetTileAtCoord(x, out var tile);
-                    return tile.transform.position;
-                }).ToList();
-                newIceRenderer.GenerateIces(listPos, BodyData.freezeTimeCount);
-                listMechanicRender.Add(newIceRenderer);
+                iceBody.Init(BodyData.freezeTimeCount);
             }
-
 
         }
         #endregion
