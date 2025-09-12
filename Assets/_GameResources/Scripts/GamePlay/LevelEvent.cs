@@ -9,6 +9,7 @@ namespace Geckout
     {
         public static Action<BodyController,Portal> OnMoveToPortalStart;
         public static Action<BodyController, Portal> OnMoveToPortalDone;
+        public static Action<BodyController, List<Vector2Int>> OnGetLastPath;
         public static Action<int> OnWin;
         public static Action<int> OnLose;
         public static Action<int> OnLevelStart;
@@ -20,6 +21,7 @@ namespace Geckout
             OnWin = null;
             OnLose = null;
             OnLevelStart = null;
+            OnGetLastPath = null;
         }
     }
 

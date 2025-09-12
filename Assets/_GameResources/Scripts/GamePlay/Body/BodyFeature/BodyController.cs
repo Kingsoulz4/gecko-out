@@ -136,11 +136,6 @@ namespace Geckout
             //Debug.Log("IsMoving " + IsMoving);
         }
 
-        private void Start()
-        {
-            //Init();
-        }
-
         public virtual void Initialize(BodyData dogData)
         {
             BodyData = dogData;
