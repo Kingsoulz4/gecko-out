@@ -41,7 +41,7 @@ namespace Geckout
             }
 
             currentCount -= 1;
-            hiddenRenderer.UpdateMeltCount(currentCount);
+            hiddenRenderer.UpdateText(currentCount);
             if (currentCount == 0)
             {
                 Break();

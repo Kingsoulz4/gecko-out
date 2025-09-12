@@ -92,8 +92,6 @@ namespace Geckout
         }
         public BodyRenderer BodyRenderer { get => _bodyRenderer; }
 
-        private List<MechanicRendererBase> listMechanicRender = new();
-
 #if UNITY_EDITOR
         [EditorButton]
         private void SetRef()
