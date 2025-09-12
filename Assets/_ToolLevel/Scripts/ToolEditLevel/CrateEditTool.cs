@@ -22,7 +22,10 @@ namespace Geckout
         {
             if(!base.PlaceMoveBox()) return false;
             Debug.Log("Move Success");
-            LevelManager.Instance.LevelGame.GameLevelData.listCrateData.Add(Data);
+            if (!LevelManager.Instance.LevelGame.GameLevelData.listCrateData.Contains(Data))
+            {
+                LevelManager.Instance.LevelGame.GameLevelData.listCrateData.Add(Data);
+            }
             return true;
         }
 
