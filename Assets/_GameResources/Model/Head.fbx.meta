@@ -5,10 +5,15 @@ ModelImporter:
   internalIDToNameTable: []
   externalObjects:
   - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dog_Material_Head
+    second: {fileID: 2100000, guid: fc9947ae9460b1942a5bcf2f5fdfe9de, type: 2}
+  - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Dog_Base
-    second: {fileID: 2800000, guid: c943262543f7d8a4da87c281de3826d6, type: 3}
+    second: {fileID: 2800000, guid: f9ef12cbacc3633478d36563035d39e6, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
