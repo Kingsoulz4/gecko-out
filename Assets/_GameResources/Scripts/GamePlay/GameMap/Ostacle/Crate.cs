@@ -41,12 +41,12 @@ namespace Geckout
             currentCount -= 1;
             if (currentCount <= 0)
             {
-                BreakCrate();
+                Break();
             }
             m_textCount.text = currentCount.ToString();
         }
 
-        private void BreakCrate()
+        private void Break()
         {
             gameObject.SetActive(false);
             //vfx

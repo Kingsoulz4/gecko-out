@@ -69,7 +69,7 @@ namespace Geckout
             PortalData.freezeTimeCount = int.Parse(arg0);
             if (LevelGame != null && LevelGame.SelectedPortal != null)
             {
-                LevelGame.SelectedPortal.InitVisual();
+                LevelGame.SelectedPortal.InitMechanic();
             }
         }
 

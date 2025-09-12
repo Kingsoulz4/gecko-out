@@ -25,5 +25,15 @@ namespace Geckout
             var midTile = listIceTile[listIceTile.Count / 2];
             m_textMeltCount.transform.position = new Vector3(midTile.transform.position.x, midTile.transform.position.y, -2);
         }
+
+        public void UpdateMeltCount(int meltCount)
+        {
+            m_textMeltCount.text = meltCount.ToString();
+        }
+
+        public void Break()
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

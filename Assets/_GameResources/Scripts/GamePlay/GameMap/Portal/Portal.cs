@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.HableCurve;
@@ -12,22 +13,21 @@ namespace Geckout
     public class Portal : MonoBehaviour
     {
         [SerializeField] private List<BodyPartColorChanger> bodyPartColorChangers = new();
-        public PortalData PortalData { get; private set; }
         [SerializeField] private MechanicsReferences m_mechanicReferences;
+        [SerializeField] private IcePortal icePortal;
 
         private List<MechanicRendererBase> listMechanicRender = new();
-        bool isMovingToPortal = false;
-
-        private void Start()
-        {
-            UpdateVisual();
-        }
+        private bool isMovingToPortal = false;
+        public PortalData PortalData { get; private set; }
+        public MechanicsReferences MechanicReferences { get => m_mechanicReferences; }
+        public List<MechanicRendererBase> ListMechanicRender { get => listMechanicRender; }
 
         public void Initialize(PortalData portalData)
         {
-            PortalData = portalData;
-            InitVisual();
             isMovingToPortal = false;
+            PortalData = portalData;
+            InitMechanic();
+            UpdateVisual();
         }
 
         private void OnTriggerEnter(Collider other)
@@ -67,7 +67,7 @@ namespace Geckout
             this.gameObject.SetActive(false);
         }
 
-        public void InitVisual()
+        public void InitMechanic()
         {
             if (listMechanicRender.Count > 0)
             {
@@ -80,13 +80,8 @@ namespace Geckout
 
             if (PortalData.freezeTimeCount > 0)
             {
-                var prefabRenderFreeze = m_mechanicReferences.listMechanicRenderer[MechanicNames.Freeze];
-                var newIceRenderer = (IceRenderer)Instantiate(prefabRenderFreeze, transform);
-                newIceRenderer.GenerateIces(new List<Vector3>() { transform.position }, PortalData.freezeTimeCount);
-                listMechanicRender.Add(newIceRenderer);
+                icePortal.Init(PortalData.freezeTimeCount);
             }
-
-
         }
     }
 }
