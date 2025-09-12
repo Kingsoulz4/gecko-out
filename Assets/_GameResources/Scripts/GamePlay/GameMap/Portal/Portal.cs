@@ -45,12 +45,14 @@ namespace Geckout
                 && bodyController.BodyData.listColor[0] == PortalData.listColor[0])
             {
                 if (isMovingToPortal) return;
+
                 GameMap.TryGetTileAtCoord(PortalData.Coordinate, out GameTile tile);
                 if (tile != null)
                 {
                     tile.SetOccupied(false);
                 }
                 bodyController.MoveToPortal.InitiatePortalMovement(this);
+                LevelEvent.OnMoveToPortalStart?.Invoke(segment.Controller, this);
                 isMovingToPortal = true;
             }
         }

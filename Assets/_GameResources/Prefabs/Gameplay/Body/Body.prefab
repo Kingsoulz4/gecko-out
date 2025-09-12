@@ -632,4 +632,4 @@ MonoBehaviour:
   bodyController: {fileID: 3655932188227585431}
   animationDurationPerSegment: 0.3
   portalEnterDistance: 0.4
-  enableDebugLogs: 1
+  enableDebugLogs: 0

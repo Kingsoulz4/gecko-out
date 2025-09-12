@@ -7,10 +7,21 @@ namespace Geckout
 {
     public class LevelEvent : SingletonMono<LevelEvent>
     {
-        public Action<BodyController,Portal> OnMoveToPortalStart;
-        public Action<BodyController, Portal> OnMoveToPortalDone;
-        public Action<int> OnWin;
-        public Action<int> OnLose;
-        public Action<int> OnLevelStart;
+        public static Action<BodyController,Portal> OnMoveToPortalStart;
+        public static Action<BodyController, Portal> OnMoveToPortalDone;
+        public static Action<int> OnWin;
+        public static Action<int> OnLose;
+        public static Action<int> OnLevelStart;
+
+        private void OnDestroy()
+        {
+            OnMoveToPortalStart = null;
+            OnMoveToPortalDone = null;
+            OnWin = null;
+            OnLose = null;
+            OnLevelStart = null;
+        }
     }
+
+
 }
