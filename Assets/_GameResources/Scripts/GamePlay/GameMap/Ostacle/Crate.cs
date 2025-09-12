@@ -15,6 +15,7 @@ namespace Geckout
         public override void Init(CrateData data)
         {
             base.Init(data);
+            currentCount = data.difusionCount;
             m_textCount.text = Data.difusionCount.ToString();
         }
 
@@ -22,7 +23,6 @@ namespace Geckout
         {
             base.UpdateVisual();
             m_textCount.transform.localPosition = Vector3.forward * -0.4f;
-            currentCount = data.difusionCount;
             m_textCount.text = currentCount.ToString();
         }
 
