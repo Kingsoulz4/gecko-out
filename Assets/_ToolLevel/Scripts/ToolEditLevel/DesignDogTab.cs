@@ -53,7 +53,7 @@ namespace Geckout
             BodyData.freezeTimeCount = int.Parse(arg0);
             if(LevelGame != null && LevelGame.selectedBody != null)
             {
-                LevelGame.selectedBody.InitVisual();
+                LevelGame.selectedBody.InitMechanic();
             }
         }
 

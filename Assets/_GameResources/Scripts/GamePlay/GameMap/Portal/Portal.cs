@@ -42,6 +42,7 @@ namespace Geckout
         {
             var bodyController = segment.Controller;
             if (bodyController != null && bodyController.MoveToPortal != null
+                && bodyController.CanMovePortal
                 && bodyController.BodyData.listColor[0] == PortalData.listColor[0])
             {
                 if (isMovingToPortal) return;

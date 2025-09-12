@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Geckout
 {
-    public class HiddenBody : MechanicBody
+    public class MechanicBody : MonoBehaviour
     {
-       
+        [SerializeField] protected BodyController body;
     }
 }
