@@ -62,6 +62,8 @@ namespace Geckout
         {
             //LevelGame.ChangeTypeSelectedTiles(Data.MapTileType.Portal);
             LevelGame.AddNewPortal();
+            PortalData.freezeTimeCount = int.Parse(m_inputFreezeCount.text);
+            LevelGame.SelectedPortal.InitVisual();
         }
 
         private void OnEnterFreezeCount(string arg0)

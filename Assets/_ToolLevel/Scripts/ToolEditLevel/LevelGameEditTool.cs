@@ -283,6 +283,7 @@ namespace Geckout
                 var newPortalData = new PortalData();
                 newPortalData.Coordinate = new Vector2Int(tileSelected.Coordinate.x, tileSelected.Coordinate.y);
                 GameMap.SpawnPortal(newPortalData);
+                GameLevelData.listPortalData.Add(newPortalData);
             }
         }
 

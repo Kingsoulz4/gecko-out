@@ -23,7 +23,7 @@ namespace Geckout
             }
             m_textMeltCount.text = meltCount + "";
             var midTile = listIceTile[listIceTile.Count / 2];
-            m_textMeltCount.transform.position = new Vector3(midTile.transform.position.x, midTile.transform.position.y, -2);
+            m_textMeltCount.transform.position = new Vector3(midTile.transform.position.x, midTile.transform.position.y, midTile.transform.position.z - 1);
         }
     }
 }
