@@ -68,8 +68,16 @@ namespace Geckout
         public BodyData BodyData { get; set; }
         public int SubLength => subLength;
         public MoveToPortal MoveToPortal { get => moveToPortal; }
-        public bool CanControl { get => canControl; set => canControl = value; }
-        public MechanicsReferences MechanicReferences { get => m_mechanicReferences;}
+        public bool CanControl
+        {
+            get
+            {
+                return canControl && iceBody.CurrentCount <= 0;
+            }
+
+            set => canControl = value;
+        }
+        public MechanicsReferences MechanicReferences { get => m_mechanicReferences; }
         public List<MechanicRendererBase> ListMechanicRender { get => listMechanicRender; set => listMechanicRender = value; }
 
         private List<MechanicRendererBase> listMechanicRender = new();
@@ -100,7 +108,7 @@ namespace Geckout
             }
             if (iceBody == null)
             {
-                iceBody = FindUlti.FindChildDirect(transform,"IceBody").GetComponent<IceBody>();
+                iceBody = FindUlti.FindChildDirect(transform, "IceBody").GetComponent<IceBody>();
             }
         }
 #endif

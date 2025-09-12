@@ -13,6 +13,8 @@ namespace Geckout
         private IceRenderer iceRenderer;
         private bool isInit = false;
 
+        public int CurrentCount { get => currentCount;}
+
         public void Init(int meltCount)
         {
             if (isInit) return;
