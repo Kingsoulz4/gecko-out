@@ -38,15 +38,20 @@ namespace Geckout
 
         private void OnBodyMoveToPortalDone(BodyController controller, Portal portal)
         {
-            currentCount -= 1;
-            if (currentCount <= 0)
+            if (currentCount < 0)
             {
-                BreakCrate();
+                return;
+            }
+
+            currentCount -= 1;
+            if (currentCount == 0)
+            {
+                Break();
             }
             m_textCount.text = currentCount.ToString();
         }
 
-        private void BreakCrate()
+        private void Break()
         {
             gameObject.SetActive(false);
             //vfx
