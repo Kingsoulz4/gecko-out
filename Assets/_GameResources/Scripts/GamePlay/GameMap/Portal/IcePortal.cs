@@ -11,19 +11,19 @@ namespace Geckout
         [SerializeField] private Portal portal;
         private int currentCount = 0;
         private IceRenderer iceRenderer;
+        private bool isInit = false;
 
         public void Init(int meltCount)
         {
+            if (isInit) return;
             currentCount = meltCount;
-
             var prefabRenderFreeze = portal.MechanicReferences.listMechanicRenderer[MechanicNames.Freeze];
             iceRenderer = (IceRenderer)Instantiate(prefabRenderFreeze, transform);
             iceRenderer.GenerateIces(new List<Vector3>() { transform.position }, portal.PortalData.freezeTimeCount);
             portal.ListMechanicRender.Add(iceRenderer);
-        }
+            isInit = true;
 
-        private void OnEnable()
-        {
+            LevelEvent.OnMoveToPortalDone -= OnBodyMoveToPortalDone;
             LevelEvent.OnMoveToPortalDone += OnBodyMoveToPortalDone;
         }
 
@@ -36,7 +36,7 @@ namespace Geckout
         {
             currentCount -= 1;
             iceRenderer.UpdateMeltCount(currentCount);
-            if (currentCount <= 0)
+            if (currentCount == 0)
             {
                 Break();
             }
