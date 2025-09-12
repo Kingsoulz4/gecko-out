@@ -18,9 +18,17 @@ namespace Geckout
 
         private List<MechanicRendererBase> listMechanicRender = new();
         private bool isMovingToPortal = false;
+        private bool isEnablePortal = true;
         public PortalData PortalData { get; private set; }
         public MechanicsReferences MechanicReferences { get => m_mechanicReferences; }
         public List<MechanicRendererBase> ListMechanicRender { get => listMechanicRender; }
+        public bool IsEnablePortal
+        {
+            get
+            {
+                return isEnablePortal && icePortal.CurrentCount <= 0;
+            }
+        }
 
         public void Initialize(PortalData portalData)
         {
@@ -42,7 +50,7 @@ namespace Geckout
         {
             var bodyController = segment.Controller;
             if (bodyController != null && bodyController.MoveToPortal != null
-                && bodyController.CanMovePortal
+                && bodyController.CanMovePortal && IsEnablePortal
                 && bodyController.BodyData.listColor[0] == PortalData.listColor[0])
             {
                 if (isMovingToPortal) return;
@@ -56,7 +64,7 @@ namespace Geckout
                 LevelEvent.OnMoveToPortalStart?.Invoke(segment.Controller, this);
                 isMovingToPortal = true;
 
-                this.Wait(Time.deltaTime*8, () =>
+                this.Wait(Time.deltaTime * 8, () =>
                 {
                     GetLastPath(bodyController);
                 });

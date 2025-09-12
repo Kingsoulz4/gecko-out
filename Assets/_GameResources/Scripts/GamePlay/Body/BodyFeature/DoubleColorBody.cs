@@ -19,7 +19,6 @@ namespace Geckout
 
             var prefabDoubleColorRender = body.MechanicReferences.listMechanicRenderer[MechanicNames.DoubleColor];
             doubleColorRenderer = (IceRenderer)Instantiate(prefabDoubleColorRender, transform);
-            //hiddenRenderer.GenerateIces(listPos, body.BodyData.freezeTimeCount);
             body.ListMechanicRender.Add(doubleColorRenderer);
 
             LevelEvent.OnMoveToPortalStart -= OnBodyMoveToPortalStart;
@@ -31,6 +30,11 @@ namespace Geckout
         {
             if (controller != body) return;
             SetLastPath(list);
+            SpawnNewBody();
+        }
+
+        private void SpawnNewBody()
+        {
             var bodyData = new BodyData();
             bodyData.listColor = new List<ColorType>() { body.BodyData.doubleColor };
             bodyData.listCoordinate = new List<Vector2Int>(lastPath);
@@ -51,8 +55,7 @@ namespace Geckout
 
         private void OnBodyMoveToPortalStart(BodyController controller, Portal portal)
         {
-        }
 
-      
+        }
     }
 }
