@@ -20,6 +20,12 @@ namespace Geckout
         [Header("Visual")]
         [SerializeField] private GameObject m_arrowHorizontal;
         [SerializeField] private GameObject m_arrowVertical;
+        [SerializeField] private GameObject m_arrowBodyHorizontal;
+        [SerializeField] private GameObject m_arrowBodyVertical;
+        [SerializeField] private GameObject m_arrowLeft;
+        [SerializeField] private GameObject m_arrowRight;
+        [SerializeField] private GameObject m_arrowTop;
+        [SerializeField] private GameObject m_arrowDown;
 
         // Data
         protected override Vector2Int RootCoordinate => Data.rootCoordinate;
@@ -154,10 +160,10 @@ namespace Geckout
             switch (Data.wayDirection)
             {
                 case WayDirection.Horizontal:
-                    constrainedForSelected.x = baseSelectedTileCoord.x;
+                    constrainedForSelected.y = baseSelectedTileCoord.y;
                     break;
                 case WayDirection.Vertical:
-                    constrainedForSelected.y = baseSelectedTileCoord.y;
+                    constrainedForSelected.x = baseSelectedTileCoord.x;
                     break;
                 case WayDirection.All:
                     if (!axisLocked)
@@ -385,10 +391,62 @@ namespace Geckout
         public override void UpdateVisual()
         {
             base.UpdateVisual();
-            m_arrowHorizontal.transform.localPosition = Vector3.forward * -0.2f;
-            m_arrowVertical.transform.localPosition = Vector3.forward * -0.2f;
+
+            var offset = 0.2f;
+            var centerWorlPos = GetCenterWorldPos();
+            var root = RootCoordinate;
+            GameMap.TryGetTileAtCoord(root, out var tileLeft);
+            var topCoord = new Vector2Int(root.x + BoxSize.x - 1, root.y + BoxSize.y - 1);
+            GameMap.TryGetTileAtCoord(topCoord, out var tileTop);
+
+            m_arrowHorizontal.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowHorizontal.transform.position.z);
+            m_arrowVertical.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowVertical.transform.position.z);
+            //m_arrowBodyHorizontal.transform.position = centerWorlPos;
+            //m_arrowBodyVertical.transform.position = centerWorlPos;
             m_arrowHorizontal.SetActive(Data.wayDirection == WayDirection.Horizontal || Data.wayDirection == WayDirection.All);
             m_arrowVertical.SetActive(Data.wayDirection == WayDirection.Vertical || Data.wayDirection == WayDirection.All);
+
+
+            if (BoxSize.x == 1 && BoxSize.y == 1)
+            {
+                m_arrowBodyHorizontal.transform.localScale = Vector3.zero;
+                m_arrowBodyVertical.transform.localScale = Vector3.zero;
+                m_arrowLeft.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowLeft.transform.position.z) + Vector3.left * offset;
+                m_arrowRight.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowRight.transform.position.z) + Vector3.right * offset;
+                m_arrowTop.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowTop.transform.position.z) + Vector3.up * offset;
+                m_arrowDown.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowDown.transform.position.z) + Vector3.down * offset;
+
+            }
+            else if(BoxSize.x == 1)
+            {
+                m_arrowBodyHorizontal.transform.localScale = Vector3.zero;
+                m_arrowLeft.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowLeft.transform.position.z) + Vector3.left * offset;
+                m_arrowRight.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowRight.transform.position.z) + Vector3.right * offset;
+                m_arrowBodyVertical.transform.localScale = new Vector3(1, (BoxSize.y - 1), 1);
+                m_arrowTop.transform.position = new Vector3(centerWorlPos.x,tileTop.transform.position.y, m_arrowTop.transform.position.z);
+                m_arrowDown.transform.position = new Vector3(centerWorlPos.x, tileLeft.transform.position.y, m_arrowTop.transform.position.z);
+
+            }
+            else if(BoxSize.y == 1)
+            {
+                m_arrowBodyHorizontal.transform.localScale = new Vector3((BoxSize.x - 1), 1, 1);
+                m_arrowLeft.transform.position = new Vector3(tileLeft.transform.position.x, centerWorlPos.y, m_arrowLeft.transform.position.z);
+                m_arrowRight.transform.position = new Vector3(tileTop.transform.position.x, centerWorlPos.y, m_arrowRight.transform.position.z);
+                m_arrowBodyVertical.transform.localScale = Vector3.zero;
+                m_arrowTop.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowTop.transform.position.z) + Vector3.up * offset;
+                m_arrowDown.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowDown.transform.position.z) + Vector3.down * offset;
+            }
+            else
+            {
+                m_arrowBodyHorizontal.transform.localScale = new Vector3((BoxSize.x - 1), 1, 1);
+                m_arrowLeft.transform.position = new Vector3(tileLeft.transform.position.x, centerWorlPos.y, m_arrowLeft.transform.position.z);
+                m_arrowRight.transform.position = new Vector3(tileTop.transform.position.x, centerWorlPos.y, m_arrowRight.transform.position.z);
+                m_arrowBodyVertical.transform.localScale = new Vector3(1,(BoxSize.y - 1), 1);
+                m_arrowTop.transform.position = new Vector3(centerWorlPos.x, tileTop.transform.position.y, m_arrowTop.transform.position.z);
+                m_arrowDown.transform.position = new Vector3(centerWorlPos.x, tileLeft.transform.position.y, m_arrowTop.transform.position.z);
+
+            }
+
         }
         #endregion
 
