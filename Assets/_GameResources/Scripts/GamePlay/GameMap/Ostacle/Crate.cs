@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using TMPro;
 using System;
+using System.Linq;
 namespace Geckout
 {
     public partial class Crate : BoxBase<CrateTile, CrateData>
@@ -53,7 +54,9 @@ namespace Geckout
 
         private void Break()
         {
+            GameMap.SetTilesUnoccupied(spawnedTiles.Select(tile => tile.Coordinate).ToList());
             gameObject.SetActive(false);
+
             //vfx
         }
 

@@ -523,7 +523,28 @@ namespace Geckout
             }
             return mapState;
         }
-        
+
+        public static void SetTilesUnoccupied(List<Vector2Int> coordinates)
+        {
+            if (coordinates == null || coordinates.Count == 0)
+            {
+                Debug.LogWarning("[GameMap] SetTilesUnoccupied: coordinates list is null or empty");
+                return;
+            }
+
+            foreach (var coord in coordinates)
+            {
+                if (TryGetTileAtCoord(coord, out GameTile tile))
+                {
+                    tile.IsOccupied = false;
+                }
+                else
+                {
+                    Debug.LogWarning($"[GameMap] SetTilesUnoccupied: No tile found at coordinate {coord}");
+                }
+            }
+        }
+
         public static void ApplyFuncToAllTiles(Action<GameTile> action)
         {
             foreach (var tile in _instance.tiles)
