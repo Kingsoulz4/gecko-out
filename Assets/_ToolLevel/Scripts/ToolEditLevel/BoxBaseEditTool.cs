@@ -30,10 +30,19 @@ namespace Geckout
         public virtual void SetSelected(bool selected)
         {
             OutlineSelected.enabled = selected;
-        }
 
+        }
         public virtual void MoveByOffset(Vector2Int offset)
         {
+            var mapSize = LevelManager.Instance.LevelGame.GameLevelData.mapSize;
+            var boxSize = Data.boxSize;
+            var newRootConstraintR = Data.rootCoordinate + boxSize + offset;
+            var newRootConstraintL = Data.rootCoordinate + offset;
+            if(newRootConstraintL.x <0 || newRootConstraintR.x > mapSize.x || newRootConstraintL.y < 0 || newRootConstraintR.y > mapSize.y)
+            {
+                return;
+            }
+
             foreach (var tileMove in spawnedTiles)
             {
                 var newCoordinate = new Vector2Int(tileMove.Coordinate.x + offset.x, tileMove.Coordinate.y + offset.y);

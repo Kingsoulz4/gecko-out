@@ -24,9 +24,9 @@ namespace Geckout
         [Header("Inputs")]
         [SerializeField] private TMP_InputField m_inputWidth;
         [SerializeField] private TMP_InputField m_inputHeight;
+        [SerializeField] private TMP_InputField m_inputDifuseCount;
 
         public LevelGameEditTool LevelGame { get; set; }
-
         private BoxBaseData BoxBaseData { get; set; } = new();
         private CrateData CrateData { get; set; } = new();
 
@@ -41,6 +41,7 @@ namespace Geckout
             m_buttonMoveDown.onClick.AddListener(() => OnClickMove(Vector2Int.down));
 
             m_dropDownMoveType.onValueChanged.AddListener(OnDropDownMoveTypeChangeValue);
+            m_inputDifuseCount.onSubmit.AddListener(OnEnterDifuseCount);
         }
 
         private void OnEnable()
@@ -61,6 +62,14 @@ namespace Geckout
             if (Input.GetKeyDown(KeyCode.DownArrow)) OnClickMove(Vector2Int.down);
             if (Input.GetKeyDown(KeyCode.LeftArrow)) OnClickMove(Vector2Int.left);
             if (Input.GetKeyDown(KeyCode.RightArrow)) OnClickMove(Vector2Int.right);
+        }
+
+        private void OnEnterDifuseCount(string arg0)
+        {
+            if(LevelGame.SelectedCrate != null && CrateData != null)
+            {
+                CrateData.difusionCount = int.Parse(arg0);
+            }
         }
 
         private void OnDropDownMoveTypeChangeValue(int arg0)
