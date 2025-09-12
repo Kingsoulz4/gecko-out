@@ -18,11 +18,12 @@ namespace Geckout
             base.MoveByOffset(offset);
         }
 
-        public override void PlaceMoveBox()
+        public override bool PlaceMoveBox()
         {
-            base.PlaceMoveBox();
+            if(!base.PlaceMoveBox()) return false;
             Debug.Log("Move Success");
             LevelManager.Instance.LevelGame.GameLevelData.listCrateData.Add(Data);
+            return true;
         }
 
         #endregion

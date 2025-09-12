@@ -55,7 +55,7 @@ namespace Geckout
             UpdateVisual();
         }
 
-        public virtual void PlaceMoveBox()
+        public virtual bool PlaceMoveBox()
         {
             foreach (var tileMove in spawnedTiles)
             {
@@ -63,7 +63,7 @@ namespace Geckout
                 if (tile.IsOccupied)
                 {
                     Debug.LogError("Cannot place tile");
-                    return;
+                    return false;
                 }
 
             }
@@ -74,7 +74,7 @@ namespace Geckout
                 tile.IsOccupied = true;
             }
 
-            
+            return true;
         }
 
 

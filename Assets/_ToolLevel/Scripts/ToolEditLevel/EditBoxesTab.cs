@@ -53,6 +53,7 @@ namespace Geckout
 
         private void OnEnable()
         {
+            m_buttonPlace.gameObject.SetActive(true);
             if (LevelGame?.SelectedBoxMove != null)
             {
                 BoxBaseData = LevelGame.SelectedBoxMove.Data;
@@ -91,13 +92,24 @@ namespace Geckout
         private void OnClickPlace()
         {
             GetSelectedBoxAction(
-                onMoveBox: b => b.PlaceMoveBox(),
-                onCrate: c => c.PlaceMoveBox()
+                onMoveBox: b => {
+                    if(b.PlaceMoveBox())
+                    {
+                        m_buttonPlace.gameObject.SetActive(false);
+                    }
+                },
+                onCrate: c => {
+                    if (c.PlaceMoveBox())
+                    {
+                        m_buttonPlace.gameObject.SetActive(false);
+                    }
+                }
             );
         }
 
         private void OnClickMove(Vector2Int direction)
         {
+            m_buttonPlace.gameObject.SetActive(true);
             GetSelectedBoxAction(
                 onMoveBox: b => b.MoveByOffset(direction),
                 onCrate: c => c.MoveByOffset(direction)
@@ -106,6 +118,7 @@ namespace Geckout
 
         private void OnClickGenerate()
         {
+            m_buttonPlace.gameObject.SetActive(true);
             Vector2Int size = new Vector2Int(
                 int.Parse(m_inputWidth.text),
                 int.Parse(m_inputHeight.text)
