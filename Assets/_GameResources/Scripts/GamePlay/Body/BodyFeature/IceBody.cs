@@ -6,9 +6,8 @@ using UnityEngine;
 
 namespace Geckout
 {
-    public class IceBody : MonoBehaviour
+    public class IceBody : MechanicBody
     {
-        [SerializeField] private BodyController body;
         private int currentCount = 0;
         private IceRenderer iceRenderer;
         private bool isInit = false;

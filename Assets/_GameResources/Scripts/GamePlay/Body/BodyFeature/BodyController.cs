@@ -31,6 +31,7 @@ namespace Geckout
         [SerializeField] private GridHeadClamper gridClamper;
         [SerializeField] private MoveToPortal moveToPortal;
         [SerializeField] private IceBody iceBody;
+        [SerializeField] private HiddenBody hiddenBody;
 
         [Header("Mechanics")]
         [SerializeField] private MechanicsReferences m_mechanicReferences;
@@ -51,6 +52,7 @@ namespace Geckout
         private List<Vector3> worldPath = new List<Vector3>();
         private float segmentSpacing;
         private bool canControl = true;
+        private bool canMovePortal = true;
 
         public List<Segment> Segments { private set; get; }
         public OccupiedTileController OccupiedTileController { get => occupiedTileController; set => occupiedTileController = value; }
@@ -79,6 +81,7 @@ namespace Geckout
         }
         public MechanicsReferences MechanicReferences { get => m_mechanicReferences; }
         public List<MechanicRendererBase> ListMechanicRender { get => listMechanicRender; set => listMechanicRender = value; }
+        public bool CanMovePortal { get => canMovePortal;}
 
         private List<MechanicRendererBase> listMechanicRender = new();
 
@@ -109,6 +112,10 @@ namespace Geckout
             if (iceBody == null)
             {
                 iceBody = FindUlti.FindChildDirect(transform, "IceBody").GetComponent<IceBody>();
+            }
+            if (hiddenBody == null)
+            {
+                hiddenBody = FindUlti.FindChildDirect(transform, "HiddenBody").GetComponent<HiddenBody>();
             }
         }
 #endif
