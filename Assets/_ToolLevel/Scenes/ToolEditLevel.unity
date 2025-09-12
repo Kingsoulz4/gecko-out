@@ -610,6 +610,7 @@ MonoBehaviour:
   - {fileID: 1302827044}
   - {fileID: 1627783818}
   m_inputFreezeCount: {fileID: 598540969}
+  m_inputHiddenCount: {fileID: 577553038}
 --- !u!1 &61812716
 GameObject:
   m_ObjectHideFlags: 0
@@ -2052,7 +2053,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &147159843
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7467,7 +7468,7 @@ GameObject:
   - component: {fileID: 577553039}
   - component: {fileID: 577553038}
   m_Layer: 5
-  m_Name: InputNumberFreeze
+  m_Name: InputNumberHidden
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

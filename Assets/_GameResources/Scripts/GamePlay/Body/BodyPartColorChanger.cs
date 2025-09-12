@@ -17,6 +17,11 @@ namespace Geckout
             m_meshRenderer.material = m_listMaterial[colorType];
         }
 
+        public void UpdateColor(Material material)
+        {
+            m_meshRenderer.material = material;
+        }
+
         private void OnValidate()
         {
             m_meshRenderer = GetComponent<Renderer>();   

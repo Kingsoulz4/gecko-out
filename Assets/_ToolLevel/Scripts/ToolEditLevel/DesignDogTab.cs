@@ -16,6 +16,7 @@ namespace Geckout
         [SerializeField] private Button m_colorPickPrefab;
         [SerializeField] private List<ButtonColorPicked> m_listButtonColorPicked;
         [SerializeField] private TMP_InputField m_inputFreezeCount;
+        [SerializeField] private TMP_InputField m_inputHiddenCount;
 
         public LevelGameEditTool LevelGame { get; set; }
 
@@ -45,7 +46,17 @@ namespace Geckout
                 buttonColorPicked.OnClick = OnClickSelectColorPicked;
             }
             m_inputFreezeCount.onSubmit.AddListener(OnEnterFreezeCount);
+            m_inputHiddenCount.onSubmit.AddListener(OnEnterHiddenCount);
             //UpdateUI(DogData);
+        }
+
+        private void OnEnterHiddenCount(string arg0)
+        {
+            BodyData.hiddenCount = int.Parse(arg0);
+            if (LevelGame != null && LevelGame.selectedBody != null)
+            {
+                LevelGame.selectedBody.InitMechanic();
+            }
         }
 
         private void OnEnterFreezeCount(string arg0)

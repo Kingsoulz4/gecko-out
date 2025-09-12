@@ -314,6 +314,7 @@ MonoBehaviour:
     - {x: 1, y: 1}
     - {x: 2, y: 1}
     freezeTimeCount: 2
+    hiddenCount: 0
   - bodyType: 0
     listColor: 02000000
     listCoordinate:
@@ -322,6 +323,7 @@ MonoBehaviour:
     - {x: 5, y: 4}
     - {x: 6, y: 4}
     freezeTimeCount: 0
+    hiddenCount: 0
   - bodyType: 0
     listColor: 00000000
     listCoordinate:
@@ -330,6 +332,7 @@ MonoBehaviour:
     - {x: 5, y: 3}
     - {x: 6, y: 3}
     freezeTimeCount: 0
+    hiddenCount: 0
   - bodyType: 0
     listColor: 03000000
     listCoordinate:
@@ -338,6 +341,16 @@ MonoBehaviour:
     - {x: 5, y: 2}
     - {x: 6, y: 2}
     freezeTimeCount: 0
+    hiddenCount: 0
+  - bodyType: 0
+    listColor: 00000000
+    listCoordinate:
+    - {x: 0, y: 11}
+    - {x: 1, y: 11}
+    - {x: 2, y: 11}
+    - {x: 3, y: 11}
+    freezeTimeCount: 0
+    hiddenCount: 2
   listPortalData:
   - portalType: 0
     Coordinate: {x: 7, y: 11}

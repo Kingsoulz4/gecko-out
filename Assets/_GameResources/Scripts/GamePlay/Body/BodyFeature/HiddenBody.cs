@@ -9,16 +9,20 @@ namespace Geckout
     {
         private int currentCount = 0;
         private bool isInit = false;
-
+        private HiddenRenderer hiddenRenderer;
         public int CurrentCount { get => currentCount; }
 
-        public void Init(int meltCount)
+        public void Init(int count)
         {
             if (isInit) return;
 
-            currentCount = meltCount;
+            currentCount = count;
 
             isInit = true;
+
+            var prefabRenderFreeze = body.MechanicReferences.listMechanicRenderer[MechanicNames.Hidden];
+            hiddenRenderer = (HiddenRenderer)Instantiate(prefabRenderFreeze, body.BodyRenderer.Segments.Last().transform);
+            hiddenRenderer.Init(body.BodyRenderer.ListBodyPartChanger, count);
 
             LevelEvent.OnMoveToPortalDone -= OnBodyMoveToPortalDone;
             LevelEvent.OnMoveToPortalDone += OnBodyMoveToPortalDone;

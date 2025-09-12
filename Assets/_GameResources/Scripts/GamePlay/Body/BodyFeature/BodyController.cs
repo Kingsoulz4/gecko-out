@@ -53,6 +53,7 @@ namespace Geckout
         private float segmentSpacing;
         private bool canControl = true;
         private bool canMovePortal = true;
+        private List<MechanicRendererBase> listMechanicRender = new();
 
         public List<Segment> Segments { private set; get; }
         public OccupiedTileController OccupiedTileController { get => occupiedTileController; set => occupiedTileController = value; }
@@ -82,8 +83,8 @@ namespace Geckout
         public MechanicsReferences MechanicReferences { get => m_mechanicReferences; }
         public List<MechanicRendererBase> ListMechanicRender { get => listMechanicRender; set => listMechanicRender = value; }
         public bool CanMovePortal { get => canMovePortal;}
-
-        private List<MechanicRendererBase> listMechanicRender = new();
+        public BodyRenderer BodyRenderer { get => _bodyRenderer; }
+        
 
 #if UNITY_EDITOR
         [EditorButton]
@@ -578,6 +579,11 @@ namespace Geckout
             if (BodyData.freezeTimeCount > 0)
             {
                 iceBody.Init(BodyData.freezeTimeCount);
+            }
+
+            if(BodyData.hiddenCount > 0)
+            {
+                hiddenBody.Init(BodyData.hiddenCount);
             }
 
         }
