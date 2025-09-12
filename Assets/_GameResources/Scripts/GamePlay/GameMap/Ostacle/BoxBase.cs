@@ -36,6 +36,8 @@ namespace Geckout
         protected virtual bool ShouldSetOccupied() { return false; }
         protected virtual void AddTileComponent(GameObject obj, Vector2Int coord) { }
 
+        protected Vector3 centerOffset;
+
         public virtual void UpdateVisual()
         {
             SetCenterPos();
@@ -43,7 +45,8 @@ namespace Geckout
 
         protected void SetCenterPos()
         {
-            SetPivotAndPosition(GetCenterWorldPos());
+            //SetPivotAndPosition(GetCenterWorldPos());
+            SetPivotAndPosition(spawnedTiles[0].transform.position);
         }
 
         protected Vector3 GetCenterWorldPos()
@@ -67,6 +70,8 @@ namespace Geckout
         protected void SetPivotAndPosition(Vector3 newPivotWorldPos)
         {
             Vector3 pivotDelta = transform.position - newPivotWorldPos;
+
+            centerOffset = pivotDelta;
 
             for (int i = 0; i < transform.childCount; i++)
             {
