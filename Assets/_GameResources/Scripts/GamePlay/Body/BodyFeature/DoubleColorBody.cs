@@ -31,6 +31,11 @@ namespace Geckout
         {
             if (controller != body) return;
             SetLastPath(list);
+            var bodyData = new BodyData();
+            bodyData.listColor = new List<ColorType>() { body.BodyData.doubleColor };
+            bodyData.listCoordinate = new List<Vector2Int>(lastPath);
+
+            LevelManager.Instance.LevelGame.SpawnBody(bodyData);
         }
 
         private void SetLastPath(List<Vector2Int> listPos)
