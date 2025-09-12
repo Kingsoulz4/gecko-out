@@ -18,11 +18,6 @@ namespace Geckout
         private List<MechanicRendererBase> listMechanicRender = new();
         bool isMovingToPortal = false;
 
-        private void Awake()
-        {
-            //bodyPartColorChangers = GetComponentsInChildren<BodyPartColorChanger>().ToList();
-        }
-
         private void Start()
         {
             UpdateVisual();
@@ -60,7 +55,7 @@ namespace Geckout
             }
         }
 
-        public void UpdateVisual()
+        public virtual void UpdateVisual()
         {
             bodyPartColorChangers.ForEach(x => x.UpdateColor(PortalData.listColor.First()));
         }
