@@ -151,13 +151,13 @@ namespace Geckout
             Vector2Int constrainedForSelected = hoveredForSelected;
 
             // Apply direction constraints
-            switch (wayDirection)
+            switch (Data.wayDirection)
             {
                 case WayDirection.Horizontal:
-                    constrainedForSelected.y = baseSelectedTileCoord.y;
+                    constrainedForSelected.x = baseSelectedTileCoord.x;
                     break;
                 case WayDirection.Vertical:
-                    constrainedForSelected.x = baseSelectedTileCoord.x;
+                    constrainedForSelected.y = baseSelectedTileCoord.y;
                     break;
                 case WayDirection.All:
                     if (!axisLocked)
