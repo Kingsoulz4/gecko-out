@@ -41,6 +41,7 @@ namespace Geckout
             }
 
             currentCount -= 1;
+            hiddenRenderer.UpdateMeltCount(currentCount);
             if (currentCount == 0)
             {
                 Break();
@@ -49,7 +50,6 @@ namespace Geckout
 
         private void Break()
         {
-
             for (int i = 1; i < body.Segments.Count - 1; i++)
             {
                 if (i % 3 == 0)
@@ -57,6 +57,7 @@ namespace Geckout
 
                 }
             }
+            hiddenRenderer.Break();
             //vfx
         }
     }
