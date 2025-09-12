@@ -1,7 +1,7 @@
 using Geckout.Data;
 using TMPro;
 using UnityEngine;
-
+using TMPro;
 namespace Geckout
 {
     public partial class Crate : BoxBase<CrateTile, CrateData>

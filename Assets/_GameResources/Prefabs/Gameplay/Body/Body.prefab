@@ -630,7 +630,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bodyController: {fileID: 3655932188227585431}
+  animationDurationPerSegment: 0.3
   portalEnterDistance: 0.4
-  animationDuration: 0.3
-  segmentAnimationDelay: 0.05
   enableDebugLogs: 1
