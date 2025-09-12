@@ -32,6 +32,7 @@ namespace Geckout
         [SerializeField] private MoveToPortal moveToPortal;
         [SerializeField] private IceBody iceBody;
         [SerializeField] private HiddenBody hiddenBody;
+        [SerializeField] private DoubleColorBody doubleColorBody;
 
         [Header("Mechanics")]
         [SerializeField] private MechanicsReferences m_mechanicReferences;
@@ -81,7 +82,13 @@ namespace Geckout
         }
         public MechanicsReferences MechanicReferences { get => m_mechanicReferences; }
         public List<MechanicRendererBase> ListMechanicRender { get => listMechanicRender; set => listMechanicRender = value; }
-        public bool CanMovePortal { get => canMovePortal;}
+        public bool CanMovePortal
+        {
+            get
+            {
+                return canMovePortal && hiddenBody.CurrentCount <= 0;
+            }
+        }
 
         private List<MechanicRendererBase> listMechanicRender = new();
 
@@ -116,6 +123,10 @@ namespace Geckout
             if (hiddenBody == null)
             {
                 hiddenBody = FindUlti.FindChildDirect(transform, "HiddenBody").GetComponent<HiddenBody>();
+            }
+            if (doubleColorBody == null)
+            {
+                doubleColorBody = FindUlti.FindChildDirect(transform, "DoubleColorBody").GetComponent<DoubleColorBody>();
             }
         }
 #endif
@@ -578,6 +589,16 @@ namespace Geckout
             if (BodyData.freezeTimeCount > 0)
             {
                 iceBody.Init(BodyData.freezeTimeCount);
+            }
+
+            if (BodyData.hiddenCount > 0)
+            {
+                hiddenBody.Init(BodyData.hiddenCount);
+            }
+
+            if (BodyData.doubleColor != ColorType.None)
+            {
+                doubleColorBody.Init(BodyData.doubleColor);
             }
 
         }

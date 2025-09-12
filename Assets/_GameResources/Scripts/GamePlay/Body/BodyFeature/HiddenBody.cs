@@ -8,6 +8,7 @@ namespace Geckout
     public class HiddenBody : MechanicBody
     {
         private int currentCount = 0;
+        private IceRenderer hiddenRenderer;
         private bool isInit = false;
 
         public int CurrentCount { get => currentCount; }
@@ -15,9 +16,11 @@ namespace Geckout
         public void Init(int meltCount)
         {
             if (isInit) return;
-
             currentCount = meltCount;
-
+            var prefabHiddenRender = body.MechanicReferences.listMechanicRenderer[MechanicNames.Hidden];
+            hiddenRenderer = (IceRenderer)Instantiate(prefabHiddenRender, transform);
+            //hiddenRenderer.GenerateIces(listPos, body.BodyData.freezeTimeCount);
+            body.ListMechanicRender.Add(hiddenRenderer);
             isInit = true;
 
             LevelEvent.OnMoveToPortalDone -= OnBodyMoveToPortalDone;
@@ -37,6 +40,7 @@ namespace Geckout
             }
 
             currentCount -= 1;
+            hiddenRenderer.UpdateMeltCount(currentCount);
             if (currentCount == 0)
             {
                 Break();
@@ -45,7 +49,6 @@ namespace Geckout
 
         private void Break()
         {
-
             for (int i = 1; i < body.Segments.Count - 1; i++)
             {
                 if (i % 3 == 0)
@@ -53,6 +56,7 @@ namespace Geckout
 
                 }
             }
+            hiddenRenderer.Break();
             //vfx
         }
     }
