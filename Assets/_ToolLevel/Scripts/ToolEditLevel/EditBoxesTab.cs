@@ -39,9 +39,16 @@ namespace Geckout
             m_buttonMoveRight.onClick.AddListener(() => OnClickMove(Vector2Int.right));
             m_buttonMoveUp.onClick.AddListener(() => OnClickMove(Vector2Int.up));
             m_buttonMoveDown.onClick.AddListener(() => OnClickMove(Vector2Int.down));
+            m_buttonDelete.onClick.AddListener(OnClickDelete);
 
             m_dropDownMoveType.onValueChanged.AddListener(OnDropDownMoveTypeChangeValue);
             m_inputDifuseCount.onSubmit.AddListener(OnEnterDifuseCount);
+        }
+
+        private void OnClickDelete()
+        {
+            LevelGame.DeleteSelectedBoxes();
+            LevelGame.ClearAllSelectedTiles();
         }
 
         private void OnEnable()

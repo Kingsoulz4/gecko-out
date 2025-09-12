@@ -220,6 +220,21 @@ namespace Geckout
             Destroy(selectedBody.gameObject);
         }
 
+        public void DeleteSelectedBoxes()
+        {
+            if(SelectedCrate != null)
+            {
+                GameLevelData.listCrateData.Remove(SelectedCrate.Data);
+                Destroy(SelectedCrate.gameObject);
+            }
+
+            if(SelectedBoxMove != null)
+            {
+                GameLevelData.listMovableBoxData.Remove(SelectedBoxMove.Data);
+                Destroy(SelectedBoxMove.gameObject);
+            }
+        }
+
         public void ClearAllSelected()
         {
             ClearAllSelectedTiles();
