@@ -200,15 +200,21 @@ namespace Geckout
                 // unitIndex = segment thuộc về tile nào
                 int unitIndex = Mathf.CeilToInt((float)i / SubLength);
 
-                //var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
-                var coordinate = listDefaultCoordinate[Mathf.Clamp(unitIndex, 0, listDefaultCoordinate.Count - 2)];
+                var coordinate = listDefaultCoordinate[Mathf.Clamp(unitIndex, 0, listDefaultCoordinate.Count - 1)];
 
-                if (i == Segments.Count - 1)
+                if (i % SubLength == 0)
                 {
-                    coordinate = listDefaultCoordinate.Last();
+                    Segments[i].InitCoordinate(coordinate);
                 }
-
-                Segments[i].InitCoordinate(coordinate);
+                else
+                {
+                    var temp = i % SubLength;
+                    var previosCoord = i / SubLength;
+                    var nextCoord = previosCoord + 1;
+                    GameMap.TryGetTileAtCoord(listDefaultCoordinate[previosCoord], out var tilePreviosCoord);
+                    GameMap.TryGetTileAtCoord(listDefaultCoordinate[nextCoord], out var tileNextCoord);
+                    Segments[i].transform.position = Vector3.Lerp(tilePreviosCoord.transform.position, tileNextCoord.transform.position, (float)temp / SubLength);
+                }
             }
 
             // ===== Init history system =====
