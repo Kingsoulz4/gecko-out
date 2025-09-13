@@ -36,7 +36,7 @@ namespace Geckout
 
         private void OnBodyMoveToPortalDone(BodyController controller, Portal portal)
         {
-            if (currentCount < 0)
+            if (currentCount <= 0)
             {
                 return;
             }

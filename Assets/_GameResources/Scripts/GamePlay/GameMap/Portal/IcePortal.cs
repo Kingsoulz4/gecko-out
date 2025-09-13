@@ -38,11 +38,12 @@ namespace Geckout
 
         private void OnBodyMoveToPortalDone(BodyController controller, Portal portal)
         {
-            if (!isInit)
+            if (currentCount <= 0)
             {
                 return;
             }
 
+            Debug.Log("OnBodyMoveToPortalDone");
             currentCount -= 1;
             iceRenderer.UpdateMeltCount(currentCount);
             if (currentCount == 0)
