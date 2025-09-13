@@ -64,10 +64,7 @@ namespace Geckout
                 LevelEvent.OnMoveToPortalStart?.Invoke(segment.Controller, this);
                 isMovingToPortal = true;
 
-                this.Wait(Time.deltaTime * 8, () =>
-                {
-                    GetLastPath(bodyController);
-                });
+                GetLastPath(bodyController);
             }
         }
 

@@ -308,13 +308,14 @@ MonoBehaviour:
     rotation: {x: 0, y: 90, z: -90}
   listDogData:
   - bodyType: 0
-    listColor: 00000000
+    listColor: 0000000006000000
     listCoordinate:
     - {x: 0, y: 1}
     - {x: 1, y: 1}
     - {x: 2, y: 1}
     freezeTimeCount: 2
     hiddenCount: 0
+    doubleColor: 6
   - bodyType: 0
     listColor: 02000000
     listCoordinate:
@@ -324,6 +325,7 @@ MonoBehaviour:
     - {x: 6, y: 4}
     freezeTimeCount: 0
     hiddenCount: 0
+    doubleColor: -1
   - bodyType: 0
     listColor: 00000000
     listCoordinate:
@@ -333,6 +335,7 @@ MonoBehaviour:
     - {x: 6, y: 3}
     freezeTimeCount: 0
     hiddenCount: 0
+    doubleColor: -1
   - bodyType: 0
     listColor: 03000000
     listCoordinate:
@@ -342,6 +345,7 @@ MonoBehaviour:
     - {x: 6, y: 2}
     freezeTimeCount: 0
     hiddenCount: 0
+    doubleColor: -1
   - bodyType: 0
     listColor: 00000000
     listCoordinate:

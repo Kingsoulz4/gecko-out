@@ -45,11 +45,11 @@ namespace Geckout
             hiddenRenderer.UpdateText(currentCount);
             if (currentCount == 0)
             {
-                Break();
+                ChangeColor();
             }
         }
 
-        private void Break()
+        private void ChangeColor()
         {
             body.BodyRenderer.UpdateBodyColor();
             for (int i = 1; i < body.Segments.Count - 1; i++)
