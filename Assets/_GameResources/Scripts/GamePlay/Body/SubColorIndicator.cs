@@ -14,7 +14,7 @@ namespace Geckout
         {
             for(int i=0; i<listColor.Count; i++)
             {
-                //var newSplineMesh = new 
+                var newSplineMesh = Instantiate(m_splineMeshPrefab, transform);
             }
         }
         
