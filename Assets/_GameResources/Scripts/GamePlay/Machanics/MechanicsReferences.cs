@@ -10,7 +10,7 @@ namespace Geckout
         Freeze,
         KeyLock,
         Hidden,
-        DoubleColor
+        MultipleColor
     }
 
     [CreateAssetMenu(fileName = "MechanicsReferences", menuName = "ScriptableObjects/MechanicsReferences")]

@@ -22,7 +22,7 @@ namespace Geckout
             });
         }
 
-        public UnityAction<int> OnClick { get; set; }
+        public UnityEvent<int> OnClick { get; set; } = new();
 
         public void SetEmpty(bool isEmpty)
         {

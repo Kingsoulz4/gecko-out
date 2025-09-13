@@ -42,7 +42,7 @@ namespace Geckout
             m_buttonDeletePortal.onClick.AddListener(OnClickDeletePortal);
             foreach (var buttonColorPicked in m_listButtonColorPicked)
             {
-                buttonColorPicked.OnClick = OnClickSelectColorPicked;
+                buttonColorPicked.OnClick.AddListener(OnClickSelectColorPicked);
             }
             m_inputFreezeCount.onSubmit.AddListener(OnEnterFreezeCount);
         }

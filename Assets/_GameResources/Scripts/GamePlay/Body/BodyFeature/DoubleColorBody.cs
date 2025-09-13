@@ -8,18 +8,21 @@ namespace Geckout
 {
     public class DoubleColorBody : MechanicBody
     {
+
         private IceRenderer doubleColorRenderer;
         private bool isInit = false;
         private List<Vector2Int> lastPath = new();
+
 
         public void Init(ColorType colorType)
         {
             if (isInit) return;
             isInit = true;
 
-            var prefabDoubleColorRender = body.MechanicReferences.listMechanicRenderer[MechanicNames.DoubleColor];
+            var prefabDoubleColorRender = body.MechanicReferences.listMechanicRenderer[MechanicNames.MultipleColor];
             doubleColorRenderer = (IceRenderer)Instantiate(prefabDoubleColorRender, transform);
             body.ListMechanicRender.Add(doubleColorRenderer);
+            SpawnSubColorIndicators();
 
             LevelEvent.OnMoveToPortalStart -= OnBodyMoveToPortalStart;
             LevelEvent.OnMoveToPortalStart += OnBodyMoveToPortalStart;
@@ -45,6 +48,11 @@ namespace Geckout
         private void SetLastPath(List<Vector2Int> listPos)
         {
             this.lastPath = new List<Vector2Int>(listPos);
+        }
+
+        private void SpawnSubColorIndicators()
+        {
+
         }
 
         private void OnDisable()

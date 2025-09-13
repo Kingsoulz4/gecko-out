@@ -11,15 +11,18 @@ namespace Geckout
         [SerializeField] private TextMeshPro m_textCount;
 
         private List<BodyPartColorChanger> listBodyChanger = new();
+        private Material instanceMat;
 
         public void Init(List<BodyPartColorChanger> listBodyChanger, int count)
         {
             this.listBodyChanger = listBodyChanger;
-            foreach(var bodyPart in listBodyChanger)
+            instanceMat = new Material(m_hiddenMat);
+            foreach (var bodyPart in listBodyChanger)
             {
-                bodyPart.UpdateColor(m_hiddenMat);
+                bodyPart.UpdateColor(instanceMat);
             }
             UpdateText(count);
+            
         }
 
         public void UpdateText(int count)

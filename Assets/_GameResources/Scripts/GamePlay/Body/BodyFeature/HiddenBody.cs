@@ -51,7 +51,6 @@ namespace Geckout
 
         private void Break()
         {
-            body.BodyRenderer.UpdateBodyColor();
             for (int i = 1; i < body.Segments.Count - 1; i++)
             {
                 if (i % 3 == 0)
@@ -60,6 +59,7 @@ namespace Geckout
                 }
             }
             hiddenRenderer.Break();
+            body.BodyRenderer.UpdateBodyColor();
         }
     }
 }
