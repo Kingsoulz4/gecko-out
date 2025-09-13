@@ -11,18 +11,18 @@ namespace Geckout
         private bool isInit = false;
         private List<Vector2Int> lastPath = new();
         private List<ColorType> colorTypes = new();
-        public void Init(ColorType colorType)
+        public void Init()
         {
             if (isInit) return;
             isInit = true;
-
             colorTypes = new List<ColorType>(body.BodyData.listColor);
             LevelEvent.OnGetLastPath += OnGetLastPath;
         }
 
         private void OnGetLastPath(BodyController controller, List<Vector2Int> list)
         {
-            if (!controller) return;
+            if (!controller || controller != body) return;
+
             SetLastPath(list);
             SpawnNewBody();
         }
