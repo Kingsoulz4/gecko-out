@@ -1,269 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &493807949239920760
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7400816694522722805}
-  - component: {fileID: 6385334827623629106}
-  - component: {fileID: 2109612371830823434}
-  - component: {fileID: 6210646821500656581}
-  m_Layer: 0
-  m_Name: SubColor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &7400816694522722805
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 493807949239920760}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 278767066312718667}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6385334827623629106
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 493807949239920760}
-  m_Mesh: {fileID: 0}
---- !u!23 &2109612371830823434
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 493807949239920760}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: -4597107667637640440, guid: 1fc8c37a4f761a742b128c34fa3087ed, type: 3}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6210646821500656581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 493807949239920760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8e405fbab136934590641eb781310b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  updateMethod: 0
-  _spline: {fileID: 3626055781503237806}
-  _autoUpdate: 1
-  _rotationModifier:
-    blend: 1
-    useClippedPercent: 0
-    keys: []
-  _offsetModifier:
-    blend: 1
-    useClippedPercent: 0
-    keys: []
-  _colorModifier:
-    blend: 1
-    useClippedPercent: 0
-    keys: []
-  _sizeModifier:
-    blend: 1
-    useClippedPercent: 0
-    keys: []
-  _clipFromSample:
-    position: {x: 2.5, y: -2.5, z: 0}
-    up: {x: 0, y: 0, z: 1}
-    forward: {x: -1, y: 0, z: 0}
-    color: {r: 1, g: 1, b: 1, a: 1}
-    size: 1
-    percent: 0
-  _clipToSample:
-    position: {x: -1.5000005, y: -2.5, z: 0}
-    up: {x: 0, y: 0, z: 1}
-    forward: {x: -1, y: 0, z: 0}
-    color: {r: 1, g: 1, b: 1, a: 1}
-    size: 1
-    percent: 1
-  _loopSamples: 0
-  _clipFrom: 0
-  _clipTo: 1
-  animClipFrom: 0
-  animClipTo: 1
-  multithreaded: 0
-  buildOnAwake: 1
-  buildOnEnable: 0
-  _baked: 0
-  _markDynamic: 1
-  _size: 1
-  _color: {r: 1, g: 1, b: 1, a: 1}
-  _offset: {x: 0, y: 0, z: 0}
-  _normalMethod: 1
-  _calculateTangents: 1
-  _useSplineSize: 1
-  _useSplineColor: 1
-  _rotation: 0
-  _flipFaces: 0
-  _doubleSided: 0
-  _uvMode: 0
-  _uvScale: {x: 1, y: 1}
-  _uvOffset: {x: 0, y: 0}
-  _uvRotation: 0
-  _meshIndexFormat: 0
-  _bakedMesh: {fileID: 0}
-  colliderUpdateRate: 0.2
-  _channels:
-  - name: Channel 1
-    _iterationSeed: 0
-    _offsetSeed: 0
-    _rotationSeed: 0
-    _scaleSeed: 0
-    owner: {fileID: 6210646821500656581}
-    meshes:
-    - vertices:
-      - {x: 0.013694235, y: 0.00019242859, z: -0.014200029}
-      - {x: -0.013694261, y: -0.0001924279, z: 7.8850516e-11}
-      - {x: -0.013694261, y: 0.00019242859, z: -0.014200029}
-      - {x: 0.013694235, y: -0.0001924279, z: 7.8850516e-11}
-      - {x: -0.013694261, y: 0.00019242612, z: 0.014200038}
-      - {x: 0.013694235, y: 0.00019242612, z: 0.014200038}
-      normals:
-      - {x: 0, y: -0.99963295, z: -0.027092641}
-      - {x: 0, y: -1, z: -0.00000008742278}
-      - {x: 0, y: -0.99963295, z: -0.027092641}
-      - {x: 0, y: -1, z: -0.00000008742278}
-      - {x: 0, y: -0.99963295, z: 0.027092438}
-      - {x: 0, y: -0.99963295, z: 0.027092438}
-      tangents:
-      - {x: -1, y: 0, z: -0, w: 0}
-      - {x: -1, y: 0, z: -0, w: 0}
-      - {x: -1, y: 0, z: -0, w: 0}
-      - {x: -1, y: 0, z: -0, w: 0}
-      - {x: -1, y: 0, z: -0, w: 0}
-      - {x: -1, y: 0, z: -0, w: 0}
-      colors:
-      - {r: 1, g: 1, b: 1, a: 1}
-      - {r: 1, g: 1, b: 1, a: 1}
-      - {r: 1, g: 1, b: 1, a: 1}
-      - {r: 1, g: 1, b: 1, a: 1}
-      - {r: 1, g: 1, b: 1, a: 1}
-      - {r: 1, g: 1, b: 1, a: 1}
-      uv:
-      - {x: 0.751519, y: 0.93782866}
-      - {x: 0.7712157, y: 0.96710676}
-      - {x: 0.7712157, y: 0.93782866}
-      - {x: 0.751519, y: 0.96710676}
-      - {x: 0.7712157, y: 0.99638486}
-      - {x: 0.751519, y: 0.99638486}
-      uv2: []
-      uv3: []
-      uv4: []
-      triangles: 000000000100000002000000000000000300000001000000030000000400000001000000030000000500000004000000
-      subMeshes:
-      - triangles: 000000000100000002000000000000000300000001000000030000000400000001000000030000000500000004000000
-      bounds:
-        center: {x: -0.000000013038516, y: 3.4197e-10, z: 0.000000004656613}
-        extents: {x: 0.013694248, y: 0.00019242824, z: 0.014200034}
-        max: {x: 0.013694235, y: 0.00019242859, z: 0.014200038}
-        min: {x: -0.013694261, y: -0.0001924279, z: -0.014200029}
-        size: {x: 0.027388496, y: 0.00038485648, z: 0.028400067}
-      vertexGroups:
-      - value: 0.014200038
-        percent: 1
-        ids: 0400000005000000
-      - value: 7.8850516e-11
-        percent: 0.49999983881156623
-        ids: 0100000003000000
-      - value: -0.014200029
-        percent: 0
-        ids: 0000000002000000
-      _mesh: {fileID: 4300000, guid: 3fd00a7066b5de54981a949f7dc9d391, type: 2}
-      _rotation: {x: 180, y: 0, z: 0}
-      _offset: {x: 0, y: 0, z: 0}
-      _scale: {x: 1, y: 1, z: 1}
-      _uvScale: {x: 1, y: 1}
-      _uvOffset: {x: 0, y: 0}
-      _uvRotation: 0
-      _mirror: 0
-      _spacing:
-        front: 0
-        back: 0
-      _vertexGroupingMargin: 0
-      _removeInnerFaces: 0
-      _flipFaces: 0
-      _doubleSided: 0
-    _clipFrom: 0.13853442668914795
-    _clipTo: 0.8395916819572449
-    _randomOrder: 0
-    _overrideUVs: 0
-    _uvScale: {x: 1, y: 1}
-    _uvOffset: {x: 0, y: 0}
-    _overrideNormal: 0
-    _customNormal: {x: 0, y: 1, z: 0}
-    _type: 0
-    _count: 99
-    _autoCount: 1
-    _spacing: 0
-    _randomRotation: 0
-    _minRotation: {x: 0, y: 0, z: 0}
-    _maxRotation: {x: 0, y: 0, z: 0}
-    _randomOffset: 0
-    _minOffset: {x: 0, y: -0.3}
-    _maxOffset: {x: 0, y: 0}
-    _randomScale: 0
-    _uniformRandomScale: 0
-    _minScale: {x: 13.72, y: 1, z: 1}
-    _maxScale: {x: 1, y: 1, z: 1}
-    _overrideMaterialID: 0
-    _targetMaterialID: 0
-    _scaleModifier:
-      blend: 1
-      useClippedPercent: 0
-      keys: []
 --- !u!1 &2345318271832329845
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,7 +85,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 7400816694522722805}
   - {fileID: 2999165627268799281}
   - {fileID: 5763781847190297493}
   - {fileID: 4709484585188773121}
@@ -454,7 +189,6 @@ MonoBehaviour:
   _sampleMode: 0
   _subscribers:
   - {fileID: 9047026933609085666}
-  - {fileID: 6210646821500656581}
   _rawSamples: []
   _nodes: []
 --- !u!114 &9047026933609085666
@@ -550,7 +284,6 @@ MonoBehaviour:
   _spline: {fileID: 3626055781503237806}
   tubeRadius: 0.6
   _tubeGenerator: {fileID: 9047026933609085666}
-  _splineMesh: {fileID: 6210646821500656581}
 --- !u!114 &2788433321168617802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603,6 +336,7 @@ MonoBehaviour:
   _bodyRenderer: {fileID: 4282819325411265969}
   gridClamper: {fileID: 4085413186241585128}
   moveToPortal: {fileID: -5629423586080132934}
+  splineComputer: {fileID: 3626055781503237806}
   iceBody: {fileID: 2964576926440202955}
   hiddenBody: {fileID: 41594273751275580}
   doubleColorBody: {fileID: 8529994725513288314}
@@ -729,6 +463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   body: {fileID: 3655932188227585431}
+  m_subColorIndicatorPrefab: {fileID: 1915661862167191895, guid: 15f0d33d2e27ac1478c962775e89953a, type: 3}
 --- !u!1 &7056571280065028219
 GameObject:
   m_ObjectHideFlags: 0

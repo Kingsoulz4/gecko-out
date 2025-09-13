@@ -8,6 +8,7 @@ namespace Geckout
 {
     public class MultipleColorBody : MechanicBody
     {
+        [SerializeField] private SubColorIndicator m_subColorIndicatorPrefab;
         private bool isInit = false;
         private List<Vector2Int> lastPath = new();
         private List<ColorType> colorTypes = new();
@@ -15,7 +16,7 @@ namespace Geckout
         {
             if (isInit) return;
             isInit = true;
-
+            SpawnSubColorIndicators();
             colorTypes = new List<ColorType>(body.BodyData.listColor);
             LevelEvent.OnGetLastPath += OnGetLastPath;
         }
@@ -44,7 +45,8 @@ namespace Geckout
 
         private void SpawnSubColorIndicators()
         {
-
+            var newSubColorIndicator = Instantiate(m_subColorIndicatorPrefab, transform);
+            newSubColorIndicator.Init(body.SplineComputer, body.BodyData.listColor);
         }
 
         private void OnDisable()

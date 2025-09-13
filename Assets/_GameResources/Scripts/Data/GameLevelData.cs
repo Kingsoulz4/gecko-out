@@ -211,7 +211,6 @@ namespace Geckout.Data
             this.listCoordinate = new List<Vector2Int>(bodyData.listCoordinate);
             this.freezeTimeCount = bodyData.freezeTimeCount;
             this.hiddenCount = bodyData.hiddenCount;
-            this.doubleColor = bodyData.doubleColor;
         }
     }
 

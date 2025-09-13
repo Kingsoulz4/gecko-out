@@ -30,6 +30,7 @@ namespace Geckout
         [SerializeField] private BodyRenderer _bodyRenderer;
         [SerializeField] private GridHeadClamper gridClamper;
         [SerializeField] private MoveToPortal moveToPortal;
+        [SerializeField] private SplineComputer splineComputer;
         [SerializeField] private IceBody iceBody;
         [SerializeField] private HiddenBody hiddenBody;
         [SerializeField] private MultipleColorBody doubleColorBody;
@@ -92,6 +93,7 @@ namespace Geckout
         }
         public BodyRenderer BodyRenderer { get => _bodyRenderer; }
         public int Length { get => length; }
+        public SplineComputer SplineComputer { get => splineComputer; }
 
 #if UNITY_EDITOR
         [EditorButton]
@@ -595,7 +597,7 @@ namespace Geckout
 
             if (BodyData.listColor.Count > 1)
             {
-                doubleColorBody.Init(BodyData.doubleColor);
+                doubleColorBody.Init(BodyData.listColor.First());
             }
 
         }
