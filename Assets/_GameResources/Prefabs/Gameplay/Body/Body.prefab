@@ -605,7 +605,7 @@ MonoBehaviour:
   moveToPortal: {fileID: -5629423586080132934}
   iceBody: {fileID: 2964576926440202955}
   hiddenBody: {fileID: 41594273751275580}
-  doubleColorBody: {fileID: 0}
+  doubleColorBody: {fileID: 8529994725513288314}
   m_mechanicReferences: {fileID: 11400000, guid: 02be985aef8091640a0461956780b270, type: 2}
   controlAnchor: 0
   m_outlineSelected: {fileID: 0}
@@ -682,8 +682,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bodyController: {fileID: 3655932188227585431}
   animationDurationPerSegment: 0.3
-  portalEnterDistance: 0.4
-  enableDebugLogs: 0
+  portalEnterDistance: 0.5
+  enableDebugLogs: 1
 --- !u!1 &6746835669322415534
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,24 +728,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40d4aed50308d8e4b8acc677a167fd66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  length: 3
-  moveSpeed: 18
-  lowSpeed: 10
-  lowDistance: 2
-  minSampleStep: 0.02
-  headPrefab: {fileID: 0}
-  segment: {fileID: 0}
-  tailPrefab: {fileID: 0}
-  occupiedTileController: {fileID: 0}
-  _bodyRenderer: {fileID: 0}
-  gridClamper: {fileID: 0}
-  moveToPortal: {fileID: 0}
-  iceBody: {fileID: 0}
-  hiddenBody: {fileID: 0}
-  doubleColorBody: {fileID: 0}
-  m_mechanicReferences: {fileID: 0}
-  controlAnchor: 0
-  m_outlineSelected: {fileID: 0}
+  body: {fileID: 0}
 --- !u!1 &7056571280065028219
 GameObject:
   m_ObjectHideFlags: 0

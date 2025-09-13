@@ -17,6 +17,8 @@ namespace Geckout
         private bool isEnteringPortal = false;
         private Coroutine portalMovementCoroutine = null;
 
+        public bool IsEnteringPortal { get => isEnteringPortal;}
+
         private void Start()
         {
             if (bodyController == null)
@@ -33,6 +35,7 @@ namespace Geckout
             }
 
             targetPortal = portal;
+            bodyController.OccupiedTileController.ForceRestoreAll();
 
             DebugLog($"Initiating portal movement to {portal.name}");
 
@@ -98,8 +101,13 @@ namespace Geckout
 
         private IEnumerator AnimateSegmentDown(Segment segment, Vector3 portalCenter, bool isLast = false)
         {
+            if (isLast)
+            {
+                bodyController.StopMoveCoroutine();
+            }
+
             Vector3 startPos = segment.transform.position;
-            Vector3 targetPos = portalCenter + Vector3.back * -3f;
+            Vector3 targetPos = portalCenter + Vector3.forward * 3;
 
             float elapsed = 0f;
             while (elapsed < animationDurationPerSegment)
@@ -113,7 +121,6 @@ namespace Geckout
                 Vector3 currentPos = startPos;
                 currentPos.z = Mathf.Lerp(startPos.z, targetPos.z, curveT);
                 segment.transform.position = currentPos;
-
                 yield return null;
             }
             if (isLast)
@@ -127,7 +134,6 @@ namespace Geckout
             if (targetPortal == null || bodyController == null) return;
             
             bodyController.OccupiedTileController.ClearAllOccupied();
-            bodyController.OccupiedTileController.ForceRestoreAll();
             LevelEvent.OnMoveToPortalDone(bodyController, targetPortal);
             DebugLog("Finish move portal");
             targetPortal.Disappear();

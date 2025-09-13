@@ -91,6 +91,7 @@ namespace Geckout
             }
         }
         public BodyRenderer BodyRenderer { get => _bodyRenderer; }
+        public int Length { get => length;}
 
 #if UNITY_EDITOR
         [EditorButton]
@@ -233,11 +234,7 @@ namespace Geckout
         {
             if (path == null || path.Count == 0) return;
 
-            if (moveCoroutine != null)
-            {
-                StopCoroutine(moveCoroutine);
-                moveCoroutine = null;
-            }
+            StopMoveCoroutine();
 
             currentPath = new List<Vector2Int>(path);
 
@@ -248,6 +245,15 @@ namespace Geckout
             }
 
             moveCoroutine = StartCoroutine(StartMovePathIE());
+        }
+
+        public void StopMoveCoroutine()
+        {
+            if (moveCoroutine != null)
+            {
+                StopCoroutine(moveCoroutine);
+                moveCoroutine = null;
+            }
         }
 
         public void SetControlAnchor(ControlAnchor anchor)
@@ -263,11 +269,7 @@ namespace Geckout
 
         public void ClearPath()
         {
-            if (moveCoroutine != null)
-            {
-                StopCoroutine(moveCoroutine);
-                moveCoroutine = null;
-            }
+            StopMoveCoroutine();
             currentPath.Clear();
         }
 
