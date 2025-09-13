@@ -198,8 +198,6 @@ namespace Geckout.Data
         public List<Vector2Int> listCoordinate = new();
         public int freezeTimeCount = 0;
         public int hiddenCount = 0;
-        public ColorType doubleColor = ColorType.None;
-
 
         public BodyData()
         { }
