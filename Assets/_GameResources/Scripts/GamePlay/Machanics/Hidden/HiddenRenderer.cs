@@ -33,11 +33,5 @@ namespace Geckout
         {
             gameObject.SetActive(false);
         }
-
-        //public void ChangeColor()
-        //{
-        //    body.BodyRenderer.UpdateBodyColor();
-
-        //}
     }
 }

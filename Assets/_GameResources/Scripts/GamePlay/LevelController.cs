@@ -38,9 +38,13 @@ namespace Geckout
             m_gameLevelData = gameLevelData;
             m_gameMap.SetLevelData(gameLevelData);
             Utils.RemoveAllChilds(m_bodyParent);
-            foreach(var dogData in gameLevelData.listDogData)
+            int i=0;
+            foreach (var bodyData in gameLevelData.listDogData)
             {
-                ListBody.Add(SpawnBody(dogData));
+                var body = SpawnBody(bodyData);
+                body.name = $"Body_{i}";
+                i++;
+                ListBody.Add(body);
             }
 #if UNITY_EDITOR
             EditorUtility.SetDirty(this.gameObject);   

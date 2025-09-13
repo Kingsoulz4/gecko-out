@@ -51,6 +51,7 @@ namespace Geckout
 
         private void ChangeColor()
         {
+            body.BodyRenderer.FadeBodyColor(body.BodyData.listColor.First());
             for (int i = 1; i < body.Segments.Count - 1; i++)
             {
                 if (i % 3 == 0)

@@ -597,7 +597,7 @@ namespace Geckout
 
             if (BodyData.listColor.Count > 1)
             {
-                doubleColorBody.Init(BodyData.listColor.First());
+                doubleColorBody.Init();
             }
 
         }

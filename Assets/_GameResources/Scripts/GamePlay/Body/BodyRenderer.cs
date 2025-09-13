@@ -1,4 +1,5 @@
 ﻿using Dreamteck.Splines;
+using Geckout.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Geckout
     [RequireComponent(typeof(SplineComputer))]
     public class BodyRenderer : MonoBehaviour
     {
-        [SerializeField]private SplineComputer _spline;
+        [SerializeField] private SplineComputer _spline;
         [SerializeField] private float tubeRadius = 0.5f;
         [SerializeField] private TubeGenerator _tubeGenerator;
 
@@ -23,11 +24,11 @@ namespace Geckout
         {
             get
             {
-                if(bodyController == null)
+                if (bodyController == null)
                 {
                     bodyController = GetComponent<BodyController>();
                 }
-                return bodyController;  
+                return bodyController;
             }
         }
 
@@ -38,6 +39,17 @@ namespace Geckout
         public void UpdateBodyColor()
         {
             bodyPartColorChangers.ForEach(x => x.UpdateColor(BodyController.BodyData.listColor.First()));
+        }
+
+        public void FadeBodyColor(ColorType color)
+        {
+            bodyPartColorChangers.ForEach(x =>
+            {
+                if (x.gameObject.activeInHierarchy)
+                {
+                    x.FadeColor(color, 0.5f);
+                }
+            });
         }
 
         public void Initialize(List<Segment> segments)
