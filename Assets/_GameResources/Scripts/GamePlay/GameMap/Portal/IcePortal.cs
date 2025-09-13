@@ -13,7 +13,7 @@ namespace Geckout
         private IceRenderer iceRenderer;
         private bool isInit = false;
 
-        public int CurrentCount { get => currentCount;}
+        public int CurrentCount { get => currentCount; }
 
         public void Init(int meltCount)
         {
@@ -31,12 +31,14 @@ namespace Geckout
 
         private void OnDisable()
         {
+
+            isInit = false;
             LevelEvent.OnMoveToPortalDone -= OnBodyMoveToPortalDone;
         }
 
         private void OnBodyMoveToPortalDone(BodyController controller, Portal portal)
         {
-            if (currentCount < 0)
+            if (!isInit)
             {
                 return;
             }

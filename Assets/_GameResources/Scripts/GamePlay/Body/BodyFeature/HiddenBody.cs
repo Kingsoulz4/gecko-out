@@ -30,6 +30,7 @@ namespace Geckout
 
         private void OnDisable()
         {
+            isInit = false;
             LevelEvent.OnMoveToPortalDone -= OnBodyMoveToPortalDone;
         }
 

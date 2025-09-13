@@ -49,6 +49,7 @@ namespace Geckout
 
         private void OnDisable()
         {
+            isInit = false;
             LevelEvent.OnMoveToPortalStart -= OnBodyMoveToPortalStart;
             LevelEvent.OnGetLastPath -= OnGetLastPath;
         }
