@@ -22,7 +22,7 @@ namespace Geckout
         public override void UpdateVisual()
         {
             base.UpdateVisual();
-            m_textCount.transform.localPosition = Vector3.forward * -0.4f;
+            m_textCount.transform.position = new Vector3(GetCenterWorldPos().x, GetCenterWorldPos().y, m_textCount.transform.position.z);
             m_textCount.text = currentCount.ToString();
         }
 
