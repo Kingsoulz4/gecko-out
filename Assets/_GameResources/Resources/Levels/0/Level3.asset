@@ -271,7 +271,7 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 4, y: 10}
-    type: 0
+    type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 10}
     type: 0
@@ -280,7 +280,7 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 7, y: 10}
-    type: 0
+    type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 0, y: 11}
     type: 0
@@ -298,16 +298,72 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 11}
-    type: 0
+    type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 6, y: 11}
-    type: 0
+    type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 7, y: 11}
-    type: 0
+    type: 6
     rotation: {x: 0, y: 90, z: -90}
-  listDogData: []
-  listPortalData: []
+  listDogData:
+  - bodyType: 0
+    listColor: 00000000
+    listCoordinate:
+    - {x: 0, y: 1}
+    - {x: 1, y: 1}
+    - {x: 2, y: 1}
+    freezeTimeCount: 2
+    hiddenCount: 0
+  - bodyType: 0
+    listColor: 02000000
+    listCoordinate:
+    - {x: 3, y: 4}
+    - {x: 4, y: 4}
+    - {x: 5, y: 4}
+    - {x: 6, y: 4}
+    freezeTimeCount: 0
+    hiddenCount: 0
+  - bodyType: 0
+    listColor: 00000000
+    listCoordinate:
+    - {x: 3, y: 3}
+    - {x: 4, y: 3}
+    - {x: 5, y: 3}
+    - {x: 6, y: 3}
+    freezeTimeCount: 0
+    hiddenCount: 0
+  - bodyType: 0
+    listColor: 03000000
+    listCoordinate:
+    - {x: 3, y: 2}
+    - {x: 4, y: 2}
+    - {x: 5, y: 2}
+    - {x: 6, y: 2}
+    freezeTimeCount: 0
+    hiddenCount: 0
+  - bodyType: 0
+    listColor: 00000000
+    listCoordinate:
+    - {x: 0, y: 11}
+    - {x: 1, y: 11}
+    - {x: 2, y: 11}
+    - {x: 3, y: 11}
+    freezeTimeCount: 0
+    hiddenCount: 2
+  listPortalData:
+  - portalType: 0
+    Coordinate: {x: 7, y: 11}
+    freezeTimeCount: 0
+    listColor: 00000000
+  - portalType: 0
+    Coordinate: {x: 4, y: 10}
+    freezeTimeCount: 2
+    listColor: 02000000
+  - portalType: 0
+    Coordinate: {x: 7, y: 10}
+    freezeTimeCount: 0
+    listColor: 03000000
   listMovableBoxData:
   - boxSize: {x: 3, y: 3}
     rootCoordinate: {x: 4, y: 6}
@@ -321,5 +377,5 @@ MonoBehaviour:
   listCrateData:
   - boxSize: {x: 3, y: 3}
     rootCoordinate: {x: 0, y: 7}
-    difusionCount: 0
+    difusionCount: 2
   colorAndMaterialData: {fileID: 11400000, guid: bea4b031ece8d284482119e23bace87e, type: 2}

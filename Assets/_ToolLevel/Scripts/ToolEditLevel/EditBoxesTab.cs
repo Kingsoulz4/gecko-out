@@ -24,11 +24,44 @@ namespace Geckout
         [Header("Inputs")]
         [SerializeField] private TMP_InputField m_inputWidth;
         [SerializeField] private TMP_InputField m_inputHeight;
-        [SerializeField] private TMP_InputField m_inputDifusionCount;
+        [SerializeField] private TMP_InputField m_inputDifuseCount;
 
         public LevelGameEditTool LevelGame { get; set; }
-        private BoxBaseData BoxBaseData { get; set; } = new();
-        private CrateData CrateData { get; set; } = new();
+
+        private BoxBaseData boxBaseData;
+
+        private BoxBaseData BoxBaseData { 
+            get 
+            {
+                Vector2Int size = new Vector2Int(
+                    int.Parse(m_inputWidth.text),
+                    int.Parse(m_inputHeight.text)
+                );
+                if (m_dropDownBoxType.value == 0 && LevelGame.SelectedBoxMove != null)
+                {
+                    boxBaseData = LevelGame.SelectedBoxMove.Data;
+                }
+                else if(m_dropDownBoxType.value == 0)
+                {
+                    boxBaseData = new MovableBoxData() { boxSize = size, wayDirection = (WayDirection)m_dropDownMoveType.value };
+                }
+                else if (m_dropDownBoxType.value == 1 && LevelGame.SelectedCrate != null)
+                {
+                    boxBaseData = LevelGame.SelectedCrate.Data;
+                }
+                else if(m_dropDownBoxType.value == 1)
+                {
+                    boxBaseData = new CrateData() { boxSize = size, difusionCount = int.Parse(m_inputDifuseCount.text) };
+                }
+                return boxBaseData;
+
+            } 
+            set
+            {
+
+            }
+        } 
+        //private CrateData CrateData { get; set; } = new();
 
         private void Awake()
         {
@@ -39,21 +72,21 @@ namespace Geckout
             m_buttonMoveRight.onClick.AddListener(() => OnClickMove(Vector2Int.right));
             m_buttonMoveUp.onClick.AddListener(() => OnClickMove(Vector2Int.up));
             m_buttonMoveDown.onClick.AddListener(() => OnClickMove(Vector2Int.down));
+            m_buttonDelete.onClick.AddListener(OnClickDelete);
 
             m_dropDownMoveType.onValueChanged.AddListener(OnDropDownMoveTypeChangeValue);
-            m_inputDifusionCount.onSubmit.AddListener(OnEnterDifusionCount);
+            m_inputDifuseCount.onSubmit.AddListener(OnEnterDifuseCount);
         }
 
-        private void OnEnterDifusionCount(string arg0)
+        private void OnClickDelete()
         {
-            if(LevelGame.SelectedCrate  != null && CrateData != null)
-            {
-                CrateData.difusionCount = int.Parse(arg0);
-            }
+            LevelGame.DeleteSelectedBoxes();
+            LevelGame.ClearAllSelectedTiles();
         }
 
         private void OnEnable()
         {
+            m_buttonPlace.gameObject.SetActive(true);
             if (LevelGame?.SelectedBoxMove != null)
             {
                 BoxBaseData = LevelGame.SelectedBoxMove.Data;
@@ -72,6 +105,14 @@ namespace Geckout
             if (Input.GetKeyDown(KeyCode.RightArrow)) OnClickMove(Vector2Int.right);
         }
 
+        private void OnEnterDifuseCount(string arg0)
+        {
+            if(LevelGame.SelectedCrate != null && BoxBaseData != null)
+            {
+                ((CrateData)BoxBaseData).difusionCount = int.Parse(arg0);
+            }
+        }
+
         private void OnDropDownMoveTypeChangeValue(int arg0)
         {
             if (BoxBaseData is MovableBoxData movable)
@@ -84,13 +125,24 @@ namespace Geckout
         private void OnClickPlace()
         {
             GetSelectedBoxAction(
-                onMoveBox: b => b.PlaceMoveBox(),
-                onCrate: c => c.PlaceMoveBox()
+                onMoveBox: b => {
+                    if(b.PlaceMoveBox())
+                    {
+                        m_buttonPlace.gameObject.SetActive(false);
+                    }
+                },
+                onCrate: c => {
+                    if (c.PlaceMoveBox())
+                    {
+                        m_buttonPlace.gameObject.SetActive(false);
+                    }
+                }
             );
         }
 
         private void OnClickMove(Vector2Int direction)
         {
+            m_buttonPlace.gameObject.SetActive(true);
             GetSelectedBoxAction(
                 onMoveBox: b => b.MoveByOffset(direction),
                 onCrate: c => c.MoveByOffset(direction)
@@ -99,6 +151,7 @@ namespace Geckout
 
         private void OnClickGenerate()
         {
+            m_buttonPlace.gameObject.SetActive(true);
             Vector2Int size = new Vector2Int(
                 int.Parse(m_inputWidth.text),
                 int.Parse(m_inputHeight.text)
@@ -114,13 +167,16 @@ namespace Geckout
 
                 var moveBox = LevelGame.GameMap.SpawnBoxMove(boxMoveData);
                 LevelGame.SelectMovableBox(moveBox);
+
                 BoxBaseData = boxMoveData;
             }
             else if (m_dropDownBoxType.value == 1) // Crate
             {
-                CrateData = new CrateData { boxSize = size };
-                var crate = LevelGame.GameMap.SpawnCrate(CrateData);
+                BoxBaseData = new CrateData { boxSize = size , difusionCount = int.Parse(m_inputDifuseCount.text)};
+                var crate = LevelGame.GameMap.SpawnCrate((CrateData)BoxBaseData);
                 LevelGame.SelectCrateBox(crate);
+
+                
             }
         }
 

@@ -14,6 +14,7 @@ namespace Geckout
         [SerializeField] protected BodyController m_bodyPrefab;
         [SerializeField] protected Transform m_bodyParent;
 
+
         private List<BodyController> listBody = new();
 
         public GameLevelData GameLevelData => m_gameLevelData;
@@ -21,6 +22,16 @@ namespace Geckout
         public GameMap GameMap => m_gameMap;
 
         public List<BodyController> ListBody { get => listBody;}
+
+        private void OnEnable()
+        {
+            LevelEvent.OnMoveToPortalDone += OnBodyMoveToPortal;
+        }
+
+        private void OnDisable()
+        {
+            LevelEvent.OnMoveToPortalDone -= OnBodyMoveToPortal;
+        }
 
         public void SetLevelData(GameLevelData gameLevelData)
         {
@@ -36,12 +47,32 @@ namespace Geckout
 #endif
         }
 
-        public void OnBodyMoveToPortal(BodyController body)
+        private void WinLevel()
+        {
+            LevelEvent.OnWin?.Invoke(m_gameLevelData.levelIndex);
+        }
+
+        private void LoseLevel()
+        {
+            LevelEvent.OnLose?.Invoke(m_gameLevelData.levelIndex);
+        }
+
+        private void OnBodyMoveToPortal(BodyController body, Portal portal)
         {
             if (listBody.Contains(body))
             {
                 listBody.Remove(body);
             }
+
+            if (listBody.Count == 0)
+            {
+                WinLevel();
+            }
+        }
+
+        private void TimeOut()
+        {
+            LoseLevel();
         }
 
         public BodyController SpawnBody(BodyData bodyData)

@@ -220,6 +220,21 @@ namespace Geckout
             Destroy(selectedBody.gameObject);
         }
 
+        public void DeleteSelectedBoxes()
+        {
+            if(SelectedCrate != null)
+            {
+                GameLevelData.listCrateData.Remove(SelectedCrate.Data);
+                Destroy(SelectedCrate.gameObject);
+            }
+
+            if(SelectedBoxMove != null)
+            {
+                GameLevelData.listMovableBoxData.Remove(SelectedBoxMove.Data);
+                Destroy(SelectedBoxMove.gameObject);
+            }
+        }
+
         public void ClearAllSelected()
         {
             ClearAllSelectedTiles();
@@ -249,9 +264,9 @@ namespace Geckout
             listSelectedTile.Clear();
         }
 
-        public void AddNewPortal()
+        public void AddNewPortal(PortalData portalData)
         {
-            ChangeTypeSelectedTiles(MapTileType.Portal);
+            
             //for (int i = 0; i < listSelectedTile.Count; i++)
             //{
             //    var tileSelected = listSelectedTile.ElementAt(i);
@@ -265,10 +280,13 @@ namespace Geckout
             for (int i = 0; i < listSelectedTile.Count; i++)
             {
                 var tileSelected = listSelectedTile.ElementAt(i);
-                var newPortalData = new PortalData();
+                if (tileSelected.IsOccupied) continue;
+                var newPortalData = new PortalData(portalData);
                 newPortalData.Coordinate = new Vector2Int(tileSelected.Coordinate.x, tileSelected.Coordinate.y);
                 GameMap.SpawnPortal(newPortalData);
+                GameLevelData.listPortalData.Add(newPortalData);
             }
+            ChangeTypeSelectedTiles(MapTileType.Portal);
         }
 
         public void RemoveAllSelectedPortals()

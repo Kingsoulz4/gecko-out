@@ -3,57 +3,82 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.HableCurve;
 
 namespace Geckout
 {
     public class Portal : MonoBehaviour
     {
         [SerializeField] private List<BodyPartColorChanger> bodyPartColorChangers = new();
-        public PortalData PortalData { get; private set; }
         [SerializeField] private MechanicsReferences m_mechanicReferences;
+        [SerializeField] private IcePortal icePortal;
 
         private List<MechanicRendererBase> listMechanicRender = new();
-        bool isMovingToPortal = false;
-
-        private void Awake()
-        {
-            //bodyPartColorChangers = GetComponentsInChildren<BodyPartColorChanger>().ToList();
-        }
-
-        private void Start()
-        {
-            UpdateVisual();
-        }
+        private bool isMovingToPortal = false;
+        public PortalData PortalData { get; private set; }
+        public MechanicsReferences MechanicReferences { get => m_mechanicReferences; }
+        public List<MechanicRendererBase> ListMechanicRender { get => listMechanicRender; }
 
         public void Initialize(PortalData portalData)
         {
-            PortalData = portalData;
-            InitVisual();
             isMovingToPortal = false;
+            PortalData = portalData;
+            InitMechanic();
+            UpdateVisual();
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.TryGetComponent<Segment>(out var segment))
             {
-                var bodyController = segment.Controller;
-                if (bodyController != null && bodyController.MoveToPortal != null)
-                {
-                    if (isMovingToPortal) return;
-                    GameMap.TryGetTileAtCoord(PortalData.Coordinate, out GameTile tile);
-                    if (tile != null)
-                    {
-                        tile.SetOccupied(false);
-                    }
-                    bodyController.MoveToPortal.InitiatePortalMovement(this);
-                    isMovingToPortal = true;
-                }
+                MoveToPortal(segment);
             }
         }
 
-        public void UpdateVisual()
+        protected virtual void MoveToPortal(Segment segment)
+        {
+            var bodyController = segment.Controller;
+            if (bodyController != null && bodyController.MoveToPortal != null
+                && bodyController.CanMovePortal
+                && bodyController.BodyData.listColor[0] == PortalData.listColor[0])
+            {
+                if (isMovingToPortal) return;
+
+                GameMap.TryGetTileAtCoord(PortalData.Coordinate, out GameTile tile);
+                if (tile != null)
+                {
+                    tile.SetOccupied(false);
+                }
+                bodyController.MoveToPortal.InitiatePortalMovement(this);
+                LevelEvent.OnMoveToPortalStart?.Invoke(segment.Controller, this);
+                isMovingToPortal = true;
+
+                this.Wait(Time.deltaTime*8, () =>
+                {
+                    GetLastPath(bodyController);
+                });
+            }
+        }
+
+        public void GetLastPath(BodyController bodyController)
+        {
+            var list = bodyController.OccupiedTileController.LastGridPositions.ToList();
+            var lastpath = new List<Vector2Int>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (i % 3 != 0 && i != 0 && i != list.Count - 1)
+                {
+                    continue;
+                }
+                lastpath.Add(list[i]);
+            }
+            LevelEvent.OnGetLastPath?.Invoke(bodyController, lastpath);
+        }
+
+        public virtual void UpdateVisual()
         {
             bodyPartColorChangers.ForEach(x => x.UpdateColor(PortalData.listColor.First()));
         }
@@ -63,7 +88,7 @@ namespace Geckout
             this.gameObject.SetActive(false);
         }
 
-        public void InitVisual()
+        public void InitMechanic()
         {
             if (listMechanicRender.Count > 0)
             {
@@ -76,13 +101,8 @@ namespace Geckout
 
             if (PortalData.freezeTimeCount > 0)
             {
-                var prefabRenderFreeze = m_mechanicReferences.listMechanicRenderer[MechanicNames.Freeze];
-                var newIceRenderer = (IceRenderer)Instantiate(prefabRenderFreeze, transform);
-                newIceRenderer.GenerateIces(new List<Vector3>() { transform.position });
-                listMechanicRender.Add(newIceRenderer);
+                icePortal.Init(PortalData.freezeTimeCount);
             }
-
-
         }
     }
 }

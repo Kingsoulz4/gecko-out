@@ -32,11 +32,9 @@ namespace Geckout
             }
         }
 
-        private void Start()
-        {
-            bodyPartColorChangers = GetComponentsInChildren<BodyPartColorChanger>().ToList();
-            UpdateBodyColor();
-        }
+        public List<Segment> Segments { get => _segments; }
+
+        public List<BodyPartColorChanger> ListBodyPartChanger { get => bodyPartColorChangers; }
 
         public void UpdateBodyColor()
         {
@@ -58,6 +56,10 @@ namespace Geckout
             }
 
             Debug.Log("Init segments: " + _segments.Count);
+
+            bodyPartColorChangers = GetComponentsInChildren<BodyPartColorChanger>().ToList();
+            UpdateBodyColor();
+
             ForceUpdate();
         }
 

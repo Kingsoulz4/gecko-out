@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Geckout
@@ -19,11 +20,15 @@ namespace Geckout
             base.MoveByOffset(offset);
         }
 
-        public override void PlaceMoveBox()
+        public override bool PlaceMoveBox()
         {
-            base.PlaceMoveBox();
+            if (!base.PlaceMoveBox()) return false;
             Debug.Log("Move Success");
-            LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Add(base.Data);
+            if (!LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Contains(Data))
+            {
+                LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Add(base.Data);
+            }
+            return true;
         }
 
         #endregion

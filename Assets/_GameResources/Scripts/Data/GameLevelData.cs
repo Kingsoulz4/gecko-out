@@ -103,6 +103,7 @@ namespace Geckout.Data
 
     public enum ColorType
     {
+        None = -1,
         Red = 0,
         Orange = 1,
         Yellow = 2,
@@ -177,6 +178,16 @@ namespace Geckout.Data
         public Vector2Int Coordinate;
         public int freezeTimeCount;
         public List<ColorType> listColor = new() { ColorType.Red };
+
+        public PortalData() { }
+
+        public PortalData(PortalData portalData)
+        {
+            this.portalType = portalData.portalType;
+            Coordinate = portalData.Coordinate;
+            this.freezeTimeCount = portalData.freezeTimeCount;
+            this.listColor = new List<ColorType>(portalData.listColor);
+        }
     }
 
     [Serializable]
@@ -186,6 +197,8 @@ namespace Geckout.Data
         public List<ColorType> listColor = new() { ColorType.Red };
         public List<Vector2Int> listCoordinate = new();
         public int freezeTimeCount = 0;
+        public int hiddenCount = 0;
+        public ColorType doubleColor = ColorType.None;
 
 
         public BodyData()
@@ -197,6 +210,8 @@ namespace Geckout.Data
             this.listColor = new List<ColorType>(bodyData.listColor);
             this.listCoordinate = new List<Vector2Int>(bodyData.listCoordinate);
             this.freezeTimeCount = bodyData.freezeTimeCount;
+            this.hiddenCount = bodyData.hiddenCount;
+            this.doubleColor = bodyData.doubleColor;
         }
     }
 

@@ -30,17 +30,23 @@ namespace Geckout
         public virtual void SetSelected(bool selected)
         {
             OutlineSelected.enabled = selected;
+            if (ShouldSetOccupied() && selected) SetTilesOccupiedMap(false);
         }
-
         public virtual void MoveByOffset(Vector2Int offset)
         {
-            var newRoot = Data.rootCoordinate + Data.boxSize - Vector2Int.one + offset;
             var mapSize = LevelManager.Instance.LevelGame.GameLevelData.mapSize;
-
-            if (newRoot.x >= mapSize.x || newRoot.x < 0 || newRoot.y >= mapSize.y || newRoot.y < 0)
+            var boxSize = Data.boxSize;
+            var newRootConstraintR = Data.rootCoordinate + boxSize + offset;
+            var newRootConstraintL = Data.rootCoordinate + offset;
+            if(newRootConstraintL.x <0 || newRootConstraintR.x > mapSize.x || newRootConstraintL.y < 0 || newRootConstraintR.y > mapSize.y)
             {
                 return;
             }
+
+            //if(CheckCanPlace())
+            //{
+            //    SetTilesOccupiedMap(false);
+            //}
 
             foreach (var tileMove in spawnedTiles)
             {
@@ -49,13 +55,18 @@ namespace Geckout
                 GameMap.TryGetTileAtCoord(newCoordinate, out var tile);
                 tileMove.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y, tileMove.transform.position.z);
                 tileMove.Coordinate = newCoordinate;
-                
             }
             Data.rootCoordinate += offset;
+
+            //if(CheckCanPlace())
+            //{
+            //    SetTilesOccupiedMap(true);
+            //}
+
             UpdateVisual();
         }
 
-        public virtual void PlaceMoveBox()
+        public bool CheckCanPlace()
         {
             foreach (var tileMove in spawnedTiles)
             {
@@ -63,18 +74,29 @@ namespace Geckout
                 if (tile.IsOccupied)
                 {
                     Debug.LogError("Cannot place tile");
-                    return;
+                    return false;
                 }
 
             }
+            return true;
+        }
 
+        public void SetTilesOccupiedMap(bool isOccupied)
+        {
             foreach (var tileMove in spawnedTiles)
             {
                 GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
-                tile.IsOccupied = true;
+                tile.IsOccupied = isOccupied;
             }
+        }
 
-            
+        public virtual bool PlaceMoveBox()
+        {
+            if (!CheckCanPlace()) return false;
+
+            SetTilesOccupiedMap(true);
+
+            return true;
         }
 
 

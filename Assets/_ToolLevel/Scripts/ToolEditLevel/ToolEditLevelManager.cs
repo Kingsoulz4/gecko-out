@@ -75,6 +75,7 @@ namespace Geckout
         private void OnPressDelete()
         {
             LevelGame.DeleteSelectedBody();
+            LevelGame.DeleteSelectedBoxes();
             LevelGame.ChangeTypeSelectedTiles(MapTileType.Normal);
             HideAllTabs();
         }
