@@ -1,5 +1,6 @@
 using Geckout.Data;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -326,6 +327,70 @@ namespace Geckout
         public void RotateSelectedTiles(int angle)
         {
             listSelectedTile.ToList().ForEach(x => x.RotateBy(angle));
+        }
+
+        public void AutoGenerateWallTiles()
+        {
+            var listCoordTileSelected = ListSelectedTile.Where(x => !x.IsOccupied).ToList();
+            foreach (var tile in listCoordTileSelected)
+            {
+                GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.up, out var tileUp);
+                bool up = !(tileUp == null || tileUp.MapTileData.type != MapTileType.Normal || !listCoordTileSelected.Contains(tileUp));
+                GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.down, out var tileDown);
+                bool down = !(tileDown == null || tileDown.MapTileData.type != MapTileType.Normal || listCoordTileSelected.Contains(tileDown));
+                GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.left, out var tileLeft);
+                bool left = !(tileLeft == null || tileLeft.MapTileData.type != MapTileType.Normal || listCoordTileSelected.Contains(tileLeft));
+                GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.right, out var tileRight);
+                bool right = !(tileRight == null || tileRight.MapTileData.type != MapTileType.Normal || listCoordTileSelected.Contains(tileRight));
+
+                var rot = Vector3Int.zero;
+
+                // Example logic: you need to replace these rules with your 6 types
+                if (up && down && left && right)
+                {
+                     tile.SetTileType(MapTileType.Wall4Side); // cross
+                }
+                else if ((up && down && left) || (up && down && right) ||
+                         (up && left && right) || (down && left && right))
+                {
+                    tile.SetTileType(MapTileType.Wall3Side); // cross
+                    if (!up) rot = new Vector3Int(0, 90, -90);
+                    if (!down) rot = new Vector3Int(0, 90, -90);
+                    if (!left) rot = new Vector3Int(0, 90, -90) ;
+                    if (!right) rot = new Vector3Int(0, 90, -90);
+                }
+                else if ((up && down) || (left && right))
+                {
+                    tile.SetTileType(MapTileType.Wall2Side);
+                    if (left && right) rot = new Vector3Int(0, 90, -90);
+                }
+                else if ((up && right) || (right && down) || (down && left) || (left && up))
+                {
+                    tile.SetTileType(MapTileType.WallCornerInside); // corner
+                    if (up && right) rot = new Vector3Int(0, 90, -90);
+                    if (right && down) rot = new Vector3Int(0, 90, -90);
+                    if (down && left) rot = new Vector3Int(0, 90, -90);
+                    if (left && up) rot = new Vector3Int(0, 90, -90);
+                }
+                else if (up || down || left || right)
+                {
+                    tile.SetTileType(MapTileType.WallCornerInside); // dead end
+                    if (up) rot = new Vector3Int(0, 90, -90);
+                    if (down) rot = new Vector3Int(0, 90, -90);
+                    if (left) rot = new Vector3Int(0, 90, -90);
+                    if (right) rot = new Vector3Int(0, 90, -90);
+                }
+                else
+                {
+                    tile.SetTileType(MapTileType.WallCenter); // single block
+                }
+
+                tile.RotateTo(rot);
+
+            }
+
+
+
         }
 
     }

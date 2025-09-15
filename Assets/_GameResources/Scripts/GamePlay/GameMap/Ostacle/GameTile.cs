@@ -1,11 +1,12 @@
+using AYellowpaper.SerializedCollections;
+using Geckout.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using AYellowpaper.SerializedCollections;
-using Geckout.Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 namespace Geckout
 {
@@ -126,6 +127,12 @@ namespace Geckout
             var rotatateAngle = new Vector3Int(angleRotated, 90, -90);
             m_displayObject.transform.localRotation = Quaternion.Euler(rotatateAngle);
             MapTileData.rotation = rotatateAngle;
+        }
+
+        public void RotateTo(Vector3Int angle)
+        {
+            m_displayObject.transform.localRotation = Quaternion.Euler(angle);
+            MapTileData.rotation = angle;
         }
 
         public void SetSelected(bool selected)
