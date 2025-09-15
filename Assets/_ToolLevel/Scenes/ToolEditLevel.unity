@@ -603,6 +603,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_buttonGenerate: {fileID: 84546730}
   m_buttonDelete: {fileID: 1957495578}
+  m_buttonDeleteColor: {fileID: 0}
   m_listColorPickContainer: {fileID: 1224245520}
   m_colorPickPrefab: {fileID: 401405089}
   m_listButtonColorPicked:

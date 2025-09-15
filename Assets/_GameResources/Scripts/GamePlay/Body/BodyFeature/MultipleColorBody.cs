@@ -12,6 +12,9 @@ namespace Geckout
         private bool isInit = false;
         private List<Vector2Int> lastPath = new();
         private List<ColorType> colorTypes = new();
+
+        private SubColorIndicator subColorIndicator;
+
         public void Init()
         {
             if (isInit) return;
@@ -46,8 +49,13 @@ namespace Geckout
 
         private void SpawnSubColorIndicators()
         {
-            var newSubColorIndicator = Instantiate(m_subColorIndicatorPrefab, transform);
-            newSubColorIndicator.Init(body.SplineComputer, body.BodyData.listColor);
+            if(subColorIndicator != null)
+            {
+                Destroy(subColorIndicator.gameObject);
+            }
+            subColorIndicator = Instantiate(m_subColorIndicatorPrefab, transform);
+            subColorIndicator.Init(body.SplineComputer, body.BodyData.listColor);
+            
         }
 
         private void OnDisable()
