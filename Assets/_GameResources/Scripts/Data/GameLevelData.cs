@@ -27,6 +27,50 @@ namespace Geckout.Data
         public List<CrateData> listCrateData = new();
         public ColorAndMaterialData colorAndMaterialData;
 
+        public GameLevelData() { }
+
+        public GameLevelData(GameLevelData other)
+        {
+            levelNum = other.levelNum;
+            levelIndex = other.levelIndex;
+            mapSize = other.mapSize;
+            time = other.time;
+            type = other.type;
+
+            // Deep copy lists
+            mapTileDatas = new List<MapTileData>();
+            foreach (var tile in other.mapTileDatas)
+            {
+                mapTileDatas.Add(new MapTileData(tile)); // assumes MapTileData has copy constructor
+            }
+
+            listDogData = new List<BodyData>();
+            foreach (var dog in other.listDogData)
+            {
+                listDogData.Add(new BodyData(dog));
+            }
+
+            listPortalData = new List<PortalData>();
+            foreach (var portal in other.listPortalData)
+            {
+                listPortalData.Add(new PortalData(portal));
+            }
+
+            listMovableBoxData = new List<MovableBoxData>();
+            foreach (var box in other.listMovableBoxData)
+            {
+                listMovableBoxData.Add(new MovableBoxData(box));
+            }
+
+            listCrateData = new List<CrateData>();
+            foreach (var crate in other.listCrateData)
+            {
+                listCrateData.Add(new CrateData(crate));
+            }
+
+            colorAndMaterialData = other.colorAndMaterialData;
+        }
+
         public void GenerateDefaultMap()
         {
             mapTileDatas.Clear();
@@ -144,18 +188,42 @@ namespace Geckout.Data
     {
         public Vector2Int boxSize;
         public Vector2Int rootCoordinate;
+
+        public BoxBaseData() { }
+
+        // Copy constructor
+        public BoxBaseData(BoxBaseData other)
+        {
+            boxSize = other.boxSize;
+            rootCoordinate = other.rootCoordinate;
+        }
     }
 
     [Serializable]
-    public class MovableBoxData: BoxBaseData
+    public class MovableBoxData : BoxBaseData
     {
         public WayDirection wayDirection = WayDirection.All;
+
+        public MovableBoxData() { }
+
+        // Copy constructor
+        public MovableBoxData(MovableBoxData other) : base(other) // call parent copy constructor
+        {
+            wayDirection = other.wayDirection;
+        }
     }
 
     [Serializable]
     public class CrateData:BoxBaseData
     {
         public int difusionCount;
+        public CrateData() { }
+
+        // Copy constructor
+        public CrateData(CrateData other) : base(other) // call parent copy constructor
+        {
+            this.difusionCount = other.difusionCount;
+        }
     }
 
     public enum PortalType
@@ -218,5 +286,14 @@ namespace Geckout.Data
         public Vector2Int coordinate;
         public MapTileType type;
         public Vector3Int rotation = new Vector3Int(0, 90, -90);
+
+        public MapTileData() { }
+
+        public MapTileData(MapTileData other)
+        {
+            coordinate = other.coordinate;
+            type = other.type;
+            rotation = other.rotation;
+        }
     }
 }

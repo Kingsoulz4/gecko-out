@@ -72,7 +72,7 @@ namespace Geckout
                 levelData = Resources.Load<GameLevelData>($"Levels/0/Level1");
             }
 
-            return levelData;   
+            return new GameLevelData(levelData);   
         }    
 
         #region GameState
