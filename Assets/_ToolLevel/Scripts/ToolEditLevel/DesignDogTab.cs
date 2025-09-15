@@ -173,6 +173,7 @@ namespace Geckout
                 BodyData.listColor.Add(ColorType.Red);
                 m_listButtonColorPicked[index].SetEmpty(false);
                 m_listButtonColorPicked[index].SetColor(listColorData[ColorType.Red]);
+                currentSelectedColorIndex = index;
             }
             else
             {
