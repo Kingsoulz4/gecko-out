@@ -141,6 +141,10 @@ namespace Geckout
 
         public void ForceRestoreAll()
         {
+            if (currentOccupiedTiles == null || currentOccupiedTiles.Length < 0)
+            {
+                return;
+            }
             for (int i = 0; i < currentOccupiedTiles.Length; i++)
             {
                 if (currentOccupiedTiles[i] != null)

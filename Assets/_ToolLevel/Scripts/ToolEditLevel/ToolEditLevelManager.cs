@@ -182,21 +182,10 @@ namespace Geckout
                 levelData = CreateNewLevelData(int.Parse(m_inputLevelNum.text), int.Parse(m_inputLevelIndex.text));
             }
 
-            if (int.TryParse(m_inputMapWidth.text, out var width))
-            {
-                if (int.TryParse(m_inputMapHeight.text, out var height))
-                {
-                    levelData.mapSize = new Vector2Int(width, height);
-                }
-            }
-
-
-            levelData.type = (LevelType)m_dropLevelType.value;
-
-            if(int.TryParse(m_inputTime.text, out var time))
-            {
-                levelData.time = time;
-            }
+            m_inputMapWidth.text = levelData.mapSize.x.ToString();
+            m_inputMapHeight.text = levelData.mapSize.y.ToString();
+            m_dropLevelType.value = (int)levelData.type;
+            m_inputTime.text = levelData.time.ToString();
 
             LevelGame.SetLevelData(levelData);
         }

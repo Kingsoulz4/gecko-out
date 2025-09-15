@@ -26,7 +26,7 @@ namespace Geckout
                 var channel = newSplineMesh.GetChannel(0);
                 channel.clipFrom = m_clipFrom;
                 channel.clipTo = m_clipTo + m_clipToOffet * i;
-                //channel.minOffset = new Vector2(0, -0.3 - i);
+                channel.minOffset = new Vector2(0, -0.3f - (listColor.Count -i) * 0.01f);
             }
         }
         

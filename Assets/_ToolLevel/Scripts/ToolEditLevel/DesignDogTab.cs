@@ -111,7 +111,7 @@ namespace Geckout
 
                     if (LevelGame.selectedBody != null)
                     {
-                        LevelGame.selectedBody.UpdateColor();
+                        LevelGame.selectedBody.InitMechanic();
                     }
                         
                 });

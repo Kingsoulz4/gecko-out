@@ -19,16 +19,11 @@ namespace Geckout
         {
             get
             {
-                //var listt = listSelectedTile.ToList();
-                var tile = listSelectedTile.ToList().Find(x => x.MapTileData.type == MapTileType.Portal);
                 if (listSelectedTile.Count <= 0) return null;
                 GameMap.TryGetPortalAtCoord(listSelectedTile.First().MapTileData.coordinate, out var portal);
 
-                if (tile != null)
-                {
-                    return portal ? portal : null;
-                }
-                return null;
+                return portal ? portal : null;
+
             }
         }
 
