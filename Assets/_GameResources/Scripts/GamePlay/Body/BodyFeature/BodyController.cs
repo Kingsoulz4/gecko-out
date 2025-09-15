@@ -601,10 +601,12 @@ namespace Geckout
                 hiddenBody.Init(BodyData.hiddenCount);
             }
 
+            doubleColorBody.gameObject.SetActive(BodyData.listColor.Count > 1);
             if (BodyData.listColor.Count > 1)
             {
                 doubleColorBody.Init();
             }
+
 
         }
         #endregion

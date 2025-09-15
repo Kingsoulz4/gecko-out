@@ -12,6 +12,7 @@ namespace Geckout
     {
         [SerializeField] private Button m_buttonGenerate;
         [SerializeField] private Button m_buttonDelete;
+        [SerializeField] private Button m_buttonDeleteColor;
         [SerializeField] private Transform m_listColorPickContainer;
         [SerializeField] private Button m_colorPickPrefab;
         [SerializeField] private List<ButtonColorPicked> m_listButtonColorPicked;
@@ -41,6 +42,7 @@ namespace Geckout
         {
             m_buttonGenerate.onClick.AddListener(OnClickGenerate);
             m_buttonDelete.onClick.AddListener(OnClickDelete);
+            //m_buttonDeleteColor.onClick.AddListener(OnClickDeleteColor);
             foreach(var buttonColorPicked in m_listButtonColorPicked)
             {
                 buttonColorPicked.OnClick.AddListener(OnClickSelectColorPicked);
@@ -50,12 +52,20 @@ namespace Geckout
             //UpdateUI(DogData);
         }
 
+        private void OnClickDeleteColor()
+        {
+            //if(currentSelectedColorIndex < BodyData.listColor.Count)
+            //{
+            //    BodyData.listColor.RemoveAt(currentSelectedColorIndex);
+            //}
+        }
+
         private void OnEnterHiddenCount(string arg0)
         {
             BodyData.hiddenCount = int.Parse(arg0);
             if (LevelGame != null && LevelGame.selectedBody != null)
             {
-                LevelGame.selectedBody.InitMechanic();
+                RefreshBody();
             }
         }
 
@@ -64,7 +74,7 @@ namespace Geckout
             BodyData.freezeTimeCount = int.Parse(arg0);
             if(LevelGame != null && LevelGame.selectedBody != null)
             {
-                LevelGame.selectedBody.InitMechanic();
+                RefreshBody();
             }
         }
 
@@ -95,29 +105,47 @@ namespace Geckout
                 var itemColorPick = Instantiate(m_colorPickPrefab, m_listColorPickContainer);
                 itemColorPick.image.color = color.Value;
                 itemColorPick.gameObject.SetActive(true);
+                //itemColorPick.
                 itemColorPick.onClick.AddListener(() =>
                 {
-                    
-                    m_listButtonColorPicked[currentSelectedColorIndex].SetColor(color.Value);
-                    m_listButtonColorPicked[currentSelectedColorIndex].SetEmpty(false);
-                    if (currentSelectedColorIndex >= BodyData.listColor.Count)
+                    if (color.Key == ColorType.None && BodyData.listColor.Count > currentSelectedColorIndex)
                     {
-                        BodyData.listColor.Add(color.Key);
+                        m_listButtonColorPicked[currentSelectedColorIndex].SetColor(color.Value);
+                        m_listButtonColorPicked[currentSelectedColorIndex].SetEmpty(true);
+                        BodyData.listColor.RemoveAt(currentSelectedColorIndex);
+                        currentSelectedColorIndex = 0;
                     }
                     else
                     {
-                        BodyData.listColor[currentSelectedColorIndex] = color.Key;
+                        m_listButtonColorPicked[currentSelectedColorIndex].SetColor(color.Value);
+                        m_listButtonColorPicked[currentSelectedColorIndex].SetEmpty(false);
+                        if (currentSelectedColorIndex >= BodyData.listColor.Count)
+                        {
+                            BodyData.listColor.Add(color.Key);
+                        }
+                        else
+                        {
+                            BodyData.listColor[currentSelectedColorIndex] = color.Key;
+                        }
                     }
 
                     if (LevelGame.selectedBody != null)
                     {
-                        LevelGame.selectedBody.InitMechanic();
+                        RefreshBody();
                     }
                         
                 });
             }
 
             m_inputFreezeCount.text = BodyData.freezeTimeCount.ToString();
+        }
+
+        private void RefreshBody()
+        {
+            LevelGame.selectedBody.gameObject.SetActive(false);
+            LevelGame.selectedBody.UpdateColor();
+            LevelGame.selectedBody.InitMechanic();
+            LevelGame.selectedBody.gameObject.SetActive(true);
         }
 
         private void OnClickDelete()

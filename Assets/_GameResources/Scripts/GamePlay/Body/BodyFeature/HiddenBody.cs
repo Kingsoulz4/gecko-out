@@ -23,6 +23,7 @@ namespace Geckout
             var prefabRenderFreeze = body.MechanicReferences.listMechanicRenderer[MechanicNames.Hidden];
             hiddenRenderer = (HiddenRenderer)Instantiate(prefabRenderFreeze, body.BodyRenderer.Segments.Last().transform);
             hiddenRenderer.Init(body.BodyRenderer.ListBodyPartChanger, count);
+            body.ListMechanicRender.Add(hiddenRenderer);
 
             LevelEvent.OnMoveToPortalDone -= OnBodyMoveToPortalDone;
             LevelEvent.OnMoveToPortalDone += OnBodyMoveToPortalDone;

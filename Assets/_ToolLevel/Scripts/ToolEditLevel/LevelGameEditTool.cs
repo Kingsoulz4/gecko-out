@@ -230,11 +230,27 @@ namespace Geckout
             }
         }
 
+        public void DeleteSelectedPortals()
+        {
+            for(int i =0; i<listSelectedTile.Count; i++)
+            {
+                var tile = listSelectedTile.ElementAt(i);
+                GameMap.TryGetPortalAtCoord(tile.Coordinate, out var portal);
+                if (portal != null)
+                {
+                    GameLevelData.listPortalData.Remove(portal.PortalData);
+                    tile.SetTileType(MapTileType.Normal);
+                    Destroy(portal.gameObject);
+                }
+            }
+        }
+
         public void ClearAllSelected()
         {
             ClearAllSelectedTiles();
             ClearSelectedBody();
-            ClearSelectedMovableBox();
+            ClearSelectedMovableBoxes();
+            ClearSelectedCrates();
         }
 
         public void ClearSelectedBody()
@@ -246,10 +262,16 @@ namespace Geckout
             }
         }
 
-        public void ClearSelectedMovableBox()
+        public void ClearSelectedMovableBoxes()
         {
             if(SelectedBoxMove != null) SelectedBoxMove.SetSelected(false);
             SelectedBoxMove = null; 
+        }
+
+        public void ClearSelectedCrates()
+        {
+            if (SelectedCrate != null) SelectedCrate.SetSelected(false);
+            SelectedCrate = null;
         }
             
 

@@ -118,7 +118,10 @@ namespace Geckout
             if (BoxBaseData is MovableBoxData movable)
             {
                 movable.wayDirection = (WayDirection)m_dropDownMoveType.value;
-                LevelGame.SelectedBoxMove.UpdateVisual();
+                if (LevelGame.SelectedBoxMove != null)
+                {
+                    LevelGame.SelectedBoxMove.UpdateVisual();
+                }
             }
         }
 

@@ -76,6 +76,7 @@ namespace Geckout
         {
             LevelGame.DeleteSelectedBody();
             LevelGame.DeleteSelectedBoxes();
+            LevelGame.DeleteSelectedPortals();
             LevelGame.ChangeTypeSelectedTiles(MapTileType.Normal);
             HideAllTabs();
         }
@@ -101,7 +102,7 @@ namespace Geckout
         {
             HideAllTabs();
             LevelGame.ClearSelectedBody();
-            LevelGame.ClearSelectedMovableBox();
+            LevelGame.ClearSelectedMovableBoxes();
             m_buttonEditPortals.GetComponent<ButtonToolTab>().SetSelected(true);
             m_editPortalTab.gameObject.SetActive(true);
             m_editPortalTab.LevelGame = LevelGame;
@@ -124,7 +125,7 @@ namespace Geckout
             if (LevelGame != null && LevelGame.selectedBody != null)
             {
                 LevelGame.ClearAllSelectedTiles();
-                LevelGame.ClearSelectedMovableBox();
+                LevelGame.ClearSelectedMovableBoxes();
                 m_designDogTab.UpdateUI(LevelGame.selectedBody.BodyData);
             }
             else
@@ -202,6 +203,7 @@ namespace Geckout
             newLevelData.name = $"Level{level}";
             newLevelData.levelNum = level;
             newLevelData.levelIndex = index;
+            newLevelData.colorAndMaterialData = Resources.Load<ColorAndMaterialData>("ColorsAndMaterials/ColorAndMaterialData");
 
             if (int.TryParse(m_inputMapWidth.text, out var width))
             {
