@@ -306,28 +306,6 @@ namespace Geckout
             ChangeTypeSelectedTiles(MapTileType.Portal);
         }
 
-        public void RemoveAllSelectedPortals()
-        {
-            var listPortal = listSelectedTile.ToList().FindAll(x => x.MapTileData.type == MapTileType.Portal);
-
-            var listPortalObject = new List<Portal>();
-
-            foreach (var portal in listPortal)
-            {
-                LevelManager.Instance.LevelGame.GameMap.TryGetPortalAtCoord(portal.Coordinate, out var portalObject);
-                listPortalObject.Add(portalObject);
-            }
-
-            for (int i = 0; i < listPortalObject.Count; i++)
-            {
-                var portalSelected = listPortalObject[i];
-                GameLevelData.listPortalData.Remove(portalSelected.PortalData);
-                listPortal[i].SetTileType(MapTileType.Normal);
-                Destroy(portalSelected);
-            }
-
-        }
-
         public void ChangeTypeSelectedTiles(MapTileType tileType)
         {
             listSelectedTile.ToList().ForEach(x =>
