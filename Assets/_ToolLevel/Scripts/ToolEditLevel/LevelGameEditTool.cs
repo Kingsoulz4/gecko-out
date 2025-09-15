@@ -335,7 +335,7 @@ namespace Geckout
             foreach (var tile in listCoordTileSelected)
             {
                 GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.up, out var tileUp);
-                bool up = !(tileUp == null || tileUp.MapTileData.type != MapTileType.Normal || !listCoordTileSelected.Contains(tileUp));
+                bool up = !(tileUp == null || tileUp.MapTileData.type != MapTileType.Normal || listCoordTileSelected.Contains(tileUp));
                 GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.down, out var tileDown);
                 bool down = !(tileDown == null || tileDown.MapTileData.type != MapTileType.Normal || listCoordTileSelected.Contains(tileDown));
                 GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.left, out var tileLeft);
@@ -355,30 +355,31 @@ namespace Geckout
                 {
                     tile.SetTileType(MapTileType.Wall3Side); // cross
                     if (!up) rot = new Vector3Int(0, 90, -90);
-                    if (!down) rot = new Vector3Int(0, 90, -90);
-                    if (!left) rot = new Vector3Int(0, 90, -90) ;
-                    if (!right) rot = new Vector3Int(0, 90, -90);
+                    if (!down) rot = new Vector3Int(180, 90, -90);
+                    if (!left) rot = new Vector3Int(-90, 90, -90) ;
+                    if (!right) rot = new Vector3Int(90, 90, -90);
                 }
                 else if ((up && down) || (left && right))
                 {
                     tile.SetTileType(MapTileType.Wall2Side);
                     if (left && right) rot = new Vector3Int(0, 90, -90);
+                    else rot = new Vector3Int(90, 90, -90);
                 }
                 else if ((up && right) || (right && down) || (down && left) || (left && up))
                 {
                     tile.SetTileType(MapTileType.WallCornerInside); // corner
                     if (up && right) rot = new Vector3Int(0, 90, -90);
-                    if (right && down) rot = new Vector3Int(0, 90, -90);
-                    if (down && left) rot = new Vector3Int(0, 90, -90);
-                    if (left && up) rot = new Vector3Int(0, 90, -90);
+                    if (right && down) rot = new Vector3Int(180, 90, -90);
+                    if (down && left) rot = new Vector3Int(-90, 90, -90);
+                    if (left && up) rot = new Vector3Int(90, 90, -90);
                 }
                 else if (up || down || left || right)
                 {
-                    tile.SetTileType(MapTileType.WallCornerInside); // dead end
+                    tile.SetTileType(MapTileType.Wall1Side); // dead end
                     if (up) rot = new Vector3Int(0, 90, -90);
-                    if (down) rot = new Vector3Int(0, 90, -90);
-                    if (left) rot = new Vector3Int(0, 90, -90);
-                    if (right) rot = new Vector3Int(0, 90, -90);
+                    if (down) rot = new Vector3Int(180, 90, -90);
+                    if (left) rot = new Vector3Int(-90, 90, -90);
+                    if (right) rot = new Vector3Int(90, 90, -90);
                 }
                 else
                 {
