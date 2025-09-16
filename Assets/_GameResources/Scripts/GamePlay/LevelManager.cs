@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Geckout
 {
-    public class LevelManager : SingletonDontDestroyMono<LevelManager>, IGameState
+    public class LevelManager : SingletonDontDestroyMono<LevelManager>
     {
         [SerializeField] private LevelController m_levelGameOriginal;
         [SerializeField] private int levelTest;
@@ -14,10 +14,11 @@ namespace Geckout
 
         private LevelController levelGame;
 
-        public LevelController LevelGame { 
+        public LevelController LevelGame
+        {
             get
             {
-                if(levelGame == null)
+                if (levelGame == null)
                 {
                     levelGame = Instantiate(m_levelGameOriginal);
                 }
@@ -27,7 +28,7 @@ namespace Geckout
             {
                 levelGame = value;
             }
-        }   
+        }
 
         public int CurrentLevelNum
         {
@@ -64,40 +65,18 @@ namespace Geckout
         {
             var levelData = LoadLevel(CurrentLevelNum, CurrentLevelIndex);
             LevelGame.SetLevelData(levelData);
-            OnStartGame();
+            LevelGame.StartLevel();
         }
 
         public GameLevelData LoadLevel(int levelNum, int levelIndex)
         {
             var levelData = Resources.Load<GameLevelData>($"Levels/{levelIndex}/Level{levelNum}");
-            if(levelData == null)
+            if (levelData == null)
             {
                 levelData = Resources.Load<GameLevelData>($"Levels/0/Level1");
             }
 
-            return new GameLevelData(levelData);   
-        }    
-
-        #region GameState
-        public void OnEndGame()
-        {
-            throw new System.NotImplementedException();
+            return new GameLevelData(levelData);
         }
-
-        public void OnPauseGame()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnPlayingGame()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnStartGame()
-        {
-            LevelGame.StartLevel();
-        }
-        #endregion
     }
 }

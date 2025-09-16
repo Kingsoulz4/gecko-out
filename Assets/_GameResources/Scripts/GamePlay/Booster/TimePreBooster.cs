@@ -7,11 +7,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TimeBooster : BoosterBase
+public class TimePreBooster : BoosterBase
 {
     [SerializeField] private float maxTime = 15;
 
-    protected override int CurrentCount { get => UserDataManager.TimeBooster; set => UserDataManager.TimeBooster = value; }
+    protected override int CurrentCount { get => UserDataManager.TimeIngameBooster; set => UserDataManager.TimeIngameBooster = value; }
 
     private float currentTime;
     private GameObject timeBooster;
@@ -19,7 +19,7 @@ public class TimeBooster : BoosterBase
     public override void Init()
     {
         base.Init();
-        CurrentCount = UserDataManager.TimeBooster;
+        CurrentCount = UserDataManager.TimeIngameBooster;
     }
     protected override void ShowBooster()
     {
@@ -47,7 +47,7 @@ public class TimeBooster : BoosterBase
     public override void ActiveBooster()
     {
         base.ActiveBooster();
-        UserDataManager.TimeBooster = CurrentCount;
+        UserDataManager.TimeIngameBooster = CurrentCount;
         timeBooster = UIManager.Instance.GetScreenActive<InGameScreenUI>().TimeBooster;
         timeBooster.gameObject.SetActive(true);
         currentTime = maxTime;

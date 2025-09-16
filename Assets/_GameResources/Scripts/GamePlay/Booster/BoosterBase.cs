@@ -9,7 +9,7 @@ public enum BoosterType
     TIME_INGAME = 0,
     TIME_PRE = 1,
     HAMMER = 2,
-    SISSOR = 3,
+    CISSOR = 3,
     HAND_MOVE = 4,
     SUFFLE = 5,
 }

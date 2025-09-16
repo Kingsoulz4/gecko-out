@@ -30,13 +30,17 @@ public class InGameScreenUI : ScreenUI
     [SerializeField] Image img_BG_Time;
     [SerializeField] Image img_BG_Booster_FreeTime;
 
-    [Header("Booster Remove One Block")]
-    [SerializeField] Button clearOneBoosterBtn;
-    [SerializeField] VisualCountBooster clearOneBoosterCountTxt;
+    [Header("Booster remove one tile")]
+    [SerializeField] Button handMoveBoosterBtn;
+    [SerializeField] VisualCountBooster handMoveBoosterCountTxt;
 
-    [Header("Booster Remove same Block")]
-    [SerializeField] Button clearSameBoosterBtn;
-    [SerializeField] VisualCountBooster clearSameBoosterCountTxt;
+    [Header("Booster remove 1 tail")]
+    [SerializeField] Button cissorBoosterBtn;
+    [SerializeField] VisualCountBooster cissorBoosterCountTxt;
+
+    [Header("Booster remove 1 tail")]
+    [SerializeField] Button suffleBoosterBtn;
+    [SerializeField] VisualCountBooster suffleBoosterCountTxt;
 
 
     [Space, Header("Top")]
@@ -51,8 +55,9 @@ public class InGameScreenUI : ScreenUI
 
         btn_Load.onClick.AddListener(LoadLevel);
         timeBoosterBtn.onClick.AddListener(OnTimeBoosterClick);
-        clearOneBoosterBtn.onClick.AddListener(OnClearOneBoosterClick);
-        clearSameBoosterBtn.onClick.AddListener(OnClearSameBoosterClick);
+        handMoveBoosterBtn.onClick.AddListener(HammerBoosterClick);
+        cissorBoosterBtn.onClick.AddListener(CissorBoosterClick);
+        suffleBoosterBtn.onClick.AddListener(SuffleBoosterClick);
         btn_pause.onClick.AddListener(OnPauseClick);
         btn_Replay.onClick.AddListener(OnReplayClick);
 
@@ -65,14 +70,21 @@ public class InGameScreenUI : ScreenUI
 
         boosterDataSO = BoosterManager.Instance.BoosterData;
 
-        timeBoosterCountTxt.Init(UserDataManager.TimeBooster, BoosterType.TIME_INGAME);
-        clearOneBoosterCountTxt.Init(UserDataManager.ClearOneBooster, BoosterType.HAMMER);
-        clearSameBoosterCountTxt.Init(UserDataManager.ClearSameBooster, BoosterType.SISSOR);
+        timeBoosterCountTxt.Init(UserDataManager.TimeIngameBooster, BoosterType.TIME_INGAME);
+        handMoveBoosterCountTxt.Init(UserDataManager.HammerBooster, BoosterType.HAND_MOVE);
+        cissorBoosterCountTxt.Init(UserDataManager.CissorBooster, BoosterType.CISSOR);
+        suffleBoosterCountTxt.Init(UserDataManager.SuffleBooster, BoosterType.SUFFLE);
+
         btn_newLevel.onClick.AddListener(() =>
         {
             UserDataManager.AddHeart(1, "test", false);
             LevelManager.Instance.StartLevel(UserDataManager.Level += 1);
         });
+    }
+
+    private void SuffleBoosterClick()
+    {
+        throw new NotImplementedException();
     }
 
     private void OnChangeBoosterCount(BoosterBase booster, int currentCount)
@@ -83,10 +95,10 @@ public class InGameScreenUI : ScreenUI
                 timeBoosterCountTxt.UpdateTextCountBooster(currentCount);
                 break;
             case BoosterType.HAMMER:
-                clearOneBoosterCountTxt.UpdateTextCountBooster(currentCount);
+                handMoveBoosterCountTxt.UpdateTextCountBooster(currentCount);
                 break;
-            case BoosterType.SISSOR:
-                clearSameBoosterCountTxt.UpdateTextCountBooster(currentCount);
+            case BoosterType.CISSOR:
+                cissorBoosterCountTxt.UpdateTextCountBooster(currentCount);
                 break;
             default:
                 break;
@@ -98,11 +110,12 @@ public class InGameScreenUI : ScreenUI
         switch (booster.BoosterType)
         {
             case BoosterType.TIME_INGAME:
+            case BoosterType.SUFFLE:
                 break;
-            case BoosterType.SISSOR:
+            case BoosterType.CISSOR:
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
-            case BoosterType.HAMMER:
+            case BoosterType.HAND_MOVE:
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
             default:
@@ -127,12 +140,16 @@ public class InGameScreenUI : ScreenUI
             case BoosterType.TIME_INGAME:
                 timeBoosterCountTxt.UpdateTextCountBooster(currentCount);
                 break;
-            case BoosterType.HAMMER:
-                clearOneBoosterCountTxt.UpdateTextCountBooster(currentCount);
+            case BoosterType.HAND_MOVE:
+                handMoveBoosterCountTxt.UpdateTextCountBooster(currentCount);
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
-            case BoosterType.SISSOR:
-                clearSameBoosterCountTxt.UpdateTextCountBooster(currentCount);
+            case BoosterType.CISSOR:
+                cissorBoosterCountTxt.UpdateTextCountBooster(currentCount);
+                boosterConfirmUI.gameObject.SetActive(false);
+                break;
+            case BoosterType.SUFFLE:
+                suffleBoosterCountTxt.UpdateTextCountBooster(currentCount);
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
             default:
@@ -142,7 +159,7 @@ public class InGameScreenUI : ScreenUI
 
     private void OnTimeBoosterClick()
     {
-        BoosterManager.Instance.TimeBooster.DoShowBooster((sucess) =>
+        BoosterManager.Instance.TimeIngameBooster.DoShowBooster((sucess) =>
         {
             //if (sucess)
             //{
@@ -158,29 +175,29 @@ public class InGameScreenUI : ScreenUI
         });
     }
 
-    private void OnClearOneBoosterClick()
+    private void HammerBoosterClick()
     {
-        BoosterManager.Instance.ClearOneBooster.DoShowBooster((sucess) =>
+        BoosterManager.Instance.TimePreBooster.DoShowBooster((sucess) =>
         {
             if (sucess)
             {
                 boosterConfirmUI.gameObject.SetActive(true);
                 var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.HAMMER);
-                Image img_BG_ClearOneBooster = clearOneBoosterBtn.GetComponent<Image>();
+                Image img_BG_ClearOneBooster = handMoveBoosterBtn.GetComponent<Image>();
                 boosterConfirmUI.SetUIData(boosterData, img_BG_ClearOneBooster);
             }
         });
     }
 
-    private void OnClearSameBoosterClick()
+    private void CissorBoosterClick()
     {
-        BoosterManager.Instance.ClearSameBooster.DoShowBooster((sucess) =>
+        BoosterManager.Instance.HammerBooster.DoShowBooster((sucess) =>
         {
             if (sucess)
             {
                 boosterConfirmUI.gameObject.SetActive(true);
-                var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.SISSOR);
-                Image img_BG_ClearSameBooster = clearSameBoosterBtn.GetComponent<Image>();
+                var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.CISSOR);
+                Image img_BG_ClearSameBooster = cissorBoosterBtn.GetComponent<Image>();
                 boosterConfirmUI.SetUIData(boosterData, img_BG_ClearSameBooster);
             }
         });

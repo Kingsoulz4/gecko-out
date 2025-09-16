@@ -4,19 +4,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearOneJellyBooster : BoosterBase
+public class HammerBooster : BoosterBase
 {
-    private Camera mainCamera;
-    [SerializeField] private LayerMask gameTile;
     [SerializeField] Hammer hammerPrefab;
 
-    protected override int CurrentCount { get => UserDataManager.ClearOneBooster; set => UserDataManager.ClearOneBooster = value; }
+    protected override int CurrentCount { get => UserDataManager.HammerBooster; set => UserDataManager.HammerBooster = value; }
 
     public override void Init()
     {
         base.Init();
-        mainCamera = Camera.main;
-        CurrentCount = UserDataManager.ClearOneBooster;
+        CurrentCount = UserDataManager.HammerBooster;
     }
 
     private void Update()

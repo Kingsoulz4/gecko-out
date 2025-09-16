@@ -17,7 +17,6 @@ namespace Geckout
     public class GameManager : SingletonDontDestroyMono<GameManager>
     {
         private static GameState gameState = GameState.MainMenu;
-        private bool userInput = true;
         Action<GameState> OnGameStateChange;
         public static GameState GameState { get => gameState; }
 
