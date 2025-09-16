@@ -53,12 +53,14 @@ namespace Geckout
             }
         }
 
+        public bool CanCountTimeLevel { get; internal set; }
+
         public void StartCurrentLevel()
         {
             StartLevel(CurrentLevelNum, CurrentLevelIndex);
         }
 
-        public void StartLevel(int levelNum, int levelIndex)
+        public void StartLevel(int levelNum, int levelIndex = 0)
         {
             var levelData = LoadLevel(CurrentLevelNum, CurrentLevelIndex);
             LevelGame.SetLevelData(levelData);

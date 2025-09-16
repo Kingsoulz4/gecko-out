@@ -1,0 +1,67 @@
+using Geckout;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class TimeBooster : BoosterBase
+{
+    [SerializeField] private float maxTime = 15;
+
+    protected override int CurrentCount { get => UserDataManager.TimeBooster; set => UserDataManager.TimeBooster = value; }
+
+    private float currentTime;
+    private GameObject timeBooster;
+
+    public override void Init()
+    {
+        base.Init();
+        CurrentCount = UserDataManager.TimeBooster;
+    }
+    protected override void ShowBooster()
+    {
+        //base.ShowBooster();
+    }
+
+    private void Update()
+    {
+        if (!InProgress || GameManager.GameState == GameState.Paused)
+        {
+            return;
+        }
+        if (currentTime > 0 && timeBooster != null)
+        {
+            currentTime -= Time.deltaTime;
+            float value = currentTime / maxTime;
+            //timeBooster.UpdateFill(value, InGameScreenUI.GetTimeValueToString(currentTime));
+        }
+        else
+        {
+            Done();
+        }
+    }
+
+    public override void ActiveBooster()
+    {
+        base.ActiveBooster();
+        UserDataManager.TimeBooster = CurrentCount;
+        timeBooster = UIManager.Instance.GetScreenActive<InGameScreenUI>().TimeBooster;
+        timeBooster.gameObject.SetActive(true);
+        currentTime = maxTime;
+        OnStartUseBooster?.Invoke(this, CurrentCount);
+        InProgress = true;
+    }
+
+    protected override void Done()
+    {
+        base.Done();
+        currentTime = 0;
+        if (timeBooster != null)
+        {
+            timeBooster.gameObject.SetActive(false);
+        }
+    }
+}

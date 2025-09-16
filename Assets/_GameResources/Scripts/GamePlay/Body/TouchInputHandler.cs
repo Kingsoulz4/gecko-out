@@ -15,6 +15,7 @@ namespace Geckout
         [SerializeField] private float pathUpdateInterval = 0.02f;
 
         private BodyController bodyController;
+        private bool canClick;
         private bool isDragging = false;
         private bool isDraggingFromHead = false;
         private Vector2Int lastTargetTile = Vector2Int.one * -1;
@@ -25,6 +26,7 @@ namespace Geckout
         private List<Vector2Int> smoothPath = new List<Vector2Int>();
 
         public bool IsDragging { get => isDragging; }
+        public bool CanClick { get => canClick; set => canClick = value; }
 
         void Start()
         {
