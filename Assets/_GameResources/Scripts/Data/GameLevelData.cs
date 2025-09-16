@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Geckout.Data
 {
@@ -122,6 +123,13 @@ namespace Geckout.Data
 #endif
         }
 
+        [ContextMenu("LogMapData")]
+        private void LogMapData()
+        {
+            Debug.Log("Map Data: " + JsonConvert.SerializeObject(mapTileDatas));
+        }
+            
+
         private void OnValidate()
         {
             if (colorAndMaterialData == null)
@@ -173,7 +181,8 @@ namespace Geckout.Data
         Wall1Side,
         Wall2Side,
         Wall3Side,
-        Portal
+        Portal,
+        WallCenter
     }
 
     public enum BodyType

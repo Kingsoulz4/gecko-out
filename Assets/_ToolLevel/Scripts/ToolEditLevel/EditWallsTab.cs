@@ -3,6 +3,9 @@ using Geckout.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +18,7 @@ namespace Geckout
         [SerializeField] private Button m_buttonRotateLeft;
         [SerializeField] private Button m_buttonRotateRight;
         [SerializeField] private Button m_buttonDelete;
+        [SerializeField] private Button m_buttAutoGenerate;
 
         public LevelGameEditTool LevelGame { get; set; }
 
@@ -31,6 +35,7 @@ namespace Geckout
             m_buttonRotateLeft.onClick.AddListener(OnClickRotateLeft);
             m_buttonRotateRight.onClick.AddListener(OnClickRotateRight);
             m_buttonDelete.onClick.AddListener(OnClickDelete);
+            m_buttAutoGenerate.onClick.AddListener(OnClickAutoGenerateWallTiles);
         }
 
         private void OnClickDelete()
@@ -54,5 +59,9 @@ namespace Geckout
             LevelGame.ChangeTypeSelectedTiles(tileType);
         }
 
+        private void OnClickAutoGenerateWallTiles()
+        {
+            LevelGame.AutoGenerateWallTiles();
+        }    
     }
 }
