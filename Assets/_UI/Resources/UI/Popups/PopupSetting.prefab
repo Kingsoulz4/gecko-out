@@ -1069,8 +1069,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCache: 1
   isAniClose: 1
-  animType: 0
-  mainPopUp: {fileID: 0}
+  animType: 2
+  mainPopUp: {fileID: 4115894757074722732}
   btn_Close: {fileID: 2419343150435730750}
   btn_Restore: {fileID: 6938155999441099013}
 --- !u!114 &1567350317854013078

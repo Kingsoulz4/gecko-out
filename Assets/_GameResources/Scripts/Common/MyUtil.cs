@@ -17,7 +17,7 @@ using Random = UnityEngine.Random;
         private static int originWidth = -1;
         private static int originHeight = -1;
 
-        public static void setScreenResolution(int resulation)
+        public static void SetScreenResolution(int resulation)
         {
             if (originWidth <= 0)
             {
@@ -39,17 +39,17 @@ using Random = UnityEngine.Random;
 
         public static long CurrentTimeMilis()
         {
-            var re = toTimestamp(DateTime.UtcNow);
+            var re = ToTimestamp(DateTime.UtcNow);
             return re;
         }
 
-        public static long toTimestamp(DateTime datetime)
+        public static long ToTimestamp(DateTime datetime)
         {
             var re = (datetime.Ticks - 621355968000000000) / 10000;
             return re;
         }
 
-        public static DateTime timeStamp2DateTime(long secondsUTC)
+        public static DateTime TimeStamp2DateTime(long secondsUTC)
         {
             DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             if (secondsUTC > 1000000000000)
@@ -68,7 +68,7 @@ using Random = UnityEngine.Random;
             return new TimeSpan(millisecond * 10000);
         }
 
-        public static bool isDevicesStrong()
+        public static bool IsHighPerformDevice()
         {
 #if UNITY_EDITOR
             return true;
@@ -95,7 +95,7 @@ using Random = UnityEngine.Random;
 #endif      
         }
 
-        public static string converMoney(long money)
+        public static string MoneyToString(long money)
         {
             //Debug.Log($"aaa b={money}");
             var re = money.ToString();
@@ -113,7 +113,7 @@ using Random = UnityEngine.Random;
             return re;
         }
 
-        public static string converMoneyK(int money)
+        public static string ConverMoneyK(int money)
         {
             int m;
             if (money >= 1000)
@@ -136,7 +136,7 @@ using Random = UnityEngine.Random;
             return re;
         }
 
-        public static string convertMoneyToString(long money)
+        public static string ConvertMoneyToString(long money)
         {
             if (money >= 1000000000)
             {
@@ -153,7 +153,7 @@ using Random = UnityEngine.Random;
             return money.ToString();
         }
 
-        public static string getMoney(int va)
+        public static string GetMoney(int va)
         {
             string re = "";
 
@@ -190,7 +190,7 @@ using Random = UnityEngine.Random;
             return re;
         }
 
-        public static int getAndroidBuildVersion()
+        public static int GetAndroidBuildVersion()
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
             if (verSdk <= 0)
@@ -210,7 +210,7 @@ using Random = UnityEngine.Random;
 #endif
         }
 
-        public static string formatNumber(int number)
+        public static string FormatNumber(int number)
         {
             var re = number.ToString();
             if (re.Length > 3)
@@ -229,7 +229,7 @@ using Random = UnityEngine.Random;
 
     
 
-        public static string int2TimeString(int seconds)
+        public static string Int2TimeString(int seconds)
         {
             string re = "";
             int h = seconds / 3600;
@@ -274,7 +274,7 @@ using Random = UnityEngine.Random;
         }
 		
 #if UNITY_EDITOR
-        public static void myMaHoa(string bkey, out byte[] makey, out int[] paskey, out byte[] pasva)
+        public static void Encrypt(string bkey, out byte[] makey, out int[] paskey, out byte[] pasva)
         {
             if (bkey != null && bkey.Length > 5)
             {
@@ -324,7 +324,7 @@ using Random = UnityEngine.Random;
         }
 #endif
 
-        public static string myGiaima(byte[] makey, int[] paskey, byte[] pasva)
+        public static string Decrypt(byte[] makey, int[] paskey, byte[] pasva)
         {
             if (makey != null && makey.Length > 5 && paskey != null && paskey.Length > 0 && pasva != null && pasva.Length == paskey.Length)
             {
@@ -357,7 +357,7 @@ using Random = UnityEngine.Random;
             return "";
         }
 
-        public static bool isiPad()
+        public static bool IsiPad()
         {
 #if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
             if (UnityEngine.iOS.Device.generation.ToString().Contains("iPad"))
@@ -449,10 +449,10 @@ using Random = UnityEngine.Random;
             return re;
         }
       
-        public static float getHeightBanner()
+        public static float GetHeightBanner()
         {
             float dpi = ScreenDpi();
-            if (isiPad())
+            if (IsiPad())
             {
                 return 100 * dpi / 160.0f;
             }
@@ -468,35 +468,5 @@ using Random = UnityEngine.Random;
             return true;
 #endif
             return false;
-        }
-
-        public static void logd(string log)
-        {
-#if ENABLE_MYLOG
-            if (levelLog <= 0)
-            {
-                Debug.Log("mysdk: " + log);
-            }
-#endif
-        }
-
-        public static void logW(string log)
-        {
-#if ENABLE_MYLOG
-            if (levelLog <= 1)
-            {
-                Debug.LogWarning("mysdk: " + log);
-            }
-#endif
-        }
-
-        public static void logE(string log)
-        {
-#if ENABLE_MYLOG
-            if (levelLog <= 2)
-            {
-                Debug.LogError("mysdk: " + log);
-            }
-#endif
         }
     }

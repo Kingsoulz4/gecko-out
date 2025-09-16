@@ -76,7 +76,7 @@ public class UIManager : SingletonMono<UIManager>
         for (int i = 0; i < canvasScaler.Length; i++)
         {
             canvasScaler[i].matchWidthOrHeight = 0;
-            if (MyUtil.isiPad())
+            if (MyUtil.IsiPad())
             {
                 canvasScaler[i].matchWidthOrHeight = 1f;
             }
@@ -139,7 +139,7 @@ public class UIManager : SingletonMono<UIManager>
             for (int i = 0; i < canvasScaler.Length; i++)
             {
                 canvasScaler[i].matchWidthOrHeight = 0;
-                if (MyUtil.isiPad())
+                if (MyUtil.IsiPad())
                 {
                     canvasScaler[i].matchWidthOrHeight = 1f;
                 }
@@ -155,7 +155,7 @@ public class UIManager : SingletonMono<UIManager>
             for (int i = 0; i < canvasScaler.Length; i++)
             {
                 canvasScaler[i].matchWidthOrHeight = 0;
-                if (MyUtil.isiPad())
+                if (MyUtil.IsiPad())
                 {
                     canvasScaler[i].matchWidthOrHeight = 1f;
                 }
