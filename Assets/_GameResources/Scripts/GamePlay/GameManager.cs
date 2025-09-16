@@ -14,11 +14,16 @@ namespace Geckout
         Lose = 4,
     }
 
-    public class GameManager : SingletonDontDestroyMono<GameManager>
+    public class GameManager : SingletonMono<GameManager>
     {
         private static GameState gameState = GameState.MainMenu;
         Action<GameState> OnGameStateChange;
         public static GameState GameState { get => gameState; }
+
+        private void Start()
+        {
+            SetGameState(GameState.MainMenu);
+        }
 
         public void SetGameState(GameState newState)
         {
