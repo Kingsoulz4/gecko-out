@@ -348,8 +348,7 @@ namespace Geckout
                 // Example logic: you need to replace these rules with your 6 types
                 if (up && down && left && right)
                 {
-                    tile.SetTileType(MapTileType.Wall4Side); // cross
-                    rot = new Vector3Int(0, 90, -90);
+                     tile.SetTileType(MapTileType.Wall4Side); // cross
                 }
                 else if ((up && down && left) || (up && down && right) ||
                          (up && left && right) || (down && left && right))

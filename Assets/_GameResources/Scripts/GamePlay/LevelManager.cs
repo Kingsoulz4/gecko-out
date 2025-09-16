@@ -62,7 +62,6 @@ namespace Geckout
         {
             var levelData = LoadLevel(CurrentLevelNum, CurrentLevelIndex);
             LevelGame.SetLevelData(levelData);
-            OnStartGame();
         }
 
         public GameLevelData LoadLevel(int levelNum, int levelIndex)
@@ -94,7 +93,7 @@ namespace Geckout
 
         public void OnStartGame()
         {
-            LevelGame.StartLevel();
+            throw new System.NotImplementedException();
         }
         #endregion
     }
