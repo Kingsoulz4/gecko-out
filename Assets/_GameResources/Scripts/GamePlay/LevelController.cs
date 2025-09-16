@@ -14,6 +14,8 @@ namespace Geckout
         [SerializeField] protected BodyController m_bodyPrefab;
         [SerializeField] protected Transform m_bodyParent;
 
+        private float currentTimeRemaining = 0;
+        private Coroutine countDownCoroutine;
 
         private List<BodyController> listBody = new();
 
@@ -22,6 +24,14 @@ namespace Geckout
         public GameMap GameMap => m_gameMap;
 
         public List<BodyController> ListBody { get => listBody;}
+
+        public float CurrentLevelRemaining => currentTimeRemaining;
+
+        #region Boosters
+        private bool IsFreezingTime { get; set; }
+        private Coroutine freezeTimeCoroutine { get; set; }
+
+        #endregion
 
         private void OnEnable()
         {
@@ -51,6 +61,11 @@ namespace Geckout
 #endif
         }
 
+        public void StartLevel()
+        {
+            StartCountDownTime();
+        }
+
         private void WinLevel()
         {
             LevelEvent.OnWin?.Invoke(m_gameLevelData.levelIndex);
@@ -74,6 +89,35 @@ namespace Geckout
             }
         }
 
+        private void StartCountDownTime()
+        {
+            StopCountDownTime();
+            countDownCoroutine = StartCoroutine(IECountDownTime());
+        }
+
+        private void StopCountDownTime()
+        {
+            if (countDownCoroutine != null)
+            {
+                StopCoroutine(countDownCoroutine);
+                countDownCoroutine = null;
+            }
+        }
+
+        private IEnumerator IECountDownTime()
+        {
+            currentTimeRemaining = GameLevelData.time;
+            while(currentTimeRemaining > 0)
+            {
+                if(!IsFreezingTime)
+                {
+                    currentTimeRemaining -= Time.deltaTime;
+                }
+                yield return null;
+            }
+            TimeOut();
+        }
+
         private void TimeOut()
         {
             LoseLevel();
@@ -83,7 +127,6 @@ namespace Geckout
         {
             var bodyPrefab = m_bodyPrefab;
 
-
 #if UNITY_EDITOR
             var newBody = (BodyController)PrefabUtility.InstantiatePrefab(m_bodyPrefab, m_bodyParent);
 #else
@@ -92,6 +135,49 @@ namespace Geckout
             newBody.Initialize(bodyData);
             return newBody;
         }
+
+        #region Boosters
+
+        public void ActivateBoosterFreezeTime()
+        {
+            // Anim Here
+            FreezeTime(15);
+        }
+
+        public void ActivateBoosterAddTime()
+        {
+            //Anim Here
+            AddTime(20);
+        }
+
+        public void AddTime(float time)
+        {
+            currentTimeRemaining += time;
+        }
+
+        public void FreezeTime(float timeFreeze)
+        {
+            if(freezeTimeCoroutine != null)
+            {
+                StopCoroutine(freezeTimeCoroutine);
+                freezeTimeCoroutine = null;
+            }    
+            freezeTimeCoroutine = StartCoroutine(IEFreezeTime(timeFreeze));
+        }
+
+        private IEnumerator IEFreezeTime(float timeFreeze)
+        {
+            var currentTime = 0f;
+            IsFreezingTime = true;
+            while(currentTime <= timeFreeze)
+            {
+                currentTime += Time.deltaTime;
+                yield return null;
+            }
+            IsFreezingTime = false;
+
+        }
+        #endregion
 
     }
 }
