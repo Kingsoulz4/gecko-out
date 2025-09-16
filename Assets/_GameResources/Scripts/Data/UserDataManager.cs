@@ -12,8 +12,6 @@ public class UserDataManager : MonoBehaviour
         public int level;
         public int gold;
         public int heart;
-        public int sound;
-        public int music;
         public bool removeAds;
         public int timeIngameBooster;
         public int timePreBooster;
@@ -179,28 +177,6 @@ public class UserDataManager : MonoBehaviour
         }
     }
 
-    public static int Sound
-    {
-        get { return LoadUserData().sound; }
-        set
-        {
-            UserData data = LoadUserData();
-            data.sound = value;
-            SaveUserData(data);
-        }
-    }
-
-    public static int Music
-    {
-        get { return LoadUserData().music; }
-        set
-        {
-            UserData data = LoadUserData();
-            data.music = value;
-            SaveUserData(data);
-        }
-    }
-
     public static bool RemoveAds
     {
         get { return LoadUserData().removeAds; }
@@ -319,8 +295,6 @@ public class UserDataManager : MonoBehaviour
             level = 1,
             gold = 0,
             heart = 3,
-            sound = 1,
-            music = 1,
             removeAds = false,
             timeIngameBooster = 0,
             hammerBooster = 0,
