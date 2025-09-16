@@ -11,6 +11,8 @@ namespace Geckout
         [SerializeField] private Button m_buttonRetry;
         [SerializeField] private Button m_buttonClose;
 
+        public Action OnRetry { get; set; }
+
         private void Awake()
         {
             m_buttonRetry.onClick.AddListener(OnClickRetry);
@@ -19,12 +21,15 @@ namespace Geckout
 
         private void OnClickClose()
         {
+            Hide();
             
         }
 
         private void OnClickRetry()
         {
-            
+            Hide();
+            OnRetry?.Invoke();
+
         }
     }
 }

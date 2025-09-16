@@ -92,10 +92,11 @@ namespace Geckout
         #region GameState
         public void OnLoseGame(int level)
         {
-            UIManager.Instance.ShowPopup<PopupLose>(() =>
+            var popupLose = UIManager.Instance.ShowPopup<PopupLose>(() =>
             {
                 UIManager.Instance.ShowScreen<MainScreenUI>();
             });
+            popupLose.OnRetry = StartCurrentLevel;
         }
 
         public void OnPauseGame(int level)
