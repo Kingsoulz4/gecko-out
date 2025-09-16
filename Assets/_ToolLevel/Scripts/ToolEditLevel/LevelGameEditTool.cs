@@ -368,22 +368,23 @@ namespace Geckout
                 else if ((up && right) || (right && down) || (down && left) || (left && up))
                 {
                     tile.SetTileType(MapTileType.WallCornerInside); // corner
-                    if (up && right) rot = new Vector3Int(0, 90, -90);
-                    if (right && down) rot = new Vector3Int(180, 90, -90);
-                    if (down && left) rot = new Vector3Int(-90, 90, -90);
+                    if (up && right) rot = new Vector3Int(180, 90, -90);
+                    if (right && down) rot = new Vector3Int(-90, 90, -90);
+                    if (down && left) rot = new Vector3Int(0, 90, -90);
                     if (left && up) rot = new Vector3Int(90, 90, -90);
                 }
                 else if (up || down || left || right)
                 {
                     tile.SetTileType(MapTileType.Wall1Side); // dead end
-                    if (up) rot = new Vector3Int(0, 90, -90);
-                    if (down) rot = new Vector3Int(180, 90, -90);
-                    if (left) rot = new Vector3Int(-90, 90, -90);
-                    if (right) rot = new Vector3Int(90, 90, -90);
+                    if (up) rot = new Vector3Int(180, 90, -90);
+                    if (down) rot = new Vector3Int(0, 90, -90);
+                    if (left) rot = new Vector3Int(90, 90, -90);
+                    if (right) rot = new Vector3Int(-90, 90, -90);
                 }
                 else
                 {
                     tile.SetTileType(MapTileType.WallCenter); // single block
+                    rot = new Vector3Int(0, 90, -90);
                 }
 
                 tile.RotateTo(rot);
