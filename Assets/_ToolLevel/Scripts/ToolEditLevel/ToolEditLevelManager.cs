@@ -152,8 +152,8 @@ namespace Geckout
             }
             Utils.SetExistingGameViewSize(1080, 1920);
             SceneManager.LoadScene("GameSceneTestLevel");
-            LevelManager.Instance.CurrentLevelNum = int.Parse(m_inputLevelNum.text);
-            LevelManager.Instance.CurrentLevelIndex = int.Parse(m_inputLevelIndex.text);
+            LevelManager.Instance.CurrentLevel = int.Parse(m_inputLevelNum.text);
+            LevelManager.Instance.CurrentLevelSetID = int.Parse(m_inputLevelIndex.text);
            
         }
 

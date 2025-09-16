@@ -30,27 +30,27 @@ namespace Geckout
             }
         }
 
-        public int CurrentLevelNum
+        public int CurrentLevel
         {
             get
             {
-                return PlayerPrefs.GetInt("CurrentLevelNum", levelTest);
+                return UserDataManager.Level;
             }
             set
             {
-                PlayerPrefs.SetInt("CurrentLevelNum", value);
+                UserDataManager.Level = value;
             }
         }
 
-        public int CurrentLevelIndex
+        public int CurrentLevelSetID
         {
             get
             {
-                return PlayerPrefs.GetInt("CurrentLevelIndex", 0);
+                return UserDataManager.LevelSetID;
             }
             set
             {
-                PlayerPrefs.SetInt("CurrentLevelIndex", value);
+                UserDataManager.LevelSetID = value;
             }
         }
 
@@ -58,19 +58,19 @@ namespace Geckout
 
         public void StartCurrentLevel()
         {
-            StartLevel(CurrentLevelNum, CurrentLevelIndex);
+            StartLevel(CurrentLevel, CurrentLevelSetID);
         }
 
-        public void StartLevel(int levelNum, int levelIndex = 0)
+        public void StartLevel(int level, int levelSetID = 0)
         {
-            var levelData = LoadLevel(CurrentLevelNum, CurrentLevelIndex);
+            var levelData = LoadLevel(level, levelSetID);
             LevelGame.SetLevelData(levelData);
             LevelGame.StartLevel();
         }
 
-        public GameLevelData LoadLevel(int levelNum, int levelIndex)
+        public GameLevelData LoadLevel(int level, int levelSetID)
         {
-            var levelData = Resources.Load<GameLevelData>($"Levels/{levelIndex}/Level{levelNum}");
+            var levelData = Resources.Load<GameLevelData>($"Levels/{levelSetID}/Level{level}");
             if (levelData == null)
             {
                 levelData = Resources.Load<GameLevelData>($"Levels/0/Level1");

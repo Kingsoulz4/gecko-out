@@ -58,7 +58,7 @@ using UnityEngine.UI;
             {
                 for (int i = 0; i < arrTextLevel.Length; i++)
                 {
-                    arrTextLevel[i].text = (LevelManager.Instance.CurrentLevelNum + i).ToString();
+                    arrTextLevel[i].text = (LevelManager.Instance.CurrentLevel + i).ToString();
                 }
             }
             UIManager.OnRefeshBannerAndAds += UpdateButtonRemoveAds;
