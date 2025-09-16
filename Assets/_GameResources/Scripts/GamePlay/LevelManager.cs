@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Geckout
 {
-    public class LevelManager : SingletonDontDestroyMono<LevelManager>, IGameState
+    public class LevelManager : SingletonDontDestroyMono<LevelManager>
     {
         [SerializeField] private LevelController m_levelGameOriginal;
         [SerializeField] private int levelTest;
@@ -14,10 +14,11 @@ namespace Geckout
 
         private LevelController levelGame;
 
-        public LevelController LevelGame { 
+        public LevelController LevelGame
+        {
             get
             {
-                if(levelGame == null)
+                if (levelGame == null)
                 {
                     levelGame = Instantiate(m_levelGameOriginal);
                 }
@@ -27,7 +28,7 @@ namespace Geckout
             {
                 levelGame = value;
             }
-        }   
+        }
 
         public int CurrentLevelNum
         {
@@ -83,7 +84,7 @@ namespace Geckout
         public GameLevelData LoadLevel(int levelNum, int levelIndex)
         {
             var levelData = Resources.Load<GameLevelData>($"Levels/{levelIndex}/Level{levelNum}");
-            if(levelData == null)
+            if (levelData == null)
             {
                 levelData = Resources.Load<GameLevelData>($"Levels/0/Level1");
             }

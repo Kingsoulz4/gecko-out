@@ -1,4 +1,3 @@
-using JellyBlockJam;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,7 +26,7 @@ public class BoosterConfirmUI : MonoBehaviour
         if(BoosterType == BoosterType.HAMMER)
         {
         }
-        else if(BoosterType == BoosterType.SISSOR)
+        else if(BoosterType == BoosterType.CISSOR)
         {
         }
         gameObject.SetActive(false);

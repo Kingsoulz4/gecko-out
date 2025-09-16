@@ -12,13 +12,13 @@ public class UserDataManager : MonoBehaviour
         public int level;
         public int gold;
         public int heart;
-        public int sound;
-        public int music;
         public bool removeAds;
         public int timeIngameBooster;
         public int timePreBooster;
         public int hammerBooster;
         public int cissorBooster;
+        public int suffleBooster;
+        public int handMoveBooster;
         public long lastTimeLogin;
         public string userName;
         public long firstTimeJoinGame;
@@ -177,28 +177,6 @@ public class UserDataManager : MonoBehaviour
         }
     }
 
-    public static int Sound
-    {
-        get { return LoadUserData().sound; }
-        set
-        {
-            UserData data = LoadUserData();
-            data.sound = value;
-            SaveUserData(data);
-        }
-    }
-
-    public static int Music
-    {
-        get { return LoadUserData().music; }
-        set
-        {
-            UserData data = LoadUserData();
-            data.music = value;
-            SaveUserData(data);
-        }
-    }
-
     public static bool RemoveAds
     {
         get { return LoadUserData().removeAds; }
@@ -225,7 +203,7 @@ public class UserDataManager : MonoBehaviour
         }
     }
 
-    public static int TimeBooster
+    public static int TimeIngameBooster
     {
         get { return LoadUserData().timeIngameBooster; }
         set
@@ -236,7 +214,18 @@ public class UserDataManager : MonoBehaviour
         }
     }
 
-    public static int ClearOneBooster
+    public static int TimePreBooster
+    {
+        get { return LoadUserData().timePreBooster; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.timePreBooster = value;
+            SaveUserData(data);
+        }
+    }
+
+    public static int HammerBooster
     {
         get { return LoadUserData().hammerBooster; }
         set
@@ -247,7 +236,29 @@ public class UserDataManager : MonoBehaviour
         }
     }
 
-    public static int ClearSameBooster
+    public static int SuffleBooster
+    {
+        get { return LoadUserData().suffleBooster; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.suffleBooster = value;
+            SaveUserData(data);
+        }
+    }
+
+    public static int HandMoveBooster
+    {
+        get { return LoadUserData().handMoveBooster; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.handMoveBooster = value;
+            SaveUserData(data);
+        }
+    }
+
+    public static int CissorBooster
     {
         get { return LoadUserData().cissorBooster; }
         set
@@ -284,8 +295,6 @@ public class UserDataManager : MonoBehaviour
             level = 1,
             gold = 0,
             heart = 3,
-            sound = 1,
-            music = 1,
             removeAds = false,
             timeIngameBooster = 0,
             hammerBooster = 0,
