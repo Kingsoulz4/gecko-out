@@ -6,9 +6,11 @@ namespace Geckout
 {
     public interface IGameState
     {
-        void OnStartGame();
-        void OnPauseGame();
-        void OnPlayingGame();
-        void OnEndGame();
+        void OnStartGame(int level);
+        void OnPauseGame(int level);
+        void OnPlayingGame(int level);
+        void OnLoseGame(int level);
+        void OnWinGame(int level);
+        
     }
 }

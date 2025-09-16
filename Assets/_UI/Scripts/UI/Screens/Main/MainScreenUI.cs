@@ -94,7 +94,8 @@ using UnityEngine.UI;
         private void PlayLevel()
         {
             LevelManager.Instance.StartCurrentLevel();
-    }
+            UIManager.Instance.ShowScreen<InGameScreenUI>();
+        }
 
         public void MoveCoin(int amount, string reason, string where)
         {

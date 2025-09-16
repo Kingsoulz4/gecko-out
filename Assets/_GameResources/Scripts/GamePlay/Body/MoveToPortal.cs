@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,6 +79,8 @@ namespace Geckout
 
         private IEnumerator EnterPortalAnimation()
         {
+            //yield return new WaitForSeconds(1f);
+
             if (targetPortal == null || bodyController == null) yield break;
             Vector3 portalCenter = targetPortal.transform.position;
             var orderedSegments = bodyController.GetOrderedSegments();
@@ -107,7 +110,7 @@ namespace Geckout
             }
 
             Vector3 startPos = segment.transform.position;
-            Vector3 targetPos = portalCenter + Vector3.forward * 3;
+            Vector3 targetPos = portalCenter + Vector3.forward * 5;
 
             float elapsed = 0f;
             while (elapsed < animationDurationPerSegment)

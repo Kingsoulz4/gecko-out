@@ -53,6 +53,19 @@ namespace Geckout
             }
         }
 
+        private void OnEnable()
+        {
+            LevelEvent.OnWin += OnWinGame;
+            LevelEvent.OnLose += OnLoseGame;
+            
+        }
+
+        private void OnDisable()
+        {
+            LevelEvent.OnWin -= OnWinGame;
+            LevelEvent.OnLose -= OnLoseGame;
+        }
+
         public void StartCurrentLevel()
         {
             StartLevel(CurrentLevelNum, CurrentLevelIndex);
@@ -62,7 +75,7 @@ namespace Geckout
         {
             var levelData = LoadLevel(CurrentLevelNum, CurrentLevelIndex);
             LevelGame.SetLevelData(levelData);
-            OnStartGame();
+            OnStartGame(CurrentLevelNum);
         }
 
         public GameLevelData LoadLevel(int levelNum, int levelIndex)
@@ -74,27 +87,44 @@ namespace Geckout
             }
 
             return new GameLevelData(levelData);   
-        }    
+        }
 
         #region GameState
-        public void OnEndGame()
+        public void OnLoseGame(int level)
+        {
+            UIManager.Instance.ShowPopup<PopupLose>(() =>
+            {
+                UIManager.Instance.ShowScreen<MainScreenUI>();
+            });
+        }
+
+        public void OnPauseGame(int level)
         {
             throw new System.NotImplementedException();
         }
 
-        public void OnPauseGame()
+        public void OnPlayingGame(int level)
         {
             throw new System.NotImplementedException();
         }
 
-        public void OnPlayingGame()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnStartGame()
+        public void OnStartGame(int level)
         {
             LevelGame.StartLevel();
+        }
+
+        public void OnWinGame(int level)
+        {
+            UIManager.Instance.ShowPopup<PopupWin>(() =>
+            {
+                NextLevel();
+            });
+        }
+
+        public void NextLevel()
+        {
+            CurrentLevelNum++;
+            StartCurrentLevel();
         }
         #endregion
     }
