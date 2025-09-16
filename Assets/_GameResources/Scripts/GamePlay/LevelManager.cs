@@ -56,6 +56,19 @@ namespace Geckout
 
         public bool CanCountTimeLevel { get; internal set; }
 
+        private void OnEnable()
+        {
+            LevelEvent.OnWin += OnWinGame;
+            LevelEvent.OnLose += OnLoseGame;
+            
+        }
+
+        private void OnDisable()
+        {
+            LevelEvent.OnWin -= OnWinGame;
+            LevelEvent.OnLose -= OnLoseGame;
+        }
+
         public void StartCurrentLevel()
         {
             StartLevel(CurrentLevel, CurrentLevelSetID);
@@ -65,7 +78,7 @@ namespace Geckout
         {
             var levelData = LoadLevel(level, levelSetID);
             LevelGame.SetLevelData(levelData);
-            LevelGame.StartLevel();
+            OnStartGame(CurrentLevelNum);
         }
 
         public GameLevelData LoadLevel(int level, int levelSetID)
@@ -76,7 +89,47 @@ namespace Geckout
                 levelData = Resources.Load<GameLevelData>($"Levels/0/Level1");
             }
 
-            return new GameLevelData(levelData);
+            return new GameLevelData(levelData);   
         }
+
+        #region GameState
+        public void OnLoseGame(int level)
+        {
+            var popupLose = UIManager.Instance.ShowPopup<PopupLose>(() =>
+            {
+                UIManager.Instance.ShowScreen<MainScreenUI>();
+            });
+            popupLose.OnRetry = StartCurrentLevel;
+        }
+
+        public void OnPauseGame(int level)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnPlayingGame(int level)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnStartGame(int level)
+        {
+            LevelGame.StartLevel();
+        }
+
+        public void OnWinGame(int level)
+        {
+            UIManager.Instance.ShowPopup<PopupWin>(() =>
+            {
+                NextLevel();
+            });
+        }
+
+        public void NextLevel()
+        {
+            CurrentLevelNum++;
+            StartCurrentLevel();
+        }
+        #endregion
     }
 }

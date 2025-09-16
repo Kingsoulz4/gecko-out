@@ -68,12 +68,12 @@ namespace Geckout
 
         private void WinLevel()
         {
-            LevelEvent.OnWin?.Invoke(m_gameLevelData.levelIndex);
+            LevelEvent.OnWin?.Invoke(m_gameLevelData.levelNum);
         }
 
         private void LoseLevel()
         {
-            LevelEvent.OnLose?.Invoke(m_gameLevelData.levelIndex);
+            LevelEvent.OnLose?.Invoke(m_gameLevelData.levelNum);
         }
 
         private void OnBodyMoveToPortal(BodyController body, Portal portal)
