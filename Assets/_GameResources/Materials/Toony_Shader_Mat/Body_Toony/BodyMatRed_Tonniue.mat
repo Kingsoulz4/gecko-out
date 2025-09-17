@@ -7,18 +7,20 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HeadMatGrey_Toonie
+  m_Name: BodyMatRed_Tonniue
   m_Shader: {fileID: -6465566751694194690, guid: edd7abf643fa4bc4e8561d4c280c97cf, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - TCP2_MOBILE
+  - TCP2_RAMP_BANDS
   - TCP2_REFLECTIONS_FRESNEL
   - TCP2_RIM_LIGHTING_LIGHTMASK
-  - TCP2_SHADOW_LIGHT_COLOR
+  - TCP2_SHADOW_TEXTURE
   m_InvalidKeywords:
+  - TCP2_OUTLINE_CONST_SIZE
   - TCP2_UV_NORMALS_FULL
-  m_LightmapFlags: 4
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -30,15 +32,15 @@ Material:
     m_TexEnvs:
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: 21b28a7afc8e3674d99e93e657c21d58, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Scale: {x: 0.5, y: 1}
+        m_Offset: {x: 0.63, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 0.35, y: 0.71}
         m_Offset: {x: 0, y: 0}
     - _DetailMask:
         m_Texture: {fileID: 0}
@@ -50,12 +52,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Scale: {x: 0.5, y: 1}
+        m_Offset: {x: 0.63, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: c943262543f7d8a4da87c281de3826d6, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Texture: {fileID: 2800000, guid: 365b2feba6652cf41bda9205e9a396c6, type: 3}
+        m_Scale: {x: 0.5, y: 1}
+        m_Offset: {x: 0.63, y: 0}
     - _MatCapMask:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -106,11 +108,11 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _IndirectIntensity: 1
+    - _IndirectIntensity: 0.507
     - _IndirectIntensityOutline: 0
     - _MatCapMaskChannel: 0
     - _MatCapType: 0
-    - _Metallic: 0
+    - _Metallic: 0.18
     - _Mode: 0
     - _NormalsSource: 0
     - _NormalsUVType: 0
@@ -120,25 +122,25 @@ Material:
     - _OutlineLightingTypeURP: 0
     - _OutlineMaxWidth: 1
     - _OutlineMinWidth: 1
-    - _OutlinePixelSizeType: 0
+    - _OutlinePixelSizeType: 1
     - _OutlineTextureLOD: 5
     - _OutlineTextureType: 0
-    - _OutlineWidth: 1
+    - _OutlineWidth: 3.04
     - _Parallax: 0.02
-    - _RampBands: 4
-    - _RampBandsSmoothing: 0.1
+    - _RampBands: 12
+    - _RampBandsSmoothing: 1
     - _RampOffset: 0
     - _RampScale: 1
-    - _RampSmoothing: 0.867
-    - _RampThreshold: 0.572
-    - _RampType: 0
+    - _RampSmoothing: 0.874
+    - _RampThreshold: 0.515
+    - _RampType: 2
     - _ReceiveShadowsOff: 1
     - _ReflectionMapType: 0
     - _ReflectionSmoothness: 0.5
     - _RenderingMode: 0
-    - _RimMax: 1
-    - _RimMin: 0.5
-    - _ShadowColorLightAtten: 1
+    - _RimMax: 2
+    - _RimMin: 0
+    - _ShadowColorLightAtten: 0
     - _SingleIndirectColor: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -161,18 +163,18 @@ Material:
     - _UseReflections: 0
     - _UseRim: 0
     - _UseRimLightMask: 1
-    - _UseShadowTexture: 0
+    - _UseShadowTexture: 1
     - _UseSpecular: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.4627451, g: 0.4509804, b: 0.4509804, a: 1}
-    - _Color: {r: 0.6627451, g: 0.28627452, b: 1, a: 1}
+    - _BaseColor: {r: 0.9339623, g: 0.19824673, b: 0.22088423, a: 1}
+    - _Color: {r: 0.66365993, g: 0.28627455, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HColor: {r: 0.8773585, g: 0.8773585, b: 0.8773585, a: 1}
+    - _HColor: {r: 0.6226415, g: 0.13670345, b: 0.108668566, a: 1}
     - _MatCapColor: {r: 1, g: 1, b: 1, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _ReflectionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _RimColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.5}
-    - _SColor: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 0.5}
+    - _SColor: {r: 0.06512819, g: 0.054245293, b: 0.5, a: 1}
     - _SpecularColor: {r: 0.75, g: 0.75, b: 0.75, a: 1}
   m_BuildTextureStacks: []
