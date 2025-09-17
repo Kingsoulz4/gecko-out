@@ -42,15 +42,15 @@ public class ScrollScreenHorizontal : ScrollRect
                 RectTransform.anchoredPosition = new Vector2(sizeXCanvas * i, 0);
 
                 var RectTransformButton = component.Button.GetComponent<RectTransform>();
-                if (i == reference.StartIndex)
-                {
-                    RectTransformButton.sizeDelta = new Vector2(sizeButton * reference.ButtonScaleUpPercent, RectTransformButton.sizeDelta.y);
-                    reference.ImageSlider.sizeDelta = RectTransformButton.sizeDelta;
-                }
-                else
-                {
-                    RectTransformButton.sizeDelta = new Vector2(sizeButton, RectTransformButton.sizeDelta.y);
-                }
+                //if (i == reference.StartIndex)
+                //{
+                //    RectTransformButton.sizeDelta = new Vector2(sizeButton * reference.ButtonScaleUpPercent, RectTransformButton.sizeDelta.y);
+                //    reference.ImageSlider.sizeDelta = RectTransformButton.sizeDelta;
+                //}
+                //else
+                //{
+                //    RectTransformButton.sizeDelta = new Vector2(sizeButton, RectTransformButton.sizeDelta.y);
+                //}
             }
             var startPanel = reference.component[reference.StartIndex].Panel.GetComponent<RectTransform>();
             int countPanel = 0;
@@ -67,7 +67,8 @@ public class ScrollScreenHorizontal : ScrollRect
             previousPanel = currentPanel;
             LayoutRebuilder.ForceRebuildLayoutImmediate(reference.ImageSlider.transform.parent.GetComponent<RectTransform>());
             var currentButton = reference.component[currentPanel].Button.GetComponent<RectTransform>();
-            reference.ImageSlider.anchoredPosition = currentButton.anchoredPosition;
+            //reference.ImageSlider.anchoredPosition = currentButton.anchoredPosition;
+            reference.ImageSlider.transform.position = new Vector3(currentButton.transform.position.x, reference.ImageSlider.transform.position.y, reference.transform.position.z);
             OnInitialized?.Invoke();
         }).SetId(this);
     }
@@ -114,8 +115,10 @@ public class ScrollScreenHorizontal : ScrollRect
     {
         base.OnDrag(eventData);
         var currentButton = reference.component[currentPanel].Button.GetComponent<RectTransform>();
-        float percent = -(currentPanel * sizeXCanvas + content.anchoredPosition.x) / sizeXCanvas;
-        reference.ImageSlider.anchoredPosition = currentButton.anchoredPosition + new Vector2(percent * reference.ImageSlider.sizeDelta.x, 0);
+        float percent = -(currentPanel * sizeXCanvas + content.anchoredPosition.x) / (sizeXCanvas);
+        //reference.ImageSlider.anchoredPosition = currentButton.anchoredPosition + new Vector2(percent * reference.ImageSlider.sizeDelta.x, 0);
+        reference.ImageSlider.transform.position = new Vector3(currentButton.transform.position.x, reference.ImageSlider.transform.position.y, reference.transform.position.z) 
+            + new Vector3(percent * reference.ImageSlider.sizeDelta.x, 0);
     }
 
     protected override void OnDestroy()
@@ -147,7 +150,8 @@ public class ScrollScreenHorizontal : ScrollRect
         /// Button
         var sizeX = GetComponentInParent<Canvas>().GetComponent<RectTransform>().sizeDelta.x;
         var RectTransform1 = reference.component[currentPanel].Button.GetComponent<RectTransform>();
-        tween.Insert(0, reference.ImageSlider.DOAnchorPosX(sizeButton * currentPanel, reference.DurationAutoScroll).SetEase(Ease.OutQuad));
+        //tween.Insert(0, reference.ImageSlider.DOAnchorPosX(sizeButton * currentPanel, reference.DurationAutoScroll).SetEase(Ease.OutQuad));
+        tween.Insert(0, reference.ImageSlider.DOMoveX(reference.component[currentPanel].Button.transform.position.x, reference.DurationAutoScroll).SetEase(Ease.OutQuad));
         if (previousPanel != currentPanel)
         {
             var RectTransform2 = reference.component[previousPanel].Button.GetComponent<RectTransform>();
