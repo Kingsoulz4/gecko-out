@@ -151,8 +151,8 @@ public class ScrollScreenHorizontal : ScrollRect
         if (previousPanel != currentPanel)
         {
             var RectTransform2 = reference.component[previousPanel].Button.GetComponent<RectTransform>();
-            RectTransform2.DOSizeDelta(new Vector2(sizeButton, RectTransform2.sizeDelta.y), 0.3f).SetEase(Ease.OutQuad);
-            RectTransform1.DOSizeDelta(new Vector2(sizeButton * reference.ButtonScaleUpPercent, RectTransform2.sizeDelta.y), reference.DurationAutoScroll).SetEase(Ease.OutQuad);
+            //RectTransform2.DOSizeDelta(new Vector2(sizeButton, RectTransform2.sizeDelta.y), 0.3f).SetEase(Ease.OutQuad);
+            //RectTransform1.DOSizeDelta(new Vector2(sizeButton * reference.ButtonScaleUpPercent, RectTransform2.sizeDelta.y), reference.DurationAutoScroll).SetEase(Ease.OutQuad);
         }
     }
 }
