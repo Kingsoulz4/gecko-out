@@ -28,7 +28,7 @@ public class InGameScreenUI : ScreenUI
     [SerializeField] VisualCountBooster timeBoosterCount;
     [SerializeField] Button timeBoosterBtn;
     [SerializeField] Image img_BG_Time;
-    [SerializeField] Image img_BG_Booster_FreeTime;
+    [SerializeField] TimeBoosterTopUI timeBoosterTopUI;
 
     [Header("Booster remove one body")]
     [SerializeField] Button handMoveBoosterBtn;
@@ -49,6 +49,8 @@ public class InGameScreenUI : ScreenUI
     private float currentTopY;
     internal GameObject TimeBooster;
 
+    public TimeBoosterTopUI TimeBoosterTopUI { get => timeBoosterTopUI;}
+
     private void Update()
     {
         if (LevelManager.Instance.LevelGame != null && LevelManager.Instance.LevelGame.GameLevelData != null)
@@ -63,7 +65,7 @@ public class InGameScreenUI : ScreenUI
         btn_Load.onClick.AddListener(LoadLevel);
         timeBoosterBtn.onClick.AddListener(OnTimeBoosterClick);
         handMoveBoosterBtn.onClick.AddListener(HandMoveboosterClick);
-        hammerBtn.onClick.AddListener(CissorBoosterClick);
+        hammerBtn.onClick.AddListener(HammerBoosterClick);
         //suffleBoosterBtn.onClick.AddListener(SuffleBoosterClick);
         btn_pause.onClick.AddListener(OnPauseClick);
         btn_Replay.onClick.AddListener(OnReplayClick);
@@ -89,14 +91,15 @@ public class InGameScreenUI : ScreenUI
         });
     }
 
-    private void HandMoveboosterClick()
+    private void OnDisable()
     {
-        throw new NotImplementedException();
-    }
-
-    private void SuffleBoosterClick()
-    {
-        throw new NotImplementedException();
+        if (BoosterManager.Instance == null) return;
+        foreach (var booster in BoosterManager.Instance.Boosters)
+        {
+            booster.OnStartUseBooster -= OnStartUseBooster;
+            booster.OnUseBoosterDone -= OnUseBoosterDone;
+            booster.OnChangeBoosterCount -= OnChangeBoosterCount;
+        }
     }
 
     private void OnChangeBoosterCount(BoosterBase booster, int currentCount)
@@ -106,10 +109,10 @@ public class InGameScreenUI : ScreenUI
             case BoosterType.TIME_INGAME:
                 timeBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
-            case BoosterType.HAMMER:
+            case BoosterType.HAND_MOVE:
                 handMoveBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
-            case BoosterType.CISSOR:
+            case BoosterType.HAMMER:
                 hammerBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
             default:
@@ -122,11 +125,9 @@ public class InGameScreenUI : ScreenUI
         switch (booster.BoosterType)
         {
             case BoosterType.TIME_INGAME:
-            case BoosterType.SUFFLE:
+                timeBoosterTopUI.SetActive(false);
                 break;
-            case BoosterType.CISSOR:
-                boosterConfirmUI.gameObject.SetActive(false);
-                break;
+            case BoosterType.HAMMER:
             case BoosterType.HAND_MOVE:
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
@@ -135,28 +136,20 @@ public class InGameScreenUI : ScreenUI
         }
     }
 
-    private void OnDisable()
-    {
-        if (BoosterManager.Instance == null) return;
-        foreach (var booster in BoosterManager.Instance.Boosters)
-        {
-            booster.OnStartUseBooster -= OnStartUseBooster;
-            booster.OnUseBoosterDone -= OnUseBoosterDone;
-        }
-    }
 
     private void OnStartUseBooster(BoosterBase booster, int currentCount)
     {
         switch (booster.BoosterType)
         {
             case BoosterType.TIME_INGAME:
+                timeBoosterTopUI.SetActive(true);
                 timeBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
             case BoosterType.HAND_MOVE:
                 handMoveBoosterCount.UpdateTextCountBooster(currentCount);
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
-            case BoosterType.CISSOR:
+            case BoosterType.HAMMER:
                 hammerBoosterCount.UpdateTextCountBooster(currentCount);
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
@@ -169,21 +162,27 @@ public class InGameScreenUI : ScreenUI
         }
     }
 
+    private void HandMoveboosterClick()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void SuffleBoosterClick()
+    {
+        throw new NotImplementedException();
+    }
+
     private void OnTimeBoosterClick()
     {
         BoosterManager.Instance.TimeIngameBooster.DoShowBooster((sucess) =>
         {
-            //if (sucess)
-            //{
-            //    boosterPanelUI.ShowChooseFreeTime(img_BG_Time, img_BG_Booster_FreeTime, () =>
-            //    {
-            //        StopTimeGame(true);
-            //        BoosterManager.Instance.TimeBooster.ActiveBooster();
-            //    }, () =>
-            //    {
-            //        StopTimeGame(false);
-            //    });
-            //}
+            if (sucess)
+            {
+                StopTimeGame(true);
+                BoosterManager.Instance.TimeIngameBooster.ActiveBooster();
+                timeBoosterTopUI.gameObject.SetActive(true);
+
+            }
         });
     }
 

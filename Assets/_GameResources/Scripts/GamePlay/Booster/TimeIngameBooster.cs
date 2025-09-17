@@ -15,7 +15,7 @@ public class TimeIngameBooster : BoosterBase
 
     private float currentTime;
     private GameObject timeBooster;
-
+    private TimeBoosterTopUI timeBoosterTopUI;
     public override void Init()
     {
         base.Init();
@@ -23,7 +23,7 @@ public class TimeIngameBooster : BoosterBase
     }
     protected override void ShowBooster()
     {
-        //base.ShowBooster();
+        base.ShowBooster();
     }
 
     private void Update()
@@ -36,7 +36,7 @@ public class TimeIngameBooster : BoosterBase
         {
             currentTime -= Time.deltaTime;
             float value = currentTime / maxTime;
-            //timeBooster.UpdateFill(value, InGameScreenUI.GetTimeValueToString(currentTime));
+            timeBoosterTopUI.UpdateFill(value, InGameScreenUI.GetTimeValueToString(currentTime));
         }
         else
         {
@@ -47,11 +47,12 @@ public class TimeIngameBooster : BoosterBase
     public override void ActiveBooster()
     {
         base.ActiveBooster();
+        timeBoosterTopUI = UIManager.Instance.GetScreenActive<InGameScreenUI>().TimeBoosterTopUI;
         UserDataManager.TimeIngameBooster = CurrentCount;
-        timeBooster = UIManager.Instance.GetScreenActive<InGameScreenUI>().TimeBooster;
-        timeBooster.gameObject.SetActive(true);
         currentTime = maxTime;
+        LevelManager.Instance.LevelGame.FreezeTime(currentTime);
         OnStartUseBooster?.Invoke(this, CurrentCount);
+
         InProgress = true;
     }
 
@@ -59,9 +60,5 @@ public class TimeIngameBooster : BoosterBase
     {
         base.Done();
         currentTime = 0;
-        if (timeBooster != null)
-        {
-            timeBooster.gameObject.SetActive(false);
-        }
     }
 }

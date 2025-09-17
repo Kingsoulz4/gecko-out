@@ -139,18 +139,6 @@ namespace Geckout
 
         #region Boosters
 
-        public void ActivateBoosterFreezeTime()
-        {
-            // Anim Here
-            FreezeTime(15);
-        }
-
-        public void ActivateBoosterAddTime()
-        {
-            //Anim Here
-            AddTime(20);
-        }
-
         public void AddTime(float time)
         {
             currentTimeRemaining += time;
