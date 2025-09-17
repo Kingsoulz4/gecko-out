@@ -183,7 +183,7 @@ public class InGameScreenUI : ScreenUI
 
     private void HammerBoosterClick()
     {
-        BoosterManager.Instance.TimePreBooster.DoShowBooster((sucess) =>
+        BoosterManager.Instance.HammerBooster.DoShowBooster((sucess) =>
         {
             if (sucess)
             {
