@@ -25,6 +25,7 @@ namespace Geckout
         [SerializeField] private TMP_Dropdown m_dropLevelType;
         [SerializeField] private TMP_InputField m_inputLevelNum;
         [SerializeField] private TMP_InputField m_inputLevelIndex;
+        [SerializeField] private TMP_InputField m_inputFieldOfView;
 
         [SerializeField] private Button m_buttonEditWalls;
         [SerializeField] private Button m_buttonDesignDog;
@@ -57,11 +58,20 @@ namespace Geckout
 
             m_inputMapWidth.onSubmit.AddListener(OnEditedMapWidth);
             m_inputMapHeight.onSubmit.AddListener(OnEditedMapHeight);
+            m_inputFieldOfView.onSubmit.AddListener(OnEditedFieldOfView);
 
             HideAllTabs();
 
             LevelManager.Instance.IsEdittingLevel = true;
             Utils.SetExistingGameViewSize(1920, 1080);
+        }
+
+        private void OnEditedFieldOfView(string arg0)
+        {
+            if(float.TryParse(m_inputFieldOfView.text, out var fov))
+            {
+                LevelGame.GameLevelData.fieldOfView = fov;
+            }
         }
 
         private void Update()
@@ -187,6 +197,7 @@ namespace Geckout
             m_inputMapHeight.text = levelData.mapSize.y.ToString();
             m_dropLevelType.value = (int)levelData.type;
             m_inputTime.text = levelData.time.ToString();
+            m_inputFieldOfView.text = levelData.fieldOfView.ToString();
 
             LevelGame.SetLevelData(levelData);
         }
@@ -211,6 +222,11 @@ namespace Geckout
                 {
                     newLevelData.mapSize = new Vector2Int(width, height);
                 }
+            }
+
+            if(float.TryParse(m_inputFieldOfView.text, out var fieldOfView))
+            {
+                newLevelData.fieldOfView = fieldOfView;
             }
 
             newLevelData.GenerateDefaultMap();

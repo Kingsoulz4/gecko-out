@@ -14,12 +14,15 @@ public class MenuTabButton : ScrollScreenButton
     [SerializeField] Sprite[] statusSprs;
     [SerializeField] RectTransform nameRect;
     [SerializeField] RectTransform iconRect;
+    [SerializeField] RectTransform iconDeSelected;
 
     [SerializeField] SkeletonGraphic skeleton;
 
     [SerializeField, SpineAnimation]  string[] anims;
 
     [SerializeField] bool isLocked;
+
+    [SerializeField] private bool canInActiveIcon;
 
     public int index;
 
@@ -35,10 +38,15 @@ public class MenuTabButton : ScrollScreenButton
         imgSpr.sprite = statusSprs[1];
         nameRect.gameObject.SetActive(true);
         nameRect.anchoredPosition = Vector2.zero;
+        if(canInActiveIcon)
+        {
+            iconRect.gameObject.SetActive(true);
+            iconDeSelected.gameObject.SetActive(false);
+        }    
         iconRect.anchoredPosition = Vector2.zero;
         iconRect.DOAnchorPosY(50f, 0.15f).SetEase(Ease.OutQuad);
-        iconRect.DOScale(1.2f, 0.15f).SetEase(Ease.OutQuad);
-        nameRect.DOAnchorPosY(-50f, 0.15f).SetEase(Ease.OutQuad);
+        iconRect.DOScale(1f, 0.15f).SetEase(Ease.OutQuad);
+        nameRect.DOAnchorPosY(-84f, 0.15f).SetEase(Ease.OutQuad);
         if (skeleton)
         {
             //skeleton.AnimationState.AddAnimation(0, anims[0], false, 0);
@@ -49,6 +57,11 @@ public class MenuTabButton : ScrollScreenButton
     {
         imgSpr.sprite = statusSprs[0];
         nameRect.gameObject.SetActive(false);
+        if (canInActiveIcon)
+        {
+            iconRect.gameObject.SetActive(false);
+            iconDeSelected.gameObject.SetActive(true);
+        }
         nameRect.anchoredPosition = new Vector2(55f, 0);
         nameRect.anchoredPosition = Vector2.zero;
         iconRect.DOAnchorPosY(0f, 0.15f).SetEase(Ease.OutQuad);

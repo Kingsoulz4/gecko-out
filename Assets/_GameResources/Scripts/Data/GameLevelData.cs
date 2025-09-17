@@ -18,6 +18,7 @@ namespace Geckout.Data
     {
         public int levelNum;
         public int levelIndex;
+        public float fieldOfView = 20;
         public Vector2Int mapSize = new(8, 12);
         public int time;
         public LevelType type;
@@ -34,6 +35,7 @@ namespace Geckout.Data
         {
             levelNum = other.levelNum;
             levelIndex = other.levelIndex;
+            fieldOfView = other.fieldOfView;
             mapSize = other.mapSize;
             time = other.time;
             type = other.type;

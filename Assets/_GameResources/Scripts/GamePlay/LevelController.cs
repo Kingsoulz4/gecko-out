@@ -48,6 +48,7 @@ namespace Geckout
             m_gameLevelData = gameLevelData;
             m_gameMap.SetLevelData(gameLevelData);
             Utils.RemoveAllChilds(m_bodyParent);
+            Camera.main.fieldOfView = gameLevelData.fieldOfView;
             int i=0;
             foreach (var bodyData in gameLevelData.listDogData)
             {
