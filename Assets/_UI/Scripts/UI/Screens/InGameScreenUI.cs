@@ -78,8 +78,8 @@ public class InGameScreenUI : ScreenUI
         boosterDataSO = BoosterManager.Instance.BoosterData;
 
         timeBoosterCount.Init(UserDataManager.TimeIngameBooster, BoosterType.TIME_INGAME);
-        //handMoveBoosterCount.Init(UserDataManager.HammerBooster, BoosterType.HAND_MOVE);
-        //cissorBoosterCount.Init(UserDataManager.CissorBooster, BoosterType.CISSOR);
+        hammerBoosterCount.Init(UserDataManager.HammerBooster, BoosterType.HAMMER);
+        handMoveBoosterCount.Init(UserDataManager.HandMoveBooster, BoosterType.HAND_MOVE);
         //suffleBoosterCount.Init(UserDataManager.SuffleBooster, BoosterType.SUFFLE);
 
         btn_newLevel.onClick.AddListener(() =>
@@ -162,12 +162,21 @@ public class InGameScreenUI : ScreenUI
 
     private void HandMoveboosterClick()
     {
-        throw new NotImplementedException();
+        BoosterManager.Instance.HandMoveBooster.DoShowBooster((sucess) =>
+        {
+            if (sucess)
+            {
+                boosterConfirmUI.gameObject.SetActive(true);
+                var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.HAND_MOVE);
+                Image handMoveImg = handMoveBoosterBtn.GetComponent<VisualCountBooster>().Icon;
+                boosterConfirmUI.SetUIData(boosterData, handMoveImg);
+            }
+        });
     }
 
     private void SuffleBoosterClick()
     {
-        throw new NotImplementedException();
+        
     }
 
     private void OnTimeBoosterClick()
@@ -189,22 +198,8 @@ public class InGameScreenUI : ScreenUI
             {
                 boosterConfirmUI.gameObject.SetActive(true);
                 var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.HAMMER);
-                Image img_BG_ClearOneBooster = handMoveBoosterBtn.GetComponent<Image>();
-                boosterConfirmUI.SetUIData(boosterData, img_BG_ClearOneBooster);
-            }
-        });
-    }
-
-    private void CissorBoosterClick()
-    {
-        BoosterManager.Instance.HammerBooster.DoShowBooster((sucess) =>
-        {
-            if (sucess)
-            {
-                boosterConfirmUI.gameObject.SetActive(true);
-                var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.CISSOR);
-                Image img_BG_ClearSameBooster = hammerBtn.GetComponent<Image>();
-                boosterConfirmUI.SetUIData(boosterData, img_BG_ClearSameBooster);
+                Image hammerImg = hammerBtn.GetComponent<VisualCountBooster>().Icon;
+                boosterConfirmUI.SetUIData(boosterData, hammerImg);
             }
         });
     }
