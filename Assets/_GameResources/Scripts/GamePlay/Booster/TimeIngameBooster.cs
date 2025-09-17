@@ -46,13 +46,13 @@ public class TimeIngameBooster : BoosterBase
     public override void ActiveBooster()
     {
         base.ActiveBooster();
+
         timeBoosterTopUI = UIManager.Instance.GetScreenActive<InGameScreenUI>().TimeBoosterTopUI;
-        UserDataManager.TimeIngameBooster = CurrentCount;
         currentTime = maxTime;
-
+        UserDataManager.TimeIngameBooster = CurrentCount;
         LevelManager.Instance.LevelGame.FreezeTime(currentTime);
-        OnStartUseBooster?.Invoke(this, CurrentCount);
 
+        OnStartUseBooster?.Invoke(this, CurrentCount);
         InProgress = true;
     }
 
