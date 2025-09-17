@@ -30,17 +30,17 @@ public class InGameScreenUI : ScreenUI
     [SerializeField] Image img_BG_Time;
     [SerializeField] Image img_BG_Booster_FreeTime;
 
-    [Header("Booster remove one tile")]
+    [Header("Booster remove one body")]
     [SerializeField] Button handMoveBoosterBtn;
     [SerializeField] VisualCountBooster handMoveBoosterCount;
 
-    [Header("Booster remove 1 tail")]
-    [SerializeField] Button cissorBoosterBtn;
-    [SerializeField] VisualCountBooster cissorBoosterCount;
+    [Header("Booster remove one tile")]
+    [SerializeField] Button hammerBtn;
+    [SerializeField] VisualCountBooster hammerBoosterCount;
 
-    [Header("Booster remove 1 tail")]
-    [SerializeField] Button suffleBoosterBtn;
-    [SerializeField] VisualCountBooster suffleBoosterCount;
+    //[Header("Booster remove 1 tail")]
+    //[SerializeField] Button suffleBoosterBtn;
+    //[SerializeField] VisualCountBooster suffleBoosterCount;
 
 
     [Space, Header("Top")]
@@ -49,14 +49,21 @@ public class InGameScreenUI : ScreenUI
     private float currentTopY;
     internal GameObject TimeBooster;
 
+    private void Update()
+    {
+        if (LevelManager.Instance.LevelGame != null && LevelManager.Instance.LevelGame.GameLevelData != null)
+        {
+            UpdateText(LevelManager.Instance.LevelGame.CurrentLevelRemaining);
+        }
+    }
     public override void Initialize(UIManager uiManager)
     {
         base.Initialize(uiManager);
 
         btn_Load.onClick.AddListener(LoadLevel);
         timeBoosterBtn.onClick.AddListener(OnTimeBoosterClick);
-        //handMoveBoosterBtn.onClick.AddListener(HandMoveboosterClick);
-        //cissorBoosterBtn.onClick.AddListener(CissorBoosterClick);
+        handMoveBoosterBtn.onClick.AddListener(HandMoveboosterClick);
+        hammerBtn.onClick.AddListener(CissorBoosterClick);
         //suffleBoosterBtn.onClick.AddListener(SuffleBoosterClick);
         btn_pause.onClick.AddListener(OnPauseClick);
         btn_Replay.onClick.AddListener(OnReplayClick);
@@ -103,7 +110,7 @@ public class InGameScreenUI : ScreenUI
                 handMoveBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
             case BoosterType.CISSOR:
-                cissorBoosterCount.UpdateTextCountBooster(currentCount);
+                hammerBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
             default:
                 break;
@@ -150,13 +157,13 @@ public class InGameScreenUI : ScreenUI
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
             case BoosterType.CISSOR:
-                cissorBoosterCount.UpdateTextCountBooster(currentCount);
+                hammerBoosterCount.UpdateTextCountBooster(currentCount);
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
-            case BoosterType.SUFFLE:
-                suffleBoosterCount.UpdateTextCountBooster(currentCount);
-                boosterConfirmUI.gameObject.SetActive(false);
-                break;
+            //case BoosterType.SUFFLE:
+            //    suffleBoosterCount.UpdateTextCountBooster(currentCount);
+            //    boosterConfirmUI.gameObject.SetActive(false);
+            //    break;
             default:
                 break;
         }
@@ -202,7 +209,7 @@ public class InGameScreenUI : ScreenUI
             {
                 boosterConfirmUI.gameObject.SetActive(true);
                 var boosterData = boosterDataSO.GetBoosterItemData(BoosterType.CISSOR);
-                Image img_BG_ClearSameBooster = cissorBoosterBtn.GetComponent<Image>();
+                Image img_BG_ClearSameBooster = hammerBtn.GetComponent<Image>();
                 boosterConfirmUI.SetUIData(boosterData, img_BG_ClearSameBooster);
             }
         });
