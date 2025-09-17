@@ -180,8 +180,6 @@ namespace Geckout
                 throw new System.Exception("Not Enough Tiles Selected");
             }
 
-            m_gameLevelData.listDogData.Add(dogData);
-
             for(int i=0; i < listSelectedTile.Count; i++)
             {
                 var tile = listSelectedTile.ElementAt(i);
@@ -201,7 +199,8 @@ namespace Geckout
                     }
                 }
             }
-                
+
+            m_gameLevelData.listDogData.Add(dogData);
             dogData.listCoordinate = new List<Vector2Int>(listSelectedTile.Select(x => x.Coordinate).ToList());
             return SpawnBody(dogData);
         }
@@ -301,10 +300,12 @@ namespace Geckout
                 if (tileSelected.IsOccupied) continue;
                 var newPortalData = new PortalData(portalData);
                 newPortalData.Coordinate = new Vector2Int(tileSelected.Coordinate.x, tileSelected.Coordinate.y);
+                tileSelected.IsOccupied = true;
+                tileSelected.SetTileType(MapTileType.Portal);
                 GameMap.SpawnPortal(newPortalData);
                 GameLevelData.listPortalData.Add(newPortalData);
             }
-            ChangeTypeSelectedTiles(MapTileType.Portal);
+            //ChangeTypeSelectedTiles(MapTileType.Portal);
         }
 
         public void ChangeTypeSelectedTiles(MapTileType tileType)
