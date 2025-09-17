@@ -23,15 +23,22 @@ namespace Geckout
         [SerializeField] private float lowSpeed = 10f;
         [SerializeField] private float lowDistance = 2f;
         [SerializeField] private float minSampleStep = 0.02f;
-        //[SerializeField] private AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
         [SerializeField] private Segment headPrefab;
         [SerializeField] private Segment segment;
         [SerializeField] private Segment tailPrefab;
         [SerializeField] private OccupiedTileController occupiedTileController;
         [SerializeField] private BodyRenderer _bodyRenderer;
         [SerializeField] private GridHeadClamper gridClamper;
-        public ControlAnchor controlAnchor = ControlAnchor.Head;
+        [SerializeField] private MoveToPortal moveToPortal;
+        [SerializeField] private SplineComputer splineComputer;
+        [SerializeField] private IceBody iceBody;
+        [SerializeField] private HiddenBody hiddenBody;
+        [SerializeField] private MultipleColorBody doubleColorBody;
 
+        [Header("Mechanics")]
+        [SerializeField] private MechanicsReferences m_mechanicReferences;
+
+        public ControlAnchor controlAnchor = ControlAnchor.Head;
 
         // Movement events
         public Action OnStartMove;
@@ -44,10 +51,13 @@ namespace Geckout
         private Coroutine moveCoroutine;
         private List<Vector2Int> currentPath = new List<Vector2Int>();
         private LinkedList<Vector3> historyPoints = new LinkedList<Vector3>();
+        private List<Vector3> worldPath = new List<Vector3>();
         private float segmentSpacing;
+        private bool canControl = true;
+        private bool canMovePortal = true;
+        private List<MechanicRendererBase> listMechanicRender = new();
 
         public List<Segment> Segments { private set; get; }
-
         public OccupiedTileController OccupiedTileController { get => occupiedTileController; set => occupiedTileController = value; }
         public bool IsMoving
         {
@@ -59,27 +69,84 @@ namespace Geckout
                 return false;
             }
         }
-
         public GridHeadClamper GridClamper { get => gridClamper; set => gridClamper = value; }
-
         public BodyData BodyData { get; set; }
         public int SubLength => subLength;
-
-
-
-        private void Start()
+        public MoveToPortal MoveToPortal { get => moveToPortal; }
+        public bool CanControl
         {
-            //Init();
+            get
+            {
+                return canControl && iceBody.CurrentCount <= 0;
+            }
+
+            set => canControl = value;
+        }
+        public MechanicsReferences MechanicReferences { get => m_mechanicReferences; }
+        public List<MechanicRendererBase> ListMechanicRender { get => listMechanicRender; set => listMechanicRender = value; }
+        public bool CanMovePortal
+        {
+            get
+            {
+                return canMovePortal && hiddenBody.CurrentCount <= 0;
+            }
+        }
+        public BodyRenderer BodyRenderer { get => _bodyRenderer; }
+        public int Length { get => length; }
+        public SplineComputer SplineComputer { get => splineComputer; }
+
+#if UNITY_EDITOR
+        [EditorButton]
+        private void SetRef()
+        {
+            if (_bodyRenderer == null)
+            {
+                _bodyRenderer = GetComponentInChildren<BodyRenderer>();
+            }
+            if (occupiedTileController == null)
+            {
+                occupiedTileController = GetComponent<OccupiedTileController>();
+            }
+            if (gridClamper == null)
+            {
+                gridClamper = GetComponent<GridHeadClamper>();
+            }
+            if (moveToPortal == null)
+            {
+                moveToPortal = GetComponent<MoveToPortal>();
+            }
+            if (m_mechanicReferences == null)
+            {
+                m_mechanicReferences = Resources.Load<MechanicsReferences>("Mechanics/MechanicsReferences");
+            }
+            if (iceBody == null)
+            {
+                iceBody = FindUlti.FindChildDirect(transform, "IceBody").GetComponent<IceBody>();
+            }
+            if (hiddenBody == null)
+            {
+                hiddenBody = FindUlti.FindChildDirect(transform, "HiddenBody").GetComponent<HiddenBody>();
+            }
+            if (doubleColorBody == null)
+            {
+                doubleColorBody = FindUlti.FindChildDirect(transform, "DoubleColorBody").GetComponent<MultipleColorBody>();
+            }
+        }
+#endif
+
+        private void Update()
+        {
+            //Debug.Log("IsMoving " + IsMoving);
         }
 
-        public void Initialize(BodyData dogData)
+        public virtual void Initialize(BodyData dogData)
         {
             BodyData = dogData;
             List<Vector2Int> listDefaultCoordinate = dogData.listCoordinate;
             Segments = new List<Segment>();
 
             // ===== Tính toán tổng số segment =====
-            length = listDefaultCoordinate.Count ;
+            length = listDefaultCoordinate.Count;
             int totalSegments = length * SubLength - 2;
             float unitSpacing = 1f / SubLength;
             segmentSpacing = unitSpacing;
@@ -127,30 +194,27 @@ namespace Geckout
                 currentSegment.SetController(this);
             }
 
-            // ===== Set coordinate ban đầu =====
-            //for (int i = 0; i < Segments.Count; i++)
-            //{
-            //    // unitIndex = segment thuộc về tile nào
-            //    int unitIndex = i / subLength;
-
-            //    var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
-            //    Segments[i].SetCoordinate(coordinate);
-            //}
 
             for (int i = 0; i < Segments.Count; i++)
             {
                 // unitIndex = segment thuộc về tile nào
                 int unitIndex = Mathf.CeilToInt((float)i / SubLength);
 
-                //var coordinate = new Vector2Int(0, GameMap.MapSize.y - unitIndex - 1);
-                var coordinate = listDefaultCoordinate[Mathf.Clamp(unitIndex, 0, listDefaultCoordinate.Count - 2)];
+                var coordinate = listDefaultCoordinate[Mathf.Clamp(unitIndex, 0, listDefaultCoordinate.Count - 1)];
 
-                if(i == Segments.Count -1)
+                if (i % SubLength == 0)
                 {
-                    coordinate = listDefaultCoordinate.Last();
-                }    
-
-                Segments[i].InitCoordinate(coordinate);
+                    Segments[i].InitCoordinate(coordinate);
+                }
+                else
+                {
+                    var temp = i % SubLength;
+                    var previosCoord = i / SubLength;
+                    var nextCoord = previosCoord + 1;
+                    GameMap.TryGetTileAtCoord(listDefaultCoordinate[previosCoord], out var tilePreviosCoord);
+                    GameMap.TryGetTileAtCoord(listDefaultCoordinate[nextCoord], out var tileNextCoord);
+                    Segments[i].transform.position = Vector3.Lerp(tilePreviosCoord.transform.position, tileNextCoord.transform.position, (float)temp / SubLength);
+                }
             }
 
             // ===== Init history system =====
@@ -160,6 +224,9 @@ namespace Geckout
             if (_bodyRenderer != null)
                 _bodyRenderer.Initialize(Segments);
 
+            InitMechanic();
+
+            canControl = true;
             Debug.Log($"Body initialized: length={length}, subLength={SubLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
         }
 
@@ -171,15 +238,11 @@ namespace Geckout
                 return Segments.AsEnumerable().Reverse().ToList();
         }
 
-        public void SetMovementPath(List<Vector2Int> path)
+        public void StartMovePath(List<Vector2Int> path)
         {
             if (path == null || path.Count == 0) return;
 
-            if (moveCoroutine != null)
-            {
-                StopCoroutine(moveCoroutine);
-                moveCoroutine = null;
-            }
+            StopMoveCoroutine();
 
             currentPath = new List<Vector2Int>(path);
 
@@ -189,7 +252,16 @@ namespace Geckout
                 gridClamper.SetPath(path);
             }
 
-            moveCoroutine = StartCoroutine(StartMovePath());
+            moveCoroutine = StartCoroutine(StartMovePathIE());
+        }
+
+        public void StopMoveCoroutine()
+        {
+            if (moveCoroutine != null)
+            {
+                StopCoroutine(moveCoroutine);
+                moveCoroutine = null;
+            }
         }
 
         public void SetControlAnchor(ControlAnchor anchor)
@@ -205,21 +277,17 @@ namespace Geckout
 
         public void ClearPath()
         {
-            if (moveCoroutine != null)
-            {
-                StopCoroutine(moveCoroutine);
-                moveCoroutine = null;
-            }
+            StopMoveCoroutine();
             currentPath.Clear();
         }
 
-        IEnumerator StartMovePath()
+        IEnumerator StartMovePathIE()
         {
             if (currentPath.Count == 0) yield break;
 
             OnStartMove?.Invoke();
+            worldPath.Clear();
 
-            List<Vector3> worldPath = new List<Vector3>();
 
             // Get current anchor position (always the leading segment in ordered view)
             var orderedSegments = GetOrderedSegments();
@@ -227,13 +295,14 @@ namespace Geckout
 
             foreach (var coord in currentPath)
             {
-                if (GameMap.TryGetTileAt(coord, out var tile))
+                if (GameMap.TryGetTileAtCoord(coord, out var tile))
                     worldPath.Add(tile.transform.position);
             }
 
             yield return MovePath(worldPath);
 
             moveCoroutine = null;
+
             OnEndMove?.Invoke();
             currentPath.Clear();
         }
@@ -249,8 +318,6 @@ namespace Geckout
                 totalPathDistance += Vector3.Distance(worldPath[i], worldPath[i + 1]);
             }
 
-            //Debug.Log($"Moving along path with {worldPath.Count} waypoints, total distance: {totalPathDistance}");
-
             float currentMoveSpeed = totalPathDistance <= lowDistance ? lowSpeed : moveSpeed;
 
             var orderedSegments = GetOrderedSegments();
@@ -265,7 +332,6 @@ namespace Geckout
 
                 // Precise movement towards target waypoint
                 Vector3 intendedPos = Vector3.MoveTowards(lastAnchorPos, currentTarget, currentMoveSpeed * Time.deltaTime);
-
                 // Clamp theo lưới (head/tail đều dùng được)
                 if (gridClamper != null)
                 {
@@ -313,15 +379,6 @@ namespace Geckout
                 Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
                 orderedSegments[segIdx].transform.position = pos;
             }
-        }
-
-        public void MoveToPortal(Portal portal)
-        {
-            portal.Disappear();
-            gameObject.SetActive(false);
-            OccupiedTileController.ClearAllOccupied();
-            occupiedTileController.ForceRestoreAll();
-            LevelManager.Instance.LevelGame.OnBodyMoveToHole(this);
         }
 
         #region History system
@@ -518,6 +575,39 @@ namespace Geckout
                 }
                 return historyPoints.Last.Value;
             }
+        }
+        #endregion
+
+
+        #region Visualize
+        public void InitMechanic()
+        {
+            if (listMechanicRender.Count > 0)
+            {
+                foreach (var item in listMechanicRender)
+                {
+                    Destroy(item.gameObject);
+                }
+                listMechanicRender.Clear();
+            }
+
+            if (BodyData.freezeTimeCount > 0)
+            {
+                iceBody.Init(BodyData.freezeTimeCount);
+            }
+
+            if (BodyData.hiddenCount > 0)
+            {
+                hiddenBody.Init(BodyData.hiddenCount);
+            }
+
+            doubleColorBody.gameObject.SetActive(BodyData.listColor.Count > 1);
+            if (BodyData.listColor.Count > 1)
+            {
+                doubleColorBody.Init();
+            }
+
+
         }
         #endregion
     }

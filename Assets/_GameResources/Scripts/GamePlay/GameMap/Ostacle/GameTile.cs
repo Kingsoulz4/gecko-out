@@ -1,11 +1,12 @@
+using AYellowpaper.SerializedCollections;
+using Geckout.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using AYellowpaper.SerializedCollections;
-using Geckout.Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 namespace Geckout
 {
@@ -128,6 +129,12 @@ namespace Geckout
             MapTileData.rotation = rotatateAngle;
         }
 
+        public void RotateTo(Vector3Int angle)
+        {
+            m_displayObject.transform.localRotation = Quaternion.Euler(angle);
+            MapTileData.rotation = angle;
+        }
+
         public void SetSelected(bool selected)
         {
             if(m_outLine != null)
@@ -225,22 +232,22 @@ namespace Geckout
 
         #endregion
 
-        public GameTile[] GetNeighbourTiles(int range)
-        {
-            List<GameTile> results = new();
-            for (int x = -range; x <= range; x++)
-            {
-                for (int y = -range; y <= range; y++)
-                {
-                    if (x == 0 && y == 0) continue;
-                    if (GameMap.TryGetTileAt(Coordinate.x + x, Coordinate.y + y, out GameTile tile))
-                    {
-                        results.Add(tile);
-                    }
-                }
-            }
-            return results.ToArray();
-        }
+        //public GameTile[] GetNeighbourTiles(int range)
+        //{
+        //    List<GameTile> results = new();
+        //    for (int x = -range; x <= range; x++)
+        //    {
+        //        for (int y = -range; y <= range; y++)
+        //        {
+        //            if (x == 0 && y == 0) continue;
+        //            if (GameMap.TryGetTileAt(Coordinate.x + x, Coordinate.y + y, out GameTile tile))
+        //            {
+        //                results.Add(tile);
+        //            }
+        //        }
+        //    }
+        //    return results.ToArray();
+        //}
 
         private void OnDrawGizmos()
         {

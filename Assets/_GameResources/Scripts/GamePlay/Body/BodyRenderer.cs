@@ -1,4 +1,5 @@
 ﻿using Dreamteck.Splines;
+using Geckout.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,9 @@ namespace Geckout
     [RequireComponent(typeof(SplineComputer))]
     public class BodyRenderer : MonoBehaviour
     {
-        [SerializeField]private SplineComputer _spline;
+        [SerializeField] private SplineComputer _spline;
         [SerializeField] private float tubeRadius = 0.5f;
         [SerializeField] private TubeGenerator _tubeGenerator;
-        [SerializeField] private SplineMesh _splineMesh;
 
         private List<Segment> _segments;
         private Vector3[] _lastPositions; // Cache để check thay đổi
@@ -24,23 +24,32 @@ namespace Geckout
         {
             get
             {
-                if(bodyController == null)
+                if (bodyController == null)
                 {
                     bodyController = GetComponent<BodyController>();
                 }
-                return bodyController;  
+                return bodyController;
             }
         }
 
-        private void Start()
-        {
-            bodyPartColorChangers = GetComponentsInChildren<BodyPartColorChanger>().ToList();
-            UpdateBodyColor();
-        }
+        public List<Segment> Segments { get => _segments; }
+
+        public List<BodyPartColorChanger> ListBodyPartChanger { get => bodyPartColorChangers; }
 
         public void UpdateBodyColor()
         {
             bodyPartColorChangers.ForEach(x => x.UpdateColor(BodyController.BodyData.listColor.First()));
+        }
+
+        public void FadeBodyColor(ColorType color)
+        {
+            bodyPartColorChangers.ForEach(x =>
+            {
+                if (x.gameObject.activeInHierarchy)
+                {
+                    x.FadeColor(color, 0.5f);
+                }
+            });
         }
 
         public void Initialize(List<Segment> segments)
@@ -58,6 +67,10 @@ namespace Geckout
             }
 
             Debug.Log("Init segments: " + _segments.Count);
+
+            bodyPartColorChangers = GetComponentsInChildren<BodyPartColorChanger>().ToList();
+            UpdateBodyColor();
+
             ForceUpdate();
         }
 
@@ -80,10 +93,6 @@ namespace Geckout
 
             _spline.SetPoints(splinePoints, SplineComputer.Space.Local);
             _spline.RebuildImmediate();
-            if (_splineMesh != null)
-            {
-                _splineMesh.RebuildImmediate();
-            }
             _tubeGenerator.RebuildImmediate();
         }
 

@@ -25,6 +25,7 @@ namespace Geckout
         [SerializeField] private TMP_Dropdown m_dropLevelType;
         [SerializeField] private TMP_InputField m_inputLevelNum;
         [SerializeField] private TMP_InputField m_inputLevelIndex;
+        [SerializeField] private TMP_InputField m_inputFieldOfView;
 
         [SerializeField] private Button m_buttonEditWalls;
         [SerializeField] private Button m_buttonDesignDog;
@@ -57,11 +58,20 @@ namespace Geckout
 
             m_inputMapWidth.onSubmit.AddListener(OnEditedMapWidth);
             m_inputMapHeight.onSubmit.AddListener(OnEditedMapHeight);
+            m_inputFieldOfView.onSubmit.AddListener(OnEditedFieldOfView);
 
             HideAllTabs();
 
             LevelManager.Instance.IsEdittingLevel = true;
             Utils.SetExistingGameViewSize(1920, 1080);
+        }
+
+        private void OnEditedFieldOfView(string arg0)
+        {
+            if(float.TryParse(m_inputFieldOfView.text, out var fov))
+            {
+                LevelGame.GameLevelData.fieldOfView = fov;
+            }
         }
 
         private void Update()
@@ -75,6 +85,8 @@ namespace Geckout
         private void OnPressDelete()
         {
             LevelGame.DeleteSelectedBody();
+            LevelGame.DeleteSelectedBoxes();
+            LevelGame.DeleteSelectedPortals();
             LevelGame.ChangeTypeSelectedTiles(MapTileType.Normal);
             HideAllTabs();
         }
@@ -90,6 +102,7 @@ namespace Geckout
         public void OnClickEditBoxes()
         {
             HideAllTabs();
+            LevelGame.ClearSelectedBody();
             m_editBoxesTab.LevelGame = LevelGame;
             m_buttonEditBoxes.GetComponent<ButtonToolTab>().SetSelected(true);
             m_editBoxesTab.gameObject.SetActive(true);
@@ -98,13 +111,14 @@ namespace Geckout
         public void OnClickEditPortals()
         {
             HideAllTabs();
-            
+            LevelGame.ClearSelectedBody();
+            LevelGame.ClearSelectedMovableBoxes();
             m_buttonEditPortals.GetComponent<ButtonToolTab>().SetSelected(true);
             m_editPortalTab.gameObject.SetActive(true);
             m_editPortalTab.LevelGame = LevelGame;
-            if (LevelGame != null && LevelGame.selectedPortal != null)
+            if (LevelGame != null && LevelGame.SelectedPortal != null)
             {
-                m_editPortalTab.UpdateUI(LevelGame.selectedPortal.PortalData);
+                m_editPortalTab.UpdateUI(LevelGame.SelectedPortal.PortalData);
             }
             else
             {
@@ -121,6 +135,7 @@ namespace Geckout
             if (LevelGame != null && LevelGame.selectedBody != null)
             {
                 LevelGame.ClearAllSelectedTiles();
+                LevelGame.ClearSelectedMovableBoxes();
                 m_designDogTab.UpdateUI(LevelGame.selectedBody.BodyData);
             }
             else
@@ -132,6 +147,7 @@ namespace Geckout
         public void OnClickEditWalls()
         {
             HideAllTabs();
+            LevelGame.ClearSelectedBody();
             m_buttonEditWalls.GetComponent<ButtonToolTab>().SetSelected(true);
             m_editWallsTab.gameObject.SetActive(true);
             m_editWallsTab.LevelGame = LevelGame;
@@ -177,21 +193,11 @@ namespace Geckout
                 levelData = CreateNewLevelData(int.Parse(m_inputLevelNum.text), int.Parse(m_inputLevelIndex.text));
             }
 
-            if (int.TryParse(m_inputMapWidth.text, out var width))
-            {
-                if (int.TryParse(m_inputMapHeight.text, out var height))
-                {
-                    levelData.mapSize = new Vector2Int(width, height);
-                }
-            }
-
-
-            levelData.type = (LevelType)m_dropLevelType.value;
-
-            if(int.TryParse(m_inputTime.text, out var time))
-            {
-                levelData.time = time;
-            }
+            m_inputMapWidth.text = levelData.mapSize.x.ToString();
+            m_inputMapHeight.text = levelData.mapSize.y.ToString();
+            m_dropLevelType.value = (int)levelData.type;
+            m_inputTime.text = levelData.time.ToString();
+            m_inputFieldOfView.text = levelData.fieldOfView.ToString();
 
             LevelGame.SetLevelData(levelData);
         }
@@ -208,6 +214,7 @@ namespace Geckout
             newLevelData.name = $"Level{level}";
             newLevelData.levelNum = level;
             newLevelData.levelIndex = index;
+            newLevelData.colorAndMaterialData = Resources.Load<ColorAndMaterialData>("ColorsAndMaterials/ColorAndMaterialData");
 
             if (int.TryParse(m_inputMapWidth.text, out var width))
             {
@@ -215,6 +222,11 @@ namespace Geckout
                 {
                     newLevelData.mapSize = new Vector2Int(width, height);
                 }
+            }
+
+            if(float.TryParse(m_inputFieldOfView.text, out var fieldOfView))
+            {
+                newLevelData.fieldOfView = fieldOfView;
             }
 
             newLevelData.GenerateDefaultMap();

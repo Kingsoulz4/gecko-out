@@ -2,6 +2,7 @@ using Geckout.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ namespace Geckout
         [SerializeField] private List<ButtonColorPicked> m_listButtonColorPicked;
         [SerializeField] private Transform m_listColorPickContainer;
         [SerializeField] private Button m_colorPickPrefab;
+        [SerializeField] private TMP_InputField m_inputFreezeCount;
 
         public LevelGameEditTool LevelGame { get; set; }
 
@@ -29,7 +31,7 @@ namespace Geckout
                 {
                     portalData = new PortalData();
                 }
-                return LevelGame != null && LevelGame.selectedPortal != null ? LevelGame.selectedPortal.PortalData : portalData;
+                return LevelGame != null && LevelGame.SelectedPortal != null ? LevelGame.SelectedPortal.PortalData : portalData;
 
             }
         }
@@ -40,8 +42,9 @@ namespace Geckout
             m_buttonDeletePortal.onClick.AddListener(OnClickDeletePortal);
             foreach (var buttonColorPicked in m_listButtonColorPicked)
             {
-                buttonColorPicked.OnClick = OnClickSelectColorPicked;
+                buttonColorPicked.OnClick.AddListener(OnClickSelectColorPicked);
             }
+            m_inputFreezeCount.onSubmit.AddListener(OnEnterFreezeCount);
         }
 
         private void Start()
@@ -52,13 +55,24 @@ namespace Geckout
         private void OnClickDeletePortal()
         {
             //LevelGame.ChangeTypeSelectedTiles(Data.MapTileType.Normal);
-            LevelGame.RemoveAllSelectedPortals();
+            LevelGame.DeleteSelectedPortals();
         }
 
         private void OnClickAddPortal()
         {
             //LevelGame.ChangeTypeSelectedTiles(Data.MapTileType.Portal);
-            LevelGame.AddNewPortal();
+            PortalData.freezeTimeCount = int.Parse(m_inputFreezeCount.text);
+            LevelGame.AddNewPortal(PortalData);
+            
+        }
+
+        private void OnEnterFreezeCount(string arg0)
+        {
+            PortalData.freezeTimeCount = int.Parse(arg0);
+            if (LevelGame != null && LevelGame.SelectedPortal != null)
+            {
+                LevelGame.SelectedPortal.InitMechanic();
+            }
         }
 
         public void UpdateUI(PortalData dogData)
@@ -102,13 +116,15 @@ namespace Geckout
                         PortalData.listColor[currentSelectedColorIndex] = color.Key;
                     }
 
-                    if (LevelGame.selectedPortal != null)
+                    if (LevelGame.SelectedPortal != null)
                     {
-                        LevelGame.selectedPortal.UpdateVisual();
+                        LevelGame.SelectedPortal.UpdateVisual();
                     }
 
                 });
             }
+            m_inputFreezeCount.text = PortalData.freezeTimeCount.ToString();
+
         }
 
         private void OnClickSelectColorPicked(int index)

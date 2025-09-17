@@ -31,6 +31,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2062647947501416683}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2703443520134156645
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6134754857416877624}
+  m_Layer: 0
+  m_Name: CrateContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6134754857416877624
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2703443520134156645}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2062647947501416683}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3778204450190434973
 GameObject:
   m_ObjectHideFlags: 0
@@ -65,6 +96,7 @@ Transform:
   - {fileID: 15752251296675440}
   - {fileID: 1153484657752392825}
   - {fileID: 2091937477640027912}
+  - {fileID: 6134754857416877624}
   m_Father: {fileID: 7072393982718881304}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8946495759869636908
@@ -79,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2649a9fd1e37ccc44a52b5bc1d79c278, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelData: {fileID: 11400000, guid: 871e6911b67d7c14487ab702155e9f62, type: 2}
+  levelData: {fileID: 0}
   tilePrefab: {fileID: 6968164639324100578, guid: 64902bb9b287b9b47b2ffeba74bcd986, type: 3}
   isDebug: 1
   offsetFactor: 1
@@ -87,10 +119,12 @@ MonoBehaviour:
   m_tileWallCorner: {fileID: 5415367166614964074, guid: 744ed41814ff14343a38e2b106f272a2, type: 3}
   m_portalPrefab: {fileID: -793955662842280384, guid: 5a57a1a5f57db114f8d10db726fdcbd6, type: 3}
   m_boxMovePrefab: {fileID: 5003617613351051986, guid: 7dc5f1a3affb9264a821e80159b03dbd, type: 3}
+  m_cratePrefab: {fileID: -9138672073881804070, guid: 00635f19895cc5f4187b60bbbcce4c58, type: 3}
   _tilesContainer: {fileID: 15752251296675440}
   m_wallContainer: {fileID: 4655650912071065848}
   m_portalsContainer: {fileID: 1153484657752392825}
   m_movableBoxContainer: {fileID: 2091937477640027912}
+  m_crateContainer: {fileID: 6134754857416877624}
   defaultMaterial: {fileID: 2100000, guid: 07711bf15d913b74f9905ffe65dc1f4e, type: 2}
   moveMaterial: {fileID: 2100000, guid: 4d442cd59cb090840b7022249cd82da6, type: 2}
 --- !u!1 &4088674694960204547
@@ -165,6 +199,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7072393982718881304}
   - component: {fileID: 1332654166868463317}
+  - component: {fileID: -3584034867637869532}
   m_Layer: 0
   m_Name: LevelOriginal
   m_TagString: Untagged
@@ -181,7 +216,7 @@ Transform:
   m_GameObject: {fileID: 7854088454610840849}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.009089256, y: -0.94147223, z: 1.2161512}
+  m_LocalPosition: {x: -0.009089256, y: -0.94147223, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -205,6 +240,18 @@ MonoBehaviour:
   m_gameMap: {fileID: 8946495759869636908}
   m_bodyPrefab: {fileID: 3655932188227585431, guid: 07f41c8bbaf563446979281513016b18, type: 3}
   m_bodyParent: {fileID: 8024906829326578474}
+--- !u!114 &-3584034867637869532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7854088454610840849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e1dd9842e97c8448bc04ef1491dd5e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8441383518699484488
 GameObject:
   m_ObjectHideFlags: 0

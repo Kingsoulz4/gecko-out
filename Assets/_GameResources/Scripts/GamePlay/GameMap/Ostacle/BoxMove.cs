@@ -1,279 +1,478 @@
 ﻿using Geckout.Data;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEditor;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 namespace Geckout
 {
-    
-
-    public partial class BoxMove : MonoBehaviour
+    public partial class BoxMove : BoxBase<MovableBoxTile, MovableBoxData>
     {
+        [Header("Movement Settings")]
         [SerializeField] private LayerMask moveBoxLayer;
-        [SerializeField] private GameObject m_tileCornerPrefab;
-        [SerializeField] private GameObject m_tileEdgePrefab;
-        [SerializeField] private GameObject m_tileCenterPrefab;
-        [SerializeField] private GameObject m_tileCorner3EdgePrefab;
-        [SerializeField] private GameObject m_tile2EdgePrefab;
-        [SerializeField] private GameObject m_tile4EdgePrefab;
-        
+        [SerializeField] private float moveSpeed = 5f;
+        [SerializeField] private float inputThreshold = 0.5f;
+        [SerializeField] private bool enableDebugLogs = true;
 
-        private WayDirection wayDirection = WayDirection.Horizontal;
-        private MovableBoxData movableBoxData = new();
-        private List<MovableBoxTile> listMovableBoxTile = new();
+        [Header("Debug")]
+        [SerializeField] private bool enablePositionDebug = true;
 
-        public void Init(MovableBoxData movableBoxData)
+        [SerializeField] private WayDirection wayDirection = WayDirection.All;
+
+        [Header("Visual")]
+        [SerializeField] private GameObject m_arrowHorizontal;
+        [SerializeField] private GameObject m_arrowVertical;
+        [SerializeField] private GameObject m_arrowBodyHorizontal;
+        [SerializeField] private GameObject m_arrowBodyVertical;
+        [SerializeField] private GameObject m_arrowLeft;
+        [SerializeField] private GameObject m_arrowRight;
+        [SerializeField] private GameObject m_arrowTop;
+        [SerializeField] private GameObject m_arrowDown;
+
+        // Data
+        protected override Vector2Int RootCoordinate => Data.rootCoordinate;
+        protected override Vector2Int BoxSize => Data.boxSize;
+
+        // Input state
+        private Camera gameCamera;
+        private bool isDragging = false;
+        private Vector2 dragStartPosition;
+        private Vector2Int dragStartCoordinate;
+
+        // Drag locking & targeting
+        private Vector2Int selectedTileOffset = Vector2Int.zero;  // clicked child tile - root
+        private Vector2Int baseSelectedTileCoord;                  // rootStart + offset
+        private bool axisLocked = false;                           // for WayDirection.All
+        private bool lockHorizontal = false;
+        private bool hasDragTarget = false;
+        private Vector2Int dragTargetRoot;                         // root coordinate target at this frame
+
+        public bool IsDragging => isDragging;
+
+        private void Start()
         {
-            this.movableBoxData = movableBoxData;
-            SpawnTiles();
+            gameCamera = Camera.main ?? FindObjectOfType<Camera>();
         }
 
-        void SpawnTiles()
+        private void Update()
         {
-            var boxSize = movableBoxData.boxSize;
-            bool needSetOccupied = false;
-            if(LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Contains(movableBoxData)) needSetOccupied = true;
+            HandleInput();
+            DragMoveUpdate();
+        }
 
-            if (movableBoxData.boxSize.x == 1 && movableBoxData.boxSize.y == 1)
+        #region Input & Drag
+
+        private void HandleInput()
+        {
+            // Mouse
+            if (Input.GetMouseButtonDown(0))
             {
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(movableBoxData.rootCoordinate.x, movableBoxData.rootCoordinate.y), out var tile);
-
-                GameObject obj;
-
-                obj = Instantiate(m_tile4EdgePrefab, transform);
-
-                obj.transform.position = tile.transform.position;
-                obj.transform.localScale = Vector3.one * 1;
-                obj.name = $"Tile";
-                obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
-                if(needSetOccupied) tile.IsOccupied = true;
+                Vector2 pos = Input.mousePosition;
+                if (IsTouchOverBox(pos)) StartDrag(pos);
             }
-            else if (movableBoxData.boxSize.x == 1)
+            else if (Input.GetMouseButton(0) && isDragging)
             {
-                for (int x = 0; x < boxSize.x; x++)
-                {
-                    for (int y = 0; y < boxSize.y; y++)
+                DragTick(Input.mousePosition);
+            }
+            else if (Input.GetMouseButtonUp(0) && isDragging)
+            {
+                EndDrag();
+            }
+
+            //// Touch
+            //if (Input.touchCount > 0)
+            //{
+            //    Touch touch = Input.GetTouch(0);
+            //    Vector2 pos = touch.position;
+
+            //    if (touch.phase == TouchPhase.Began)
+            //    {
+            //        if (IsTouchOverBox(pos)) StartDrag(pos);
+            //    }
+            //    else if ((touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary) && isDragging)
+            //    {
+            //        DragTick(pos);
+            //    }
+            //    else if (touch.phase == TouchPhase.Ended && isDragging)
+            //    {
+            //        EndDrag();
+            //    }
+            //}
+        }
+
+        private bool IsTouchOverBox(Vector2 screenPosition)
+        {
+            if (gameCamera == null) return false;
+
+            Ray ray = gameCamera.ScreenPointToRay(screenPosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, moveBoxLayer))
+            {
+                return hit.transform == transform || hit.transform.IsChildOf(transform);
+            }
+            return false;
+        }
+
+        private MovableBoxTile GetTileUnderScreenPosition(Vector2 screenPosition)
+        {
+            if (gameCamera == null) return null;
+
+            Ray ray = gameCamera.ScreenPointToRay(screenPosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, moveBoxLayer))
+            {
+                var tile = hit.transform.GetComponent<MovableBoxTile>();
+                if (tile != null) return tile;
+                return hit.transform.GetComponentInParent<MovableBoxTile>();
+            }
+            return null;
+        }
+
+        private void StartDrag(Vector2 inputPosition)
+        {
+            var clickedTile = GetTileUnderScreenPosition(inputPosition);
+            if (clickedTile == null) return;
+
+            isDragging = true;
+            axisLocked = false;
+            hasDragTarget = false;
+
+
+            dragStartPosition = inputPosition;
+            dragStartCoordinate = Data.rootCoordinate;
+
+            selectedTileOffset = clickedTile.Coordinate - Data.rootCoordinate;
+            baseSelectedTileCoord = dragStartCoordinate + selectedTileOffset;
+
+            DebugLog($"StartDrag: root={dragStartCoordinate}, clicked={clickedTile.Coordinate}, offset={selectedTileOffset}");
+        }
+
+        private void DragTick(Vector2 currentInputPos)
+        {
+            // Nếu đang auto-move sau EndDrag, không cập nhật target mới
+            if (!isDragging && hasDragTarget)
+            {
+                DebugLog("Skipping DragTick - auto-moving to previous target");
+                return;
+            }
+
+
+            Vector2Int hoveredForSelected = ScreenToGridCoordinate(currentInputPos);
+            Vector2Int constrainedForSelected = hoveredForSelected;
+
+            // Apply direction constraints
+            switch (Data.wayDirection)
+            {
+                case WayDirection.Horizontal:
+                    constrainedForSelected.y = baseSelectedTileCoord.y;
+                    break;
+                case WayDirection.Vertical:
+                    constrainedForSelected.x = baseSelectedTileCoord.x;
+                    break;
+                case WayDirection.All:
+                    if (!axisLocked)
                     {
-                        Vector2Int c = new Vector2Int(x, y);
-                        var prefab = m_tile2EdgePrefab;
-                        if (y == 0 || y == boxSize.y - 1)
+                        Vector2 delta = currentInputPos - dragStartPosition;
+                        if (delta.sqrMagnitude > inputThreshold * inputThreshold)
                         {
-                            prefab = m_tileCorner3EdgePrefab;
+                            lockHorizontal = Mathf.Abs(delta.x) >= Mathf.Abs(delta.y);
+                            axisLocked = true;
                         }
-
-                        LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(movableBoxData.rootCoordinate.x + c.x, movableBoxData.rootCoordinate.y + c.y), out var tile);
-                        GameObject obj;
-
-                        obj = Instantiate(prefab, transform);
-
-                        obj.transform.position = tile.transform.position;
-                        obj.transform.localScale = Vector3.one * 1;
-                        obj.name = $"Tile_{c.x}_{c.y}";
-                        //obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
-                        if(y == 0)
-                        {
-                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(0, 90, -90));
-                        }
-                        else if(y == boxSize.y - 1)
-                        {
-                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(0, -90, 90));
-                        }
-                        else
-                        {
-                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(0, 90, -90));
-                        }
-
-                        var movableBoxTile = obj.AddComponent<MovableBoxTile>();
-                        movableBoxTile.Coordinate = tile.MapTileData.coordinate;
-                        listMovableBoxTile.Add(movableBoxTile);
-                        if (needSetOccupied) tile.IsOccupied = true;
                     }
+                    if (axisLocked)
+                    {
+                        if (lockHorizontal) constrainedForSelected.y = baseSelectedTileCoord.y;
+                        else constrainedForSelected.x = baseSelectedTileCoord.x;
+                    }
+                    break;
+            }
+
+            Vector2Int rootTarget = constrainedForSelected - selectedTileOffset;
+
+            // Validation và set target
+            Debug.Log($"1 {rootTarget != Data.rootCoordinate}"  );
+            Debug.Log($"2 {CanMoveRootTo(rootTarget)}");
+            if (rootTarget != Data.rootCoordinate && CanMoveRootTo(rootTarget))
+            {
+                if (GameMap.TryGetTileAtCoord(rootTarget, out var targetTile))
+                {
+                    dragTargetRoot = rootTarget;
+                    hasDragTarget = true;
+                    DebugLog($"New drag target set: {rootTarget}");
                 }
-            }
-            else if (movableBoxData.boxSize.y == 1)
-            {
-
-                for (int x = 0; x < boxSize.x; x++)
+                else
                 {
-                    for (int y = 0; y < boxSize.y; y++)
-                    {
-                        Vector2Int c = new Vector2Int(x, y);
-                        var prefab = m_tile2EdgePrefab;
-                        if (x == 0 || x == boxSize.x - 1)
-                        {
-                            prefab = m_tileCorner3EdgePrefab;
-                        }
-
-                        LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(movableBoxData.rootCoordinate.x + c.x, movableBoxData.rootCoordinate.y + c.y), out var tile);
-
-                        GameObject obj;
-
-                        obj = Instantiate(prefab, transform);
-
-                        obj.transform.position = tile.transform.position;
-                        obj.transform.localScale = Vector3.one * 1;
-                        obj.name = $"Tile_{c.x}_{c.y}";
-                        if (x == 0)
-                        {
-                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(90, 90, -90));
-                        }
-                        else if (x == boxSize.x - 1)
-                        {
-                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(-90, -90, 90));
-                        }
-                        else
-                        {
-                            obj.transform.localRotation = Quaternion.Euler(new Vector3Int(90, 90, -90));
-                        }
-
-                        var movableBoxTile = obj.AddComponent<MovableBoxTile>();
-                        movableBoxTile.Coordinate = tile.MapTileData.coordinate;
-                        listMovableBoxTile.Add(movableBoxTile);
-                        if (needSetOccupied) tile.IsOccupied = true;
-                    }
+                    hasDragTarget = false;
+                    DebugLog($"Invalid target - no tile: {rootTarget}");
                 }
             }
             else
             {
-                for (int x = 0; x < boxSize.x; x++)
+                DebugLog("rootTarget != movableBoxData.rootCoordina");
+                if (rootTarget == Data.rootCoordinate)
                 {
-                    for (int y = 0; y < boxSize.y; y++)
-                    {
-                        Vector2Int c = new Vector2Int(x, y);
+                    DebugLog("Target same as current position");
+                }
+                   
+            }
+        }
 
-                        LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(new Vector2Int(movableBoxData.rootCoordinate.x + c.x, movableBoxData.rootCoordinate.y + c.y), out var tile);
+        private void DragMoveUpdate()
+        {
+            if (!hasDragTarget) return;
 
-                        GameObject obj = null;
+            Vector3 targetWorld = GetWorldPositionFromGridKeepZ(dragTargetRoot);
+            float step = moveSpeed * Time.deltaTime;
 
-                        if (x == 0 && y == 0)
-                        {
-                            obj = Instantiate(m_tileCornerPrefab, transform);
-                            var angleCornerBottomLeft = new Vector3(0, 90, -90);
-                            obj.transform.localRotation = Quaternion.Euler(angleCornerBottomLeft);
-                        }
-                        else if (x == 0 && y == boxSize.y -1)
-                        {
-                            obj = Instantiate(m_tileCornerPrefab, transform);
-                            var angleCornerTopLeft = new Vector3(90, 90, -90);
-                            obj.transform.localRotation = Quaternion.Euler(angleCornerTopLeft);
-                        }
-                        else if(x == boxSize.x -1 && y == 0)
-                        {
-                            obj = Instantiate(m_tileCornerPrefab, transform);
-                            var angleCornerBottomRight = new Vector3(-90, -90, 90);
-                            obj.transform.localRotation = Quaternion.Euler(angleCornerBottomRight);
-                        }
-                        else if(x== boxSize.x - 1 && y == boxSize.y -1)
-                        {
-                            obj = Instantiate(m_tileCornerPrefab, transform);
-                            var angleCornerTopRight = new Vector3(0, -90, 90);
-                            obj.transform.localRotation = Quaternion.Euler(angleCornerTopRight);
-                        }
-                        else if(x == 0 && (y != 0 && y != boxSize.y -1))
-                        {
-                            obj = Instantiate(m_tileEdgePrefab, transform);
-                            var angleLeftEdge = new Vector3(90, 90, -90);
-                            obj.transform.localRotation = Quaternion.Euler(angleLeftEdge);
-                        }
-                        else if (x == boxSize.x -1 && (y != 0 && y != boxSize.y - 1))
-                        {
-                            obj = Instantiate(m_tileEdgePrefab, transform);
-                            var angleRightEdge = new Vector3(-90, -90, 90);
-                            obj.transform.localRotation = Quaternion.Euler(angleRightEdge);
-                        }
-                        else if (y == 0 && (x != 0 && x != boxSize.x - 1))
-                        {
-                            obj = Instantiate(m_tileEdgePrefab, transform);
-                            var angleBottomEdge = new Vector3(-180, -90, 90);
-                            obj.transform.localRotation = Quaternion.Euler(angleBottomEdge);
-                        }
-                        else if (y == boxSize.y -1 && (x != 0 && x != boxSize.x - 1))
-                        {
-                            obj = Instantiate(m_tileEdgePrefab, transform);
-                            var angleTopEdge = new Vector3(-180, 90, -90);
-                            obj.transform.localRotation = Quaternion.Euler(angleTopEdge);
-                        }
-                        else
-                        {
-                            obj = Instantiate(m_tileCenterPrefab, transform);
-                            obj.transform.localRotation = Quaternion.Euler(-90 * Vector3.right);
-                        }
+            // MoveTowards đảm bảo không bao giờ vượt qua target
+            Vector3 newPosition = Vector3.MoveTowards(transform.position, targetWorld, step);
+            transform.position = newPosition;
 
-                        obj.transform.position = tile.transform.position;
-                        obj.transform.localScale = Vector3.one * 1;
-                        obj.name = $"Tile_{c.x}_{c.y}";
-                        var movableBoxTile = obj.AddComponent<MovableBoxTile>();
-                        movableBoxTile.Coordinate = tile.MapTileData.coordinate;
-                        listMovableBoxTile.Add(movableBoxTile);
-                        if (needSetOccupied) tile.IsOccupied = true;
-                    }
+            // Kiểm tra đã đến target chưa
+            if (Vector3.Distance(transform.position, targetWorld) < 0.01f)
+            {
+                // Đảm bảo position chính xác 100%
+                transform.position = targetWorld;
+
+                ClearCurrentOccupation();
+                UpdateBoxLogicalPosition(dragTargetRoot);
+                hasDragTarget = false;
+                //axisLocked = false;
+                DebugLog($"Reached target after EndDrag: {targetWorld}");
+            }
+            else
+            {
+                float remainingDist = Vector3.Distance(transform.position, targetWorld);
+                DebugLog($"Still moving to target, remaining: {remainingDist}");
+            }
+        }
+
+        private void EndDrag()
+        {
+            DebugLog($"EndDrag called - hasDragTarget: {hasDragTarget}");
+
+            if (hasDragTarget)
+            {
+                Vector3 currentPos = transform.position;
+                Vector3 targetPos = GetWorldPositionFromGridKeepZ(dragTargetRoot);
+                float remainingDist = Vector3.Distance(currentPos, targetPos);
+
+                DebugLog($"EndDrag with active target - remaining distance: {remainingDist}");
+            }
+
+            isDragging = false;
+            axisLocked = false;
+            // Không clear hasDragTarget - để DragMoveUpdate tiếp tục move
+        }
+
+
+        #endregion
+
+        #region Grid Helpers & Validation
+
+        private Vector2Int ScreenToGridCoordinate(Vector2 screenPosition)
+        {
+            Ray ray = gameCamera.ScreenPointToRay(screenPosition);
+
+            float currentZ = transform.position.z;
+            Plane groundPlane = new Plane(Vector3.forward, new Vector3(0, 0, currentZ));
+
+            if (groundPlane.Raycast(ray, out float distance))
+            {
+                Vector3 worldPoint = ray.GetPoint(distance);
+                Vector2Int gridCoord = GameMap.WorldToGridPosition(worldPoint);
+
+                DebugLog($"Screen {screenPosition} -> World {worldPoint} -> Grid {gridCoord}");
+                return gridCoord;
+            }
+
+            return Data.rootCoordinate;
+        }
+
+        private bool CanMoveRootTo(Vector2Int targetRootPos)
+        {
+            // Bounds check toàn khối
+            for (int x = 0; x < Data.boxSize.x; x++)
+            {
+                for (int y = 0; y < Data.boxSize.y; y++)
+                {
+                    Vector2Int check = targetRootPos + new Vector2Int(x, y);
+                    if (!IsWithinMapBounds(check)) 
+                        return false;
+                    if (IsTileOccupiedByOther(check)) 
+                        return false;
+                }
+            }
+            return true;
+        }
+
+        private bool IsWithinMapBounds(Vector2Int gridPos)
+        {
+            return gridPos.x >= 0 && gridPos.y >= 0 &&
+                   gridPos.x < GameMap.MapSize.x && gridPos.y < GameMap.MapSize.y;
+        }
+
+        private bool IsTileOccupiedByOther(Vector2Int gridPos)
+        {
+            if (GameMap.TryGetTileAtCoord(gridPos, out var tile))
+            {
+                // Bỏ qua các tile thuộc chính box này
+                foreach (var boxTile in spawnedTiles)
+                {
+                    if (boxTile.Coordinate == gridPos)
+                        return false; // occupied nhưng là của mình
+                }
+                return tile.IsOccupied;
+            }
+            return true; // không tìm thấy tile → xem như không hợp lệ
+        }
+
+        private Vector3 GetWorldPositionFromGridKeepZ(Vector2Int gridPos)
+        {
+            if (GameMap.TryGetTileAtCoord(gridPos, out var tile))
+            {
+                var p = tile.transform.position;              
+                return new Vector3(p.x, p.y, transform.position.z);
+            }
+            var f = GameMap.GetTileWorldPosition(gridPos);    
+            return new Vector3(f.x, f.y, transform.position.z);
+        }
+
+        #endregion
+
+        #region Occupation & Logical Update
+
+        private void ClearCurrentOccupation()
+        {
+            foreach (var boxTile in spawnedTiles)
+            {
+                if (GameMap.TryGetTileAtCoord(boxTile.Coordinate, out var tile))
+                {
+                    tile.IsOccupied = false;
                 }
             }
         }
 
-        public void MoveByOffset(Vector2Int offset)
+        private void UpdateBoxLogicalPosition(Vector2Int newRootPos)
         {
-            foreach (var tileMove in listMovableBoxTile)
-            {
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
-                //oldTile.IsOccupied = false;
-            }
+            Vector2Int offset = newRootPos - Data.rootCoordinate;
+            Data.rootCoordinate = newRootPos;
 
-            foreach (var tileMove in listMovableBoxTile)
+            foreach (var boxTile in spawnedTiles)
             {
-                var newCoordinate = new Vector2Int(tileMove.Coordinate.x + offset.x, tileMove.Coordinate.y + offset.y);
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var oldTile);
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(newCoordinate, out var tile);
-                //oldTile.IsOccupied = false;
-                tileMove.transform.position = tile.transform.position;
-                tileMove.Coordinate = newCoordinate;
-            }
-            movableBoxData.rootCoordinate += offset;
-        }
-
-        public void PlaceMoveBox()
-        {
-            foreach (var tileMove in listMovableBoxTile)
-            {
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
-                if (tile.IsOccupied)
+                boxTile.Coordinate += offset;
+                if (GameMap.TryGetTileAtCoord(boxTile.Coordinate, out var tile))
                 {
-                    Debug.LogError("Cannot place tile");
-                    return;
+                    tile.IsOccupied = true;
                 }
-
             }
 
-            foreach (var tileMove in listMovableBoxTile)
-            {
-                LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(tileMove.Coordinate, out var tile);
-                tile.IsOccupied = true;
-            }
-
-            Debug.Log("Move Success");
-            LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Add(movableBoxData);
+            DebugLog($"Box moved to {newRootPos}, world={transform.position}");
         }
 
-        private void Move()
+        #endregion
+
+        #region Public API
+
+        public override void Init(MovableBoxData data)
         {
-            // check way direction
-            switch (wayDirection)
-            {
-                case WayDirection.Horizontal:
-                    // move left or right
-                    break;
-                case WayDirection.Vertical:
-                    // move up or down
-                    break;
-                case WayDirection.All:
-                    // move in any direction
-                    break;
-                default:
-                    break;
-            }
+            //Data = data;
+            //SpawnTiles();
+
+            base.Init(data);
+
+            // Đặt transform về đúng tâm root tile (giữ Z hiện tại)
+            //if (LevelManager.Instance.LevelGame.GameMap.TryGetTileAtCoord(Data.rootCoordinate, out var rootTile))
+            //{
+            //    var p = rootTile.transform.position;
+            //    transform.position = new Vector3(p.x, p.y, transform.position.z);
+            //}
         }
+
+        #endregion
+
+        #region Visual 
+        public override void UpdateVisual()
+        {
+            base.UpdateVisual();
+
+            var offset = 0.2f;
+            var centerWorlPos = GetCenterWorldPos();
+            var root = RootCoordinate;
+            GameMap.TryGetTileAtCoord(root, out var tileLeft);
+            var topCoord = new Vector2Int(root.x + BoxSize.x - 1, root.y + BoxSize.y - 1);
+            GameMap.TryGetTileAtCoord(topCoord, out var tileTop);
+
+            m_arrowHorizontal.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowHorizontal.transform.position.z);
+            m_arrowVertical.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowVertical.transform.position.z);
+            //m_arrowBodyHorizontal.transform.position = centerWorlPos;
+            //m_arrowBodyVertical.transform.position = centerWorlPos;
+            m_arrowHorizontal.SetActive(Data.wayDirection == WayDirection.Horizontal || Data.wayDirection == WayDirection.All);
+            m_arrowVertical.SetActive(Data.wayDirection == WayDirection.Vertical || Data.wayDirection == WayDirection.All);
+
+
+            if (BoxSize.x == 1 && BoxSize.y == 1)
+            {
+                m_arrowBodyHorizontal.transform.localScale = Vector3.zero;
+                m_arrowBodyVertical.transform.localScale = Vector3.zero;
+                m_arrowLeft.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowLeft.transform.position.z) + Vector3.left * offset;
+                m_arrowRight.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowRight.transform.position.z) + Vector3.right * offset;
+                m_arrowTop.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowTop.transform.position.z) + Vector3.up * offset;
+                m_arrowDown.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowDown.transform.position.z) + Vector3.down * offset;
+
+            }
+            else if(BoxSize.x == 1)
+            {
+                m_arrowBodyHorizontal.transform.localScale = Vector3.zero;
+                m_arrowLeft.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowLeft.transform.position.z) + Vector3.left * offset;
+                m_arrowRight.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowRight.transform.position.z) + Vector3.right * offset;
+                m_arrowBodyVertical.transform.localScale = new Vector3(1, (BoxSize.y - 1), 1);
+                m_arrowTop.transform.position = new Vector3(centerWorlPos.x,tileTop.transform.position.y, m_arrowTop.transform.position.z);
+                m_arrowDown.transform.position = new Vector3(centerWorlPos.x, tileLeft.transform.position.y, m_arrowTop.transform.position.z);
+
+            }
+            else if(BoxSize.y == 1)
+            {
+                m_arrowBodyHorizontal.transform.localScale = new Vector3((BoxSize.x - 1), 1, 1);
+                m_arrowLeft.transform.position = new Vector3(tileLeft.transform.position.x, centerWorlPos.y, m_arrowLeft.transform.position.z);
+                m_arrowRight.transform.position = new Vector3(tileTop.transform.position.x, centerWorlPos.y, m_arrowRight.transform.position.z);
+                m_arrowBodyVertical.transform.localScale = Vector3.zero;
+                m_arrowTop.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowTop.transform.position.z) + Vector3.up * offset;
+                m_arrowDown.transform.position = new Vector3(centerWorlPos.x, centerWorlPos.y, m_arrowDown.transform.position.z) + Vector3.down * offset;
+            }
+            else
+            {
+                m_arrowBodyHorizontal.transform.localScale = new Vector3((BoxSize.x - 1), 1, 1);
+                m_arrowLeft.transform.position = new Vector3(tileLeft.transform.position.x, centerWorlPos.y, m_arrowLeft.transform.position.z);
+                m_arrowRight.transform.position = new Vector3(tileTop.transform.position.x, centerWorlPos.y, m_arrowRight.transform.position.z);
+                m_arrowBodyVertical.transform.localScale = new Vector3(1,(BoxSize.y - 1), 1);
+                m_arrowTop.transform.position = new Vector3(centerWorlPos.x, tileTop.transform.position.y, m_arrowTop.transform.position.z);
+                m_arrowDown.transform.position = new Vector3(centerWorlPos.x, tileLeft.transform.position.y, m_arrowTop.transform.position.z);
+
+            }
+
+        }
+        #endregion
+
+        #region Tile Spawning
+
+        protected override bool ShouldSetOccupied()
+        {
+            return LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Contains(Data);
+        }
+
+        protected override void AddTileComponent(GameObject obj, Vector2Int coord)
+        {
+            var tile = obj.AddComponent<MovableBoxTile>();
+            tile.Coordinate = coord;
+            spawnedTiles.Add(tile);
+        }
+
+        #endregion
+
+        #region Utils
+
+        private void DebugLog(string message)
+        {
+            if (enableDebugLogs) Debug.Log($"[BoxMove] {message}");
+        }
+
+        #endregion
     }
 }

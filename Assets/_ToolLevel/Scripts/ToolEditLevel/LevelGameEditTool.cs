@@ -1,9 +1,9 @@
 using Geckout.Data;
-using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using System.Linq;
 
 namespace Geckout
 {
@@ -16,24 +16,24 @@ namespace Geckout
 
         public BodyController selectedBody { get; set; }
 
-        public Portal selectedPortal
+        public Portal SelectedPortal
         {
             get
             {
-                //var listt = listSelectedTile.ToList();
-                var tile = listSelectedTile.ToList().Find(x => x.MapTileData.type == MapTileType.Portal);
                 if (listSelectedTile.Count <= 0) return null;
                 GameMap.TryGetPortalAtCoord(listSelectedTile.First().MapTileData.coordinate, out var portal);
 
-                if (tile != null)
-                {
-                    return portal ? portal : null;
-                }
-                return null;
+                return portal ? portal : null;
+
             }
         }
 
         public BoxMove SelectedBoxMove
+        {
+            get; set;
+        }
+
+        public Crate SelectedCrate
         {
             get; set;
         }
@@ -69,7 +69,12 @@ namespace Geckout
 
                     if(hitInfo.transform.parent.TryGetComponent<BoxMove>(out var boxMove))
                     {
-                        SelectBoxMove(boxMove);
+                        SelectMovableBox(boxMove);
+                    }
+
+                    if (hitInfo.transform.parent.TryGetComponent<Crate>(out var crate))
+                    {
+                        SelectCrateBox(crate);
                     }
 
                     var dogBody = hitInfo.transform.GetComponentInParent<BodyController>();
@@ -91,6 +96,15 @@ namespace Geckout
                         tile.SetSelected(false);
                         listSelectedTile.Remove(tile);
                     }
+
+                    if (hitInfo.transform.parent.TryGetComponent<BoxMove>(out var boxMove))
+                    {
+                        if (SelectedBoxMove != null)
+                        {
+                            SelectedBoxMove.SetSelected(false);
+                            SelectedBoxMove = null;
+                        }
+                    }
                 }
             }
 
@@ -102,14 +116,28 @@ namespace Geckout
             }
         }
 
-        public void SelectBoxMove(BoxMove boxMove)
+        public void SelectMovableBox(BoxMove boxBase) 
         {
             if(SelectedBoxMove != null)
             {
                 SelectedBoxMove.SetSelected(false);
             }
-            SelectedBoxMove = boxMove;
+           
+            SelectedBoxMove = boxBase;
             SelectedBoxMove.SetSelected(true);
+            ToolEditLevelManager.OnClickEditBoxes();
+        }
+
+        public void SelectCrateBox(Crate crate)
+        {
+            if (SelectedCrate != null)
+            {
+                SelectedCrate.SetSelected(false);
+            }
+
+            SelectedCrate = crate;
+            SelectedCrate.SetSelected(true);
+            ToolEditLevelManager.OnClickEditBoxes();
         }
 
         public void SelectTile(GameTile tile)
@@ -152,8 +180,6 @@ namespace Geckout
                 throw new System.Exception("Not Enough Tiles Selected");
             }
 
-            m_gameLevelData.listDogData.Add(dogData);
-
             for(int i=0; i < listSelectedTile.Count; i++)
             {
                 var tile = listSelectedTile.ElementAt(i);
@@ -173,7 +199,8 @@ namespace Geckout
                     }
                 }
             }
-                
+
+            m_gameLevelData.listDogData.Add(dogData);
             dogData.listCoordinate = new List<Vector2Int>(listSelectedTile.Select(x => x.Coordinate).ToList());
             return SpawnBody(dogData);
         }
@@ -188,10 +215,42 @@ namespace Geckout
             Destroy(selectedBody.gameObject);
         }
 
+        public void DeleteSelectedBoxes()
+        {
+            if(SelectedCrate != null)
+            {
+                GameLevelData.listCrateData.Remove(SelectedCrate.Data);
+                Destroy(SelectedCrate.gameObject);
+            }
+
+            if(SelectedBoxMove != null)
+            {
+                GameLevelData.listMovableBoxData.Remove(SelectedBoxMove.Data);
+                Destroy(SelectedBoxMove.gameObject);
+            }
+        }
+
+        public void DeleteSelectedPortals()
+        {
+            for(int i =0; i<listSelectedTile.Count; i++)
+            {
+                var tile = listSelectedTile.ElementAt(i);
+                GameMap.TryGetPortalAtCoord(tile.Coordinate, out var portal);
+                if (portal != null)
+                {
+                    GameLevelData.listPortalData.Remove(portal.PortalData);
+                    tile.SetTileType(MapTileType.Normal);
+                    Destroy(portal.gameObject);
+                }
+            }
+        }
+
         public void ClearAllSelected()
         {
             ClearAllSelectedTiles();
             ClearSelectedBody();
+            ClearSelectedMovableBoxes();
+            ClearSelectedCrates();
         }
 
         public void ClearSelectedBody()
@@ -203,15 +262,28 @@ namespace Geckout
             }
         }
 
+        public void ClearSelectedMovableBoxes()
+        {
+            if(SelectedBoxMove != null) SelectedBoxMove.SetSelected(false);
+            SelectedBoxMove = null; 
+        }
+
+        public void ClearSelectedCrates()
+        {
+            if (SelectedCrate != null) SelectedCrate.SetSelected(false);
+            SelectedCrate = null;
+        }
+            
+
         public void ClearAllSelectedTiles()
         {
             listSelectedTile.ToList().ForEach(x => x.SetSelected(false));
             listSelectedTile.Clear();
         }
 
-        public void AddNewPortal()
+        public void AddNewPortal(PortalData portalData)
         {
-            ChangeTypeSelectedTiles(MapTileType.Portal);
+            
             //for (int i = 0; i < listSelectedTile.Count; i++)
             //{
             //    var tileSelected = listSelectedTile.ElementAt(i);
@@ -225,32 +297,15 @@ namespace Geckout
             for (int i = 0; i < listSelectedTile.Count; i++)
             {
                 var tileSelected = listSelectedTile.ElementAt(i);
-                var newPortalData = new PortalData();
+                if (tileSelected.IsOccupied) continue;
+                var newPortalData = new PortalData(portalData);
                 newPortalData.Coordinate = new Vector2Int(tileSelected.Coordinate.x, tileSelected.Coordinate.y);
+                tileSelected.IsOccupied = true;
+                tileSelected.SetTileType(MapTileType.Portal);
                 GameMap.SpawnPortal(newPortalData);
+                GameLevelData.listPortalData.Add(newPortalData);
             }
-        }
-
-        public void RemoveAllSelectedPortals()
-        {
-            var listPortal = listSelectedTile.ToList().FindAll(x => x.MapTileData.type == MapTileType.Portal);
-
-            var listPortalObject = new List<Portal>();
-
-            foreach (var portal in listPortal)
-            {
-                LevelManager.Instance.LevelGame.GameMap.TryGetPortalAtCoord(portal.Coordinate, out var portalObject);
-                listPortalObject.Add(portalObject);
-            }
-
-            for (int i = 0; i < listPortalObject.Count; i++)
-            {
-                var portalSelected = listPortalObject[i];
-                GameLevelData.listPortalData.Remove(portalSelected.PortalData);
-                listPortal[i].SetTileType(MapTileType.Normal);
-                Destroy(portalSelected);
-            }
-
+            //ChangeTypeSelectedTiles(MapTileType.Portal);
         }
 
         public void ChangeTypeSelectedTiles(MapTileType tileType)
@@ -273,6 +328,73 @@ namespace Geckout
         public void RotateSelectedTiles(int angle)
         {
             listSelectedTile.ToList().ForEach(x => x.RotateBy(angle));
+        }
+
+        public void AutoGenerateWallTiles()
+        {
+            var listCoordTileSelected = ListSelectedTile.Where(x => !x.IsOccupied).ToList();
+            foreach (var tile in listCoordTileSelected)
+            {
+                GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.up, out var tileUp);
+                bool up = !(tileUp == null || tileUp.MapTileData.type != MapTileType.Normal || listCoordTileSelected.Contains(tileUp));
+                GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.down, out var tileDown);
+                bool down = !(tileDown == null || tileDown.MapTileData.type != MapTileType.Normal || listCoordTileSelected.Contains(tileDown));
+                GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.left, out var tileLeft);
+                bool left = !(tileLeft == null || tileLeft.MapTileData.type != MapTileType.Normal || listCoordTileSelected.Contains(tileLeft));
+                GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.right, out var tileRight);
+                bool right = !(tileRight == null || tileRight.MapTileData.type != MapTileType.Normal || listCoordTileSelected.Contains(tileRight));
+
+                var rot = Vector3Int.zero;
+
+                // Example logic: you need to replace these rules with your 6 types
+                if (up && down && left && right)
+                {
+                    tile.SetTileType(MapTileType.Wall4Side); // cross
+                    rot = new Vector3Int(0, 90, -90);
+                }
+                else if ((up && down && left) || (up && down && right) ||
+                         (up && left && right) || (down && left && right))
+                {
+                    tile.SetTileType(MapTileType.Wall3Side); // cross
+                    if (!up) rot = new Vector3Int(0, 90, -90);
+                    if (!down) rot = new Vector3Int(180, 90, -90);
+                    if (!left) rot = new Vector3Int(-90, 90, -90) ;
+                    if (!right) rot = new Vector3Int(90, 90, -90);
+                }
+                else if ((up && down) || (left && right))
+                {
+                    tile.SetTileType(MapTileType.Wall2Side);
+                    if (left && right) rot = new Vector3Int(0, 90, -90);
+                    else rot = new Vector3Int(90, 90, -90);
+                }
+                else if ((up && right) || (right && down) || (down && left) || (left && up))
+                {
+                    tile.SetTileType(MapTileType.WallCornerInside); // corner
+                    if (up && right) rot = new Vector3Int(180, 90, -90);
+                    if (right && down) rot = new Vector3Int(-90, 90, -90);
+                    if (down && left) rot = new Vector3Int(0, 90, -90);
+                    if (left && up) rot = new Vector3Int(90, 90, -90);
+                }
+                else if (up || down || left || right)
+                {
+                    tile.SetTileType(MapTileType.Wall1Side); // dead end
+                    if (up) rot = new Vector3Int(180, 90, -90);
+                    if (down) rot = new Vector3Int(0, 90, -90);
+                    if (left) rot = new Vector3Int(90, 90, -90);
+                    if (right) rot = new Vector3Int(-90, 90, -90);
+                }
+                else
+                {
+                    tile.SetTileType(MapTileType.WallCenter); // single block
+                    rot = new Vector3Int(0, 90, -90);
+                }
+
+                tile.RotateTo(rot);
+
+            }
+
+
+
         }
 
     }

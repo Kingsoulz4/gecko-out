@@ -16,17 +16,19 @@ namespace Geckout
         [SerializeField] private bool isDebug = false;
         [SerializeField] private float offsetFactor = 1f;
 
-        [Header("Tiles")]
+        [Header("Tiles And Blocks")]
         [SerializeField] private GameTile m_tileWallEdge;
         [SerializeField] private GameTile m_tileWallCorner;
         [SerializeField] private Portal m_portalPrefab;
         [SerializeField] private BoxMove m_boxMovePrefab;
+        [SerializeField] private Crate m_cratePrefab;
 
         [Header("Containers")]
         [SerializeField] private Transform _tilesContainer;
         [SerializeField] private Transform m_wallContainer;
         [SerializeField] private Transform m_portalsContainer;
         [SerializeField] private Transform m_movableBoxContainer;
+        [SerializeField] private Transform m_crateContainer;
 
         [Header("Material Management")]
         [SerializeField] private Material defaultMaterial;
@@ -35,6 +37,9 @@ namespace Geckout
         private GameTile[] tiles;
         private Vector2Int _mapSize;
         private List<Portal> listPortal = new();
+        private List<BoxMove> listMovableBox = new();
+        private List<Crate> listCrate = new();
+
         private static Vector2 gridOffset;
 
         public static Vector2Int MapSize => _instance._mapSize;
@@ -75,9 +80,10 @@ namespace Geckout
             //SpawnAllTiles(levelData);
             //GetAllTilesTest(levelData);
         }
+
         public static Vector3 GetTileWorldPosition(Vector2Int coord)
         {
-            if (TryGetTileAt(coord, out var tile))
+            if (TryGetTileAtCoord(coord, out var tile))
             {
                 return tile.transform.position;
             }
@@ -87,7 +93,8 @@ namespace Geckout
                 return Vector3.zero;
             }
         }
-        public static bool TryGetTileAt(int x, int y, out GameTile result)
+
+        private static bool TryGetTileAt(int x, int y, out GameTile result)
         {
             if (x < 0 || y < 0 || x >= _instance._mapSize.x || y >= _instance._mapSize.y)
             {
@@ -100,11 +107,11 @@ namespace Geckout
             return true;
         }
 
-        public bool TryGetTileAtCoord(Vector2Int coordinate, out GameTile result)
+        public static bool TryGetTileAtCoord(Vector2Int coordinate, out GameTile result)
         {
             var x = coordinate.x;
             var y = coordinate.y;
-            if (x < 0 || y < 0 || x >= levelData.mapSize.x || y >= levelData.mapSize.y)
+            if (x < 0 || y < 0 || x >= _instance.levelData.mapSize.x || y >= _instance.levelData.mapSize.y)
             {
                 result = null;
                 return false;
@@ -113,7 +120,7 @@ namespace Geckout
             //var index = x + y * levelData.mapSize.x;
             //result = tiles[index];
 
-            result = tiles.First(x => x.Coordinate == coordinate);
+            result = _instance.tiles.First(x => x.Coordinate == coordinate);
 
             return  result != null;
         }
@@ -130,21 +137,6 @@ namespace Geckout
 
             result = listPortal.Find(x => x.PortalData.Coordinate == coordinate);
             return result != null;
-        }
-
-        public static bool TryGetTileAt(Vector2Int coordinate, out GameTile result)
-        {
-            var x= coordinate.x;
-            var y = coordinate.y;
-            if (x < 0 || y < 0 || x >= _instance._mapSize.x || y >= _instance._mapSize.y)
-            {
-                result = null;
-                return false;
-            }
-
-            var index = x + y * _instance._mapSize.x;
-            result = _instance.tiles[index];
-            return true;
         }
 
         void GetAllTilesTest(GameLevelData levelData)
@@ -195,6 +187,8 @@ namespace Geckout
             SpawnPortals();
 
             SpawnMovableBoxes();
+
+            SpawnCrates();
         }
 
         [ContextMenu("Test SpawnTiles")]
@@ -216,20 +210,27 @@ namespace Geckout
             listPortal.Add(portal);
         }
 
+        public Crate SpawnCrate(CrateData crateData)
+        {
+            var newCrate = Instantiate(m_cratePrefab, m_movableBoxContainer);
+            newCrate.Init(crateData);
+            return newCrate;
+        }
+
         public BoxMove SpawnBoxMove(MovableBoxData movableBoxData)
         {
             var newMovableBox = Instantiate(m_boxMovePrefab, m_movableBoxContainer);
             newMovableBox.Init(movableBoxData);
-            //levelData.listMovableBoxData.Add(movableBoxData);
             return newMovableBox;
         }
 
         void SpawnMovableBoxes()
         {
             Utils.RemoveAllChilds(m_movableBoxContainer);
+            listMovableBox.Clear();
             foreach (var movableBox in levelData.listMovableBoxData)
             {
-                SpawnBoxMove(movableBox);
+                listMovableBox.Add(SpawnBoxMove(movableBox));
             }
 
         }
@@ -237,9 +238,20 @@ namespace Geckout
         void SpawnPortals()
         {
             Utils.RemoveAllChilds(m_portalsContainer);
+            listPortal.Clear();
             foreach(var portal in levelData.listPortalData)
             {
                 SpawnPortal(portal);
+            }
+        }
+
+        void SpawnCrates()
+        {
+            Utils.RemoveAllChilds(m_crateContainer);
+            listCrate.Clear();
+            foreach (var crateData in levelData.listCrateData)
+            {
+                listCrate.Add(SpawnCrate(crateData));
             }
         }
 
@@ -514,7 +526,28 @@ namespace Geckout
             }
             return mapState;
         }
-        
+
+        public static void SetTilesUnoccupied(List<Vector2Int> coordinates)
+        {
+            if (coordinates == null || coordinates.Count == 0)
+            {
+                Debug.LogWarning("[GameMap] SetTilesUnoccupied: coordinates list is null or empty");
+                return;
+            }
+
+            foreach (var coord in coordinates)
+            {
+                if (TryGetTileAtCoord(coord, out GameTile tile))
+                {
+                    tile.IsOccupied = false;
+                }
+                else
+                {
+                    Debug.LogWarning($"[GameMap] SetTilesUnoccupied: No tile found at coordinate {coord}");
+                }
+            }
+        }
+
         public static void ApplyFuncToAllTiles(Action<GameTile> action)
         {
             foreach (var tile in _instance.tiles)

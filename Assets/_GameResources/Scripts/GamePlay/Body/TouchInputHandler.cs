@@ -77,7 +77,7 @@ namespace Geckout
             }
 
             // Kiểm tra tile trống + tìm head/tail adjacent
-            if (GameMap.TryGetTileAt(tileCoord.Value, out GameTile tile) && !tile.IsOccupied)
+            if (GameMap.TryGetTileAtCoord(tileCoord.Value, out GameTile tile) && !tile.IsOccupied)
             {
                 var adjacentResult = FindAdjacentGeckoAnchor(tileCoord.Value);
                 if (adjacentResult.HasValue)
@@ -327,7 +327,7 @@ namespace Geckout
         Vector2Int startPosCache;
         void FindAndSetSmoothPath(Vector2Int targetTile)
         {
-            if (bodyController == null) return;
+            if (bodyController == null || !bodyController.CanControl) return;
 
             var headPos = GameMap.WorldToGridPositionForward(bodyController.Segments[0].transform.position, bodyController);
             var tailPos = GameMap.WorldToGridPositionForward(bodyController.Segments[bodyController.Segments.Count - 1].transform.position, bodyController);
@@ -399,7 +399,7 @@ namespace Geckout
             DebugLog($"Executing smooth path with {path.Count} points for {(isDraggingFromHead ? "HEAD" : "TAIL")} control");
 
             bodyController.ClearPath();
-            bodyController.SetMovementPath(path);
+            bodyController.StartMovePath(path);
 
             DebugLog("Smooth path movement started");
         }

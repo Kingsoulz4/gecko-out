@@ -1,0 +1,11 @@
+REMOVE ADS.png
+size:272,148
+filter:Linear,Linear
+pma:true
+NOADS
+bounds:2,2,177,142
+offsets:4,4,185,148
+Tiao006
+bounds:181,16,128,88
+offsets:0,20,128,128
+rotate:90

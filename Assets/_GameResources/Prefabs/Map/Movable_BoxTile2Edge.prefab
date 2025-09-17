@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9036015693858767449}
   - component: {fileID: -6364346117175287478}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Movable_BoxTile2Edge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,7 +52,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 2, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5803881170842371492
 GameObject:
@@ -81,9 +81,9 @@ Transform:
   m_GameObject: {fileID: 5803881170842371492}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 15.147, y: 15.147, z: 15.147}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: 0, y: 0, z: 0.005}
+  m_LocalScale: {x: 16.5, y: 16.5, z: 16.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9036015693858767449}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -94,7 +94,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5803881170842371492}
-  m_Mesh: {fileID: -4679383082785198031, guid: 310999448dd4447429f6944daf8f7629, type: 3}
+  m_Mesh: {fileID: -4679383082785198031, guid: 397cdb032b2cd794f9b65d0553a80d9a, type: 3}
 --- !u!23 &5576086564897360982
 MeshRenderer:
   m_ObjectHideFlags: 0

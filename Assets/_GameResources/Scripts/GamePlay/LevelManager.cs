@@ -8,6 +8,7 @@ namespace Geckout
     public class LevelManager : SingletonDontDestroyMono<LevelManager>, IGameState
     {
         [SerializeField] private LevelController m_levelGameOriginal;
+        [SerializeField] private int levelTest;
 
         public bool IsEdittingLevel { get; set; } = false;
 
@@ -32,7 +33,7 @@ namespace Geckout
         {
             get
             {
-                return PlayerPrefs.GetInt("CurrentLevelNum", 2);
+                return PlayerPrefs.GetInt("CurrentLevelNum", levelTest);
             }
             set
             {
@@ -61,6 +62,7 @@ namespace Geckout
         {
             var levelData = LoadLevel(CurrentLevelNum, CurrentLevelIndex);
             LevelGame.SetLevelData(levelData);
+            OnStartGame();
         }
 
         public GameLevelData LoadLevel(int levelNum, int levelIndex)
@@ -71,7 +73,7 @@ namespace Geckout
                 levelData = Resources.Load<GameLevelData>($"Levels/0/Level1");
             }
 
-            return levelData;   
+            return new GameLevelData(levelData);   
         }    
 
         #region GameState
@@ -92,7 +94,7 @@ namespace Geckout
 
         public void OnStartGame()
         {
-            throw new System.NotImplementedException();
+            LevelGame.StartLevel();
         }
         #endregion
     }

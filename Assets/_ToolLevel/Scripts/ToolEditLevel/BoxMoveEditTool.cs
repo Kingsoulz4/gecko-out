@@ -1,37 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Geckout
 {
     public partial class BoxMove
     {
-        [HideInInspector]
-        [Header("Tool")]
-        [SerializeField] private Outline m_outlineSelected;
-        private Outline OutlineSelected
-        {
-            get
-            {
-                if (m_outlineSelected == null)
-                {
-                    m_outlineSelected = gameObject.AddComponent<Outline>();
-                    m_outlineSelected.OutlineColor = Color.red;
-                    m_outlineSelected.OutlineWidth = 8;
-
-                }
-                //m_outlineSelected.gameObject.SetActive(true);
-                return m_outlineSelected;
-            }
-        }
 
         #region Tool
 
-        public void SetSelected(bool selected)
+        public override void SetSelected(bool selected)
         {
-            OutlineSelected.enabled = selected;
+            base.SetSelected(selected);
         }
 
+        public override void MoveByOffset(Vector2Int offset)
+        {
+            base.MoveByOffset(offset);
+        }
+
+        public override bool PlaceMoveBox()
+        {
+            if (!base.PlaceMoveBox()) return false;
+            Debug.Log("Move Success");
+            if (!LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Contains(Data))
+            {
+                LevelManager.Instance.LevelGame.GameLevelData.listMovableBoxData.Add(base.Data);
+            }
+            return true;
+        }
 
         #endregion
     }

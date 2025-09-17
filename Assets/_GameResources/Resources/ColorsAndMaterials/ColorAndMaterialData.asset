@@ -31,7 +31,7 @@ MonoBehaviour:
     - Key: 7
       Value: {r: 0.4339623, g: 0.35794896, b: 0.079832695, a: 1}
     - Key: 8
-      Value: {r: 1, g: 1, b: 1, a: 1}
+      Value: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
     - Key: 9
       Value: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 1}
     - Key: 10
@@ -44,6 +44,8 @@ MonoBehaviour:
       Value: {r: 0.9622642, g: 0.40396938, b: 0.7581947, a: 1}
     - Key: 14
       Value: {r: 0.5566038, g: 0.039851647, b: 0, a: 1}
+    - Key: -1
+      Value: {r: 0, g: 0, b: 0, a: 1}
   listDogMaterial:
     _serializedList: []
   listPortalMaterial:

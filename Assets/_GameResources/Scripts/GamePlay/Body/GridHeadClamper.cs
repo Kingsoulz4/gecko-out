@@ -150,7 +150,7 @@ namespace Geckout
 
         private void CheckTileCenterAlignment(Vector3 controllingPos, Vector2Int tileCoord)
         {
-            if (!GameMap.TryGetTileAt(tileCoord, out GameTile currentTile))
+            if (!GameMap.TryGetTileAtCoord(tileCoord, out GameTile currentTile))
             {
                 IsAtTileCenter = false;
                 DebugLog($"No tile found at coordinate: {tileCoord}");
@@ -242,7 +242,7 @@ namespace Geckout
 
         private Vector3 ApplyGridClamp(Vector3 currentPos, Vector3 targetPos, Vector2Int currentTileCoord)
         {
-            if (!GameMap.TryGetTileAt(currentTileCoord, out GameTile currentTile))
+            if (!GameMap.TryGetTileAtCoord(currentTileCoord, out GameTile currentTile))
             {
                 DebugLog($"Cannot find current tile at {currentTileCoord}");
                 return targetPos;
@@ -255,7 +255,7 @@ namespace Geckout
             }
 
             Vector2Int nextTileCoord = currentTileCoord + currentDirection;
-            if (!GameMap.TryGetTileAt(nextTileCoord, out GameTile nextTile))
+            if (!GameMap.TryGetTileAtCoord(nextTileCoord, out GameTile nextTile))
             {
                 return currentPos; // Invalid tile
             }

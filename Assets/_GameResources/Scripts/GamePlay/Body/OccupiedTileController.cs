@@ -74,7 +74,7 @@ namespace Geckout
 
                 Vector3 worldPos = segment.transform.position;
                 Vector2Int gridPos = GameMap.WorldToGridPosition(worldPos);
-                
+
                 UpdateSegmentTile(rawIndex, gridPos, isChangeTileColor);
                 lastGridPositions[rawIndex] = gridPos;
             }
@@ -113,15 +113,18 @@ namespace Geckout
             {
                 previousTile.RemoveOccupant();
                 currentOccupiedTiles[segmentIndex].SetOccupied(false);
-                
+
             }
 
             // Add to new tile
-            if (GameMap.TryGetTileAt(gridPos, out GameTile newTile))
+            if (GameMap.TryGetTileAtCoord(gridPos, out GameTile newTile))
             {
                 currentOccupiedTiles[segmentIndex] = newTile;
                 newTile.SetOccupied(true);
-                newTile.AddOccupant(changeTileColor);
+                if (!bodyController.MoveToPortal.IsEnteringPortal)
+                {
+                    newTile.AddOccupant(changeTileColor);
+                }
                 segment.UpdateCoordinateOnly(gridPos);
             }
             else
@@ -138,6 +141,10 @@ namespace Geckout
 
         public void ForceRestoreAll()
         {
+            if (currentOccupiedTiles == null || currentOccupiedTiles.Length < 0)
+            {
+                return;
+            }
             for (int i = 0; i < currentOccupiedTiles.Length; i++)
             {
                 if (currentOccupiedTiles[i] != null)
