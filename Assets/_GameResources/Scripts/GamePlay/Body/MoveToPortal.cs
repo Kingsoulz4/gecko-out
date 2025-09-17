@@ -107,7 +107,7 @@ namespace Geckout
             }
 
             Vector3 startPos = segment.transform.position;
-            Vector3 targetPos = portalCenter + Vector3.forward * 5;
+            Vector3 targetPos = portalCenter + Vector3.forward * bodyController.Length;
 
             float elapsed = 0f;
             while (elapsed < animationDurationPerSegment)
