@@ -17,9 +17,9 @@ namespace Geckout
 
         public void SetActive(bool isActive)
         {
-            gameObject.SetActive(isActive);
             frezzeTimeBG.SetActive(isActive);
             frezzeTimeVfx.SetActive(isActive);
+            fillVisualUI.gameObject.SetActive(isActive);
         }
     }
 }

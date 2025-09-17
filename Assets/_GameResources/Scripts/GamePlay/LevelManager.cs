@@ -56,8 +56,6 @@ namespace Geckout
             }
         }
 
-        public bool CanCountTimeLevel { get; internal set; }
-
         private void OnEnable()
         {
             LevelEvent.OnWin += OnWinGame;

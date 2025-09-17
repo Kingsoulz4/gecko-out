@@ -53,8 +53,9 @@ public class InGameScreenUI : ScreenUI
 
     private void Update()
     {
-        UpdateText(LevelManager.Instance.LevelGame.CurrentTimeLevelRemaining);
+        UpdateTimeText(LevelManager.Instance.LevelGame.CurrentTimeLevelRemaining);
     }
+
     public override void Initialize(UIManager uiManager)
     {
         base.Initialize(uiManager);
@@ -175,10 +176,7 @@ public class InGameScreenUI : ScreenUI
         {
             if (sucess)
             {
-                StopTimeGame(true);
                 BoosterManager.Instance.TimeIngameBooster.ActiveBooster();
-                timeBoosterTopUI.gameObject.SetActive(true);
-
             }
         });
     }
@@ -233,7 +231,7 @@ public class InGameScreenUI : ScreenUI
         currentTopY = rect_Top.anchoredPosition.y;
     }
 
-    public void UpdateText(float timeLevel)
+    public void UpdateTimeText(float timeLevel)
     {
         timeLevel = (int)timeLevel;
         txt_Time.text = GetTimeValueToString(timeLevel);
@@ -247,11 +245,6 @@ public class InGameScreenUI : ScreenUI
         }
         UserDataManager.Level = int.Parse(inputField.text);
         LevelManager.Instance.StartCurrentLevel();
-    }
-
-    private void StopTimeGame(bool isStop)
-    {
-        LevelManager.Instance.CanCountTimeLevel = !isStop;
     }
 
     public static string GetTimeValueToString(float timeInSeconds)

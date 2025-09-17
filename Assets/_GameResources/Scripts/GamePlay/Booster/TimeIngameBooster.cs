@@ -14,7 +14,6 @@ public class TimeIngameBooster : BoosterBase
     protected override int CurrentCount { get => UserDataManager.TimeIngameBooster; set => UserDataManager.TimeIngameBooster = value; }
 
     private float currentTime;
-    private GameObject timeBooster;
     private TimeBoosterTopUI timeBoosterTopUI;
     public override void Init()
     {
@@ -32,7 +31,7 @@ public class TimeIngameBooster : BoosterBase
         {
             return;
         }
-        if (currentTime > 0 && timeBooster != null)
+        if (currentTime > 0 && timeBoosterTopUI != null)
         {
             currentTime -= Time.deltaTime;
             float value = currentTime / maxTime;
@@ -50,6 +49,7 @@ public class TimeIngameBooster : BoosterBase
         timeBoosterTopUI = UIManager.Instance.GetScreenActive<InGameScreenUI>().TimeBoosterTopUI;
         UserDataManager.TimeIngameBooster = CurrentCount;
         currentTime = maxTime;
+
         LevelManager.Instance.LevelGame.FreezeTime(currentTime);
         OnStartUseBooster?.Invoke(this, CurrentCount);
 
