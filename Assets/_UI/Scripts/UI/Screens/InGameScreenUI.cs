@@ -53,7 +53,7 @@ public class InGameScreenUI : ScreenUI
 
     private void Update()
     {
-        UpdateText(LevelManager.Instance.LevelGame.CurrentLevelRemaining);
+        UpdateText(LevelManager.Instance.LevelGame.CurrentTimeLevelRemaining);
     }
     public override void Initialize(UIManager uiManager)
     {
