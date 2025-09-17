@@ -875,6 +875,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Home
       objectReference: {fileID: 0}
+    - target: {fileID: 4440074346634390712, guid: 67f802081607d2e45b34914020619de3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5688394135799501277, guid: 67f802081607d2e45b34914020619de3, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1029,6 +1033,10 @@ PrefabInstance:
     - target: {fileID: 6274498873125958575, guid: 42bc9c1c1b3162f49a9e404d519bdf6d, type: 3}
       propertyPath: m_Name
       value: UIGamePlay
+      objectReference: {fileID: 0}
+    - target: {fileID: 6274498873125958575, guid: 42bc9c1c1b3162f49a9e404d519bdf6d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9148709379623378047, guid: 42bc9c1c1b3162f49a9e404d519bdf6d, type: 3}
       propertyPath: m_Pivot.x
