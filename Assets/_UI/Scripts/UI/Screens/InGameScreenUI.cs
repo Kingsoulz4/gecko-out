@@ -25,22 +25,22 @@ public class InGameScreenUI : ScreenUI
     [SerializeField] BoosterConfirmUI boosterConfirmUI;
 
     [Header("Booster FreeTime")]
-    [SerializeField] VisualCountBooster timeBoosterCountTxt;
+    [SerializeField] VisualCountBooster timeBoosterCount;
     [SerializeField] Button timeBoosterBtn;
     [SerializeField] Image img_BG_Time;
     [SerializeField] Image img_BG_Booster_FreeTime;
 
     [Header("Booster remove one tile")]
     [SerializeField] Button handMoveBoosterBtn;
-    [SerializeField] VisualCountBooster handMoveBoosterCountTxt;
+    [SerializeField] VisualCountBooster handMoveBoosterCount;
 
     [Header("Booster remove 1 tail")]
     [SerializeField] Button cissorBoosterBtn;
-    [SerializeField] VisualCountBooster cissorBoosterCountTxt;
+    [SerializeField] VisualCountBooster cissorBoosterCount;
 
     [Header("Booster remove 1 tail")]
     [SerializeField] Button suffleBoosterBtn;
-    [SerializeField] VisualCountBooster suffleBoosterCountTxt;
+    [SerializeField] VisualCountBooster suffleBoosterCount;
 
 
     [Space, Header("Top")]
@@ -55,9 +55,9 @@ public class InGameScreenUI : ScreenUI
 
         btn_Load.onClick.AddListener(LoadLevel);
         timeBoosterBtn.onClick.AddListener(OnTimeBoosterClick);
-        handMoveBoosterBtn.onClick.AddListener(HammerBoosterClick);
-        cissorBoosterBtn.onClick.AddListener(CissorBoosterClick);
-        suffleBoosterBtn.onClick.AddListener(SuffleBoosterClick);
+        //handMoveBoosterBtn.onClick.AddListener(HandMoveboosterClick);
+        //cissorBoosterBtn.onClick.AddListener(CissorBoosterClick);
+        //suffleBoosterBtn.onClick.AddListener(SuffleBoosterClick);
         btn_pause.onClick.AddListener(OnPauseClick);
         btn_Replay.onClick.AddListener(OnReplayClick);
 
@@ -70,16 +70,21 @@ public class InGameScreenUI : ScreenUI
 
         boosterDataSO = BoosterManager.Instance.BoosterData;
 
-        timeBoosterCountTxt.Init(UserDataManager.TimeIngameBooster, BoosterType.TIME_INGAME);
-        handMoveBoosterCountTxt.Init(UserDataManager.HammerBooster, BoosterType.HAND_MOVE);
-        cissorBoosterCountTxt.Init(UserDataManager.CissorBooster, BoosterType.CISSOR);
-        suffleBoosterCountTxt.Init(UserDataManager.SuffleBooster, BoosterType.SUFFLE);
+        timeBoosterCount.Init(UserDataManager.TimeIngameBooster, BoosterType.TIME_INGAME);
+        //handMoveBoosterCount.Init(UserDataManager.HammerBooster, BoosterType.HAND_MOVE);
+        //cissorBoosterCount.Init(UserDataManager.CissorBooster, BoosterType.CISSOR);
+        //suffleBoosterCount.Init(UserDataManager.SuffleBooster, BoosterType.SUFFLE);
 
         btn_newLevel.onClick.AddListener(() =>
         {
             UserDataManager.AddHeart(1, "test", false);
             LevelManager.Instance.StartLevel(UserDataManager.Level += 1);
         });
+    }
+
+    private void HandMoveboosterClick()
+    {
+        throw new NotImplementedException();
     }
 
     private void SuffleBoosterClick()
@@ -92,13 +97,13 @@ public class InGameScreenUI : ScreenUI
         switch (booster.BoosterType)
         {
             case BoosterType.TIME_INGAME:
-                timeBoosterCountTxt.UpdateTextCountBooster(currentCount);
+                timeBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
             case BoosterType.HAMMER:
-                handMoveBoosterCountTxt.UpdateTextCountBooster(currentCount);
+                handMoveBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
             case BoosterType.CISSOR:
-                cissorBoosterCountTxt.UpdateTextCountBooster(currentCount);
+                cissorBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
             default:
                 break;
@@ -138,18 +143,18 @@ public class InGameScreenUI : ScreenUI
         switch (booster.BoosterType)
         {
             case BoosterType.TIME_INGAME:
-                timeBoosterCountTxt.UpdateTextCountBooster(currentCount);
+                timeBoosterCount.UpdateTextCountBooster(currentCount);
                 break;
             case BoosterType.HAND_MOVE:
-                handMoveBoosterCountTxt.UpdateTextCountBooster(currentCount);
+                handMoveBoosterCount.UpdateTextCountBooster(currentCount);
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
             case BoosterType.CISSOR:
-                cissorBoosterCountTxt.UpdateTextCountBooster(currentCount);
+                cissorBoosterCount.UpdateTextCountBooster(currentCount);
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
             case BoosterType.SUFFLE:
-                suffleBoosterCountTxt.UpdateTextCountBooster(currentCount);
+                suffleBoosterCount.UpdateTextCountBooster(currentCount);
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
             default:

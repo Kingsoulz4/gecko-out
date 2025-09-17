@@ -10,6 +10,7 @@ public class UserDataManager : MonoBehaviour
     public class UserData
     {
         public int level;
+        public int levelSetID;
         public int gold;
         public int heart;
         public bool removeAds;
@@ -188,7 +189,16 @@ public class UserDataManager : MonoBehaviour
         }
     }
 
-
+    public static int LevelSetID
+    {
+        get { return LoadUserData().levelSetID; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.levelSetID = value;
+            SaveUserData(data);
+        }
+    }
     public static bool IsFirstShowChangeName
     {
         get

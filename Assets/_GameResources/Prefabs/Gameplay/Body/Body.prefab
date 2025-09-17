@@ -417,7 +417,7 @@ MonoBehaviour:
   bodyController: {fileID: 3655932188227585431}
   animationDurationPerSegment: 0.3
   portalEnterDistance: 0.5
-  enableDebugLogs: 1
+  enableDebugLogs: 0
 --- !u!1 &6746835669322415534
 GameObject:
   m_ObjectHideFlags: 0

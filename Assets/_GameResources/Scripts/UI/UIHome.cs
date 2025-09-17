@@ -18,7 +18,7 @@ namespace Geckout
 
         private void OnEnable()
         {
-            m_textLevel.text = $"Level {LevelManager.Instance.CurrentLevelNum}";
+            m_textLevel.text = $"Level {LevelManager.Instance.CurrentLevel}";
         }
 
         private void OnClickPlay()

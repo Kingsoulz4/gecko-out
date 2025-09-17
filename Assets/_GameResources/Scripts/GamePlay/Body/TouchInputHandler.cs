@@ -15,7 +15,7 @@ namespace Geckout
         [SerializeField] private float pathUpdateInterval = 0.02f;
 
         private BodyController bodyController;
-        private bool canClick;
+        private bool canClick = true;
         private bool isDragging = false;
         private bool isDraggingFromHead = false;
         private Vector2Int lastTargetTile = Vector2Int.one * -1;
@@ -38,6 +38,7 @@ namespace Geckout
         void Update()
         {
             if(!LevelManager.Instance.IsEdittingLevel)
+            if (canClick && GameManager.GameState == GameState.Playing)
             HandleTouchInput();
         }
 
