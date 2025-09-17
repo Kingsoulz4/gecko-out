@@ -22,7 +22,7 @@ namespace Geckout
         {
             if (LevelManager.Instance.LevelGame != null && LevelManager.Instance.LevelGame.GameLevelData != null)
             {
-                var timeSecond = LevelManager.Instance.LevelGame.CurrentLevelRemaining;
+                var timeSecond = LevelManager.Instance.LevelGame.CurrentTimeLevelRemaining;
                 m_textTime.text = $"{(int)(timeSecond / 60)}:{(int)(timeSecond % 60)}";
             }
         }

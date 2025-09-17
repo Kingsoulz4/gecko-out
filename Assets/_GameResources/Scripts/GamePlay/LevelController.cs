@@ -25,7 +25,7 @@ namespace Geckout
 
         public List<BodyController> ListBody { get => listBody;}
 
-        public float CurrentLevelRemaining => currentTimeRemaining;
+        public float CurrentTimeLevelRemaining => currentTimeRemaining;
 
         #region Boosters
         private bool IsFreezingTime { get; set; }
@@ -64,7 +64,7 @@ namespace Geckout
 
         public void StartLevel()
         {
-            StartCountDownTime();
+            StartCountDownTime(GameLevelData.time);
         }
 
         private void WinLevel()
@@ -75,6 +75,11 @@ namespace Geckout
         private void LoseLevel()
         {
             LevelEvent.OnLose?.Invoke(m_gameLevelData.levelNum);
+        }
+
+        private void ReviveLevel()
+        {
+            StartCountDownTime(20);
         }
 
         private void OnBodyMoveToPortal(BodyController body, Portal portal)
@@ -90,10 +95,10 @@ namespace Geckout
             }
         }
 
-        private void StartCountDownTime()
+        private void StartCountDownTime(float time)
         {
             StopCountDownTime();
-            countDownCoroutine = StartCoroutine(IECountDownTime());
+            countDownCoroutine = StartCoroutine(IECountDownTime(time));
         }
 
         private void StopCountDownTime()
@@ -105,9 +110,9 @@ namespace Geckout
             }
         }
 
-        private IEnumerator IECountDownTime()
+        private IEnumerator IECountDownTime(float time)
         {
-            currentTimeRemaining = GameLevelData.time;
+            currentTimeRemaining = time;
             while(currentTimeRemaining > 0)
             {
                 if(!IsFreezingTime)
@@ -121,7 +126,10 @@ namespace Geckout
 
         private void TimeOut()
         {
-            LoseLevel();
+            var popupTimeIsUp = UIManager.Instance.ShowPopup<PopupTimeIsUp>(() => { });
+            popupTimeIsUp.OnClose = LoseLevel;
+            popupTimeIsUp.OnKeepPlaying = ReviveLevel;
+            //LoseLevel();
         }
 
         public BodyController SpawnBody(BodyData bodyData)

@@ -53,7 +53,7 @@ using UnityEngine.UI;
         {
             base.Initialize(uiManager);
             btn_Play.onClick.AddListener(PlayLevel);
-            txt_Level.text = "LEVEL ";
+            txt_Level.text = $"Level {LevelManager.Instance.CurrentLevel}";
             if (arrTextLevel != null)
             {
                 for (int i = 0; i < arrTextLevel.Length; i++)

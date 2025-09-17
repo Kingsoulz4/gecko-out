@@ -53,10 +53,7 @@ public class InGameScreenUI : ScreenUI
 
     private void Update()
     {
-        if (LevelManager.Instance.LevelGame != null && LevelManager.Instance.LevelGame.GameLevelData != null)
-        {
-            UpdateText(LevelManager.Instance.LevelGame.CurrentLevelRemaining);
-        }
+        UpdateText(LevelManager.Instance.LevelGame.CurrentLevelRemaining);
     }
     public override void Initialize(UIManager uiManager)
     {
