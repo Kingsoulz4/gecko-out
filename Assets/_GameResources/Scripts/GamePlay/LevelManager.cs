@@ -14,6 +14,8 @@ namespace Geckout
 
         private LevelController levelGame;
 
+        private int priceRevive = 900;
+
         public LevelController LevelGame
         {
             get
@@ -97,9 +99,49 @@ namespace Geckout
         {
             var popupLose = UIManager.Instance.ShowPopup<PopupLose>(() =>
             {
-                UIManager.Instance.ShowScreen<MainScreenUI>();
+                //UIManager.Instance.ShowScreen<MainScreenUI>();
             });
-            popupLose.OnRetry = StartCurrentLevel;
+
+            HeartManager.UseHeart(1);
+
+            popupLose.OnClose = () =>
+            {
+                UIManager.Instance.ShowScreen<MainScreenUI>();
+            };
+            popupLose.OnRetry = OnRetryGame;
+        }
+
+        public void OnRetryGame()
+        {
+            if(UserDataManager.Heart > 0)
+            {
+                StartCurrentLevel();
+            }
+            else
+            {
+                var popupGetMoreLives = UIManager.Instance.ShowPopup<PopupGetMoreLives>(null);
+                popupGetMoreLives.OnRefilled = () =>
+                {
+                    StartCurrentLevel();
+                };
+                popupGetMoreLives.OnClose = () =>
+                {
+                    UIManager.Instance.ShowScreen<MainScreenUI>();
+                };
+            }
+        }
+
+        public void OnReviveGame()
+        {
+            if(UserDataManager.Gold >= priceRevive)
+            {
+                UserDataManager.AddGold(-priceRevive, "Revive");
+                
+            }
+            else
+            {
+
+            }
         }
 
         public void OnPauseGame(int level)

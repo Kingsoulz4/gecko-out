@@ -49,6 +49,11 @@ public class InGameScreenUI : ScreenUI
     private float currentTopY;
     internal GameObject TimeBooster;
 
+    private void Update()
+    {
+        UpdateText(LevelManager.Instance.LevelGame.CurrentTimeLevelRemaining);
+    }
+
     public override void Initialize(UIManager uiManager)
     {
         base.Initialize(uiManager);

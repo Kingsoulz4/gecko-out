@@ -14,6 +14,7 @@ namespace Geckout
         public static Action<int> OnWin;
         public static Action<int> OnLose;
         public static Action<int> OnLevelStart;
+        //public static Action<int> 
 
         private void OnDestroy()
         {
