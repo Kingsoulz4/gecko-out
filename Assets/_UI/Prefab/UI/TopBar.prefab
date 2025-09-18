@@ -1387,6 +1387,7 @@ GameObject:
   - component: {fileID: 1831000301137392083}
   - component: {fileID: 1549111147248870175}
   - component: {fileID: 5822353545686525840}
+  - component: {fileID: 5441740178853990592}
   m_Layer: 5
   m_Name: HeartBar
   m_TagString: Untagged
@@ -1520,6 +1521,20 @@ MonoBehaviour:
   eventOnPointUp:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5441740178853990592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7999613637894813678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f796f500a90b18145b03c840a4da82ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_textQuantity: {fileID: 6727603280390696795}
+  m_textCountDown: {fileID: 3605764312155033120}
 --- !u!1 &8615608762177979758
 GameObject:
   m_ObjectHideFlags: 0
