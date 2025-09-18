@@ -17,18 +17,22 @@ namespace Geckout
         private float currentTimeRemaining = 0;
         private Coroutine countDownCoroutine;
 
+
         private List<BodyController> listBody = new();
 
         public GameLevelData GameLevelData => m_gameLevelData;
 
         public GameMap GameMap => m_gameMap;
 
-        public List<BodyController> ListBody { get => listBody;}
+        public List<BodyController> ListBody { get => listBody; }
 
         public float CurrentTimeLevelRemaining => currentTimeRemaining;
 
+        public bool IsFirstClick { get; set; }
+
         #region Boosters
         private bool IsFreezingTime { get; set; }
+        private bool CanCountdownTime => !IsFreezingTime && IsFirstClick;
         private Coroutine freezeTimeCoroutine { get; set; }
 
         #endregion
@@ -45,11 +49,12 @@ namespace Geckout
 
         public void SetLevelData(GameLevelData gameLevelData)
         {
+            IsFirstClick = false;
             m_gameLevelData = gameLevelData;
             m_gameMap.SetLevelData(gameLevelData);
             Utils.RemoveAllChilds(m_bodyParent);
             Camera.main.fieldOfView = gameLevelData.fieldOfView;
-            int i=0;
+            int i = 0;
             foreach (var bodyData in gameLevelData.listDogData)
             {
                 var body = SpawnBody(bodyData);
@@ -58,7 +63,7 @@ namespace Geckout
                 ListBody.Add(body);
             }
 #if UNITY_EDITOR
-            EditorUtility.SetDirty(this.gameObject);   
+            EditorUtility.SetDirty(this.gameObject);
 #endif
         }
 
@@ -113,9 +118,9 @@ namespace Geckout
         private IEnumerator IECountDownTime(float time)
         {
             currentTimeRemaining = time;
-            while(currentTimeRemaining > 0)
+            while (currentTimeRemaining > 0)
             {
-                if(!IsFreezingTime)
+                if (CanCountdownTime)
                 {
                     currentTimeRemaining -= Time.deltaTime;
                 }
@@ -154,11 +159,11 @@ namespace Geckout
 
         public void FreezeTime(float timeFreeze)
         {
-            if(freezeTimeCoroutine != null)
+            if (freezeTimeCoroutine != null)
             {
                 StopCoroutine(freezeTimeCoroutine);
                 freezeTimeCoroutine = null;
-            }    
+            }
             freezeTimeCoroutine = StartCoroutine(IEFreezeTime(timeFreeze));
         }
 
@@ -166,7 +171,7 @@ namespace Geckout
         {
             var currentTime = 0f;
             IsFreezingTime = true;
-            while(currentTime <= timeFreeze)
+            while (currentTime <= timeFreeze)
             {
                 currentTime += Time.deltaTime;
                 yield return null;

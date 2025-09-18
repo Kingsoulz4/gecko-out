@@ -61,6 +61,10 @@ namespace Geckout
         void OnTouchStart(Vector2 screenPosition)
         {
             DebugLog($"Touch start at screen: {screenPosition}");
+            if (GameManager.GameState == GameState.Playing && !LevelManager.Instance.LevelGame.IsFirstClick)
+            {
+                LevelManager.Instance.LevelGame.IsFirstClick = true;
+            }
 
             Vector2Int? tileCoord = GetTileCoordinateFromScreen(screenPosition);
             if (!tileCoord.HasValue)
