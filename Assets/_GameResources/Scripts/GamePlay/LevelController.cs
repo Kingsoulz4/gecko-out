@@ -60,7 +60,6 @@ namespace Geckout
                 var body = SpawnBody(bodyData);
                 body.name = $"Body_{i}";
                 i++;
-                ListBody.Add(body);
             }
 #if UNITY_EDITOR
             EditorUtility.SetDirty(this.gameObject);
@@ -147,6 +146,7 @@ namespace Geckout
             var newBody = Instantiate(m_bodyPrefab, m_bodyParent);
 #endif
             newBody.Initialize(bodyData);
+            ListBody.Add(newBody);
             return newBody;
         }
 
