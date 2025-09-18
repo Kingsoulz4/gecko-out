@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HeadMatPurple_Toon
+  m_Name: HeadMatCyan_Toon
   m_Shader: {fileID: 4800000, guid: 50cad7c0b9bcd3840b05e3829c0a121a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -76,7 +76,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _HighlightStrength: 0.5
+    - _HighlightStrength: 1.39
     - _Metallic: 0.18
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -87,7 +87,7 @@ Material:
     - _RampSteps: 3.34
     - _ReadMask: 255
     - _Saturation: 0.48
-    - _ShadowStrength: 0.21
+    - _ShadowStrength: 0.29
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -101,9 +101,9 @@ Material:
     - _ZTest: 4
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.46310377, g: 0.19023673, b: 0.7075472, a: 1}
+    - _Color: {r: 0.074509814, g: 0.61283356, b: 0.6431373, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HighlightColor: {r: 0.7462254, g: 0.51882344, b: 0.8396226, a: 1}
+    - _HighlightColor: {r: 0.5176471, g: 0.6766676, b: 0.8392157, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowColor: {r: 0.12517801, g: 0.12988931, b: 0.2735849, a: 1}
   m_BuildTextureStacks: []

@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HeadMatPurple_Toon
-  m_Shader: {fileID: 4800000, guid: 50cad7c0b9bcd3840b05e3829c0a121a, type: 3}
+  m_Name: HeadMatBrown
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -44,7 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 365b2feba6652cf41bda9205e9a396c6, type: 3}
+        m_Texture: {fileID: 2800000, guid: c943262543f7d8a4da87c281de3826d6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -59,51 +59,25 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Ramp:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _BumpScale: 1
-    - _ColorMask: 15
-    - _Culling: 2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _EdgeDarkness: 0.38
-    - _EdgeFalloff: 2
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _HighlightStrength: 0.5
-    - _Metallic: 0.18
+    - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Offset: 0
-    - _OutlineThickness: 0.0064
     - _Parallax: 0.02
-    - _RampSmoothness: 0.81
-    - _RampSteps: 3.34
-    - _ReadMask: 255
-    - _Saturation: 0.48
-    - _ShadowStrength: 0.21
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Stencil: 0
-    - _StencilComp: 0
-    - _StencilFail: 0
-    - _StencilOp: 0
-    - _StencilZFail: 0
     - _UVSec: 0
-    - _WriteMask: 255
-    - _ZTest: 4
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.46310377, g: 0.19023673, b: 0.7075472, a: 1}
+    - _Color: {r: 0.6037736, g: 0.20835468, b: 0.13385546, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HighlightColor: {r: 0.7462254, g: 0.51882344, b: 0.8396226, a: 1}
-    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _ShadowColor: {r: 0.12517801, g: 0.12988931, b: 0.2735849, a: 1}
   m_BuildTextureStacks: []

@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HeadMatPurple_Toon
+  m_Name: HeadMatViolet_Toon
   m_Shader: {fileID: 4800000, guid: 50cad7c0b9bcd3840b05e3829c0a121a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
