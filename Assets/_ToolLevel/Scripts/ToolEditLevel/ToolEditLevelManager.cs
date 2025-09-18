@@ -59,11 +59,20 @@ namespace Geckout
             m_inputMapWidth.onSubmit.AddListener(OnEditedMapWidth);
             m_inputMapHeight.onSubmit.AddListener(OnEditedMapHeight);
             m_inputFieldOfView.onSubmit.AddListener(OnEditedFieldOfView);
+            m_inputTime.onSubmit.AddListener(OnEditedTime);
 
             HideAllTabs();
 
             LevelManager.Instance.IsEdittingLevel = true;
             Utils.SetExistingGameViewSize(1920, 1080);
+        }
+
+        private void OnEditedTime(string arg0)
+        {
+            if (float.TryParse(m_inputTime.text, out var time))
+            {
+                LevelGame.GameLevelData.time = (int)time;
+            }
         }
 
         private void OnEditedFieldOfView(string arg0)

@@ -20,7 +20,7 @@ namespace Geckout.Data
         public int levelIndex;
         public float fieldOfView = 20;
         public Vector2Int mapSize = new(8, 12);
-        public int time;
+        public int time = 120;
         public LevelType type;
         public List<MapTileData> mapTileDatas = new();
         public List<BodyData> listDogData = new();
