@@ -164,7 +164,12 @@ using UnityEngine.UI;
             }
         }
 
-        private void OnDisable()
+    private void OnEnable()
+    {
+        btn_Play.GetComponent<ButtonPlay>().SetDisplayLevelType(LevelManager.Instance.GetCurrentLevelType());
+    }
+
+    private void OnDisable()
         {
             UIManager.OnRefeshBannerAndAds -= UpdateButtonRemoveAds;
             DOTween.Kill(this);

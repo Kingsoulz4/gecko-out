@@ -92,6 +92,12 @@ namespace Geckout
             return new GameLevelData(levelData);   
         }
 
+        public LevelType GetCurrentLevelType()
+        {
+            var levelData = LoadLevel(CurrentLevel, CurrentLevelSetID);
+            return levelData.type;
+        }    
+
         #region GameState
 
         public void OnLoseGame(int level)
