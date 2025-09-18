@@ -93,6 +93,7 @@ namespace Geckout
         }
 
         #region GameState
+
         public void OnLoseGame(int level)
         {
             var popupLose = UIManager.Instance.ShowPopup<PopupLose>(() =>
