@@ -336,7 +336,7 @@ MonoBehaviour:
     _overrideNormal: 0
     _customNormal: {x: 0, y: 1, z: 0}
     _type: 0
-    _count: 20
+    _count: 30
     _autoCount: 0
     _spacing: 0
     _randomRotation: 0
