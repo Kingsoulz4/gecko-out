@@ -213,7 +213,10 @@ public class InGameScreenUI : ScreenUI
 
     private void OnReplayClick()
     {
-        MoveUp();
+        //MoveUp();
+        var confirmLeave = UIManager.Instance.ShowPopup<PopupConfirmLeave>(null);
+        confirmLeave.OnConfirm = ShowConfirmLeave;
+
         //GameManager.Instance.PauseGame(false);
         //PopupWarningOutLevel popupWarning = UIManager.Instance.ShowPopup<PopupWarningOutLevel>(null);
         //popupWarning.ShowVisual(true, "ingame");
@@ -261,5 +264,19 @@ public class InGameScreenUI : ScreenUI
     public void MoveDown()
     {
         rect_Top.DOAnchorPosY(currentTopY, 0.5f).SetId(this);
+    }
+
+    private void ShowConfirmLeave()
+    {
+        var popupConfirmLeave = UIManager.Instance.ShowPopup<PopupConfirmLeave>(null);
+        popupConfirmLeave.OnConfirm = () =>
+        {
+            HeartManager.UseHeart(1);
+            LevelManager.Instance.OnRetryGame();
+        };
+        popupConfirmLeave.OnClose = () =>
+        {
+
+        };
     }
 }
