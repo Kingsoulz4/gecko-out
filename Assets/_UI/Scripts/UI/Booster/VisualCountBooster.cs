@@ -5,12 +5,14 @@ using UnityEngine.UI;
 
 public class VisualCountBooster : MonoBehaviour
 {
-    [Space, Header("UI")]
     [SerializeField] Text txt_CountBooster;
     [SerializeField] GameObject obj_BoosterActive;
     [SerializeField] GameObject obj_BoosterAdd;
     [SerializeField] Button btn_AddBooster;
+    [SerializeField] Image icon;
     private BoosterType boosterType;
+
+    public Image Icon { get => icon;}
 
     public void Init(int count, BoosterType boosterType)
     {

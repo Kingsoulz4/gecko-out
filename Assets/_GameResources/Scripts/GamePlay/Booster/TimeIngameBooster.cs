@@ -14,8 +14,7 @@ public class TimeIngameBooster : BoosterBase
     protected override int CurrentCount { get => UserDataManager.TimeIngameBooster; set => UserDataManager.TimeIngameBooster = value; }
 
     private float currentTime;
-    private GameObject timeBooster;
-
+    private TimeBoosterTopUI timeBoosterTopUI;
     public override void Init()
     {
         base.Init();
@@ -23,7 +22,7 @@ public class TimeIngameBooster : BoosterBase
     }
     protected override void ShowBooster()
     {
-        //base.ShowBooster();
+        base.ShowBooster();
     }
 
     private void Update()
@@ -32,11 +31,11 @@ public class TimeIngameBooster : BoosterBase
         {
             return;
         }
-        if (currentTime > 0 && timeBooster != null)
+        if (currentTime > 0 && timeBoosterTopUI != null)
         {
             currentTime -= Time.deltaTime;
             float value = currentTime / maxTime;
-            //timeBooster.UpdateFill(value, InGameScreenUI.GetTimeValueToString(currentTime));
+            timeBoosterTopUI.UpdateFill(value, InGameScreenUI.GetTimeValueToString(currentTime));
         }
         else
         {
@@ -47,10 +46,12 @@ public class TimeIngameBooster : BoosterBase
     public override void ActiveBooster()
     {
         base.ActiveBooster();
-        UserDataManager.TimeIngameBooster = CurrentCount;
-        timeBooster = UIManager.Instance.GetScreenActive<InGameScreenUI>().TimeBooster;
-        timeBooster.gameObject.SetActive(true);
+
+        timeBoosterTopUI = UIManager.Instance.GetScreenActive<InGameScreenUI>().TimeBoosterTopUI;
         currentTime = maxTime;
+        UserDataManager.TimeIngameBooster = CurrentCount;
+        LevelManager.Instance.LevelGame.FreezeTime(currentTime);
+
         OnStartUseBooster?.Invoke(this, CurrentCount);
         InProgress = true;
     }
@@ -59,9 +60,5 @@ public class TimeIngameBooster : BoosterBase
     {
         base.Done();
         currentTime = 0;
-        if (timeBooster != null)
-        {
-            timeBooster.gameObject.SetActive(false);
-        }
     }
 }

@@ -16,21 +16,21 @@ MonoBehaviour:
   - boosterType: 0
     title: Freeze Time
     description: Freezes time for 20 seconds
-    icon: {fileID: 21300000, guid: 6a8d2d333aefb4c4baad3533ab775c91, type: 3}
-    iconBig: {fileID: 21300000, guid: 413f0a087f0a9b34d8dd9dd769aa429a, type: 3}
+    icon: {fileID: 21300000, guid: 77695f78dff86fd47bc37a323a96affe, type: 3}
+    iconBig: {fileID: 21300000, guid: 77695f78dff86fd47bc37a323a96affe, type: 3}
     price: 900
     quantity: 3
-  - boosterType: 1
-    title: 
-    description: 
-    icon: {fileID: 21300000, guid: 9a34a018c7d5590409a70298b7c1b01c, type: 3}
-    iconBig: {fileID: 21300000, guid: 2cc6b0d86eae4ac46858e0b7182d3dec, type: 3}
+  - boosterType: 2
+    title: Hammer
+    description: ' Hammer des'
+    icon: {fileID: 21300000, guid: df0c0932fc9e2394c823dbc589e20fb0, type: 3}
+    iconBig: {fileID: 21300000, guid: df0c0932fc9e2394c823dbc589e20fb0, type: 3}
     price: 1400
     quantity: 3
-  - boosterType: 2
-    title: 
-    description: 
-    icon: {fileID: 21300000, guid: 19c11ab03f220394db687cae36184b84, type: 3}
-    iconBig: {fileID: 21300000, guid: 033f75c25a34b8047ad17eff7196626c, type: 3}
+  - boosterType: 4
+    title: Hand pick
+    description: Hand pick des
+    icon: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
+    iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     price: 1900
     quantity: 3
