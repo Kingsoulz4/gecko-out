@@ -16,8 +16,8 @@ MonoBehaviour:
   levelIndex: 0
   fieldOfView: 20
   mapSize: {x: 7, y: 10}
-  time: 0
-  type: 0
+  time: 120
+  type: 3
   mapTileDatas:
   - coordinate: {x: 0, y: 0}
     type: 6

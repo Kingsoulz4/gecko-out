@@ -22,6 +22,7 @@ namespace Geckout
 
         private void OnEnable()
         {
+            UserDataManager.OnUpdateGold += UpdateTextGold;
         }
 
         private void setUpVisual()
@@ -51,6 +52,7 @@ namespace Geckout
 
         private void OnDisable()
         {
+            UserDataManager.OnUpdateGold -= UpdateTextGold;
             DOTween.Kill(this);
         }
     }

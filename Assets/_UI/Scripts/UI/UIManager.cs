@@ -62,7 +62,11 @@ public class UIManager : SingletonMono<UIManager>
 
     private void Start()
     {
-        MainScreenUI mainScreenUI = UIManager.Instance.ShowScreen<MainScreenUI>();
+        var loadingScreen = ShowScreen<LoadingScreen>();
+        loadingScreen.Show(() =>
+        {
+            ShowScreen<MainScreenUI>();
+        });
     }
     public Vector2 GetCanvasSize()
     {
