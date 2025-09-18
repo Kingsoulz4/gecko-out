@@ -116,9 +116,11 @@ public class ScrollScreenHorizontal : ScrollRect
         base.OnDrag(eventData);
         var currentButton = reference.component[currentPanel].Button.GetComponent<RectTransform>();
         float percent = -(currentPanel * sizeXCanvas + content.anchoredPosition.x) / (sizeXCanvas);
+        float scaleFactor = 30;
         //reference.ImageSlider.anchoredPosition = currentButton.anchoredPosition + new Vector2(percent * reference.ImageSlider.sizeDelta.x, 0);
+        Debug.Log("Percent Scroll:" + percent);
         reference.ImageSlider.transform.position = new Vector3(currentButton.transform.position.x, reference.ImageSlider.transform.position.y, reference.transform.position.z) 
-            + new Vector3(percent * reference.ImageSlider.sizeDelta.x, 0);
+            + new Vector3(percent * (reference.ImageSlider.sizeDelta.x/scaleFactor), 0);
     }
 
     protected override void OnDestroy()

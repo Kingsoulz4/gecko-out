@@ -206,16 +206,19 @@ public class InGameScreenUI : ScreenUI
 
     private void OnPauseClick()
     {
-        MoveUp();
+        //MoveUp();
         //GameManager.Instance.PauseGame(false);
         //PopupPause popupPause = UIManager.Instance.ShowPopup<PopupPause>(null);
+
+        var popupSetting = UIManager.Instance.ShowPopup<PopupSetting>(null);
+        popupSetting.SetType(PopupSettingType.IN_GAME);
+        
     }
 
     private void OnReplayClick()
     {
         //MoveUp();
-        var confirmLeave = UIManager.Instance.ShowPopup<PopupConfirmLeave>(null);
-        confirmLeave.OnConfirm = ShowConfirmLeave;
+        ShowConfirmLeave();
 
         //GameManager.Instance.PauseGame(false);
         //PopupWarningOutLevel popupWarning = UIManager.Instance.ShowPopup<PopupWarningOutLevel>(null);
@@ -269,6 +272,7 @@ public class InGameScreenUI : ScreenUI
     private void ShowConfirmLeave()
     {
         var popupConfirmLeave = UIManager.Instance.ShowPopup<PopupConfirmLeave>(null);
+        popupConfirmLeave.SetTextButtonConfirm("Retry");
         popupConfirmLeave.OnConfirm = () =>
         {
             HeartManager.UseHeart(1);

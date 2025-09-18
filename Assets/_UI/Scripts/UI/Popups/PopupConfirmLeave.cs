@@ -10,6 +10,7 @@ namespace Geckout
     {
         [SerializeField] private Button m_buttonConfirm;
         [SerializeField] private Button m_buttonClose;
+        [SerializeField] private Text m_textButtonConfirm;
 
         public Action OnConfirm { get; set; }
         public Action OnClose { get; set; }
@@ -30,6 +31,11 @@ namespace Geckout
         {
             Hide();
             OnConfirm?.Invoke();
+        }
+
+        public void SetTextButtonConfirm(string text)
+        {
+            m_textButtonConfirm.text = text;
         }
     }
 }
