@@ -14,39 +14,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelNum: 2
   levelIndex: 0
-  mapSize: {x: 8, y: 12}
-  time: 120
+  fieldOfView: 20
+  mapSize: {x: 6, y: 6}
+  time: 0
   type: 0
   mapTileDatas:
   - coordinate: {x: 0, y: 0}
-    type: 6
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 1, y: 0}
-    type: 3
-    rotation: {x: 90, y: 90, z: -90}
-  - coordinate: {x: 2, y: 0}
     type: 2
     rotation: {x: 180, y: 90, z: -90}
+  - coordinate: {x: 1, y: 0}
+    type: 6
+    rotation: {x: 0, y: 90, z: -90}
+  - coordinate: {x: 2, y: 0}
+    type: 6
+    rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 3, y: 0}
-    type: 0
+    type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 4, y: 0}
-    type: 0
+    type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 0}
     type: 2
     rotation: {x: 90, y: 90, z: -90}
-  - coordinate: {x: 6, y: 0}
-    type: 3
-    rotation: {x: -90, y: 90, z: -90}
-  - coordinate: {x: 7, y: 0}
-    type: 6
-    rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 0, y: 1}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 1, y: 1}
-    type: 4
+    type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 1}
     type: 0
@@ -60,18 +55,12 @@ MonoBehaviour:
   - coordinate: {x: 5, y: 1}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 1}
-    type: 4
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 7, y: 1}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 0, y: 2}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 1, y: 2}
-    type: 5
-    rotation: {x: 180, y: 90, z: -90}
+    type: 0
+    rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 2}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
@@ -84,17 +73,11 @@ MonoBehaviour:
   - coordinate: {x: 5, y: 2}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 2}
-    type: 5
-    rotation: {x: 180, y: 90, z: -90}
-  - coordinate: {x: 7, y: 2}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 0, y: 3}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 1, y: 3}
-    type: 0
+    type: 5
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 3}
     type: 0
@@ -103,22 +86,16 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 4, y: 3}
-    type: 0
+    type: 5
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 3}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 3}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 7, y: 3}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 0, y: 4}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 1, y: 4}
-    type: 0
+    type: 4
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 4}
     type: 0
@@ -127,240 +104,77 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 4, y: 4}
-    type: 0
+    type: 4
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 4}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 4}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 7, y: 4}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 0, y: 5}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 1, y: 5}
-    type: 0
+    type: 4
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 5}
-    type: 5
+    type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 3, y: 5}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 4, y: 5}
-    type: 0
+    type: 4
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 5}
-    type: 5
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 5}
     type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 7, y: 5}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 0, y: 6}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 1, y: 6}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 2, y: 6}
-    type: 4
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 3, y: 6}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 4, y: 6}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 5, y: 6}
-    type: 4
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 6}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 7, y: 6}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 0, y: 7}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 1, y: 7}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 2, y: 7}
-    type: 5
-    rotation: {x: 180, y: 90, z: -90}
-  - coordinate: {x: 3, y: 7}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 4, y: 7}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 5, y: 7}
-    type: 5
-    rotation: {x: 180, y: 90, z: -90}
-  - coordinate: {x: 6, y: 7}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 7, y: 7}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 0, y: 8}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 1, y: 8}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 2, y: 8}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 3, y: 8}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 4, y: 8}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 5, y: 8}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 8}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 7, y: 8}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 0, y: 9}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 1, y: 9}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 2, y: 9}
-    type: 5
-    rotation: {x: 90, y: 90, z: -90}
-  - coordinate: {x: 3, y: 9}
-    type: 4
-    rotation: {x: 90, y: 90, z: -90}
-  - coordinate: {x: 4, y: 9}
-    type: 4
-    rotation: {x: 90, y: 90, z: -90}
-  - coordinate: {x: 5, y: 9}
-    type: 5
-    rotation: {x: -90, y: 90, z: -90}
-  - coordinate: {x: 6, y: 9}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 7, y: 9}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 0, y: 10}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 1, y: 10}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 2, y: 10}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 3, y: 10}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 4, y: 10}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 5, y: 10}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 10}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 7, y: 10}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 0, y: 11}
-    type: 6
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 1, y: 11}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 2, y: 11}
-    type: 5
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 3, y: 11}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 4, y: 11}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 5, y: 11}
-    type: 5
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 11}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 7, y: 11}
-    type: 6
     rotation: {x: 0, y: 90, z: -90}
   listDogData:
   - bodyType: 0
-    listColor: 000000000400000006000000
+    listColor: 02000000
     listCoordinate:
-    - {x: 6, y: 8}
-    - {x: 6, y: 7}
-    - {x: 6, y: 6}
+    - {x: 0, y: 5}
+    - {x: 0, y: 4}
+    - {x: 0, y: 3}
     freezeTimeCount: 0
     hiddenCount: 0
-    doubleColor: -1
   - bodyType: 0
-    listColor: 05000000
+    listColor: 03000000
     listCoordinate:
-    - {x: 6, y: 3}
-    - {x: 5, y: 3}
-    - {x: 5, y: 2}
-    - {x: 5, y: 1}
+    - {x: 2, y: 5}
+    - {x: 2, y: 4}
+    - {x: 2, y: 3}
     freezeTimeCount: 0
     hiddenCount: 0
-    doubleColor: -1
   - bodyType: 0
     listColor: 02000000
     listCoordinate:
-    - {x: 1, y: 3}
-    - {x: 2, y: 3}
-    - {x: 2, y: 2}
-    - {x: 2, y: 1}
+    - {x: 3, y: 5}
+    - {x: 3, y: 4}
+    - {x: 3, y: 3}
     freezeTimeCount: 0
     hiddenCount: 0
-    doubleColor: -1
   - bodyType: 0
     listColor: 00000000
     listCoordinate:
-    - {x: 2, y: 8}
-    - {x: 3, y: 8}
-    - {x: 4, y: 8}
-    - {x: 5, y: 8}
+    - {x: 5, y: 5}
+    - {x: 5, y: 4}
+    - {x: 5, y: 3}
     freezeTimeCount: 0
     hiddenCount: 0
-    doubleColor: -1
   listPortalData:
   - portalType: 0
-    Coordinate: {x: 0, y: 11}
+    Coordinate: {x: 1, y: 0}
     freezeTimeCount: 0
     listColor: 00000000
   - portalType: 0
-    Coordinate: {x: 7, y: 11}
+    Coordinate: {x: 2, y: 0}
     freezeTimeCount: 0
-    listColor: 01000000
+    listColor: 04000000
   - portalType: 0
-    Coordinate: {x: 7, y: 0}
+    Coordinate: {x: 3, y: 0}
     freezeTimeCount: 0
-    listColor: 05000000
+    listColor: 03000000
   - portalType: 0
-    Coordinate: {x: 0, y: 0}
+    Coordinate: {x: 4, y: 0}
     freezeTimeCount: 0
     listColor: 02000000
   listMovableBoxData: []
