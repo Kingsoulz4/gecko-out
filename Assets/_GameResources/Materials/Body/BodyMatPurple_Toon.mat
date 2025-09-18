@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BodyMatPurple_Toon
-  m_Shader: {fileID: 4800000, guid: b09630fa8f3aeb94d93b3367a96ca582, type: 3}
+  m_Shader: {fileID: 4800000, guid: 50cad7c0b9bcd3840b05e3829c0a121a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -72,18 +72,22 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EdgeDarkness: 1
+    - _EdgeFalloff: 2
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
+    - _HighlightStrength: 0.84
     - _Metallic: 0.18
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Offset: 0
-    - _OutlineThickness: 0.0153
+    - _OutlineThickness: 0
     - _Parallax: 0.02
-    - _RampSteps: 2
+    - _RampSmoothness: 1
+    - _RampSteps: 10
     - _ReadMask: 255
-    - _Saturation: 0.48
+    - _Saturation: 0.61
+    - _ShadowStrength: 0.44
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -97,7 +101,9 @@ Material:
     - _ZTest: 4
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.3260383, g: 0.1003916, b: 0.4528302, a: 1}
+    - _Color: {r: 0.38900715, g: 0.15979885, b: 0.5943396, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _HighlightColor: {r: 1, g: 0.4009434, b: 0.98764837, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _ShadowColor: {r: 0.41456032, g: 0.52943575, b: 0.6415094, a: 1}
   m_BuildTextureStacks: []

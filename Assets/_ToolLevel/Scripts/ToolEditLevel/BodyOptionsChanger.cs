@@ -12,7 +12,7 @@ namespace Geckout
 
         private void Start()
         {
-            currentIndex = Random.Range(0, m_listOptions.Count);
+            currentIndex = 0;
             foreach (var item in m_listOptions)
             {
                 item.SetActive(false);

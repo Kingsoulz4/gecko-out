@@ -402,6 +402,7 @@ MonoBehaviour:
       Value: {fileID: 2100000, guid: 5ed52e0df17dacc4aa4bb9096a28310c, type: 2}
     - Key: 14
       Value: {fileID: 2100000, guid: 213b53b2230c2344f86ace7cc8484aec, type: 2}
+  m_listMaterialByColor: {fileID: 11400000, guid: 58e29ccb3985dee4482a8db47cc64ff1, type: 2}
 --- !u!114 &-5629423586080132934
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -22,6 +22,8 @@ namespace Geckout
 
         private void Start()
         {
+            HeartManager.CF_EnableHeart = 1;
+            HeartManager.CF_RecoverTimeHeart = 60 * 20;
             SetGameState(GameState.MainMenu);
         }
 

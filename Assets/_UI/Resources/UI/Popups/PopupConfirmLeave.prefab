@@ -250,6 +250,7 @@ MonoBehaviour:
   mainPopUp: {fileID: 5136412737843860258}
   m_buttonConfirm: {fileID: 3238102682907068695}
   m_buttonClose: {fileID: 3289948634054812093}
+  m_textButtonConfirm: {fileID: 8802798162561295906}
 --- !u!1 &2295907910090004276
 GameObject:
   m_ObjectHideFlags: 0
