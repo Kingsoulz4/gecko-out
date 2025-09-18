@@ -30,11 +30,11 @@ public class InGameScreenUI : ScreenUI
     [SerializeField] Image img_BG_Time;
     [SerializeField] TimeBoosterTopUI timeBoosterTopUI;
 
-    [Header("Booster remove one body")]
+    [Header("Booster hand")]
     [SerializeField] Button handMoveBoosterBtn;
     [SerializeField] VisualCountBooster handMoveBoosterCount;
 
-    [Header("Booster remove one tile")]
+    [Header("Booster hammer")]
     [SerializeField] Button hammerBtn;
     [SerializeField] VisualCountBooster hammerBoosterCount;
 
@@ -127,6 +127,7 @@ public class InGameScreenUI : ScreenUI
                 break;
             case BoosterType.HAMMER:
             case BoosterType.HAND_MOVE:
+            case BoosterType.SUFFLE:
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
             default:
@@ -206,17 +207,14 @@ public class InGameScreenUI : ScreenUI
 
     private void OnPauseClick()
     {
-        MoveUp();
-        //GameManager.Instance.PauseGame(false);
-        //PopupPause popupPause = UIManager.Instance.ShowPopup<PopupPause>(null);
+        GameManager.Instance.SetGameState(GameState.Paused);
+        PopupSetting popupPause = UIManager.Instance.ShowPopup<PopupSetting>(null);
     }
 
     private void OnReplayClick()
     {
-        MoveUp();
-        //GameManager.Instance.PauseGame(false);
-        //PopupWarningOutLevel popupWarning = UIManager.Instance.ShowPopup<PopupWarningOutLevel>(null);
-        //popupWarning.ShowVisual(true, "ingame");
+        GameManager.Instance.SetGameState(GameState.Playing);
+        PopupConfirmLeave popupWarning = UIManager.Instance.ShowPopup<PopupConfirmLeave>(null);
     }
 
     public override void Active()
