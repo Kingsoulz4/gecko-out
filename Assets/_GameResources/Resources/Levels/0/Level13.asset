@@ -252,57 +252,54 @@ MonoBehaviour:
     rotation: {x: 0, y: 90, z: -90}
   listDogData:
   - bodyType: 0
-    listColor: 0000000005000000
+    listColor: 0000000004000000
     listCoordinate:
-    - {x: 4, y: 1}
-    - {x: 4, y: 0}
-    - {x: 3, y: 0}
-    - {x: 2, y: 0}
-    - {x: 2, y: 1}
+    - {x: 5, y: 6}
+    - {x: 5, y: 5}
+    - {x: 5, y: 4}
+    - {x: 5, y: 3}
+    - {x: 4, y: 3}
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
-    listColor: 0100000006000000
+    listColor: 0200000003000000
     listCoordinate:
-    - {x: 6, y: 3}
-    - {x: 6, y: 4}
+    - {x: 1, y: 7}
+    - {x: 1, y: 6}
+    - {x: 1, y: 5}
+    - {x: 1, y: 4}
+    - {x: 1, y: 3}
+    - {x: 2, y: 3}
+    freezeTimeCount: 0
+    hiddenCount: 0
+  - bodyType: 0
+    listColor: 0100000005000000
+    listCoordinate:
+    - {x: 4, y: 9}
+    - {x: 4, y: 10}
+    - {x: 3, y: 10}
+    - {x: 2, y: 10}
+    - {x: 2, y: 9}
+    freezeTimeCount: 0
+    hiddenCount: 0
+  - bodyType: 0
+    listColor: 0700000005000000
+    listCoordinate:
     - {x: 6, y: 5}
     - {x: 6, y: 6}
     - {x: 6, y: 7}
+    - {x: 6, y: 8}
+    - {x: 5, y: 8}
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
     listColor: 0600000004000000
     listCoordinate:
-    - {x: 2, y: 9}
-    - {x: 2, y: 10}
-    - {x: 3, y: 10}
-    - {x: 4, y: 10}
-    - {x: 4, y: 9}
-    freezeTimeCount: 0
-    hiddenCount: 0
-  - bodyType: 0
-    listColor: 0400000005000000
-    listCoordinate:
-    - {x: 5, y: 4}
-    - {x: 5, y: 3}
-    - {x: 4, y: 3}
-    - {x: 3, y: 3}
-    - {x: 2, y: 3}
-    - {x: 1, y: 3}
-    - {x: 1, y: 4}
-    freezeTimeCount: 0
-    hiddenCount: 0
-  - bodyType: 0
-    listColor: 0300000002000000
-    listCoordinate:
-    - {x: 1, y: 6}
-    - {x: 1, y: 7}
-    - {x: 2, y: 7}
-    - {x: 3, y: 7}
-    - {x: 4, y: 7}
-    - {x: 5, y: 7}
-    - {x: 5, y: 6}
+    - {x: 4, y: 0}
+    - {x: 3, y: 0}
+    - {x: 2, y: 0}
+    - {x: 2, y: 1}
+    - {x: 2, y: 2}
     freezeTimeCount: 0
     hiddenCount: 0
   listPortalData:
@@ -321,7 +318,7 @@ MonoBehaviour:
   - portalType: 0
     Coordinate: {x: 0, y: 9}
     freezeTimeCount: 0
-    listColor: 06000000
+    listColor: 05000000
   - portalType: 0
     Coordinate: {x: 0, y: 1}
     freezeTimeCount: 0
@@ -329,7 +326,7 @@ MonoBehaviour:
   - portalType: 0
     Coordinate: {x: 0, y: 0}
     freezeTimeCount: 0
-    listColor: 05000000
+    listColor: 07000000
   - portalType: 0
     Coordinate: {x: 6, y: 1}
     freezeTimeCount: 0
