@@ -3,8 +3,10 @@ using Geckout;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class InGameScreenUI : ScreenUI
@@ -215,8 +217,21 @@ public class InGameScreenUI : ScreenUI
     public override void Active()
     {
         base.Active();
-        txt_Level.text = $"{UserDataManager.Level}";
+        txt_Level.text = $"{LevelManager.Instance.CurrentLevel}";
         currentTopY = rect_Top.anchoredPosition.y;
+
+        PoupNewFeature();
+    }
+
+    private void PoupNewFeature()
+    {
+        var listKey = NewFeatureManager.Instance.FeaturePopupDataDic.Keys.ToList();
+        var level = listKey.FirstOrDefault(item => item == LevelManager.Instance.CurrentLevel);
+        if (LevelManager.Instance.CurrentLevel == level && level != 0 && UserDataManager.LastFeatureCount < level)
+        {
+            UIManager.Instance.ShowPopup<PopupNewFeature>(null);
+            UserDataManager.LastFeatureCount = level;
+        }
     }
 
     public void UpdateTimeText(float timeLevel)
