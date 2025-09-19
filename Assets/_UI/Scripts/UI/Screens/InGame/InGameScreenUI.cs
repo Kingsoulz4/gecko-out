@@ -13,12 +13,8 @@ public class InGameScreenUI : ScreenUI
     [SerializeField] Text txt_Time;
     [SerializeField] Text txt_Level;
 
-    [SerializeField] InputField inputField;
-    [SerializeField] Button btn_Load;
     [SerializeField] Button btn_pause;
-
     [SerializeField] Button btn_Replay;
-    [SerializeField] Button btn_newLevel;
 
     [Space, Header("Booster")]
     BoosterDataSO boosterDataSO;
@@ -60,7 +56,6 @@ public class InGameScreenUI : ScreenUI
     {
         base.Initialize(uiManager);
 
-        btn_Load.onClick.AddListener(LoadLevel);
         timeBoosterBtn.onClick.AddListener(OnTimeBoosterClick);
         handMoveBoosterBtn.onClick.AddListener(HandMoveboosterClick);
         hammerBtn.onClick.AddListener(HammerBoosterClick);
@@ -82,11 +77,7 @@ public class InGameScreenUI : ScreenUI
         handMoveBoosterCount.Init(UserDataManager.HandMoveBooster, BoosterType.HAND_MOVE);
         //suffleBoosterCount.Init(UserDataManager.SuffleBooster, BoosterType.SUFFLE);
 
-        btn_newLevel.onClick.AddListener(() =>
-        {
-            UserDataManager.AddHeart(1, "test", false);
-            LevelManager.Instance.StartLevel(UserDataManager.Level += 1);
-        });
+       
     }
 
     private void OnDisable()
@@ -231,15 +222,7 @@ public class InGameScreenUI : ScreenUI
         txt_Time.text = GetTimeValueToString(timeLevel);
     }
 
-    private void LoadLevel()
-    {
-        if (string.IsNullOrEmpty(inputField.text))
-        {
-            return;
-        }
-        UserDataManager.Level = int.Parse(inputField.text);
-        LevelManager.Instance.StartCurrentLevel();
-    }
+  
 
     public static string GetTimeValueToString(float timeInSeconds)
     {
