@@ -32,7 +32,7 @@ namespace Geckout
 
         #region Boosters
         private bool IsFreezingTime { get; set; }
-        private bool CanCountdownTime => !IsFreezingTime && IsFirstClick;
+        private bool CanCountdownTime => !IsFreezingTime && IsFirstClick && GameManager.GameState == GameState.Playing;
         private Coroutine freezeTimeCoroutine { get; set; }
 
         #endregion
@@ -54,7 +54,8 @@ namespace Geckout
             m_gameMap.SetLevelData(gameLevelData);
             MyUlti.RemoveAllChilds(m_bodyParent);
             Camera.main.fieldOfView = gameLevelData.fieldOfView;
-            int i = 0;
+            int i=0;
+            ListBody.Clear();
             foreach (var bodyData in gameLevelData.listDogData)
             {
                 var body = SpawnBody(bodyData);
@@ -68,6 +69,7 @@ namespace Geckout
 
         public void StartLevel()
         {
+            ActiveBeginingBoosters();
             StartCountDownTime(GameLevelData.time);
         }
 
@@ -99,6 +101,11 @@ namespace Geckout
             }
         }
 
+        private void ActiveBeginingBoosters()
+        {
+
+        }    
+            
         private void StartCountDownTime(float time)
         {
             StopCountDownTime();
