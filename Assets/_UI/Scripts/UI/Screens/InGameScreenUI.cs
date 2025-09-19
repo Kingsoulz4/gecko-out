@@ -207,9 +207,12 @@ public class InGameScreenUI : ScreenUI
 
     private void OnPauseClick()
     {
-        var popupSetting = UIManager.Instance.ShowPopup<PopupSetting>(null);
+        var popupSetting = UIManager.Instance.ShowPopup<PopupSetting>(() =>
+        {
+            GameManager.Instance.SetGameState(GameState.Playing);
+        });
         popupSetting.SetType(PopupSettingType.IN_GAME);
-        GameManager.Instance.SetGameState(GameState.Playing);
+        GameManager.Instance.SetGameState(GameState.Paused);
     }
 
     private void OnReplayClick()

@@ -167,6 +167,7 @@ public class MainScreenUI : ScreenUI
 
     private void OnEnable()
     {
+        GameManager.Instance.SetGameState(GameState.MainMenu);
         btn_Play.GetComponent<ButtonPlay>().SetDisplayLevelType(LevelManager.Instance.GetCurrentLevelType());
     }
 

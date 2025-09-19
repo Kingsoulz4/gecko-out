@@ -32,7 +32,7 @@ namespace Geckout
 
         #region Boosters
         private bool IsFreezingTime { get; set; }
-        private bool CanCountdownTime => !IsFreezingTime && IsFirstClick;
+        private bool CanCountdownTime => !IsFreezingTime && IsFirstClick && GameManager.GameState == GameState.Playing;
         private Coroutine freezeTimeCoroutine { get; set; }
 
         #endregion
@@ -69,6 +69,7 @@ namespace Geckout
 
         public void StartLevel()
         {
+            ActiveBeginingBoosters();
             StartCountDownTime(GameLevelData.time);
         }
 
@@ -100,6 +101,11 @@ namespace Geckout
             }
         }
 
+        private void ActiveBeginingBoosters()
+        {
+
+        }    
+            
         private void StartCountDownTime(float time)
         {
             StopCountDownTime();
