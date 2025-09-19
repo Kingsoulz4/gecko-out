@@ -172,6 +172,7 @@ namespace Geckout
         public void NextLevel()
         {
             CurrentLevel++;
+            UIManager.Instance.ShowScreen<InGameScreenUI>();
             StartCurrentLevel();
         }
         #endregion

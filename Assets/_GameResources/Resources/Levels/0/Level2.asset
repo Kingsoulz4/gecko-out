@@ -16,7 +16,7 @@ MonoBehaviour:
   levelIndex: 0
   fieldOfView: 20
   mapSize: {x: 6, y: 6}
-  time: 120
+  time: 0
   type: 0
   mapTileDatas:
   - coordinate: {x: 0, y: 0}
@@ -145,7 +145,7 @@ MonoBehaviour:
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
-    listColor: 02000000
+    listColor: 04000000
     listCoordinate:
     - {x: 3, y: 5}
     - {x: 3, y: 4}

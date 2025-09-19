@@ -50,6 +50,7 @@ namespace Geckout
             Utils.RemoveAllChilds(m_bodyParent);
             Camera.main.fieldOfView = gameLevelData.fieldOfView;
             int i=0;
+            ListBody.Clear();
             foreach (var bodyData in gameLevelData.listDogData)
             {
                 var body = SpawnBody(bodyData);

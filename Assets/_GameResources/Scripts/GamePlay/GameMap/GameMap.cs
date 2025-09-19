@@ -120,7 +120,7 @@ namespace Geckout
             //var index = x + y * levelData.mapSize.x;
             //result = tiles[index];
 
-            result = _instance.tiles.First(x => x.Coordinate == coordinate);
+            result = _instance.tiles.ToList().Find(x => x.Coordinate == coordinate);
 
             return  result != null;
         }
