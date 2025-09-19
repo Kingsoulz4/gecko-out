@@ -9,7 +9,6 @@ public class UISettingModule : MonoBehaviour
     [SerializeField] private Button musicBtn;
     [SerializeField] private Button soundBtn;
     [SerializeField] private Button vibrateBtn;
-    [SerializeField] private Button restoreIAPBtn;
     [SerializeField] private Animation musicAni;
     [SerializeField] private Animation soundAni;
     [SerializeField] private Animation vibrateAni;
@@ -20,12 +19,7 @@ public class UISettingModule : MonoBehaviour
         musicBtn.onClick.AddListener(OnClickMusic);
         soundBtn.onClick.AddListener(OnClickSound);
         vibrateBtn.onClick.AddListener(OnClickVibrate);
-        if (restoreIAPBtn != null) restoreIAPBtn.onClick.AddListener(OnClickRestoreIAP);
         Refresh();
-    }
-
-    private void OnClickRestoreIAP()
-    {
     }
 
     private void OnClickMusic()

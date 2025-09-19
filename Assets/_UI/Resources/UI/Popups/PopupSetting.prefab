@@ -564,7 +564,6 @@ GameObject:
   - component: {fileID: 4115894757074722732}
   - component: {fileID: 960405501917057540}
   - component: {fileID: 7172082385994334348}
-  - component: {fileID: 8309084725110024693}
   m_Layer: 5
   m_Name: Popup
   m_TagString: Untagged
@@ -633,26 +632,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8309084725110024693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1532079121911699262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48019972a0478f94ea86fe187ae15d22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  musicBtn: {fileID: 2076854984300771513}
-  soundBtn: {fileID: 4282637339373014511}
-  vibrateBtn: {fileID: 4191981246117940580}
-  restoreIAPBtn: {fileID: 6938155999441099013}
-  musicAni: {fileID: 3458619753247512564}
-  soundAni: {fileID: 8849815029563332535}
-  vibrateAni: {fileID: 6816904229338047785}
-  SFX_ButtonSwitch: {fileID: 8300000, guid: d906d0e4e60816a4185707bffda717fb, type: 3}
 --- !u!1 &1550668525531992724
 GameObject:
   m_ObjectHideFlags: 0
@@ -1660,6 +1639,7 @@ GameObject:
   - component: {fileID: 3661601807785077245}
   - component: {fileID: 7192513070738676623}
   - component: {fileID: 1567350317854013078}
+  - component: {fileID: 6392127880991597613}
   m_Layer: 5
   m_Name: PopupSetting
   m_TagString: Untagged
@@ -1759,6 +1739,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IgnoreSafeAreaTop: 0
   isSetBanner: 1
+--- !u!114 &6392127880991597613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3659928156376847418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48019972a0478f94ea86fe187ae15d22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicBtn: {fileID: 2076854984300771513}
+  soundBtn: {fileID: 4282637339373014511}
+  vibrateBtn: {fileID: 4191981246117940580}
+  musicAni: {fileID: 3458619753247512564}
+  soundAni: {fileID: 8849815029563332535}
+  vibrateAni: {fileID: 6816904229338047785}
+  SFX_ButtonSwitch: {fileID: 8300000, guid: d906d0e4e60816a4185707bffda717fb, type: 3}
 --- !u!1 &3902902405716751508
 GameObject:
   m_ObjectHideFlags: 0

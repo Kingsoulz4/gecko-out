@@ -22,14 +22,14 @@ MonoBehaviour:
     quantity: 3
   - boosterType: 2
     title: Hammer
-    description: ' Hammer des'
+    description: Tap Wall To Destroy
     icon: {fileID: 21300000, guid: df0c0932fc9e2394c823dbc589e20fb0, type: 3}
     iconBig: {fileID: 21300000, guid: df0c0932fc9e2394c823dbc589e20fb0, type: 3}
     price: 1400
     quantity: 3
   - boosterType: 4
     title: Hand pick
-    description: Hand pick des
+    description: Pick a Dog To  Move
     icon: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     price: 1900

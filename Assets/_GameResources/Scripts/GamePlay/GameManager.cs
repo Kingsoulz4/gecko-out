@@ -25,6 +25,11 @@ namespace Geckout
             HeartManager.CF_EnableHeart = 1;
             HeartManager.CF_RecoverTimeHeart = 60 * 20;
             SetGameState(GameState.MainMenu);
+            var loading = UIManager.Instance.ShowScreen<LoadingScreen>();
+            loading.Show(() =>
+            {
+                UIManager.Instance.ShowScreen<MainScreenUI>();
+            });
         }
 
         public void SetGameState(GameState newState)

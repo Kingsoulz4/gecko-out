@@ -39,6 +39,7 @@ namespace Geckout
         private List<Portal> listPortal = new();
         private List<BoxMove> listMovableBox = new();
         private List<Crate> listCrate = new();
+        private List<GameTile> tileInGame = new();
 
         private static Vector2 gridOffset;
 
@@ -47,6 +48,7 @@ namespace Geckout
         public List<Portal> ListPortal { get => listPortal; }
 
         public bool IsDebug { get => isDebug;}
+        public List<GameTile> TilesWall { get => tileInGame; set => tileInGame = value; }
 
         private void Awake()
         {
@@ -257,6 +259,7 @@ namespace Geckout
 
         void SpawnAllTiles()
         {
+            TilesWall.Clear();
             if (_tilesContainer.transform.childCount > 0)
             {
                 Utils.RemoveAllChilds(_tilesContainer);
@@ -308,11 +311,9 @@ namespace Geckout
                     obj.transform.localScale = Vector3.one * cubeSize;
                     obj.name = $"Tile_{c.x}_{c.y}_{tile.type}";
                     obj.Initialize(tile);
-                    if (tile.type == MapTileType.Portal)
+                    if (tile.type != MapTileType.Portal && tile.type != MapTileType.Normal)
                     {
-                        //var portal = obj.gameObject.AddComponent<Portal>();
-                        //portal.Initialize(levelData.listPortalData.Find(x => x.Coordinate == tile.coordinate));
-                        //SpawnPortal(levelData.listPortalData.Find(x => x.Coordinate == tile.coordinate));
+                        TilesWall.Add(obj);
                     }
 
                 }
