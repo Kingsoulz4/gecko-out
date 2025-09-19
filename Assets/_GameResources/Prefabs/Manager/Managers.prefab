@@ -60,6 +60,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+  - component: {fileID: 4120499363706181328}
   - component: {fileID: 3789345977824561796}
   m_Layer: 0
   m_Name: LevelEvent

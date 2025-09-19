@@ -168,6 +168,7 @@ namespace Geckout
 
         public void OnWinGame(int level)
         {
+            GameManager.Instance.SetGameState(GameState.Win);
             UIManager.Instance.ShowPopup<PopupWin>(() =>
             {
                 NextLevel();
