@@ -24,6 +24,7 @@ namespace Geckout
                 {
                     levelGame = Instantiate(m_levelGameOriginal);
                 }
+
                 return levelGame;
             }
             set
@@ -77,6 +78,10 @@ namespace Geckout
         public void StartLevel(int level, int levelSetID = 0)
         {
             var levelData = LoadLevel(level, levelSetID);
+//#if !UNITY_EDITOR
+            Destroy(LevelGame.gameObject);
+            LevelGame = Instantiate(m_levelGameOriginal);
+//#endif
             LevelGame.SetLevelData(levelData);
             OnStartGame(CurrentLevel);
         }

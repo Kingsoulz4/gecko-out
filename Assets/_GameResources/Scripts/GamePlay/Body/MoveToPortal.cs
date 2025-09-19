@@ -137,7 +137,7 @@ namespace Geckout
             if (targetPortal == null || bodyController == null) return;
             
             bodyController.OccupiedTileController.ClearAllOccupied();
-            LevelEvent.OnMoveToPortalDone(bodyController, targetPortal);
+            LevelEvent.OnMoveToPortalDone?.Invoke(bodyController, targetPortal);
             DebugLog("Finish move portal");
             targetPortal.Disappear();
             gameObject.SetActive(false);
