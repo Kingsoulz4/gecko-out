@@ -48,4 +48,27 @@ public class BoosterConfirmUI : MonoBehaviour
         }
     }
 
+    public void UseBooster(BoosterItemData boosterItemData, Image img_Booster)
+    {
+        switch (boosterItemData.boosterType)
+        {
+            case BoosterType.NONE:
+                break;
+            case BoosterType.TIME_INGAME:
+                break;
+            case BoosterType.TIME_PRE:
+                break;
+            case BoosterType.HAMMER:
+                break;
+            case BoosterType.CISSOR:
+                break;
+            case BoosterType.HAND_MOVE:
+                break;
+            case BoosterType.SUFFLE:
+                break;
+            default:
+                break;
+        }
+    }
+
 }
