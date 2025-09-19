@@ -225,6 +225,7 @@ public class InGameScreenUI : ScreenUI
 
     private void PoupNewFeature()
     {
+        return;
         var listKey = NewFeatureManager.Instance.FeaturePopupDataDic.Keys.ToList();
         var level = listKey.FirstOrDefault(item => item == LevelManager.Instance.CurrentLevel);
         if (LevelManager.Instance.CurrentLevel == level && level != 0 && UserDataManager.LastFeatureCount < level)
