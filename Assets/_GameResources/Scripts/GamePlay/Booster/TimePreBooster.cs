@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Geckout;
 using System;
 using System.Collections;
@@ -9,12 +10,14 @@ using UnityEngine.UI;
 
 public class TimePreBooster : BoosterBase
 {
-    [SerializeField] private float maxTime = 15;
+    public float bonusTime = 15;
+    public float timePlayAnim = 2;
 
     protected override int CurrentCount { get => UserDataManager.TimeIngameBooster; set => UserDataManager.TimeIngameBooster = value; }
 
+    public bool IsSelectedToUse { get; set; }
+
     private float currentTime;
-    private GameObject timeBooster;
 
     public override void Init()
     {
@@ -32,36 +35,29 @@ public class TimePreBooster : BoosterBase
         {
             return;
         }
-        if (currentTime > 0 && timeBooster != null)
-        {
-            currentTime -= Time.deltaTime;
-            float value = currentTime / maxTime;
-            //timeBooster.UpdateFill(value, InGameScreenUI.GetTimeValueToString(currentTime));
-        }
-        else
-        {
-            Done();
-        }
+        
     }
 
     public override void ActiveBooster()
     {
+        if (!IsSelectedToUse) return;
+
+        IsSelectedToUse = true;
+
         base.ActiveBooster();
         UserDataManager.TimeIngameBooster = CurrentCount;
-        timeBooster = UIManager.Instance.GetScreenActive<InGameScreenUI>().TimeBooster;
-        timeBooster.gameObject.SetActive(true);
-        currentTime = maxTime;
+
         OnStartUseBooster?.Invoke(this, CurrentCount);
         InProgress = true;
+
+        DOVirtual.DelayedCall(timePlayAnim, Done);
+
     }
 
     protected override void Done()
     {
         base.Done();
         currentTime = 0;
-        if (timeBooster != null)
-        {
-            timeBooster.gameObject.SetActive(false);
-        }
+
     }
 }

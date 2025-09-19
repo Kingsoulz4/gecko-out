@@ -19,7 +19,7 @@ namespace Geckout
 
         void Start()
         {
-            Init();
+            //Init();
         }
 
         private void OnStartMoveHandle()
@@ -31,7 +31,7 @@ namespace Geckout
             ForceRestoreAll();
         }
 
-        void Init()
+        public void Init()
         {
             this.WaitUntil(() => bodyController != null, () =>
             {
@@ -83,6 +83,7 @@ namespace Geckout
         public void ClearAllOccupied()
         {
             var segments = bodyController.Segments;
+            if (segments == null || segments.Count <= 0) return;
 
             for (int i = 0; i < segments.Count; i++)
             {

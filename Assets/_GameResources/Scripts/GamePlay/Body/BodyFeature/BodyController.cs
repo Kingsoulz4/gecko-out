@@ -143,6 +143,18 @@ namespace Geckout
         {
             BodyData = dogData;
             List<Vector2Int> listDefaultCoordinate = dogData.listCoordinate;
+            occupiedTileController.ClearAllOccupied();
+            if (Segments != null && Segments.Count >= 3)
+            {
+                foreach (var seg in Segments)
+                {
+                    if (seg != _head && seg != _tail)
+                    {
+                        Destroy(seg.gameObject);
+                    }
+                }
+                Segments.Clear();
+            }
             Segments = new List<Segment>();
 
             // ===== Tính toán tổng số segment =====
@@ -153,13 +165,18 @@ namespace Geckout
             float totalBodyLength = length;
 
             // ===== Head =====
-            _head = Instantiate(headPrefab, transform);
+            if (_head == null)
+            {
+                _head = Instantiate(headPrefab, transform);
+            }
             _head.name = "Head";
             _head.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             Segments.Add(_head);
 
             // ===== Body segments =====
             // chỉ spawn từ 1 đến totalSegments - 2 (dành chỗ cho Tail)
+            
+
             for (int i = 1; i < totalSegments - 1; i++)
             {
                 Segment seg = Instantiate(this.segment, transform);
@@ -173,7 +190,10 @@ namespace Geckout
             }
 
             // ===== Tail =====
-            _tail = Instantiate(tailPrefab, transform);
+            if (_tail == null)
+            {
+                _tail = Instantiate(tailPrefab, transform);
+            }
             _tail.name = "Tail";
             _tail.transform.localPosition = new Vector3(0, -(totalSegments - 1) * unitSpacing, 0);
             Segments.Add(_tail);
@@ -225,7 +245,7 @@ namespace Geckout
                 _bodyRenderer.Initialize(Segments);
 
             InitMechanic();
-
+            occupiedTileController?.Init();
             canControl = true;
             Debug.Log($"Body initialized: length={length}, subLength={SubLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
         }
@@ -609,6 +629,22 @@ namespace Geckout
 
 
         }
+        #endregion
+
+        #region Booster
+
+        public void CutOutLastSegment()
+        {
+            var bodyData = new BodyData(BodyData);
+            bodyData.listCoordinate.Remove(bodyData.listCoordinate.Last());
+            Initialize(bodyData);
+        }
+
+        private IEnumerator IECutOutAnim()
+        {
+            yield return null;
+        }
+
         #endregion
     }
 }

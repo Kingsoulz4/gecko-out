@@ -163,7 +163,41 @@ namespace Geckout
         public void OnStartGame(int level)
         {
             LevelGame.StartLevel();
+            ActiveBeginingBoosters();
+        }
+
+        private void ActiveBeginingBoosters()
+        {
+
+            StartCoroutine(IEActiveBeginingBoosters());
+        }
+
+        private IEnumerator IEActiveBeginingBoosters()
+        {
+            GameManager.Instance.SetGameState(GameState.Paused);
+            var timeBeginBooster = (TimePreBooster)BoosterManager.Instance.TimePreBooster;
+            var scissorBooster = (ScissorBooster)BoosterManager.Instance.ScissorBooster;
+            if (timeBeginBooster.IsSelectedToUse || scissorBooster.IsSelectedToUse)
+            {
+                if (timeBeginBooster.IsSelectedToUse)
+                {
+                    timeBeginBooster.ActiveBooster();
+                    LevelGame.AddTime(timeBeginBooster.bonusTime);
+                    
+                }
+
+                if (scissorBooster.IsSelectedToUse)
+                {
+
+                    scissorBooster.ActiveBooster(LevelGame.ListBody.Find(x => x.Length > 3));
+                }
+
+                yield return new WaitUntil(() => !timeBeginBooster.InProgress);
+                yield return new WaitUntil(() => !scissorBooster.InProgress);
+            }
+
             GameManager.Instance.SetGameState(GameState.Playing);
+
         }
 
         public void OnWinGame(int level)

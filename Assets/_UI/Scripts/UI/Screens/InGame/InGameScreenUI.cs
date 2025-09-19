@@ -143,6 +143,9 @@ public class InGameScreenUI : ScreenUI
                 hammerBoosterCount.UpdateTextCountBooster(currentCount);
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
+            case BoosterType.TIME_PRE:
+                TimeBoosterTopUI.gameObject.SetActive(true);
+                break;
             //case BoosterType.SUFFLE:
             //    suffleBoosterCount.UpdateTextCountBooster(currentCount);
             //    boosterConfirmUI.gameObject.SetActive(false);

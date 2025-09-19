@@ -69,7 +69,6 @@ namespace Geckout
 
         public void StartLevel()
         {
-            ActiveBeginingBoosters();
             StartCountDownTime(GameLevelData.time);
         }
 
@@ -100,11 +99,6 @@ namespace Geckout
                 WinLevel();
             }
         }
-
-        private void ActiveBeginingBoosters()
-        {
-
-        }    
             
         private void StartCountDownTime(float time)
         {
