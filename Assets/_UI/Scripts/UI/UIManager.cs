@@ -60,14 +60,6 @@ public class UIManager : SingletonMono<UIManager>
     //    EditorUtility.SetDirty(u);
     //}
 
-    //private void Start()
-    //{
-    //    var loadingScreen = ShowScreen<LoadingScreen>();
-    //    loadingScreen.Show(() =>
-    //    {
-    //        ShowScreen<MainScreenUI>();
-    //    });
-    //}
     public Vector2 GetCanvasSize()
     {
         return canvas.GetComponent<RectTransform>().sizeDelta;
@@ -80,7 +72,7 @@ public class UIManager : SingletonMono<UIManager>
         for (int i = 0; i < canvasScaler.Length; i++)
         {
             canvasScaler[i].matchWidthOrHeight = 0;
-            if (MyUtil.IsiPad())
+            if (MyUlti.IsiPad())
             {
                 canvasScaler[i].matchWidthOrHeight = 1f;
             }
@@ -143,7 +135,7 @@ public class UIManager : SingletonMono<UIManager>
             for (int i = 0; i < canvasScaler.Length; i++)
             {
                 canvasScaler[i].matchWidthOrHeight = 0;
-                if (MyUtil.IsiPad())
+                if (MyUlti.IsiPad())
                 {
                     canvasScaler[i].matchWidthOrHeight = 1f;
                 }
@@ -159,7 +151,7 @@ public class UIManager : SingletonMono<UIManager>
             for (int i = 0; i < canvasScaler.Length; i++)
             {
                 canvasScaler[i].matchWidthOrHeight = 0;
-                if (MyUtil.IsiPad())
+                if (MyUlti.IsiPad())
                 {
                     canvasScaler[i].matchWidthOrHeight = 1f;
                 }

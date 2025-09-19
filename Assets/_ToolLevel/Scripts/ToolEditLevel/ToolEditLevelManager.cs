@@ -64,7 +64,7 @@ namespace Geckout
             HideAllTabs();
 
             LevelManager.Instance.IsEdittingLevel = true;
-            Utils.SetExistingGameViewSize(1920, 1080);
+            MyUlti.SetExistingGameViewSize(1920, 1080);
         }
 
         private void OnEditedTime(string arg0)
@@ -169,7 +169,7 @@ namespace Geckout
             {
                 LevelGame.ClearAllSelected();
             }
-            Utils.SetExistingGameViewSize(1080, 1920);
+            MyUlti.SetExistingGameViewSize(1080, 1920);
             SceneManager.LoadScene("GameSceneTestLevel");
             LevelManager.Instance.CurrentLevel = int.Parse(m_inputLevelNum.text);
             LevelManager.Instance.CurrentLevelSetID = int.Parse(m_inputLevelIndex.text);

@@ -228,7 +228,7 @@ namespace Geckout
 
         void SpawnMovableBoxes()
         {
-            Utils.RemoveAllChilds(m_movableBoxContainer);
+            MyUlti.RemoveAllChilds(m_movableBoxContainer);
             listMovableBox.Clear();
             foreach (var movableBox in levelData.listMovableBoxData)
             {
@@ -239,7 +239,7 @@ namespace Geckout
 
         void SpawnPortals()
         {
-            Utils.RemoveAllChilds(m_portalsContainer);
+            MyUlti.RemoveAllChilds(m_portalsContainer);
             listPortal.Clear();
             foreach(var portal in levelData.listPortalData)
             {
@@ -249,7 +249,7 @@ namespace Geckout
 
         void SpawnCrates()
         {
-            Utils.RemoveAllChilds(m_crateContainer);
+            MyUlti.RemoveAllChilds(m_crateContainer);
             listCrate.Clear();
             foreach (var crateData in levelData.listCrateData)
             {
@@ -262,12 +262,12 @@ namespace Geckout
             TilesWall.Clear();
             if (_tilesContainer.transform.childCount > 0)
             {
-                Utils.RemoveAllChilds(_tilesContainer);
+                MyUlti.RemoveAllChilds(_tilesContainer);
             }
 
             if (m_wallContainer.transform.childCount > 0)
             {
-                Utils.RemoveAllChilds(m_wallContainer);
+                MyUlti.RemoveAllChilds(m_wallContainer);
             }
 
             var cubeSize = 1f;
@@ -328,12 +328,12 @@ namespace Geckout
         {
             if(_tilesContainer.transform.childCount > 0)
             {
-                Utils.RemoveAllChilds(_tilesContainer);
+                MyUlti.RemoveAllChilds(_tilesContainer);
             }
 
             if(m_wallContainer.transform.childCount > 0)
             {
-                Utils.RemoveAllChilds(m_wallContainer);
+                MyUlti.RemoveAllChilds(m_wallContainer);
             }
 
             var cubeSize = 1f;
