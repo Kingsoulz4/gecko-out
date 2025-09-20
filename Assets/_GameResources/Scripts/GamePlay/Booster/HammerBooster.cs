@@ -19,6 +19,22 @@ public class HammerBooster : BoosterBase
     private void Update()
     {
         GetTile();
+
+        if (IsShowConfirm && Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hitInfo))
+            {
+                GameTile tile = hitInfo.collider.GetComponent<GameTile>();
+                if (tile != null)
+                {
+                    if (GameMap.Instance.TilesWall.Contains(tile))
+                    {
+                        StartCoroutine(IEClearGameTile(tile));
+                    }
+                }
+            }
+        }
     }
 
     private void GetTile()
@@ -34,17 +50,18 @@ public class HammerBooster : BoosterBase
 
     }
 
-    private IEnumerator IEClearGameTIle(GameTile tile)
+    private IEnumerator IEClearGameTile(GameTile tile)
     {
         ActiveBooster();
+        UpdateVisualBooster();
         yield return new WaitForEndOfFrame();
         Hammer hammer = Instantiate(hammerPrefab);
-
+        Debug.Log(tile.transform.position);
         hammer.SmashToBlock(tile.transform.position, 0.35f, () =>
         {
-
             Done();
             RemoveHammer(hammer);
+            tile.HideWall();
         });
     }
 
@@ -72,7 +89,7 @@ public class HammerBooster : BoosterBase
 
     protected override void Done()
     {
-        base.Done();
+       base.Done();
        TouchInputHandler.Instance.CanClick = true;
     }
 }

@@ -1,3 +1,4 @@
+using Geckout;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ public class BoosterConfirmUI : MonoBehaviour
         gameObject.SetActive(false);
         var booster = BoosterManager.Instance.GetBoosterByType(BoosterType);
         booster.CancelBooster();
+        LevelEvent.OnHideConfirmUIBooster?.Invoke(BoosterType);
     }
 
     public void SetUIData(BoosterItemData boosterItemData, Image img_Booster)
@@ -46,29 +48,7 @@ public class BoosterConfirmUI : MonoBehaviour
         {
             iconImg.sprite = boosterItemData.icon;
         }
-    }
 
-    public void UseBooster(BoosterItemData boosterItemData, Image img_Booster)
-    {
-        switch (boosterItemData.boosterType)
-        {
-            case BoosterType.NONE:
-                break;
-            case BoosterType.TIME_INGAME:
-                break;
-            case BoosterType.TIME_PRE:
-                break;
-            case BoosterType.HAMMER:
-                break;
-            case BoosterType.CISSOR:
-                break;
-            case BoosterType.HAND_MOVE:
-                break;
-            case BoosterType.SUFFLE:
-                break;
-            default:
-                break;
-        }
+        LevelEvent.OnShowConfirmUIBooster?.Invoke(BoosterType);
     }
-
 }

@@ -20,6 +20,7 @@ public class Hammer : MonoBehaviour
         }
         tweenMove = transform.DOMove(destination, time).OnComplete(() => onComplete?.Invoke());
     }
+
     public void SmashToBlock(Vector3 position, float time, Action OnDone)
     {
         this.OnDone = OnDone;
@@ -31,6 +32,7 @@ public class Hammer : MonoBehaviour
             animator.Play("Smash");
         });
     }
+
     public void SmashDone()
     {
         //LevelManager.Instance.CameraController.ShakeCamera();
@@ -44,6 +46,7 @@ public class Hammer : MonoBehaviour
         //ef2.SetColor(color);
         OnDone?.Invoke();
     }
+
     public void Destroy()
     {
         Destroy(gameObject);

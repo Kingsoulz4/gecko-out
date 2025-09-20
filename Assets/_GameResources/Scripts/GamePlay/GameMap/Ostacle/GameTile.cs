@@ -85,6 +85,22 @@ namespace Geckout
             SetTileType(tileData.type);
         }
 
+        public void ShowHammer(bool show)
+        {
+            if (hammer != null)
+            {
+                hammer.SetActive(show);
+            }
+        }
+
+        public void HideWall()
+        {
+            IsOccupied = false;
+            m_tilesTypeDisplay[MapTileData.type].SetActive(false);
+            hammer.SetActive(false);
+            GameMap.Instance.TilesWall.Remove(this);
+        }
+
         public void SetTileType(MapTileType tileType)
         {
             if (m_tilesTypeDisplay == null || m_tilesTypeDisplay.Count <= 0)

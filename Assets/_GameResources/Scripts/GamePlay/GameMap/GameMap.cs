@@ -54,7 +54,43 @@ namespace Geckout
         {
             _instance = this;
             //Initialize(levelData);
+
         }
+
+        private void OnEnable()
+        {
+            LevelEvent.OnShowConfirmUIBooster += OnShowConfirmUIBooster;
+            LevelEvent.OnHideConfirmUIBooster += OnHideConfirmUIBooster;
+        }
+
+        private void OnDisable()
+        {
+            LevelEvent.OnShowConfirmUIBooster -= OnShowConfirmUIBooster;
+            LevelEvent.OnHideConfirmUIBooster -= OnHideConfirmUIBooster;
+        }
+
+        private void OnShowConfirmUIBooster(BoosterType type)
+        {
+            if (type == BoosterType.HAMMER)
+            {
+                for (int i = 0; i < TilesWall.Count; i++)
+                {
+                    TilesWall[i].ShowHammer(true);
+                }
+            }
+        }
+
+        private void OnHideConfirmUIBooster(BoosterType type)
+        {
+            if (type == BoosterType.HAMMER)
+            {
+                for (int i = 0; i < TilesWall.Count; i++)
+                {
+                    TilesWall[i].ShowHammer(false);
+                }
+            }
+        }
+
         void CreateContainers()
         {
             DestroyContainers();
@@ -311,11 +347,6 @@ namespace Geckout
                     obj.transform.localScale = Vector3.one * cubeSize;
                     obj.name = $"Tile_{c.x}_{c.y}_{tile.type}";
                     obj.Initialize(tile);
-                    if (tile.type != MapTileType.Portal && tile.type != MapTileType.Normal)
-                    {
-                        TilesWall.Add(obj);
-                    }
-
                 }
             }
 
@@ -371,6 +402,12 @@ namespace Geckout
                 obj.transform.localPosition = pos;
                 obj.transform.localScale = Vector3.one * cubeSize;
                 obj.Initialize(tile);
+
+                if (tile.type != MapTileType.Portal && tile.type != MapTileType.Normal)
+                {
+                    TilesWall.Add(obj);
+                }
+
                 if (tile.type == MapTileType.Portal)
                 {
                     //var portal = obj.gameObject.AddComponent<Portal>();
