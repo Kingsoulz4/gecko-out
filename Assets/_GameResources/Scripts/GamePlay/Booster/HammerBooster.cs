@@ -18,8 +18,6 @@ public class HammerBooster : BoosterBase
 
     private void Update()
     {
-        GetTile();
-
         if (IsShowConfirm && Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -37,17 +35,32 @@ public class HammerBooster : BoosterBase
         }
     }
 
-    private void GetTile()
-    {
-        
-    }
-
     public override void CancelBooster()
     {
         base.CancelBooster();
         TouchInputHandler.Instance.CanClick = true;
         IsShowConfirm = false;
 
+    }
+
+    public override void ActiveBooster()
+    {
+        base.ActiveBooster();
+        IsShowConfirm = false;
+        OnStartUseBooster?.Invoke(this, CurrentCount);
+    }
+
+    protected override void ShowBooster()
+    {
+        base.ShowBooster();
+        TouchInputHandler.Instance.CanClick = false;
+        IsShowConfirm = true;
+    }
+
+    protected override void Done()
+    {
+       base.Done();
+       TouchInputHandler.Instance.CanClick = true;
     }
 
     private IEnumerator IEClearGameTile(GameTile tile)
@@ -73,23 +86,4 @@ public class HammerBooster : BoosterBase
         }).SetEase(Ease.InOutBack);
     }
 
-    public override void ActiveBooster()
-    {
-        base.ActiveBooster();
-        IsShowConfirm = false;
-        OnStartUseBooster?.Invoke(this, CurrentCount);
-    }
-
-    protected override void ShowBooster()
-    {
-        base.ShowBooster();
-        TouchInputHandler.Instance.CanClick = false;
-        IsShowConfirm = true;
-    }
-
-    protected override void Done()
-    {
-       base.Done();
-       TouchInputHandler.Instance.CanClick = true;
-    }
 }

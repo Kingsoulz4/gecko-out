@@ -25,6 +25,10 @@ public class BoosterConfirmUI : MonoBehaviour
         gameObject.SetActive(false);
         var booster = BoosterManager.Instance.GetBoosterByType(BoosterType);
         booster.CancelBooster();
+    }
+
+    private void OnDisable()
+    {
         LevelEvent.OnHideConfirmUIBooster?.Invoke(BoosterType);
     }
 
