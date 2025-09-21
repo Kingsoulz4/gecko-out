@@ -36,6 +36,9 @@ public class InGameScreenUI : ScreenUI
     [SerializeField] Button hammerBtn;
     [SerializeField] VisualCountBooster hammerBoosterCount;
 
+    [Header("Booster Time")]
+    [SerializeField] private GameObject m_iconClock;
+
     //[Header("Booster remove 1 tail")]
     //[SerializeField] Button suffleBoosterBtn;
     //[SerializeField] VisualCountBooster suffleBoosterCount;
@@ -49,9 +52,14 @@ public class InGameScreenUI : ScreenUI
 
     public TimeBoosterTopUI TimeBoosterTopUI { get => timeBoosterTopUI;}
 
+    private LevelController LevelController => LevelManager.Instance.LevelGame;
+
     private void Update()
     {
-        UpdateTimeText(LevelManager.Instance.LevelGame.CurrentTimeLevelRemaining);
+        if (LevelController.CanCountdownTime)
+        {
+            UpdateTimeText(LevelController.CurrentTimeLevelRemaining);
+        }
     }
 
     public override void Initialize(UIManager uiManager)
@@ -222,19 +230,18 @@ public class InGameScreenUI : ScreenUI
         base.Active();
         txt_Level.text = $"{LevelManager.Instance.CurrentLevel}";
         currentTopY = rect_Top.anchoredPosition.y;
-
+        UpdateTimeText(LevelController.CurrentTimeLevelRemaining);
         PoupNewFeature();
     }
 
     private void PoupNewFeature()
     {
-        return;
-        var listKey = NewFeatureManager.Instance.FeaturePopupDataDic.Keys.ToList();
-        var level = listKey.FirstOrDefault(item => item == LevelManager.Instance.CurrentLevel);
-        if (LevelManager.Instance.CurrentLevel == level && level != 0 && UserDataManager.LastFeatureCount < level)
+        //return;
+        var feature = NewFeatureManager.Instance.GetNewFeatureInProgress();
+        if (feature != null && LevelManager.Instance.CurrentLevel == feature.level && UserDataManager.LastFeatureCount < feature.level)
         {
-            UIManager.Instance.ShowPopup<PopupNewFeature>(null);
-            UserDataManager.LastFeatureCount = level;
+            UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
+            UserDataManager.LastFeatureCount = feature.level;
         }
     }
 
@@ -281,4 +288,16 @@ public class InGameScreenUI : ScreenUI
 
         };
     }
+
+    public void ShowAddTimeAnim()
+    {
+
+    }
+        
+    private IEnumerator IEAnimateAddTime()
+    {
+        yield return null;
+        //var currentTime = 
+    }
+        
 }

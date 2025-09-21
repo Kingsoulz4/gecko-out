@@ -24,29 +24,36 @@ namespace Geckout
 
         private void OnClickSelectBoosterScissor()
         {
-            if(UserDataManager.CissorBooster < 0)
+            if(UserDataManager.CissorBooster <= 0)
             {
                 var popupBuyBooster = UIManager.Instance.ShowPopup<PopupBuyBooster>(null);
                 popupBuyBooster.Show(BoosterType.CISSOR);
-                //popupBuyBooster.OnClose 
+                popupBuyBooster.OnBought = UpdateUI;
             }
         }
 
         private void OnClickSelectBoosterTime()
         {
-            if (UserDataManager.TimePreBooster < 0)
+            if (UserDataManager.TimePreBooster <= 0)
             {
                 var popupBuyBooster = UIManager.Instance.ShowPopup<PopupBuyBooster>(null);
-                popupBuyBooster.Show(BoosterType.CISSOR);
+                popupBuyBooster.Show(BoosterType.TIME_PRE);
+                popupBuyBooster.OnBought = UpdateUI;
             }
         }
 
         private void OnEnable()
         {
-            m_textLevel.text = $"Level {LevelManager.Instance.CurrentLevel}";
-            m_buttonSelectBoosterTime.Init(5);
-            m_buttonSelectBoosterScissor.Init(10);
+            UpdateUI();
         }
+
+        private void UpdateUI()
+        {
+            m_textLevel.text = $"Level {LevelManager.Instance.CurrentLevel}";
+            m_buttonSelectBoosterTime.Init(5, UserDataManager.TimePreBooster);
+            m_buttonSelectBoosterScissor.Init(10, UserDataManager.CissorBooster);
+        }
+            
 
         private void OnClickClose()
         {

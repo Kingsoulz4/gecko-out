@@ -18,26 +18,66 @@ namespace Geckout
         [SerializeField] private Image iconFeatureDisplay;
         [SerializeField] private Image iconFill;
         [SerializeField] private Slider m_sliderProgress;
+        [SerializeField] private GameObject m_winContent;
+
+        [Header("New Feature")]
+        [SerializeField] private GameObject m_newFeatureContent;
+        [SerializeField] private Button m_buttonContinue;
+        [SerializeField] private Image m_imageNewFeatureIcon;
+        [SerializeField] private Text m_textDes;
+        [SerializeField] private Text m_textFeatureName;
+
         
         private int finalFeatureLv;
+
+        private bool isLockClick = false;
+
+        private float currentProgressNewFeature = 0;
 
         private void Awake()
         {
             m_buttonClaim.onClick.AddListener(OnClickClaim);
             m_buttonClaimX2.onClick.AddListener(OnClickClaimX2);
+            m_buttonContinue.onClick.AddListener(OnClickContinue);
             var FeatureLevelKeys = NewFeatureManager.Instance.FeaturePopupDataDic.Keys.ToList();
-            finalFeatureLv = FeatureLevelKeys[FeatureLevelKeys.Count - 1];
+            finalFeatureLv = NewFeatureManager.Instance.GetNewFeatureInProgress().level;
         }
 
+        private void OnClickContinue()
+        {
+            Hide();
+        }
 
         private void OnClickClaimX2()
         {
-            Hide();
+            if (isLockClick) return;
+            if (currentProgressNewFeature < 1)
+            {
+                Hide();
+            }
+            else
+            {
+                ShowNewFeature();
+            }
         }
 
         private void OnClickClaim()
         {
-            Hide();
+            if (isLockClick) return;
+            if (currentProgressNewFeature < 1)
+            {
+                Hide();
+            }
+            else
+            {
+                ShowNewFeature();
+            }
+        }
+
+        private void ShowNewFeature()
+        {
+            m_winContent.gameObject.SetActive(false);
+            m_newFeatureContent.gameObject.SetActive(true);
         }
 
         private void OnEnable()
@@ -58,7 +98,10 @@ namespace Geckout
 
         public override void Show(Action onClose)
         {
+            m_winContent.SetActive(true);
+            m_newFeatureContent.SetActive(false);
             base.Show(onClose);
+         
             if (LevelManager.Instance.CurrentLevel > finalFeatureLv)
             {
                 onShowDone -= UpdateFill;
@@ -108,10 +151,17 @@ namespace Geckout
             float progress = (LevelManager.Instance.CurrentLevel - featureLevelOld) / totalStep;
             float lastProgress = (LevelManager.Instance.CurrentLevel - 1 - featureLevelOld) / totalStep;
 
-            iconFeatureDisplay.sprite = NewFeatureManager.Instance.FeaturePopupDataDic[featureLevel].spriteBG;
-            iconFill.sprite = NewFeatureManager.Instance.FeaturePopupDataDic[featureLevel].spriteFill;
+            var feature = NewFeatureManager.Instance.FeaturePopupDataDic[featureLevel];
+
+            iconFeatureDisplay.sprite = NewFeatureManager.Instance.FeaturePopupDataDic[featureLevel].icon;
+            iconFill.sprite = NewFeatureManager.Instance.FeaturePopupDataDic[featureLevel].icon;
+            m_imageNewFeatureIcon.sprite = NewFeatureManager.Instance.FeaturePopupDataDic[featureLevel].icon;
             //iconFeatureDisplay.SetNativeSize();
-            iconFill.SetNativeSize();
+            //iconFill.SetNativeSize();
+
+            currentProgressNewFeature = progress;
+            m_textDes.text = feature.des;
+            m_textFeatureName.text = feature.title;
 
             StartCoroutine(Fill(lastProgress, progress, 1f));
 
@@ -120,6 +170,11 @@ namespace Geckout
         private IEnumerator Fill(float start, float target, float speed = 1)
         {
             float t = start;
+
+            if(target >= 1)
+            {
+                isLockClick = true;
+            }
 
             while (start < target)
             {
@@ -130,6 +185,10 @@ namespace Geckout
                 this.progressText.text = $"{(int)(start * 100)}%";
                 yield return null;
             }
+
+            isLockClick = false;
+            
+
         }
     }
 }

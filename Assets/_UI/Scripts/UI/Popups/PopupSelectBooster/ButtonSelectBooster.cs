@@ -17,7 +17,7 @@ namespace Geckout
 
         public Action OnClick { get; set; }
         public bool IsSelected { get; set; } = false;
-        public bool IsUnLocked => UserDataManager.Level > levelUnlock;
+        public bool IsUnLocked => UserDataManager.Level >= levelUnlock;
 
         private int levelUnlock = 1;
 
@@ -36,7 +36,8 @@ namespace Geckout
             m_lockObject.SetActive(!IsUnLocked);
             m_selectedObject.SetActive(false);
             m_textLevelUnlock.text = $"Lv.{levelUnlock}";
-            m_textQuantity.text = quantity.ToString();  
+            m_textQuantity.text = quantity.ToString();
+            m_quantityObj.gameObject.SetActive(!IsSelected && IsUnLocked);
         }
 
         private void OnClickButton()

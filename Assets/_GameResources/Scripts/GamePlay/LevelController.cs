@@ -32,7 +32,7 @@ namespace Geckout
 
         #region Boosters
         private bool IsFreezingTime { get; set; }
-        private bool CanCountdownTime => !IsFreezingTime && IsFirstClick && GameManager.GameState == GameState.Playing;
+        public bool CanCountdownTime => !IsFreezingTime && IsFirstClick && GameManager.GameState == GameState.Playing;
         private Coroutine freezeTimeCoroutine { get; set; }
 
         #endregion

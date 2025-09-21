@@ -13,7 +13,25 @@ MonoBehaviour:
   m_Name: NewFeatureSO
   m_EditorClassIdentifier: 
   newFeatureItemDatas:
-  - level: 2
+  - level: 3
+    icon: {fileID: 21300000, guid: b9bec12562ec64047aba62c46a6d1740, type: 3}
+    title: Freeze Time
+    des: Something Here
+    spriteBG: {fileID: 21300000, guid: b9bec12562ec64047aba62c46a6d1740, type: 3}
+    spriteFill: {fileID: 21300000, guid: b9bec12562ec64047aba62c46a6d1740, type: 3}
+  - level: 5
+    icon: {fileID: 21300000, guid: 99043121cb0f96f41be34fdb0b205aba, type: 3}
+    title: Hammer
+    des: Desss
+    spriteBG: {fileID: 21300000, guid: 99043121cb0f96f41be34fdb0b205aba, type: 3}
+    spriteFill: {fileID: 21300000, guid: 99043121cb0f96f41be34fdb0b205aba, type: 3}
+  - level: 7
+    icon: {fileID: 21300000, guid: a1d3b84312216714bb13d71e1bf58da9, type: 3}
+    title: 'Pickup '
+    des: 'Something '
+    spriteBG: {fileID: 21300000, guid: a1d3b84312216714bb13d71e1bf58da9, type: 3}
+    spriteFill: {fileID: 21300000, guid: a1d3b84312216714bb13d71e1bf58da9, type: 3}
+  - level: 15
     icon: {fileID: 21300000, guid: ee5e978f6f35fe642822145446ade9f3, type: 3}
     title: title
     des: Desss

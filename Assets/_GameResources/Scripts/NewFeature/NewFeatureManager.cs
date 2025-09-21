@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class NewFeatureManager : SingletonMono<NewFeatureManager>
@@ -17,4 +18,12 @@ public class NewFeatureManager : SingletonMono<NewFeatureManager>
             FeaturePopupDataDic.Add(NewFeatureSO.newFeatureItemDatas[i].level, NewFeatureSO.newFeatureItemDatas[i]);
         }
     }
+
+    public NewFeatureItemData GetNewFeatureInProgress()
+    {
+        return FeaturePopupDataDic.FirstOrDefault(x => x.Key >= UserDataManager.Level).Value;
+    }
+
+
+        
 }
