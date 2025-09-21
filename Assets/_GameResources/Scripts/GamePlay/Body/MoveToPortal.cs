@@ -134,7 +134,45 @@ namespace Geckout
 
         public IEnumerator IEEnterPortalBooster(Portal portal)
         {
-            yield return null;
+            if (isEnteringPortal) yield break;
+
+            targetPortal = portal;
+            isEnteringPortal = true;
+            bodyController.CanControl = false;
+
+            DebugLog($"Starting portal booster jump to {portal.name}");
+
+            Vector3 portalCenter = targetPortal.transform.position;
+            var orderedSegments = bodyController.Segments;
+
+            List<Tween> jumpTweens = new List<Tween>();
+
+            for (int i = 0; i < orderedSegments.Count; i++)
+            {
+                var segment = orderedSegments[i];
+                if (segment == null) continue;
+
+                // Calculate jump parameters
+                float jumpPower = 1;// Random.Range(2f, 4f); // Random jump height for variety
+                float duration = animationDurationPerSegment + (i * 0.05f);
+
+                var jumpTween = segment.transform.DOJump(
+                    portalCenter,
+                    jumpPower,
+                    1,
+                    duration
+                ).SetEase(Ease.InOutQuad)
+                .OnComplete(() => {
+                    bool isLast = segment == orderedSegments[orderedSegments.Count - 1];
+                    StartCoroutine(AnimateSegmentDown(segment, portalCenter, isLast));
+                });
+
+                jumpTweens.Add(jumpTween);
+            }
+
+            yield return new WaitUntil(() => jumpTweens.All(t => t == null || !t.IsActive()));
+
+            DebugLog("Portal booster jump animation completed");
         }
 
         private void FinishMoveToPortal()
