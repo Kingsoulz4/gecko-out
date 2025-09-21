@@ -279,6 +279,31 @@ public class UserDataManager : MonoBehaviour
         }
     }
 
+    public static void AddBooster(BoosterType boosterType, int quantity)
+    {
+        switch(boosterType)
+        {
+            case BoosterType.TIME_PRE:
+                TimePreBooster += quantity; 
+                break;
+            case BoosterType.TIME_INGAME:
+                TimeIngameBooster += quantity;
+                break;
+            case BoosterType.HAMMER:
+                HammerBooster += quantity;
+                break;
+            case BoosterType.HAND_MOVE:
+                HandMoveBooster += quantity;
+                break;
+            case BoosterType.CISSOR:
+                CissorBooster += quantity;
+                break;
+            default:
+                break;
+        }
+    }
+        
+
     public static UserData LoadUserData()
     {
         if (PlayerPrefs.HasKey(USER_DATA_KEY))

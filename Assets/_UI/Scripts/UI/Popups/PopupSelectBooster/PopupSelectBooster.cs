@@ -18,7 +18,27 @@ namespace Geckout
         {
             m_buttonPlay.onClick.AddListener(OnClickPlay);
             m_buttonClose.onClick.AddListener(OnClickClose);
-            
+            m_buttonSelectBoosterTime.OnClick = OnClickSelectBoosterTime;
+            m_buttonSelectBoosterScissor.OnClick = OnClickSelectBoosterScissor;
+        }
+
+        private void OnClickSelectBoosterScissor()
+        {
+            if(UserDataManager.CissorBooster < 0)
+            {
+                var popupBuyBooster = UIManager.Instance.ShowPopup<PopupBuyBooster>(null);
+                popupBuyBooster.Show(BoosterType.CISSOR);
+                //popupBuyBooster.OnClose 
+            }
+        }
+
+        private void OnClickSelectBoosterTime()
+        {
+            if (UserDataManager.TimePreBooster < 0)
+            {
+                var popupBuyBooster = UIManager.Instance.ShowPopup<PopupBuyBooster>(null);
+                popupBuyBooster.Show(BoosterType.CISSOR);
+            }
         }
 
         private void OnEnable()

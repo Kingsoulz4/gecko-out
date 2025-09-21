@@ -143,19 +143,8 @@ namespace Geckout
         {
             BodyData = dogData;
             List<Vector2Int> listDefaultCoordinate = dogData.listCoordinate;
-            occupiedTileController.ClearAllOccupied();
-            if (Segments != null && Segments.Count >= 3)
-            {
-                foreach (var seg in Segments)
-                {
-                    if (seg != _head && seg != _tail)
-                    {
-                        Destroy(seg.gameObject);
-                    }
-                }
-                Segments.Clear();
-            }
-            Segments = new List<Segment>();
+            
+            ResetAllComponents();
 
             // ===== Tính toán tổng số segment =====
             length = listDefaultCoordinate.Count;
@@ -249,6 +238,24 @@ namespace Geckout
             canControl = true;
             Debug.Log($"Body initialized: length={length}, subLength={SubLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
         }
+
+        public void ResetAllComponents()
+        {
+            occupiedTileController.ClearAllOccupied();
+            if (Segments != null && Segments.Count >= 3)
+            {
+                foreach (var seg in Segments)
+                {
+                    if (seg != _head && seg != _tail)
+                    {
+                        Destroy(seg.gameObject);
+                    }
+                }
+                Segments.Clear();
+            }
+            Segments = new List<Segment>();
+        }
+            
 
         public List<Segment> GetOrderedSegments()
         {
