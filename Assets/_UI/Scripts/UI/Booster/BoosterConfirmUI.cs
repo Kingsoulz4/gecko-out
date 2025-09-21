@@ -27,10 +27,6 @@ public class BoosterConfirmUI : MonoBehaviour
         booster.CancelBooster();
     }
 
-    private void OnDisable()
-    {
-        LevelEvent.OnHideConfirmUIBooster?.Invoke(BoosterType);
-    }
 
     public void SetUIData(BoosterItemData boosterItemData, Image img_Booster)
     {
@@ -52,7 +48,5 @@ public class BoosterConfirmUI : MonoBehaviour
         {
             iconImg.sprite = boosterItemData.icon;
         }
-
-        LevelEvent.OnShowConfirmUIBooster?.Invoke(BoosterType);
     }
 }

@@ -21,7 +21,7 @@ namespace Geckout
                 var body = TouchInputHandler.Instance.GetBodyControllerByMouse(Input.mousePosition);
                 if (body != null && listBodySelected.Contains(body))
                 {
-                    DoBooster(body);
+                    StartCoroutine(DoBooster(body));
                 }
             }
         }
@@ -86,16 +86,20 @@ namespace Geckout
         public override void ActiveBooster()
         {
             base.ActiveBooster();
+            UpdateVisualBooster();
             IsShowConfirm = false;
             OnStartUseBooster?.Invoke(this, CurrentCount);
         }
 
-        private void DoBooster(BodyController bodyController)
+        private IEnumerator DoBooster(BodyController bodyController)
         {
             ActiveBooster();
+
             Portal portal = listPortal.Find(x => x.PortalData.listColor.FirstOrDefault() == bodyController.BodyData.listColor.FirstOrDefault());
-            bodyController.MoveToPortal.EnterPortalBooster(portal);
             listBodySelected.Remove(bodyController);
+            yield return bodyController.MoveToPortal.IEEnterPortalBooster(portal);
+
+            Done();
         }
 
         protected override void ShowBooster()
@@ -110,6 +114,7 @@ namespace Geckout
         {
             base.Done();
             TouchInputHandler.Instance.CanClick = true;
+            HideSelectedBody();
         }
     }
 }

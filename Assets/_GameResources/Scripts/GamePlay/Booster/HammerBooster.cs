@@ -41,11 +41,13 @@ public class HammerBooster : BoosterBase
         TouchInputHandler.Instance.CanClick = true;
         IsShowConfirm = false;
 
+        GameMap.Instance.HideHammerIcon();
     }
 
     public override void ActiveBooster()
     {
         base.ActiveBooster();
+        UpdateVisualBooster();
         IsShowConfirm = false;
         OnStartUseBooster?.Invoke(this, CurrentCount);
     }
@@ -55,26 +57,30 @@ public class HammerBooster : BoosterBase
         base.ShowBooster();
         TouchInputHandler.Instance.CanClick = false;
         IsShowConfirm = true;
+
+        GameMap.Instance.ShowHammerIcon();
     }
 
     protected override void Done()
     {
-       base.Done();
-       TouchInputHandler.Instance.CanClick = true;
+        base.Done();
+        TouchInputHandler.Instance.CanClick = true;
+        GameMap.Instance.HideHammerIcon();
+
     }
 
     private IEnumerator DoBooster(GameTile tile)
     {
         ActiveBooster();
-        UpdateVisualBooster();
+
         yield return new WaitForEndOfFrame();
+
         Hammer hammer = Instantiate(hammerPrefab);
-        Debug.Log(tile.transform.position);
         hammer.SmashToBlock(tile.transform.position, 0.35f, () =>
         {
-            Done();
             RemoveHammer(hammer);
             tile.HideWall();
+            Done();
         });
     }
 

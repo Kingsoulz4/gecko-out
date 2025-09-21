@@ -47,7 +47,7 @@ namespace Geckout
 
         public List<Portal> ListPortal { get => listPortal; }
 
-        public bool IsDebug { get => isDebug;}
+        public bool IsDebug { get => isDebug; }
         public List<GameTile> TilesWall { get => tileInGame; set => tileInGame = value; }
 
         private void Awake()
@@ -57,21 +57,8 @@ namespace Geckout
 
         }
 
-        private void OnEnable()
+        public void ShowHammerIcon()
         {
-            LevelEvent.OnShowConfirmUIBooster += OnShowConfirmUIBooster;
-            LevelEvent.OnHideConfirmUIBooster += OnHideConfirmUIBooster;
-        }
-
-        private void OnDisable()
-        {
-            LevelEvent.OnShowConfirmUIBooster -= OnShowConfirmUIBooster;
-            LevelEvent.OnHideConfirmUIBooster -= OnHideConfirmUIBooster;
-        }
-
-        private void OnShowConfirmUIBooster(BoosterType type)
-        {
-            if (type == BoosterType.HAMMER)
             {
                 for (int i = 0; i < TilesWall.Count; i++)
                 {
@@ -80,30 +67,28 @@ namespace Geckout
             }
         }
 
-        private void OnHideConfirmUIBooster(BoosterType type)
+        public void HideHammerIcon()
         {
-            if (type == BoosterType.HAMMER)
             {
                 for (int i = 0; i < TilesWall.Count; i++)
                 {
                     TilesWall[i].ShowHammer(false);
                 }
             }
-        }
 
-        void CreateContainers()
-        {
-            DestroyContainers();
-            _tilesContainer = CreateChild("TilesContainer");
-            _entitiesContainer = CreateChild("EntitiesContainer");
-        }
+            void CreateContainers()
+            {
+                DestroyContainers();
+                _tilesContainer = CreateChild("TilesContainer");
+                _entitiesContainer = CreateChild("EntitiesContainer");
+            }
 
-        void DestroyContainers()
-        {
-            if (_tilesContainer != null) Destroy(_tilesContainer.gameObject);
-            if (_entitiesContainer != null) Destroy(_entitiesContainer.gameObject);
+            void DestroyContainers()
+            {
+                if (_tilesContainer != null) Destroy(_tilesContainer.gameObject);
+                if (_entitiesContainer != null) Destroy(_entitiesContainer.gameObject);
+            }
         }
-
         private Transform CreateChild(string childName)
         {
             var child = new GameObject(childName).transform;
@@ -160,7 +145,7 @@ namespace Geckout
 
             result = _instance.tiles.ToList().Find(x => x.Coordinate == coordinate);
 
-            return  result != null;
+            return result != null;
         }
 
         public bool TryGetPortalAtCoord(Vector2Int coordinate, out Portal result)
@@ -184,7 +169,7 @@ namespace Geckout
             if (_tilesContainer == null)
             {
                 _tilesContainer = GameObject.Find("TilesContainer").transform;
-            }    
+            }
             tiles = new GameTile[_mapSize.x * _mapSize.y];
             List<GameTile> listTile = _tilesContainer.GetComponentsInChildren<GameTile>().ToList();
             int i = 0;
@@ -206,11 +191,11 @@ namespace Geckout
         public void SetLevelData(GameLevelData levelData)
         {
             this.levelData = levelData;
-            if(levelData.mapSize.x * levelData.mapSize.y != levelData.mapTileDatas.Count)
+            if (levelData.mapSize.x * levelData.mapSize.y != levelData.mapTileDatas.Count)
             {
                 levelData.mapTileDatas.Clear();
-            }   
-            
+            }
+
             if (levelData.mapTileDatas != null && levelData.mapTileDatas.Count > 0)
             {
                 SpawnAllTiles(levelData.mapTileDatas);
@@ -237,7 +222,7 @@ namespace Geckout
 #if UNITY_EDITOR
             EditorUtility.SetDirty(gameObject);
 #endif
-        }    
+        }
 
         public void SpawnPortal(PortalData portalData)
         {
@@ -277,7 +262,7 @@ namespace Geckout
         {
             MyUlti.RemoveAllChilds(m_portalsContainer);
             listPortal.Clear();
-            foreach(var portal in levelData.listPortalData)
+            foreach (var portal in levelData.listPortalData)
             {
                 SpawnPortal(portal);
             }
@@ -338,7 +323,7 @@ namespace Geckout
                     GameTile obj;
 #if UNITY_EDITOR
                     obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, _tilesContainer));
-                    
+
 #else
                     obj = Instantiate(prefab, _tilesContainer);
 #endif
@@ -357,12 +342,12 @@ namespace Geckout
 
         void SpawnAllTiles(List<MapTileData> mapTileData)
         {
-            if(_tilesContainer.transform.childCount > 0)
+            if (_tilesContainer.transform.childCount > 0)
             {
                 MyUlti.RemoveAllChilds(_tilesContainer);
             }
 
-            if(m_wallContainer.transform.childCount > 0)
+            if (m_wallContainer.transform.childCount > 0)
             {
                 MyUlti.RemoveAllChilds(m_wallContainer);
             }
@@ -378,7 +363,7 @@ namespace Geckout
                 (gridSize.x - 1) * cellSize * 0.5f,
                 (gridSize.y - 1) * cellSize * 0.5f,
                 0
-                
+
             );
 
             // spawn based on coordinates
@@ -393,7 +378,7 @@ namespace Geckout
                 GameTile obj;
 #if UNITY_EDITOR
                 obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, _tilesContainer));
-                
+
                 obj.name = $"Tile_{c.x}_{c.y}_{tile.type}";
 #else
             obj = Instantiate(prefab, _tilesContainer);
@@ -507,7 +492,7 @@ namespace Geckout
             }
         }
 
-        public static Vector2Int WorldToGridPositionForward(Vector3 worldPos,BodyController bodyController)
+        public static Vector2Int WorldToGridPositionForward(Vector3 worldPos, BodyController bodyController)
         {
             float gridX = worldPos.x + gridOffset.x;
             float gridY = worldPos.y + gridOffset.y;
@@ -552,7 +537,7 @@ namespace Geckout
         public static bool[] GetCurrentMapState()
         {
             bool[] mapState = new bool[_instance.tiles.Length];
-            for(int x = 0; x < _instance._mapSize.x; x++)
+            for (int x = 0; x < _instance._mapSize.x; x++)
             {
                 for (int y = 0; y < _instance._mapSize.y; y++)
                 {
