@@ -28,7 +28,7 @@ public class HammerBooster : BoosterBase
                 {
                     if (GameMap.Instance.TilesWall.Contains(tile))
                     {
-                        StartCoroutine(IEClearGameTile(tile));
+                        StartCoroutine(DoBooster(tile));
                     }
                 }
             }
@@ -63,7 +63,7 @@ public class HammerBooster : BoosterBase
        TouchInputHandler.Instance.CanClick = true;
     }
 
-    private IEnumerator IEClearGameTile(GameTile tile)
+    private IEnumerator DoBooster(GameTile tile)
     {
         ActiveBooster();
         UpdateVisualBooster();

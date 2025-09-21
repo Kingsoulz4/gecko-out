@@ -9,17 +9,19 @@ namespace Geckout
 {
     public class HandMoveBooster : BoosterBase
     {
-        protected override int CurrentCount { get => UserDataManager.HandMoveBooster; set => UserDataManager.HandMoveBooster = value; }
+
         private List<BodyController> listBodySelected = new List<BodyController>();
+        private List<Portal> listPortal = new List<Portal>();
+        protected override int CurrentCount { get => UserDataManager.HandMoveBooster; set => UserDataManager.HandMoveBooster = value; }
 
         private void Update()
         {
             if (IsShowConfirm && Input.GetMouseButton(0))
             {
                 var body = TouchInputHandler.Instance.GetBodyControllerByMouse(Input.mousePosition);
-                if (body != null)
+                if (body != null && listBodySelected.Contains(body))
                 {
-
+                    DoBooster(body);
                 }
             }
         }
@@ -29,12 +31,14 @@ namespace Geckout
             bool isPortalEnabled = false;
             ColorType portalColor = ColorType.Violet;
             ColorType bodyColor = ColorType.Violet;
-            foreach (var portal in GameMap.Instance.ListPortal)
+            foreach (var portalTmp in GameMap.Instance.ListPortal)
             {
-                portalColor = portal.PortalData.listColor.FirstOrDefault();
+                portalColor = portalTmp.PortalData.listColor.FirstOrDefault();
                 bodyColor = bodyController.BodyData.listColor.FirstOrDefault();
-                if (portalColor == bodyColor && portal.IsEnablePortal)
+                if (portalColor == bodyColor && portalTmp.IsEnablePortal
+                    && !bodyController.MoveToPortal.IsEnteringPortal && !portalTmp.IsMovingToPortal)
                 {
+                    listPortal.Add(portalTmp);
                     isPortalEnabled = true;
                     break;
                 }
@@ -43,10 +47,25 @@ namespace Geckout
             return bodyController.CanControl && isPortalEnabled;
         }
 
-        private void InitListBody()
+        private void ShowSlectedBody()
         {
             listBodySelected.Clear();
+            listPortal.Clear();
             listBodySelected = LevelManager.Instance.LevelGame.ListBody.Where(x => CanAddToListBody(x)).ToList();
+            foreach (var body in listBodySelected)
+            {
+                if (body != null)
+                    body.BodySelectedIcon.gameObject.SetActive(true);
+            }
+        }
+
+        public void HideSelectedBody()
+        {
+            foreach (var body in listBodySelected)
+            {
+                if (body != null)
+                    body.BodySelectedIcon.gameObject.SetActive(false);
+            }
         }
 
         public override void Init()
@@ -60,14 +79,23 @@ namespace Geckout
             base.CancelBooster();
             TouchInputHandler.Instance.CanClick = true;
             IsShowConfirm = false;
+
+            HideSelectedBody();
         }
 
         public override void ActiveBooster()
         {
             base.ActiveBooster();
             IsShowConfirm = false;
-            InitListBody();
             OnStartUseBooster?.Invoke(this, CurrentCount);
+        }
+
+        private void DoBooster(BodyController bodyController)
+        {
+            ActiveBooster();
+            Portal portal = listPortal.Find(x => x.PortalData.listColor.FirstOrDefault() == bodyController.BodyData.listColor.FirstOrDefault());
+            bodyController.MoveToPortal.EnterPortalBooster(portal);
+            listBodySelected.Remove(bodyController);
         }
 
         protected override void ShowBooster()
@@ -75,6 +103,7 @@ namespace Geckout
             base.ShowBooster();
             TouchInputHandler.Instance.CanClick = false;
             IsShowConfirm = true;
+            ShowSlectedBody();
         }
 
         protected override void Done()

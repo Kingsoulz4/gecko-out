@@ -169,6 +169,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SelectedIcon
       objectReference: {fileID: 0}
+    - target: {fileID: 8331349953536901271, guid: 48d58360cbc2d01458addb5cf28a6469, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
