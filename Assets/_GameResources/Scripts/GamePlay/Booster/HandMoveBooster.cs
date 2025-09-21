@@ -95,6 +95,7 @@ namespace Geckout
         {
             ActiveBooster();
 
+            bodyController.BodySelectedIcon.gameObject.SetActive(false);
             Portal portal = listPortal.Find(x => x.PortalData.listColor.FirstOrDefault() == bodyController.BodyData.listColor.FirstOrDefault());
             listBodySelected.Remove(bodyController);
             yield return bodyController.MoveToPortal.IEEnterPortalBooster(portal);
