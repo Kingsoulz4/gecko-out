@@ -132,6 +132,11 @@ namespace Geckout
             }
         }
 
+        public IEnumerator IEEnterPortalBooster(Portal portal)
+        {
+            yield return null;
+        }
+
         private void FinishMoveToPortal()
         {
             if (targetPortal == null || bodyController == null) return;

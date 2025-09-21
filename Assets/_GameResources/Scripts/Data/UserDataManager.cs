@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class UserDataManager : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class UserDataManager : MonoBehaviour
         public long firstTimeJoinGame;
         public int avtarID = 1;
         public int isFirstShowChangeName;
+        public int lastFeatureCount;
     }
 
     private const string USER_DATA_KEY = Constant.PlayerPrefs.USER_DATA;
@@ -74,6 +76,16 @@ public class UserDataManager : MonoBehaviour
     #endregion
 
     #region Get Set
+    public static int LastFeatureCount
+    {
+        get { return LoadUserData().lastFeatureCount; }
+        set
+        {
+            UserData data = LoadUserData();
+            data.lastFeatureCount = value;
+            SaveUserData(data);
+        }
+    }
     public static int Level
     {
         get { return LoadUserData().level; }

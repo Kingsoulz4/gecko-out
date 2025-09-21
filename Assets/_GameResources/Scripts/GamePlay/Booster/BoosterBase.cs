@@ -1,3 +1,4 @@
+using Geckout;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +16,6 @@ public enum BoosterType
 }
 public abstract class BoosterBase : MonoBehaviour
 {
-    [SerializeField] protected int maxCount;
     [SerializeField] BoosterType boosterType;
     private int currentCount;
     private bool canActive => !InProgress;
@@ -81,11 +81,11 @@ public abstract class BoosterBase : MonoBehaviour
         }
     }
 
-    public void UpdateCountBooster()
-    {
-        CurrentCount += 1;
-        UpdateVisualBooster();
-    }
+    //public void UpdateCountBooster()
+    //{
+    //    CurrentCount += 1;
+    //    UpdateVisualBooster();
+    //}
 
     public void UpdateVisualBooster()
     {
@@ -101,7 +101,6 @@ public abstract class BoosterBase : MonoBehaviour
     {
         IsShowConfirm = false;
         InProgress = false;
-
     }
 
     protected virtual void ShowBooster()

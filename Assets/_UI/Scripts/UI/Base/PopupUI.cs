@@ -13,11 +13,13 @@ public abstract class PopupUI : MonoBehaviour
     protected UIManager uiManager;
     protected Action onClose;
     protected Action onHide;
+    protected Action onShowDone;
     public static event Action<PopupUI> OnDestroyPopup;
     public static event Action<PopupUI> OnHide;
     public static event Action<PopupUI> OnShow;
     public bool isCache = false;
     public bool isAniClose = true;
+    [SerializeField] protected float duration = 0.3f;
     [SerializeField] private AnimShowPopUp animType;
     [SerializeField] protected RectTransform mainPopUp;
 
@@ -38,11 +40,11 @@ public abstract class PopupUI : MonoBehaviour
             {
                 case AnimShowPopUp.Move:
                     mainPopUp.anchoredPosition = new Vector2(-2000, mainPopUp.anchoredPosition.y);
-                    mainPopUp.DOAnchorPos(new Vector2(0, mainPopUp.anchoredPosition.y), 0.3f).SetEase(Ease.OutQuad);
+                    mainPopUp.DOAnchorPos(new Vector2(0, mainPopUp.anchoredPosition.y), duration).SetEase(Ease.OutQuad);
                     break;
                 case AnimShowPopUp.ScalePunch:
                     mainPopUp.localScale = Vector3.zero;
-                    mainPopUp.DOScale(1.1f, 0.3f).OnComplete(() =>
+                    mainPopUp.DOScale(1.1f, duration).OnComplete(() =>
                     {
                         mainPopUp.DOScale(1, 0.1f);
                     });
@@ -50,8 +52,11 @@ public abstract class PopupUI : MonoBehaviour
             }
         }
         gameObject.SetActive(true);
-
         OnShow?.Invoke(this);
+        this.Wait(duration, () =>
+        {
+            onShowDone?.Invoke();
+        });
     }
     public virtual void Hide()
     {

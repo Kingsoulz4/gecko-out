@@ -352,6 +352,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1057309698828914412}
     m_Modifications:
+    - target: {fileID: 4683005929746910059, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
+      propertyPath: hammerPrefab
+      value: 
+      objectReference: {fileID: 4310894213181050854, guid: 5d4a6816981da9f4ea983b0049ed397c, type: 3}
     - target: {fileID: 6018013672586842931, guid: 665cf5a2b04e89a40808af3ce49a1b24, type: 3}
       propertyPath: m_Name
       value: BoosterManager
