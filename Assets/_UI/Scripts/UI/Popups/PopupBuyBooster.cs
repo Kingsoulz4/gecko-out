@@ -14,7 +14,9 @@ namespace Geckout
 
         public Action OnClose { get; set; }
 
-        public Action OnBought { get; set; }   
+        public Action OnBought { get; set; }
+
+        private BoosterType boosterType;
 
         private void Awake()
         {
@@ -25,6 +27,7 @@ namespace Geckout
 
         public void Show(BoosterType boosterType)
         {
+            this.boosterType = boosterType;
             var iconSprite = Resources.Load<Sprite>($"BoosterIcons/{(int)boosterType}");
             m_imageBoosterIcon.sprite = iconSprite;
         }
@@ -38,8 +41,8 @@ namespace Geckout
         private void OnClickBuy()
         {
             Hide();
+            UserDataManager.AddBooster(boosterType, 3);
             OnBought?.Invoke();
-            UserDataManager.CissorBooster
 
             if (UserDataManager.Gold >= 900)
             {

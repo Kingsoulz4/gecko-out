@@ -14,9 +14,11 @@ namespace Geckout
     {
         [SerializeField] private Button m_buttonClaim;
         [SerializeField] private Button m_buttonClaimX2;
-        [SerializeField] private Text progress;
-        [SerializeField] private Image bg;
+        [SerializeField] private Text progressText;
+        [SerializeField] private Image iconFeatureDisplay;
         [SerializeField] private Image iconFill;
+        [SerializeField] private Slider m_sliderProgress;
+        
         private int finalFeatureLv;
 
         private void Awake()
@@ -60,8 +62,8 @@ namespace Geckout
             if (LevelManager.Instance.CurrentLevel > finalFeatureLv)
             {
                 onShowDone -= UpdateFill;
-                progress.enabled = false;
-                bg.enabled = false;
+                progressText.enabled = false;
+                iconFeatureDisplay.enabled = false;
                 iconFill.enabled = false;
             }
         }
@@ -87,8 +89,8 @@ namespace Geckout
 
             if (featureLevel == -1)
             {
-                bg.enabled = false;
-                this.progress.enabled = false;
+                iconFeatureDisplay.enabled = false;
+                this.progressText.enabled = false;
                 iconFill.enabled = false;
                 return;
             }
@@ -106,9 +108,9 @@ namespace Geckout
             float progress = (LevelManager.Instance.CurrentLevel - featureLevelOld) / totalStep;
             float lastProgress = (LevelManager.Instance.CurrentLevel - 1 - featureLevelOld) / totalStep;
 
-            bg.sprite = NewFeatureManager.Instance.FeaturePopupDataDic[featureLevel].spriteBG;
+            iconFeatureDisplay.sprite = NewFeatureManager.Instance.FeaturePopupDataDic[featureLevel].spriteBG;
             iconFill.sprite = NewFeatureManager.Instance.FeaturePopupDataDic[featureLevel].spriteFill;
-            bg.SetNativeSize();
+            //iconFeatureDisplay.SetNativeSize();
             iconFill.SetNativeSize();
 
             StartCoroutine(Fill(lastProgress, progress, 1f));
@@ -123,8 +125,9 @@ namespace Geckout
             {
                 start += Time.deltaTime * speed;
                 start = Mathf.Clamp01(start);
-                iconFill.fillAmount = start;
-                this.progress.text = $"{(int)(start * 100)}%";
+                iconFill.fillAmount = 1 - start;
+                m_sliderProgress.value = start;
+                this.progressText.text = $"{(int)(start * 100)}%";
                 yield return null;
             }
         }
