@@ -48,7 +48,7 @@ namespace Geckout
 
             var sq = DOTween.Sequence();
 
-            sq.Append(visual.DOLocalMoveY(startY + moveDistance, duration).
+            tween = sq.Append(visual.DOLocalMoveY(startY + moveDistance, duration).
                 SetLoops(-1, DG.Tweening.LoopType.Yoyo).SetEase(DG.Tweening.Ease.InOutSine));
         }
     }
