@@ -61,7 +61,7 @@ GameObject:
   - component: {fileID: 4074992736965259442}
   - component: {fileID: 3564921464316880553}
   m_Layer: 5
-  m_Name: TimeBooster
+  m_Name: TimeBoosterBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

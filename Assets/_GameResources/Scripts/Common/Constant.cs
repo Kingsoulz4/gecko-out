@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Constant
 {
+
     public class Path
     {
         public const string TUTORIAL = "UI/Tutorial/Tutorial";
@@ -19,6 +20,7 @@ public class Constant
     {
         public const string USER_DATA = "UserData";
         public const string TUTORIAL_LV1 = "TutorialLv1";
+        public const string NEW_FEATURE = "NewFeature";
     }
 
 }

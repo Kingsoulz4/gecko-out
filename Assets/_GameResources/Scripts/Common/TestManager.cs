@@ -31,12 +31,12 @@ namespace Geckout
             btn_backLevel.onClick.AddListener(() =>
             {
                 UserDataManager.AddHeart(1, "test", false);
-                LevelManager.Instance.StartLevel(UserDataManager.Level -= 1);
+                LevelManager.Instance.StartLevel(LevelManager.Instance.CurrentLevel -= 1);
             });
             btn_nextLevel.onClick.AddListener(() =>
             {
                 UserDataManager.AddHeart(1, "test", false);
-                LevelManager.Instance.StartLevel(UserDataManager.Level += 1);
+                LevelManager.Instance.StartLevel(LevelManager.Instance.CurrentLevel += 1);
             });
         }
 
@@ -53,7 +53,7 @@ namespace Geckout
                 return;
             }
 
-            UserDataManager.Level = int.Parse(inputField.text);
+            LevelManager.Instance.CurrentLevel = int.Parse(inputField.text);
             LevelManager.Instance.StartCurrentLevel();
         }
 

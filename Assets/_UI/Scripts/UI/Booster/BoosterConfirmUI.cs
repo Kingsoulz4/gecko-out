@@ -1,3 +1,4 @@
+using Geckout;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ public class BoosterConfirmUI : MonoBehaviour
         booster.CancelBooster();
     }
 
+
     public void SetUIData(BoosterItemData boosterItemData, Image img_Booster)
     {
         BoosterType = boosterItemData.boosterType;
@@ -47,5 +49,4 @@ public class BoosterConfirmUI : MonoBehaviour
             iconImg.sprite = boosterItemData.icon;
         }
     }
-
 }

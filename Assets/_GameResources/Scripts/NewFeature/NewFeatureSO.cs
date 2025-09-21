@@ -19,5 +19,7 @@ public class NewFeatureItemData
     public int level;
     public Sprite icon;
     public string title;
-    public string use;
+    public string des;
+    public Sprite spriteBG;
+    public Sprite spriteFill;
 }

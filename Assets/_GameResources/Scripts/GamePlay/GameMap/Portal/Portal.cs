@@ -28,6 +28,8 @@ namespace Geckout
             }
         }
 
+        public bool IsMovingToPortal { get => isMovingToPortal;}
+
         public void Initialize(PortalData portalData)
         {
             isMovingToPortal = false;

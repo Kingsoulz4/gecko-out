@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8576036070549581444}
   - component: {fileID: 3122040368856230132}
   m_Layer: 0
-  m_Name: CissorBooster
+  m_Name: ScissorBooster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,7 +29,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7186091768816987362}
   m_Father: {fileID: 6386734015373583055}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3122040368856230132
@@ -45,7 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxCount: 0
-  boosterType: 0
+  boosterType: 3
+  m_scissorPrefab: {fileID: 1388438316953824942, guid: dbe34823e5944414884bd27edf18f8b4, type: 3}
+  m_spawnPoint: {fileID: 7186091768816987362}
 --- !u!1 &2546502368117706213
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,7 +188,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxCount: 0
   boosterType: 1
-  maxTime: 15
+  bonusTime: 15
+  timePlayAnim: 2
 --- !u!1 &4674836085133187285
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,7 +336,7 @@ MonoBehaviour:
   boosterData: {fileID: 11400000, guid: 55705ad30119ab94a967803154fac2b8, type: 2}
   boosters:
   - {fileID: 2795243672731946447}
-  - {fileID: 0}
+  - {fileID: 3122040368856230132}
   - {fileID: 4683005929746910059}
   - {fileID: 8744219414392260340}
   - {fileID: 2959119882975584505}
@@ -340,6 +344,37 @@ MonoBehaviour:
   timeInGameBooster: {fileID: 2795243672731946447}
   timePreBooster: {fileID: 7430461798034861548}
   hammerBooster: {fileID: 4683005929746910059}
-  scissorBooster: {fileID: 0}
+  scissorBooster: {fileID: 3122040368856230132}
   handMoveBooster: {fileID: 8744219414392260340}
   suffleBooster: {fileID: 2959119882975584505}
+--- !u!1 &7139980177684193534
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7186091768816987362}
+  m_Layer: 0
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7186091768816987362
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7139980177684193534}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.6, y: 4.74, z: -20.37}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8576036070549581444}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

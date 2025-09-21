@@ -34,6 +34,8 @@ namespace Geckout
         [SerializeField] private IceBody iceBody;
         [SerializeField] private HiddenBody hiddenBody;
         [SerializeField] private MultipleColorBody doubleColorBody;
+        [SerializeField] private Segment _head, _tail;
+        [SerializeField] private BodySelected bodySelectedIcon;
 
         [Header("Mechanics")]
         [SerializeField] private MechanicsReferences m_mechanicReferences;
@@ -45,7 +47,6 @@ namespace Geckout
         public Action OnEndMove;
 
         private readonly int subLength = 3;
-        private Segment _head, _tail;
         private float historyTotalLength = 0f;
         private const float extraHistoryPadding = 4f;
         private Coroutine moveCoroutine;
@@ -94,6 +95,7 @@ namespace Geckout
         public BodyRenderer BodyRenderer { get => _bodyRenderer; }
         public int Length { get => length; }
         public SplineComputer SplineComputer { get => splineComputer; }
+        public BodySelected BodySelectedIcon { get => bodySelectedIcon; set => bodySelectedIcon = value; }
 
 #if UNITY_EDITOR
         [EditorButton]

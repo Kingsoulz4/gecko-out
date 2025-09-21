@@ -76,10 +76,11 @@ namespace Geckout
             DebugLog($"Touch at tile coordinate: {tileCoord.Value}");
 
             // Kiểm tra xem có click trực tiếp lên segment không
-            var directGecko = GetBodyControllerByMouse(screenPosition);
-            if (directGecko != null)
+            var body = GetBodyControllerByMouse(screenPosition);
+            if (body != null)
             {
-                HandleDirectBodyTouch(directGecko, tileCoord.Value);
+                HandleDirectBodyTouch(body, tileCoord.Value);
+                Debug.Log(body.name);
                 return;
             }
 
@@ -436,7 +437,7 @@ namespace Geckout
             return null;
         }
 
-        BodyController GetBodyControllerByMouse(Vector2 screenPosition)
+        public BodyController GetBodyControllerByMouse(Vector2 screenPosition)
         {
             Ray ray = gameCamera.ScreenPointToRay(screenPosition);
 
