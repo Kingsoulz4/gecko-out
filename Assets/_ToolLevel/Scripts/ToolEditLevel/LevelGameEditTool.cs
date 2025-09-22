@@ -336,13 +336,17 @@ namespace Geckout
             foreach (var tile in listCoordTileSelected)
             {
                 GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.up, out var tileUp);
-                bool up = !(tileUp == null || tileUp.MapTileData.type != MapTileType.Normal || listCoordTileSelected.Contains(tileUp));
+                bool up = !(tileUp == null || (tileUp.MapTileData.type != MapTileType.Normal && tileUp.MapTileData.type != MapTileType.Portal)
+                    || listCoordTileSelected.Contains(tileUp));
                 GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.down, out var tileDown);
-                bool down = !(tileDown == null || tileDown.MapTileData.type != MapTileType.Normal || listCoordTileSelected.Contains(tileDown));
+                bool down = !(tileDown == null || (tileDown.MapTileData.type != MapTileType.Normal && tileDown.MapTileData.type != MapTileType.Portal)
+                    || listCoordTileSelected.Contains(tileDown));
                 GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.left, out var tileLeft);
-                bool left = !(tileLeft == null || tileLeft.MapTileData.type != MapTileType.Normal || listCoordTileSelected.Contains(tileLeft));
+                bool left = !(tileLeft == null || (tileLeft.MapTileData.type != MapTileType.Normal && tileLeft.MapTileData.type != MapTileType.Portal)
+                    || listCoordTileSelected.Contains(tileLeft));
                 GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.right, out var tileRight);
-                bool right = !(tileRight == null || tileRight.MapTileData.type != MapTileType.Normal || listCoordTileSelected.Contains(tileRight));
+                bool right = !(tileRight == null || (tileRight.MapTileData.type != MapTileType.Normal && tileRight.MapTileData.type != MapTileType.Portal)
+                    || listCoordTileSelected.Contains(tileRight));
 
                 var rot = Vector3Int.zero;
 
