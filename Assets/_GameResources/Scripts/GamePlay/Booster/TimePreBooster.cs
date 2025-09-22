@@ -52,7 +52,6 @@ public class TimePreBooster : BoosterBase
         UserDataManager.TimePreBooster = CurrentCount;
 
         OnStartUseBooster?.Invoke(this, CurrentCount);
-        InProgress = true;
 
         //DOVirtual.DelayedCall(timePlayAnim, Done);
         StartCoroutine(IEAnimateBooster());

@@ -53,7 +53,6 @@ public class TimeIngameBooster : BoosterBase
         LevelManager.Instance.LevelGame.FreezeTime(currentTime);
 
         OnStartUseBooster?.Invoke(this, CurrentCount);
-        InProgress = true;
     }
 
     protected override void Done()

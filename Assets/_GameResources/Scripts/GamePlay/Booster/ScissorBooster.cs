@@ -26,7 +26,6 @@ namespace Geckout
             base.ActiveBooster();
             UserDataManager.TimeIngameBooster = CurrentCount;
             OnStartUseBooster?.Invoke(this, CurrentCount);
-            InProgress = true;
         }
 
         public void ActiveBooster(BodyController body)
