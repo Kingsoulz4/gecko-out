@@ -80,7 +80,6 @@ namespace Geckout
             if (body != null)
             {
                 HandleDirectBodyTouch(body, tileCoord.Value);
-                Debug.Log(body.name);
                 return;
             }
 

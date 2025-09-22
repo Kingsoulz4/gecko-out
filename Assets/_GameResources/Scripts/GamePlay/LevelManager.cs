@@ -126,6 +126,7 @@ namespace Geckout
             if(UserDataManager.Heart > 0)
             {
                 StartCurrentLevel();
+                UIManager.Instance.ShowScreen<InGameScreenUI>();
             }
             else
             {

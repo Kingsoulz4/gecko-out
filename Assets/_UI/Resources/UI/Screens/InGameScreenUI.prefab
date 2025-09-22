@@ -7240,7 +7240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b9e435c6c3fa484489032ac7fcf41a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCache: 1
+  isCache: 0
   txt_Time: {fileID: 5772942748116659467}
   txt_Level: {fileID: 4450823474278473698}
   btn_pause: {fileID: 2711237329158275292}
