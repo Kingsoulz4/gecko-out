@@ -95,7 +95,7 @@ namespace Geckout
                     if (distanceToPortal <= portalEnterDistance)
                     {
                         segmentAnimated[i] = true;
-                        StartCoroutine(AnimateSegmentDown(segment, portalCenter, i == orderedSegments.Count - 1));
+                        StartCoroutine(AnimateSegmentDown(segment, portalCenter, i == orderedSegments.Count - 2));
                     }
                 }
                 yield return null;
@@ -163,7 +163,7 @@ namespace Geckout
                     duration
                 ).SetEase(Ease.InOutQuad)
                 .OnComplete(() => {
-                    bool isLast = segment == orderedSegments[orderedSegments.Count - 1];
+                    bool isLast = segment == orderedSegments[orderedSegments.Count - 2];
                     StartCoroutine(AnimateSegmentDown(segment, portalCenter, isLast));
                 });
 
@@ -182,7 +182,7 @@ namespace Geckout
             bodyController.OccupiedTileController.ClearAllOccupied();
             LevelEvent.OnMoveToPortalDone?.Invoke(bodyController, targetPortal);
             DebugLog("Finish move portal");
-            targetPortal.Disappear();
+            targetPortal.PlayDoneAnim();
             gameObject.SetActive(false);
             ResetPortalState();
         }
@@ -215,6 +215,7 @@ namespace Geckout
         private void OnDestroy()
         {
             ResetPortalState();
+            DOTween.Kill(gameObject);
         }
 
         #region Editor Support
