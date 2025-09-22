@@ -1,5 +1,7 @@
+using AYellowpaper.SerializedCollections;
 using DG.Tweening;
 using Geckout;
+using Geckout.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,6 +19,8 @@ public class InGameScreenUI : ScreenUI
 
     [SerializeField] Button btn_pause;
     [SerializeField] Button btn_Replay;
+
+    [SerializeField] SerializedDictionary<LevelType, GameObject> m_listTimeBarBackground;
 
     [Space, Header("Booster")]
     BoosterDataSO boosterDataSO;
@@ -231,7 +235,17 @@ public class InGameScreenUI : ScreenUI
         txt_Level.text = $"{LevelManager.Instance.CurrentLevel}";
         currentTopY = rect_Top.anchoredPosition.y;
         UpdateTimeText(LevelController.CurrentTimeLevelRemaining);
+        UpdateTimeBar();
         PoupNewFeature();
+    }
+
+    private void UpdateTimeBar()
+    {
+        foreach(var item in m_listTimeBarBackground)
+        {
+            item.Value.SetActive(false);
+        }
+        m_listTimeBarBackground[LevelController.GameLevelData.type].SetActive(true);
     }
 
     private void PoupNewFeature()
