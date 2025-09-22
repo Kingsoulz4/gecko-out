@@ -195,7 +195,7 @@ Transform:
   m_GameObject: {fileID: 7838665600272700627}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -434,6 +434,7 @@ MonoBehaviour:
       Value: {fileID: 2100000, guid: cfd36f91d6d953c4d8db46d20481f55c, type: 2}
     - Key: 14
       Value: {fileID: 2100000, guid: 9ed95ca712c803a40b7e47d46bd8d2f8, type: 2}
+  m_listMaterialByColor: {fileID: 11400000, guid: 9da8fcf13d930584b930917e44d8c8e2, type: 2}
 --- !u!137 &1702539012020025590 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 3701313319036967136, guid: ab557415571e453498a51b44c48f9459, type: 3}
@@ -659,3 +660,4 @@ MonoBehaviour:
       Value: {fileID: 2100000, guid: cfd36f91d6d953c4d8db46d20481f55c, type: 2}
     - Key: 14
       Value: {fileID: 2100000, guid: 9ed95ca712c803a40b7e47d46bd8d2f8, type: 2}
+  m_listMaterialByColor: {fileID: 11400000, guid: 9da8fcf13d930584b930917e44d8c8e2, type: 2}

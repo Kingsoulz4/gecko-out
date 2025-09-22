@@ -19,6 +19,7 @@ namespace Geckout
         [SerializeField] private Outline m_outLine;
         [SerializeField] private SerializedDictionary<MapTileType, GameObject> m_tilesTypeDisplay;
         [SerializeField] private GameObject m_displayObject;
+        [SerializeField] private GameObject hammer;
 
         private bool IsObstacle
         {
@@ -28,8 +29,9 @@ namespace Geckout
 
         public MapTileData MapTileData { get; set; } = new();
 
-        public Vector2Int Coordinate {
-            get 
+        public Vector2Int Coordinate
+        {
+            get
             {
                 return MapTileData.coordinate;
             }
@@ -41,8 +43,8 @@ namespace Geckout
         {
             SetTileType(MapTileType.Normal);
         }
-       
-        [SerializeField] private float restoreDelay =0.05f;
+
+        [SerializeField] private float restoreDelay = 0.05f;
 
         public Renderer TileRenderer { get => tileRenderer; }
 
@@ -83,13 +85,30 @@ namespace Geckout
             SetTileType(tileData.type);
         }
 
+        public void ShowHammer(bool show)
+        {
+            if (hammer != null)
+            {
+                hammer.SetActive(show);
+            }
+        }
+
+        public void HideWall()
+        {
+            IsOccupied = false;
+            m_tilesTypeDisplay[MapTileData.type].SetActive(false);
+            hammer.SetActive(false);
+            GameMap.Instance.TilesWall.Remove(this);
+        }
+
         public void SetTileType(MapTileType tileType)
         {
-            if(m_tilesTypeDisplay == null || m_tilesTypeDisplay.Count <= 0)
+            if (m_tilesTypeDisplay == null || m_tilesTypeDisplay.Count <= 0)
             {
                 return;
             }
             //m_tileTypeDisplay.Values.ToList().ForEach(x => x.gameObject.SetActive(false));
+
             if (MapTileData.type != MapTileType.Normal)
             {
                 m_displayObject.SetActive(false);
@@ -104,23 +123,23 @@ namespace Geckout
                 m_displayObject.transform.localRotation = Quaternion.Euler(MapTileData.rotation);
             }
             m_tilesTypeDisplay[MapTileType.Normal].SetActive(true);
-            
+
         }
 
         public void ChangeVisualToNormalTile()
         {
             m_displayObject.SetActive(false);
-        }    
+        }
 
         public void RotateBy(int deltaAngle)
         {
-            if(m_displayObject == null)
+            if (m_displayObject == null)
             {
                 return;
             }
             var currentRotation = m_displayObject.transform.localRotation.eulerAngles;
             var angleRotated = (int)(currentRotation.x + deltaAngle);
-            if(angleRotated % 90 != 0)
+            if (angleRotated % 90 != 0)
             {
                 angleRotated = (angleRotated / 90) * 90;
             }
@@ -137,8 +156,8 @@ namespace Geckout
 
         public void SetSelected(bool selected)
         {
-            if(m_outLine != null)
-            { 
+            if (m_outLine != null)
+            {
                 m_outLine.enabled = selected;
             }
         }

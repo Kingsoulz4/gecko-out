@@ -52,4 +52,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   enableDebugLogs: 0
-  pathUpdateInterval: 0
+  pathUpdateInterval: 0.02

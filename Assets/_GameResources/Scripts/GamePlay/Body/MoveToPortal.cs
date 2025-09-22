@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,6 +79,8 @@ namespace Geckout
 
         private IEnumerator EnterPortalAnimation()
         {
+            //yield return new WaitForSeconds(1f);
+
             if (targetPortal == null || bodyController == null) yield break;
             Vector3 portalCenter = targetPortal.transform.position;
             var orderedSegments = bodyController.GetOrderedSegments();
@@ -129,12 +132,55 @@ namespace Geckout
             }
         }
 
+        public IEnumerator IEEnterPortalBooster(Portal portal)
+        {
+            if (isEnteringPortal) yield break;
+
+            targetPortal = portal;
+            isEnteringPortal = true;
+            bodyController.CanControl = false;
+
+            DebugLog($"Starting portal booster jump to {portal.name}");
+
+            Vector3 portalCenter = targetPortal.transform.position;
+            var orderedSegments = bodyController.Segments;
+
+            List<Tween> jumpTweens = new List<Tween>();
+
+            for (int i = 0; i < orderedSegments.Count; i++)
+            {
+                var segment = orderedSegments[i];
+                if (segment == null) continue;
+
+                // Calculate jump parameters
+                float jumpPower = 1;// Random.Range(2f, 4f); // Random jump height for variety
+                float duration = animationDurationPerSegment + (i * 0.05f);
+
+                var jumpTween = segment.transform.DOJump(
+                    portalCenter,
+                    jumpPower,
+                    1,
+                    duration
+                ).SetEase(Ease.InOutQuad)
+                .OnComplete(() => {
+                    bool isLast = segment == orderedSegments[orderedSegments.Count - 1];
+                    StartCoroutine(AnimateSegmentDown(segment, portalCenter, isLast));
+                });
+
+                jumpTweens.Add(jumpTween);
+            }
+
+            yield return new WaitUntil(() => jumpTweens.All(t => t == null || !t.IsActive()));
+
+            DebugLog("Portal booster jump animation completed");
+        }
+
         private void FinishMoveToPortal()
         {
             if (targetPortal == null || bodyController == null) return;
             
             bodyController.OccupiedTileController.ClearAllOccupied();
-            LevelEvent.OnMoveToPortalDone(bodyController, targetPortal);
+            LevelEvent.OnMoveToPortalDone?.Invoke(bodyController, targetPortal);
             DebugLog("Finish move portal");
             targetPortal.Disappear();
             gameObject.SetActive(false);

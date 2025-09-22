@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a63775379711f934697214f728687fcb, type: 3}
+  m_Name: BoosterDataSO
+  m_EditorClassIdentifier: 
+  boosterItemDatas:
+  - boosterType: 0
+    title: Freeze Time
+    description: Freezes time for 20 seconds
+    icon: {fileID: 21300000, guid: 77695f78dff86fd47bc37a323a96affe, type: 3}
+    iconBig: {fileID: 21300000, guid: 77695f78dff86fd47bc37a323a96affe, type: 3}
+    price: 900
+    quantity: 3
+    levelUnlock: 0
+  - boosterType: 2
+    title: Hammer
+    description: Tap Wall To Destroy
+    icon: {fileID: 21300000, guid: df0c0932fc9e2394c823dbc589e20fb0, type: 3}
+    iconBig: {fileID: 21300000, guid: df0c0932fc9e2394c823dbc589e20fb0, type: 3}
+    price: 1400
+    quantity: 3
+    levelUnlock: 0
+  - boosterType: 4
+    title: Hand pick
+    description: Pick a Dog To  Move
+    icon: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
+    iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
+    price: 1900
+    quantity: 3
+    levelUnlock: 0
+  - boosterType: 1
+    title: Add Time
+    description: Add Time In Game
+    icon: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
+    iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
+    price: 900
+    quantity: 3
+    levelUnlock: 5
+  - boosterType: 3
+    title: Scissor
+    description: Cut out Dog
+    icon: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
+    iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
+    price: 900
+    quantity: 3
+    levelUnlock: 10

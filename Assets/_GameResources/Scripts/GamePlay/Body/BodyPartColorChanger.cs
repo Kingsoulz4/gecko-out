@@ -10,11 +10,20 @@ namespace Geckout
     {
         [SerializeField] private Renderer m_meshRenderer;
         [SerializeField] private SerializedDictionary<ColorType, Material> m_listMaterial;
+        [SerializeField] private ListMaterialByColor m_listMaterialByColor;
 
 
         public void UpdateColor(ColorType colorType)
         {
-            m_meshRenderer.material = m_listMaterial[colorType];
+            if(m_listMaterialByColor != null)
+            {
+                m_meshRenderer.material = m_listMaterialByColor.listMaterial[colorType];
+            }
+            else
+            {
+                m_meshRenderer.material = m_listMaterial[colorType];
+            }
+
         }
 
         public void FadeColor(ColorType targetColor, float duration)
@@ -25,7 +34,14 @@ namespace Geckout
 
         private Material GetMaterialByColorType(ColorType colorType)
         {
-            return m_listMaterial[colorType];
+            if (m_listMaterialByColor != null)
+            {
+                return m_listMaterialByColor.listMaterial[colorType];
+            }
+            else
+            {
+                return m_listMaterial[colorType];
+            }
         }
 
         private IEnumerator FadeToColor(Color targetColor, float duration)

@@ -34,6 +34,8 @@ namespace Geckout
         [SerializeField] private IceBody iceBody;
         [SerializeField] private HiddenBody hiddenBody;
         [SerializeField] private MultipleColorBody doubleColorBody;
+        [SerializeField] private Segment _head, _tail;
+        [SerializeField] private BodySelected bodySelectedIcon;
 
         [Header("Mechanics")]
         [SerializeField] private MechanicsReferences m_mechanicReferences;
@@ -45,7 +47,6 @@ namespace Geckout
         public Action OnEndMove;
 
         private readonly int subLength = 3;
-        private Segment _head, _tail;
         private float historyTotalLength = 0f;
         private const float extraHistoryPadding = 4f;
         private Coroutine moveCoroutine;
@@ -94,6 +95,7 @@ namespace Geckout
         public BodyRenderer BodyRenderer { get => _bodyRenderer; }
         public int Length { get => length; }
         public SplineComputer SplineComputer { get => splineComputer; }
+        public BodySelected BodySelectedIcon { get => bodySelectedIcon; set => bodySelectedIcon = value; }
 
 #if UNITY_EDITOR
         [EditorButton]
@@ -143,7 +145,8 @@ namespace Geckout
         {
             BodyData = dogData;
             List<Vector2Int> listDefaultCoordinate = dogData.listCoordinate;
-            Segments = new List<Segment>();
+            
+            ResetAllComponents();
 
             // ===== Tính toán tổng số segment =====
             length = listDefaultCoordinate.Count;
@@ -153,13 +156,18 @@ namespace Geckout
             float totalBodyLength = length;
 
             // ===== Head =====
-            _head = Instantiate(headPrefab, transform);
+            if (_head == null)
+            {
+                _head = Instantiate(headPrefab, transform);
+            }
             _head.name = "Head";
             _head.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             Segments.Add(_head);
 
             // ===== Body segments =====
             // chỉ spawn từ 1 đến totalSegments - 2 (dành chỗ cho Tail)
+            
+
             for (int i = 1; i < totalSegments - 1; i++)
             {
                 Segment seg = Instantiate(this.segment, transform);
@@ -173,7 +181,10 @@ namespace Geckout
             }
 
             // ===== Tail =====
-            _tail = Instantiate(tailPrefab, transform);
+            if (_tail == null)
+            {
+                _tail = Instantiate(tailPrefab, transform);
+            }
             _tail.name = "Tail";
             _tail.transform.localPosition = new Vector3(0, -(totalSegments - 1) * unitSpacing, 0);
             Segments.Add(_tail);
@@ -225,10 +236,28 @@ namespace Geckout
                 _bodyRenderer.Initialize(Segments);
 
             InitMechanic();
-
+            occupiedTileController?.Init();
             canControl = true;
             Debug.Log($"Body initialized: length={length}, subLength={SubLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
         }
+
+        public void ResetAllComponents()
+        {
+            occupiedTileController.ClearAllOccupied();
+            if (Segments != null && Segments.Count >= 3)
+            {
+                foreach (var seg in Segments)
+                {
+                    if (seg != _head && seg != _tail)
+                    {
+                        Destroy(seg.gameObject);
+                    }
+                }
+                Segments.Clear();
+            }
+            Segments = new List<Segment>();
+        }
+            
 
         public List<Segment> GetOrderedSegments()
         {
@@ -609,6 +638,22 @@ namespace Geckout
 
 
         }
+        #endregion
+
+        #region Booster
+
+        public void CutOutLastSegment()
+        {
+            var bodyData = new BodyData(BodyData);
+            bodyData.listCoordinate.Remove(bodyData.listCoordinate.Last());
+            Initialize(bodyData);
+        }
+
+        private IEnumerator IECutOutAnim()
+        {
+            yield return null;
+        }
+
         #endregion
     }
 }

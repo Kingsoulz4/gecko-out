@@ -31,39 +31,35 @@ public class UIManager : SingletonMono<UIManager>
     public static bool isFold { get; private set; }
     private bool ready;
 
-    [EditorButton]
-    private void SetRef()
-    {
-        UIManager u = GetComponent<UIManager>();
-        u.canvasScaler = u.GetComponentsInChildren<CanvasScaler>(true);
-        // u.popups = FindObjectsOfType<PopupUI>(true);
-        PopupUI[] popups = Resources.LoadAll<PopupUI>("UI/Popups/");
-        for (int i = 0; i < popups.Length; i++)
-        {
-            string nname = popups[i].GetType().Name;
-            Debug.Log(nname);
-            popups[i].gameObject.name = nname;
-            string pa = AssetDatabase.GetAssetPath(popups[i].gameObject);
-            AssetDatabase.RenameAsset(pa, nname);
-            AssetDatabase.SaveAssetIfDirty(popups[i].gameObject);
-        }
-        ScreenUI[] screens = Resources.LoadAll<ScreenUI>("UI/Screens/");
-        for (int i = 0; i < screens.Length; i++)
-        {
-            string nname = screens[i].GetType().Name;
-            Debug.Log(nname);
-            screens[i].gameObject.name = nname;
-            string pa = AssetDatabase.GetAssetPath(screens[i].gameObject);
-            AssetDatabase.RenameAsset(pa, nname);
-            AssetDatabase.SaveAssetIfDirty(screens[i].gameObject);
-        }
-        EditorUtility.SetDirty(u);
-    }
+    //[EditorButton]
+    //private void SetRef()
+    //{
+    //    UIManager u = GetComponent<UIManager>();
+    //    u.canvasScaler = u.GetComponentsInChildren<CanvasScaler>(true);
+    //    // u.popups = FindObjectsOfType<PopupUI>(true);
+    //    PopupUI[] popups = Resources.LoadAll<PopupUI>("UI/Popups/");
+    //    for (int i = 0; i < popups.Length; i++)
+    //    {
+    //        string nname = popups[i].GetType().Name;
+    //        Debug.Log(nname);
+    //        popups[i].gameObject.name = nname;
+    //        string pa = AssetDatabase.GetAssetPath(popups[i].gameObject);
+    //        AssetDatabase.RenameAsset(pa, nname);
+    //        AssetDatabase.SaveAssetIfDirty(popups[i].gameObject);
+    //    }
+    //    ScreenUI[] screens = Resources.LoadAll<ScreenUI>("UI/Screens/");
+    //    for (int i = 0; i < screens.Length; i++)
+    //    {
+    //        string nname = screens[i].GetType().Name;
+    //        Debug.Log(nname);
+    //        screens[i].gameObject.name = nname;
+    //        string pa = AssetDatabase.GetAssetPath(screens[i].gameObject);
+    //        AssetDatabase.RenameAsset(pa, nname);
+    //        AssetDatabase.SaveAssetIfDirty(screens[i].gameObject);
+    //    }
+    //    EditorUtility.SetDirty(u);
+    //}
 
-    private void Start()
-    {
-        MainScreenUI mainScreenUI = UIManager.Instance.ShowScreen<MainScreenUI>();
-    }
     public Vector2 GetCanvasSize()
     {
         return canvas.GetComponent<RectTransform>().sizeDelta;
@@ -76,7 +72,7 @@ public class UIManager : SingletonMono<UIManager>
         for (int i = 0; i < canvasScaler.Length; i++)
         {
             canvasScaler[i].matchWidthOrHeight = 0;
-            if (MyUtil.isiPad())
+            if (MyUlti.IsiPad())
             {
                 canvasScaler[i].matchWidthOrHeight = 1f;
             }
@@ -139,7 +135,7 @@ public class UIManager : SingletonMono<UIManager>
             for (int i = 0; i < canvasScaler.Length; i++)
             {
                 canvasScaler[i].matchWidthOrHeight = 0;
-                if (MyUtil.isiPad())
+                if (MyUlti.IsiPad())
                 {
                     canvasScaler[i].matchWidthOrHeight = 1f;
                 }
@@ -155,7 +151,7 @@ public class UIManager : SingletonMono<UIManager>
             for (int i = 0; i < canvasScaler.Length; i++)
             {
                 canvasScaler[i].matchWidthOrHeight = 0;
-                if (MyUtil.isiPad())
+                if (MyUlti.IsiPad())
                 {
                     canvasScaler[i].matchWidthOrHeight = 1f;
                 }

@@ -99,7 +99,7 @@ namespace Geckout
         public void UpdateUI()
         {
             var listColorData = LevelGame.GameLevelData.colorAndMaterialData;
-            Utils.RemoveAllChilds(m_listColorPickContainer);
+            MyUlti.RemoveAllChilds(m_listColorPickContainer);
             foreach(var color in listColorData.listColor)
             {
                 var itemColorPick = Instantiate(m_colorPickPrefab, m_listColorPickContainer);

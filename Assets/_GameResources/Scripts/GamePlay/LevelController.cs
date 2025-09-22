@@ -17,18 +17,22 @@ namespace Geckout
         private float currentTimeRemaining = 0;
         private Coroutine countDownCoroutine;
 
+
         private List<BodyController> listBody = new();
 
         public GameLevelData GameLevelData => m_gameLevelData;
 
         public GameMap GameMap => m_gameMap;
 
-        public List<BodyController> ListBody { get => listBody;}
+        public List<BodyController> ListBody { get => listBody; }
 
-        public float CurrentLevelRemaining => currentTimeRemaining;
+        public float CurrentTimeLevelRemaining => currentTimeRemaining;
+
+        public bool IsFirstClick { get; set; }
 
         #region Boosters
         private bool IsFreezingTime { get; set; }
+        public bool CanCountdownTime => !IsFreezingTime && IsFirstClick && GameManager.GameState == GameState.Playing;
         private Coroutine freezeTimeCoroutine { get; set; }
 
         #endregion
@@ -45,36 +49,42 @@ namespace Geckout
 
         public void SetLevelData(GameLevelData gameLevelData)
         {
+            IsFirstClick = false;
             m_gameLevelData = gameLevelData;
             m_gameMap.SetLevelData(gameLevelData);
-            Utils.RemoveAllChilds(m_bodyParent);
+            MyUlti.RemoveAllChilds(m_bodyParent);
             Camera.main.fieldOfView = gameLevelData.fieldOfView;
             int i=0;
+            ListBody.Clear();
             foreach (var bodyData in gameLevelData.listDogData)
             {
                 var body = SpawnBody(bodyData);
                 body.name = $"Body_{i}";
                 i++;
-                ListBody.Add(body);
             }
 #if UNITY_EDITOR
-            EditorUtility.SetDirty(this.gameObject);   
+            EditorUtility.SetDirty(this.gameObject);
 #endif
         }
 
         public void StartLevel()
         {
-            StartCountDownTime();
+            StartCountDownTime(GameLevelData.time);
         }
 
         private void WinLevel()
         {
-            LevelEvent.OnWin?.Invoke(m_gameLevelData.levelIndex);
+            LevelEvent.OnWin?.Invoke(m_gameLevelData.levelNum);
         }
 
         private void LoseLevel()
         {
-            LevelEvent.OnLose?.Invoke(m_gameLevelData.levelIndex);
+            LevelEvent.OnLose?.Invoke(m_gameLevelData.levelNum);
+        }
+
+        private void ReviveLevel()
+        {
+            StartCountDownTime(20);
         }
 
         private void OnBodyMoveToPortal(BodyController body, Portal portal)
@@ -89,11 +99,11 @@ namespace Geckout
                 WinLevel();
             }
         }
-
-        private void StartCountDownTime()
+            
+        private void StartCountDownTime(float time)
         {
             StopCountDownTime();
-            countDownCoroutine = StartCoroutine(IECountDownTime());
+            countDownCoroutine = StartCoroutine(IECountDownTime(time));
         }
 
         private void StopCountDownTime()
@@ -105,12 +115,12 @@ namespace Geckout
             }
         }
 
-        private IEnumerator IECountDownTime()
+        private IEnumerator IECountDownTime(float time)
         {
-            currentTimeRemaining = GameLevelData.time;
-            while(currentTimeRemaining > 0)
+            currentTimeRemaining = time;
+            while (currentTimeRemaining > 0)
             {
-                if(!IsFreezingTime)
+                if (CanCountdownTime)
                 {
                     currentTimeRemaining -= Time.deltaTime;
                 }
@@ -121,7 +131,10 @@ namespace Geckout
 
         private void TimeOut()
         {
-            LoseLevel();
+            var popupTimeIsUp = UIManager.Instance.ShowPopup<PopupTimeIsUp>(() => { });
+            popupTimeIsUp.OnClose = LoseLevel;
+            popupTimeIsUp.OnKeepPlaying = ReviveLevel;
+            //LoseLevel();
         }
 
         public BodyController SpawnBody(BodyData bodyData)
@@ -134,22 +147,11 @@ namespace Geckout
             var newBody = Instantiate(m_bodyPrefab, m_bodyParent);
 #endif
             newBody.Initialize(bodyData);
+            ListBody.Add(newBody);
             return newBody;
         }
 
         #region Boosters
-
-        public void ActivateBoosterFreezeTime()
-        {
-            // Anim Here
-            FreezeTime(15);
-        }
-
-        public void ActivateBoosterAddTime()
-        {
-            //Anim Here
-            AddTime(20);
-        }
 
         public void AddTime(float time)
         {
@@ -158,11 +160,11 @@ namespace Geckout
 
         public void FreezeTime(float timeFreeze)
         {
-            if(freezeTimeCoroutine != null)
+            if (freezeTimeCoroutine != null)
             {
                 StopCoroutine(freezeTimeCoroutine);
                 freezeTimeCoroutine = null;
-            }    
+            }
             freezeTimeCoroutine = StartCoroutine(IEFreezeTime(timeFreeze));
         }
 
@@ -170,7 +172,7 @@ namespace Geckout
         {
             var currentTime = 0f;
             IsFreezingTime = true;
-            while(currentTime <= timeFreeze)
+            while (currentTime <= timeFreeze)
             {
                 currentTime += Time.deltaTime;
                 yield return null;

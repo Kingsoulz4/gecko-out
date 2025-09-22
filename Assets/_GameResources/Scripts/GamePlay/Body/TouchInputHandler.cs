@@ -15,6 +15,7 @@ namespace Geckout
         [SerializeField] private float pathUpdateInterval = 0.02f;
 
         private BodyController bodyController;
+        private bool canClick = true;
         private bool isDragging = false;
         private bool isDraggingFromHead = false;
         private Vector2Int lastTargetTile = Vector2Int.one * -1;
@@ -25,6 +26,7 @@ namespace Geckout
         private List<Vector2Int> smoothPath = new List<Vector2Int>();
 
         public bool IsDragging { get => isDragging; }
+        public bool CanClick { get => canClick; set => canClick = value; }
 
         void Start()
         {
@@ -36,6 +38,7 @@ namespace Geckout
         void Update()
         {
             if(!LevelManager.Instance.IsEdittingLevel)
+            if (canClick && GameManager.GameState == GameState.Playing)
             HandleTouchInput();
         }
 
@@ -58,6 +61,10 @@ namespace Geckout
         void OnTouchStart(Vector2 screenPosition)
         {
             DebugLog($"Touch start at screen: {screenPosition}");
+            if (GameManager.GameState == GameState.Playing && !LevelManager.Instance.LevelGame.IsFirstClick)
+            {
+                LevelManager.Instance.LevelGame.IsFirstClick = true;
+            }
 
             Vector2Int? tileCoord = GetTileCoordinateFromScreen(screenPosition);
             if (!tileCoord.HasValue)
@@ -69,10 +76,11 @@ namespace Geckout
             DebugLog($"Touch at tile coordinate: {tileCoord.Value}");
 
             // Kiểm tra xem có click trực tiếp lên segment không
-            var directGecko = GetBodyControllerByMouse(screenPosition);
-            if (directGecko != null)
+            var body = GetBodyControllerByMouse(screenPosition);
+            if (body != null)
             {
-                HandleDirectBodyTouch(directGecko, tileCoord.Value);
+                HandleDirectBodyTouch(body, tileCoord.Value);
+                Debug.Log(body.name);
                 return;
             }
 
@@ -429,7 +437,7 @@ namespace Geckout
             return null;
         }
 
-        BodyController GetBodyControllerByMouse(Vector2 screenPosition)
+        public BodyController GetBodyControllerByMouse(Vector2 screenPosition)
         {
             Ray ray = gameCamera.ScreenPointToRay(screenPosition);
 
