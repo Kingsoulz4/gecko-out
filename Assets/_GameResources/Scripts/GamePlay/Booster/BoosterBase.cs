@@ -63,7 +63,7 @@ public abstract class BoosterBase : MonoBehaviour
         {
             if (inProgress)
             {
-                UIManager.Instance.NotifyContent("You can't use it right now!");
+                UIManager.Instance.NotifyContent("You can't use it now!");
                 return;
             }
             // Show popup buy
