@@ -220,12 +220,18 @@ public class InGameScreenUI : ScreenUI
     public override void Active()
     {
         base.Active();
-        txt_Level.text = $"{LevelManager.Instance.CurrentLevel}";
         currentTopY = rect_Top.anchoredPosition.y;
-        UpdateTimeText(LevelController.CurrentTimeLevelRemaining);
-        UpdateTimeBar();
+        UpdateUI();
         PoupNewFeature();
     }
+
+    public void UpdateUI()
+    {
+        txt_Level.text = $"{LevelManager.Instance.CurrentLevel}";
+        UpdateTimeText(LevelController.CurrentTimeLevelRemaining);
+        UpdateTimeBar();
+    }
+        
 
     private void UpdateTimeBar()
     {
