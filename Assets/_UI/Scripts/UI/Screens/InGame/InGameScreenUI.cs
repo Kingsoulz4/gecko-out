@@ -288,16 +288,33 @@ public class InGameScreenUI : ScreenUI
 
         };
     }
+    #region Booster Add Time
 
-    public void ShowAddTimeAnim()
+    public void ShowAddTimeAnim(int valAdd)
     {
-
+        StartCoroutine(IEAnimateAddTime(valAdd));
     }
         
-    private IEnumerator IEAnimateAddTime()
+    private IEnumerator IEAnimateAddTime(int valAdd)
     {
         yield return null;
-        //var currentTime = 
+        m_iconClock.transform.DOScale(1.1f, 0.25f);
+        txt_Time.transform.DOScale(1.1f, 0.25f);
+        yield return new WaitForSeconds(0.3f);
+        var currentVal = LevelController.CurrentTimeLevelRemaining - valAdd;
+        DOTween.To(() => currentVal, (val) =>
+        {
+            txt_Time.text = GetTimeValueToString(val);
+        }, LevelController.CurrentTimeLevelRemaining, 0.5f);
+
+        yield return new WaitForSeconds(0.5f);
+        m_iconClock.transform.DOScale(1f, 0.25f);
+        txt_Time.transform.DOScale(1f, 0.25f);
     }
-        
+
+    public Vector3 GetClockIconPosition()
+    {
+        return m_iconClock.transform.position;
+    }    
+    #endregion
 }

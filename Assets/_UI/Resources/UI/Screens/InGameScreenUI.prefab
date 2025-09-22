@@ -7012,7 +7012,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b9e435c6c3fa484489032ac7fcf41a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCache: 0
+  isCache: 1
   txt_Time: {fileID: 5772942748116659467}
   txt_Level: {fileID: 4450823474278473698}
   btn_pause: {fileID: 2711237329158275292}
@@ -7026,6 +7026,7 @@ MonoBehaviour:
   handMoveBoosterCount: {fileID: 2412791807541195897}
   hammerBtn: {fileID: 206924863008490104}
   hammerBoosterCount: {fileID: 369004529328918525}
+  m_iconClock: {fileID: 4070635629960487446}
   rect_Top: {fileID: 7548274029939510473}
 --- !u!222 &3508880465791921251
 CanvasRenderer:

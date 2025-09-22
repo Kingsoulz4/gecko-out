@@ -3,6 +3,7 @@ using Geckout;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using TMPro;
 using UnityEngine;
@@ -12,6 +13,9 @@ public class TimePreBooster : BoosterBase
 {
     public float bonusTime = 15;
     public float timePlayAnim = 2;
+    [SerializeField] private GameObject m_clockPrefab;
+    [SerializeField] private Transform m_spawnPoint;
+    [SerializeField] private Transform m_targetPoint;
 
     protected override int CurrentCount { get => UserDataManager.TimeIngameBooster; set => UserDataManager.TimeIngameBooster = value; }
 
@@ -50,9 +54,46 @@ public class TimePreBooster : BoosterBase
         OnStartUseBooster?.Invoke(this, CurrentCount);
         InProgress = true;
 
-        DOVirtual.DelayedCall(timePlayAnim, Done);
+        //DOVirtual.DelayedCall(timePlayAnim, Done);
+        StartCoroutine(IEAnimateBooster());
 
     }
+
+    private IEnumerator IEAnimateBooster()
+    {
+        var scissorObject = Instantiate(m_clockPrefab, transform);
+        scissorObject.transform.localScale = Vector3.zero;
+        scissorObject.transform.position = m_spawnPoint.position;
+        scissorObject.transform.DOScale(1, 0.5f);
+        scissorObject.transform.DOLocalRotate(scissorObject.transform.localRotation.eulerAngles + Vector3.up * 360, 0.5f, RotateMode.FastBeyond360);
+        yield return new WaitForSeconds(0.6f);
+        //scissorObject.transform.DOMove(body.Segments.Last().transform.position, 0.5f);
+
+        
+        var target = m_targetPoint.position;
+        target = new Vector3(target.x, target.y, m_spawnPoint.position.z);
+        float flightDuration = 0.5f;
+
+        Vector3 startPos = scissorObject.transform.position;
+        Vector3 endPos = target;
+        Transform controlPointA = null;
+        Transform controlPointB = null;
+        Vector3 cpA = controlPointA ? controlPointA.position : (startPos + (endPos - startPos) * 0.33f + new Vector3(3, 2, 0));
+        Vector3 cpB = controlPointB ? controlPointB.position : (startPos + (endPos - startPos) * 0.66f + new Vector3(-3, 2, 0));
+
+        // path goes through control points -> natural XY curve
+        Vector3[] path = new Vector3[] { startPos, cpA, cpB, endPos };
+
+        Tween flightTween = scissorObject.transform
+            .DOPath(path, flightDuration, PathType.CatmullRom, PathMode.Full3D, 10, Color.green)
+            .SetEase(Ease.InOutSine)
+            .SetLookAt(0.01f); // rotate toward movement
+
+        yield return new WaitForSeconds(flightDuration * 0.9f);
+        Destroy(scissorObject.gameObject);
+        Done();
+    }
+
 
     protected override void Done()
     {
