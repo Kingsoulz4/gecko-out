@@ -62,7 +62,7 @@ namespace Geckout
             Vector3 cpB = controlPointB ? controlPointB.position : (startPos + (endPos - startPos) * 0.66f + new Vector3(-3, 2, 0));
 
             // path goes through control points -> natural XY curve
-            Vector3[] path = new Vector3[] {startPos, cpA, cpB, endPos };
+            Vector3[] path = new Vector3[] {startPos, cpA, endPos };
 
             Tween flightTween = scissorObject.transform
                 .DOPath(path, flightDuration, PathType.CatmullRom, PathMode.Full3D, 10, Color.green)

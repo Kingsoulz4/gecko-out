@@ -53,6 +53,7 @@ namespace Geckout
             if (currentProgressNewFeature < 1)
             {
                 Hide();
+                UserDataManager.AddGold(80, "WinX2");
             }
             else
             {
@@ -66,6 +67,7 @@ namespace Geckout
             if (currentProgressNewFeature < 1)
             {
                 Hide();
+                UserDataManager.AddGold(40, "Win");
             }
             else
             {

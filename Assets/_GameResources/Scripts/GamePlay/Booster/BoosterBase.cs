@@ -67,16 +67,17 @@ public abstract class BoosterBase : MonoBehaviour
                 return;
             }
             // Show popup buy
-            //PopupBuyBooster poup = UIManager.Instance.GetPopupActive<PopupBuyBooster>();
-            //if (poup == null)
-            //{
-            //    poup = UIManager.Instance.ShowPopup<PopupBuyBooster>(() =>
-            //    {
-            //        OnUseBoosterDone?.Invoke(this, CurrentCount);
-            //    });
-            //    poup.action = UpdateCountBooster;
-            //    poup.VisualBooster(boosterType);
-            //}
+            PopupBuyBooster poup = UIManager.Instance.GetPopupActive<PopupBuyBooster>();
+            if (poup == null)
+            {
+                poup = UIManager.Instance.ShowPopup<PopupBuyBooster>(() =>
+                {
+                    OnUseBoosterDone?.Invoke(this, CurrentCount);
+                });
+                
+                poup.Show(boosterType);
+                poup.OnBought = UpdateVisualBooster;
+            }
             callback?.Invoke(false);
         }
     }

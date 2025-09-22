@@ -554,11 +554,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCache: 0
   isAniClose: 1
+  duration: 0.3
   animType: 2
   mainPopUp: {fileID: 6242188070902747332}
   m_buttonClose: {fileID: 7204150507629762149}
   m_buttonBuy: {fileID: 359328462354271759}
   m_imageBoosterIcon: {fileID: 7129114649895029740}
+  m_textPrice: {fileID: 7057250840868870650}
+  m_textTitle: {fileID: 5737511289633605752}
+  m_textDes: {fileID: 3137739538880547696}
 --- !u!1 &4403576837137753858
 GameObject:
   m_ObjectHideFlags: 0
@@ -743,7 +747,7 @@ GameObject:
   - component: {fileID: 7057250840868870650}
   - component: {fileID: 235147488436728759}
   m_Layer: 5
-  m_Name: TextPlay
+  m_Name: TextPrice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
