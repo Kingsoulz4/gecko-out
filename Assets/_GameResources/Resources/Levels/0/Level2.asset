@@ -145,7 +145,7 @@ MonoBehaviour:
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
-    listColor: 02000000
+    listColor: 04000000
     listCoordinate:
     - {x: 3, y: 5}
     - {x: 3, y: 4}
