@@ -219,9 +219,9 @@ MonoBehaviour:
   boosterType: 1
   bonusTime: 15
   timePlayAnim: 2
-  m_clockPrefab: {fileID: 0}
-  m_spawnPoint: {fileID: 0}
-  m_targetPoint: {fileID: 0}
+  m_clockPrefab: {fileID: 1388438316953824942, guid: 209152d0a5215214bbeee502d467d5c3, type: 3}
+  m_spawnPoint: {fileID: 4934659890583029000}
+  m_targetPoint: {fileID: 6287565007949385066}
 --- !u!1 &4674836085133187285
 GameObject:
   m_ObjectHideFlags: 0
