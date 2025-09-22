@@ -27,6 +27,10 @@ namespace Geckout
 
         private void Start()
         {
+            AddRes();
+
+
+            BoosterManager.Instance.UpdateVisualBooster();
             btn_Load.onClick.AddListener(LoadLevel);
             btn_backLevel.onClick.AddListener(() =>
             {
@@ -61,6 +65,11 @@ namespace Geckout
         {
             UserDataManager.AddGold(1000, "test", false);
             UserDataManager.AddHeart(5, "test", false);
+            UserDataManager.HammerBooster = 100;
+            UserDataManager.HandMoveBooster = 100;
+            UserDataManager.TimeIngameBooster = 100;
+            UserDataManager.TimePreBooster = 50;
+            UserDataManager.CissorBooster = 50;
         }
     }
 }
