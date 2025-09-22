@@ -33,7 +33,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8292703877078742081}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -144,7 +143,6 @@ RectTransform:
   m_Children:
   - {fileID: 1791611768107052164}
   m_Father: {fileID: 7173436966149955704}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -222,7 +220,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7173436966149955704}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -312,7 +309,6 @@ GameObject:
   - component: {fileID: 7173436966149955704}
   - component: {fileID: 5038540821444803075}
   - component: {fileID: 6575656504929031199}
-  - component: {fileID: 209258871437397511}
   m_Layer: 5
   m_Name: RankingsScreen
   m_TagString: Untagged
@@ -335,7 +331,6 @@ RectTransform:
   - {fileID: 8292703877078742081}
   - {fileID: 5958579177642010832}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -380,19 +375,3 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &209258871437397511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8155166275860536571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 090e3a6fe7e621c4daf509d98b790b5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_color1: {r: 0.03529412, g: 0.101960786, b: 0.2627451, a: 1}
-  m_color2: {r: 0.14117648, g: 0.36078432, b: 0.56078434, a: 1}
-  m_angle: 0
-  m_ignoreRatio: 1

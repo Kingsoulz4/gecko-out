@@ -662,7 +662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d7f76ba468362641affe4900231d364, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCache: 0
+  isCache: 1
   btn_Play: {fileID: 8292504895901306289}
   txt_Level: {fileID: 5601292090428485601}
   soundBG: {fileID: 8300000, guid: db084b41f8797e0429bd1a9abe0e48ad, type: 3}

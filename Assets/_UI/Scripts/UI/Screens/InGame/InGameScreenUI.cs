@@ -93,7 +93,7 @@ public class InGameScreenUI : ScreenUI
        
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         if (BoosterManager.Instance == null) return;
         foreach (var booster in BoosterManager.Instance.Boosters)
