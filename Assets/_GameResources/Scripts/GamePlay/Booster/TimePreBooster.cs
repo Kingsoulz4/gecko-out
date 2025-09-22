@@ -17,7 +17,7 @@ public class TimePreBooster : BoosterBase
     [SerializeField] private Transform m_spawnPoint;
     [SerializeField] private Transform m_targetPoint;
 
-    protected override int CurrentCount { get => UserDataManager.TimeIngameBooster; set => UserDataManager.TimeIngameBooster = value; }
+    protected override int CurrentCount { get => UserDataManager.TimePreBooster; set => UserDataManager.TimePreBooster = value; }
 
     public bool IsSelectedToUse { get; set; }
 
@@ -26,7 +26,7 @@ public class TimePreBooster : BoosterBase
     public override void Init()
     {
         base.Init();
-        CurrentCount = UserDataManager.TimeIngameBooster;
+        CurrentCount = UserDataManager.TimePreBooster;
     }
     protected override void ShowBooster()
     {
@@ -49,7 +49,7 @@ public class TimePreBooster : BoosterBase
         IsSelectedToUse = true;
 
         base.ActiveBooster();
-        UserDataManager.TimeIngameBooster = CurrentCount;
+        UserDataManager.TimePreBooster = CurrentCount;
 
         OnStartUseBooster?.Invoke(this, CurrentCount);
         InProgress = true;
