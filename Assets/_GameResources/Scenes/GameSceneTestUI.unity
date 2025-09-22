@@ -350,16 +350,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53ab0c9f8001fd44cae1bb4ed18f3431, type: 3}
---- !u!4 &1539293598 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 995032683619554184, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
-  m_PrefabInstance: {fileID: 1822668404}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1594271053 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2230853006765726698, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
-  m_PrefabInstance: {fileID: 1822668404}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1602501156 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2081370821875115684, guid: 53ab0c9f8001fd44cae1bb4ed18f3431, type: 3}
@@ -536,18 +526,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3362555398252378988, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
-      propertyPath: m_spawnPoint
-      value: 
-      objectReference: {fileID: 1539293598}
-    - target: {fileID: 3362555398252378988, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
-      propertyPath: m_clockPrefab
-      value: 
-      objectReference: {fileID: 1388438316953824942, guid: 209152d0a5215214bbeee502d467d5c3, type: 3}
-    - target: {fileID: 3362555398252378988, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
-      propertyPath: m_targetPoint
-      value: 
-      objectReference: {fileID: 1594271053}
     - target: {fileID: 4007479879379954468, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
       propertyPath: m_Name
       value: 'Managers '
