@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Geckout
 {
@@ -18,7 +19,7 @@ namespace Geckout
         private bool isEnteringPortal = false;
         private Coroutine portalMovementCoroutine = null;
 
-        public bool IsEnteringPortal { get => isEnteringPortal;}
+        public bool IsEnteringPortal { get => isEnteringPortal; }
 
         private void Start()
         {
@@ -92,10 +93,12 @@ namespace Geckout
                     if (segmentAnimated[i]) continue;
                     var segment = orderedSegments[i];
                     float distanceToPortal = Vector3.Distance(segment.transform.position, portalCenter);
-                    if (distanceToPortal <= portalEnterDistance)
-                    {
+                    if (distanceToPortal <= portalEnterDistance )
+                    { 
+                        Debug.Log($"Animating segment {i} into portal");
                         segmentAnimated[i] = true;
-                        StartCoroutine(AnimateSegmentDown(segment, portalCenter, i == orderedSegments.Count - 2));
+                        segment.IsPortalAnimating = true;
+                        StartCoroutine(AnimateSegmentDown(segment, portalCenter, i == orderedSegments.Count - 1));
                     }
                 }
                 yield return null;
@@ -110,7 +113,7 @@ namespace Geckout
             }
 
             Vector3 startPos = segment.transform.position;
-            Vector3 targetPos = portalCenter + Vector3.forward * Mathf.Max(3, bodyController.Length);
+            Vector3 targetPos = portalCenter + Vector3.forward * Mathf.Max(3, bodyController.Length - 1);
 
             float elapsed = 0f;
             while (elapsed < animationDurationPerSegment)
@@ -162,8 +165,9 @@ namespace Geckout
                     1,
                     duration
                 ).SetEase(Ease.InOutQuad)
-                .OnComplete(() => {
-                    bool isLast = segment == orderedSegments[orderedSegments.Count - 2];
+                .OnComplete(() =>
+                {
+                    bool isLast = segment == orderedSegments[orderedSegments.Count - 1];
                     StartCoroutine(AnimateSegmentDown(segment, portalCenter, isLast));
                 });
 
@@ -178,7 +182,7 @@ namespace Geckout
         private void FinishMoveToPortal()
         {
             if (targetPortal == null || bodyController == null) return;
-            
+
             bodyController.OccupiedTileController.ClearAllOccupied();
             LevelEvent.OnMoveToPortalDone?.Invoke(bodyController, targetPortal);
             DebugLog("Finish move portal");
