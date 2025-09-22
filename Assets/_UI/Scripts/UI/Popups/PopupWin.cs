@@ -39,8 +39,7 @@ namespace Geckout
             m_buttonClaim.onClick.AddListener(OnClickClaim);
             m_buttonClaimX2.onClick.AddListener(OnClickClaimX2);
             m_buttonContinue.onClick.AddListener(OnClickContinue);
-            var FeatureLevelKeys = NewFeatureManager.Instance.FeaturePopupDataDic.Keys.ToList();
-            finalFeatureLv = NewFeatureManager.Instance.GetNewFeatureInProgress().level;
+            finalFeatureLv = NewFeatureManager.Instance.FeaturePopupDataDic.Last().Key;
         }
 
         private void OnClickContinue()
@@ -113,13 +112,12 @@ namespace Geckout
 
         public void UpdateFill()
         {
-
             int featureLevel = -1;
             int featureLevelOld = -1;
             var FeatureLevelKeys = NewFeatureManager.Instance.FeaturePopupDataDic.Keys.ToList();
             for (int i = 0; i < FeatureLevelKeys.Count; i++)
             {
-                if (LevelManager.Instance.CurrentLevel - 1 < FeatureLevelKeys[i])
+                if (LevelManager.Instance.CurrentLevel < FeatureLevelKeys[i])
                 {
                     featureLevel = FeatureLevelKeys[i];
                     if (i > 0)
@@ -148,8 +146,10 @@ namespace Geckout
                 totalStep = featureLevel - 1;
             }
 
-            float progress = (LevelManager.Instance.CurrentLevel - featureLevelOld) / totalStep;
-            float lastProgress = (LevelManager.Instance.CurrentLevel - 1 - featureLevelOld) / totalStep;
+            //var currentFeatureInProgress = NewFeatureManager.Instance.Get
+
+            float progress = (LevelManager.Instance.CurrentLevel + 1 - featureLevelOld) / totalStep;
+            float lastProgress = (LevelManager.Instance.CurrentLevel - featureLevelOld) / totalStep;
 
             var feature = NewFeatureManager.Instance.FeaturePopupDataDic[featureLevel];
 

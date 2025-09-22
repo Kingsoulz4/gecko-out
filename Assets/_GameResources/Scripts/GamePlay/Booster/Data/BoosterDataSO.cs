@@ -25,4 +25,5 @@ public class BoosterItemData
     public Sprite iconBig;
     public int price;
     public int quantity;
+    public int levelUnlock;
 }

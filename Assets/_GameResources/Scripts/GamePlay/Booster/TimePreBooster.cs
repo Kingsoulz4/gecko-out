@@ -78,16 +78,31 @@ public class TimePreBooster : BoosterBase
         Vector3 endPos = target;
         Transform controlPointA = null;
         Transform controlPointB = null;
-        Vector3 cpA = controlPointA ? controlPointA.position : (startPos + (endPos - startPos) * 0.33f + new Vector3(3, 2, 0));
+        //Vector3 cpA = controlPointA ? controlPointA.position : (startPos + (endPos - startPos) * 0.33f + new Vector3(3, 2, 0));
         Vector3 cpB = controlPointB ? controlPointB.position : (startPos + (endPos - startPos) * 0.66f + new Vector3(-3, 2, 0));
 
+        Vector3 cpA = controlPointA ? controlPointA.position : (startPos + (endPos - startPos) * 0.33f + new Vector3(-3, 2, 0));
+
+
         // path goes through control points -> natural XY curve
-        Vector3[] path = new Vector3[] { startPos, cpA, cpB, endPos };
+        Vector3[] path = new Vector3[] { startPos, cpA, endPos };
 
         Tween flightTween = scissorObject.transform
             .DOPath(path, flightDuration, PathType.CatmullRom, PathMode.Full3D, 10, Color.green)
-            .SetEase(Ease.InOutSine)
-            .SetLookAt(0.01f); // rotate toward movement
+            .SetEase(Ease.InOutSine);
+        //.SetLookAt(0.01f); // rotate toward movement
+        flightTween.OnUpdate(() =>
+            {
+                // direction = next position - current position
+                Vector3 dir = flightTween.PathGetPoint(flightTween.ElapsedPercentage() + 0.01f) - transform.position;
+
+                if (dir.sqrMagnitude > 0.001f)
+                {
+                    // if plane forward is +X, use Vector3.right
+                    Quaternion lookRot = Quaternion.LookRotation(Vector3.forward, dir);
+                    transform.rotation = lookRot;
+                }
+            });
 
         yield return new WaitForSeconds(flightDuration * 0.9f);
         Destroy(scissorObject.gameObject);
