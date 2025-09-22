@@ -16,6 +16,7 @@ namespace Geckout
         private void ShowPopupSetting()
         {
             PopupSetting popupSetting = UIManager.Instance.ShowPopup<PopupSetting>(null);
+            popupSetting.SetType(PopupSettingType.HOME);
         }
     }
 }
