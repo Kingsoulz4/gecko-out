@@ -11,6 +11,7 @@ namespace Geckout
     {
         [SerializeField] private float moveDistance = 0.5f;
         [SerializeField] private float duration = 0.5f;
+        [SerializeField] private float yOffset = 0.8f;
         [SerializeField] private Transform visual;
         private Quaternion originalRotation = Quaternion.identity;
         private Vector3 tmpPos = new Vector3();
@@ -21,7 +22,7 @@ namespace Geckout
             transform.rotation = originalRotation;
             tmpPos = transform.parent.position;
             tmpPos.z = -1;
-            tmpPos.y += 0.5f;
+            tmpPos.y += yOffset;
             transform.position = tmpPos;
         }
 
