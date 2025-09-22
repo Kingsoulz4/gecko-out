@@ -211,7 +211,7 @@ public class InGameScreenUI : ScreenUI
         GameManager.Instance.SetGameState(GameState.Paused);
     }
 
-    private void OnReplayClick()
+    public void OnReplayClick()
     {
         ShowConfirmLeave();
         GameManager.Instance.SetGameState(GameState.Playing);
