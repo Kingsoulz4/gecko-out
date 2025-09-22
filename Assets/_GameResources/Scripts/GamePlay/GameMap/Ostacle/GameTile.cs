@@ -122,7 +122,11 @@ namespace Geckout
                 m_displayObject.SetActive(true);
                 m_displayObject.transform.localRotation = Quaternion.Euler(MapTileData.rotation);
             }
-            m_tilesTypeDisplay[MapTileType.Normal].SetActive(true);
+
+            if (m_tilesTypeDisplay.ContainsKey(MapTileType.Normal))
+            {
+                m_tilesTypeDisplay[MapTileType.Normal].SetActive(true);
+            }
 
         }
 
@@ -150,6 +154,7 @@ namespace Geckout
 
         public void RotateTo(Vector3Int angle)
         {
+            if (m_displayObject != null)
             m_displayObject.transform.localRotation = Quaternion.Euler(angle);
             MapTileData.rotation = angle;
         }

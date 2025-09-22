@@ -170,7 +170,7 @@ namespace Geckout
                 LevelGame.ClearAllSelected();
             }
             MyUlti.SetExistingGameViewSize(1080, 1920);
-            SceneManager.LoadScene("GameSceneTestLevel");
+            SceneManager.LoadScene("GameScene");
             LevelManager.Instance.CurrentLevel = int.Parse(m_inputLevelNum.text);
             LevelManager.Instance.CurrentLevelSetID = int.Parse(m_inputLevelIndex.text);
            
