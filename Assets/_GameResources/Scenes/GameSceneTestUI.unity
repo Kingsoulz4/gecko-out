@@ -350,6 +350,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53ab0c9f8001fd44cae1bb4ed18f3431, type: 3}
+--- !u!114 &1116801039 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5974805375045455472, guid: e3dd9e77adf642c41b8352fd54c91406, type: 3}
+  m_PrefabInstance: {fileID: 1826401904}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84688f259a15fbd459258aa2c9a01c44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1602501156 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2081370821875115684, guid: 53ab0c9f8001fd44cae1bb4ed18f3431, type: 3}
@@ -530,6 +541,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'Managers '
       objectReference: {fileID: 0}
+    - target: {fileID: 7235591930544182692, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
+      propertyPath: uiManager
+      value: 
+      objectReference: {fileID: 1116801039}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
