@@ -472,11 +472,11 @@ namespace Geckout
             //bool right = !(tileRight == null || tileRight.MapTileData.type != MapTileType.Normal || listCoordTileSelected.Contains(tileRight));
 
 
-            GameObject obj;
+            GameTile obj;
 #if UNITY_EDITOR
-            obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, m_wallContainer)).gameObject;
+            obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, m_wallContainer));
 #else
-            obj = Instantiate(prefab.gameObject, m_wallContainer);
+            obj = Instantiate(prefab, m_wallContainer);
 #endif
             obj.name = name;
             obj.transform.localPosition = pos;
