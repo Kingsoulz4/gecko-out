@@ -52,7 +52,6 @@ public class InGameScreenUI : ScreenUI
 
     [SerializeField] RectTransform rect_Top;
     private float currentTopY;
-    internal GameObject TimeBooster;
 
     public TimeBoosterTopUI TimeBoosterTopUI { get => timeBoosterTopUI;}
 
@@ -130,11 +129,6 @@ public class InGameScreenUI : ScreenUI
             case BoosterType.TIME_INGAME:
                 timeBoosterTopUI.SetActive(false);
                 break;
-            case BoosterType.HAMMER:
-            case BoosterType.HAND_MOVE:
-            case BoosterType.SUFFLE:
-                boosterConfirmUI.gameObject.SetActive(false);
-                break;
             default:
                 break;
         }
@@ -157,13 +151,6 @@ public class InGameScreenUI : ScreenUI
                 hammerBoosterCount.UpdateTextCountBooster(currentCount);
                 boosterConfirmUI.gameObject.SetActive(false);
                 break;
-            case BoosterType.TIME_PRE:
-                TimeBoosterTopUI.gameObject.SetActive(true);
-                break;
-            //case BoosterType.SUFFLE:
-            //    suffleBoosterCount.UpdateTextCountBooster(currentCount);
-            //    boosterConfirmUI.gameObject.SetActive(false);
-            //    break;
             default:
                 break;
         }
