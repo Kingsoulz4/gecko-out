@@ -13,27 +13,75 @@ MonoBehaviour:
   m_Name: NewFeatureSO
   m_EditorClassIdentifier: 
   newFeatureItemDatas:
-  - level: 3
-    icon: {fileID: 21300000, guid: b9bec12562ec64047aba62c46a6d1740, type: 3}
-    title: Freeze Time
-    des: Something Here
-    spriteBG: {fileID: 21300000, guid: b9bec12562ec64047aba62c46a6d1740, type: 3}
-    spriteFill: {fileID: 21300000, guid: b9bec12562ec64047aba62c46a6d1740, type: 3}
-  - level: 5
+  - level: 9
     icon: {fileID: 21300000, guid: 99043121cb0f96f41be34fdb0b205aba, type: 3}
     title: Hammer
-    des: Desss
+    des: Break any wall on the playing area
+    desInTutorial: Break any wall on the playing area
     spriteBG: {fileID: 21300000, guid: 99043121cb0f96f41be34fdb0b205aba, type: 3}
     spriteFill: {fileID: 21300000, guid: 99043121cb0f96f41be34fdb0b205aba, type: 3}
-  - level: 7
+    displayType: 0
+  - level: 12
+    icon: {fileID: 21300000, guid: b9bec12562ec64047aba62c46a6d1740, type: 3}
+    title: Double Color
+    des: Put stacked dogs to the holes in order
+    desInTutorial: Put the outer dog into hole to release the inner one.
+    spriteBG: {fileID: 21300000, guid: b9bec12562ec64047aba62c46a6d1740, type: 3}
+    spriteFill: {fileID: 21300000, guid: b9bec12562ec64047aba62c46a6d1740, type: 3}
+    displayType: 1
+  - level: 13
+    icon: {fileID: 21300000, guid: b9bec12562ec64047aba62c46a6d1740, type: 3}
+    title: Freeze Time
+    des: Freeze timer for 10 seconds
+    desInTutorial: Freeze timer for 10 seconds
+    spriteBG: {fileID: 21300000, guid: b9bec12562ec64047aba62c46a6d1740, type: 3}
+    spriteFill: {fileID: 21300000, guid: b9bec12562ec64047aba62c46a6d1740, type: 3}
+    displayType: 0
+  - level: 15
     icon: {fileID: 21300000, guid: a1d3b84312216714bb13d71e1bf58da9, type: 3}
-    title: 'Pickup '
-    des: 'Something '
+    title: Pick Dog
+    des: Pick any dog and put in the hole
+    desInTutorial: Pick any dog and put in the hole
     spriteBG: {fileID: 21300000, guid: a1d3b84312216714bb13d71e1bf58da9, type: 3}
     spriteFill: {fileID: 21300000, guid: a1d3b84312216714bb13d71e1bf58da9, type: 3}
-  - level: 15
+    displayType: 0
+  - level: 16
+    icon: {fileID: 21300000, guid: a3285a938335df54c9a1102f3d67da96, type: 3}
+    title: Add Time
+    des: Use "Add Time" booster to get +5 second at the start of the level
+    desInTutorial: Use "Add Time" booster to get +5 second at the start of the level
+    spriteBG: {fileID: 21300000, guid: a3285a938335df54c9a1102f3d67da96, type: 3}
+    spriteFill: {fileID: 21300000, guid: a3285a938335df54c9a1102f3d67da96, type: 3}
+    displayType: 0
+  - level: 18
+    icon: {fileID: 21300000, guid: f63891d951082e149845268c140e8116, type: 3}
+    title: Scissor
+    des: Use "Scissors" booster to shorten a random dog
+    desInTutorial: Use "Scissors" booster to shorten a random dog
+    spriteBG: {fileID: 21300000, guid: f63891d951082e149845268c140e8116, type: 3}
+    spriteFill: {fileID: 21300000, guid: f63891d951082e149845268c140e8116, type: 3}
+    displayType: 0
+  - level: 19
+    icon: {fileID: 21300000, guid: 99043121cb0f96f41be34fdb0b205aba, type: 3}
+    title: Ice Dog
+    des: Break the ice on the dogs
+    desInTutorial: To release dogs from the ice, put other dogs in their holes.
+    spriteBG: {fileID: 21300000, guid: 99043121cb0f96f41be34fdb0b205aba, type: 3}
+    spriteFill: {fileID: 21300000, guid: 99043121cb0f96f41be34fdb0b205aba, type: 3}
+    displayType: 1
+  - level: 24
     icon: {fileID: 21300000, guid: ee5e978f6f35fe642822145446ade9f3, type: 3}
-    title: title
-    des: Desss
+    title: Ice Hole
+    des: Break the ice on the holes
+    desInTutorial: Put the dogs in to their holes to break the ice from holes.
     spriteBG: {fileID: 21300000, guid: 79fdc5eecd2c06f44b1ec674d2b993ab, type: 3}
     spriteFill: {fileID: 21300000, guid: 63cfdd37b62663d43a5ed3a48c2a700b, type: 3}
+    displayType: 1
+  - level: 30
+    icon: {fileID: 21300000, guid: a1d3b84312216714bb13d71e1bf58da9, type: 3}
+    title: Hidden Dog
+    des: Reveal the hidden dogs
+    desInTutorial: Put other dogs into their holes to reveal the hidden dog's color.
+    spriteBG: {fileID: 21300000, guid: a1d3b84312216714bb13d71e1bf58da9, type: 3}
+    spriteFill: {fileID: 21300000, guid: a1d3b84312216714bb13d71e1bf58da9, type: 3}
+    displayType: 1

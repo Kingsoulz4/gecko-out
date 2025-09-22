@@ -248,8 +248,16 @@ public class InGameScreenUI : ScreenUI
         var feature = NewFeatureManager.Instance.GetNewFeatureInProgress();
         if (feature != null && LevelManager.Instance.CurrentLevel == feature.level && UserDataManager.LastFeatureCount < feature.level)
         {
-            UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
-            UserDataManager.LastFeatureCount = feature.level;
+            if (feature.displayType == NewFeatureTutDisplayType.POPOP_VID)
+            {
+                UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
+                UserDataManager.LastFeatureCount = feature.level;
+            }
+            else
+            {
+                var pop = UIManager.Instance.ShowPopup<PopupTutorialTextNewFeature>(null);
+                pop.SetData(feature);
+            }
         }
     }
 

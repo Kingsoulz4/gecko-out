@@ -13,6 +13,13 @@ public class NewFeatureSO : ScriptableObject
         return newFeatureItemDatas.FirstOrDefault(x => x.level == level);
     }
 }
+
+public enum NewFeatureTutDisplayType
+{
+    POPOP_VID,
+    POPUP_TEXT
+}
+
 [Serializable]
 public class NewFeatureItemData
 {
@@ -20,6 +27,8 @@ public class NewFeatureItemData
     public Sprite icon;
     public string title;
     public string des;
+    public string desInTutorial;
     public Sprite spriteBG;
     public Sprite spriteFill;
+    public NewFeatureTutDisplayType displayType;
 }
