@@ -106,7 +106,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _IndirectIntensity: 1
+    - _IndirectIntensity: 0.172
     - _IndirectIntensityOutline: 0
     - _MatCapMaskChannel: 0
     - _MatCapType: 0
@@ -129,8 +129,8 @@ Material:
     - _RampBandsSmoothing: 0.1
     - _RampOffset: 0
     - _RampScale: 1
-    - _RampSmoothing: 0.867
-    - _RampThreshold: 0.572
+    - _RampSmoothing: 0.93
+    - _RampThreshold: 0.32
     - _RampType: 0
     - _ReceiveShadowsOff: 1
     - _ReflectionMapType: 0
