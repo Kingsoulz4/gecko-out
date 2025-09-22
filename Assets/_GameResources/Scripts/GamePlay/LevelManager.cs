@@ -174,6 +174,7 @@ namespace Geckout
 
         private IEnumerator IEActiveBeginingBoosters()
         {
+            yield return new WaitForEndOfFrame();
             GameManager.Instance.SetGameState(GameState.Paused);
             var timeBeginBooster = (TimePreBooster)BoosterManager.Instance.TimePreBooster;
             var scissorBooster = (ScissorBooster)BoosterManager.Instance.ScissorBooster;
@@ -188,12 +189,18 @@ namespace Geckout
 
                 if (scissorBooster.IsSelectedToUse)
                 {
-
                     scissorBooster.ActiveBooster(LevelGame.ListBody.Find(x => x.Length > 3));
                 }
 
-                yield return new WaitUntil(() => !timeBeginBooster.InProgress);
-                yield return new WaitUntil(() => !scissorBooster.InProgress);
+                if (timeBeginBooster.IsSelectedToUse)
+                {
+                    yield return new WaitUntil(() => !timeBeginBooster.InProgress);
+                    UIManager.Instance.GetScreenActive<InGameScreenUI>().ShowAddTimeAnim((int)timeBeginBooster.bonusTime);
+                }
+                if (scissorBooster.IsSelectedToUse)
+                {
+                    yield return new WaitUntil(() => !scissorBooster.InProgress);
+                }
             }
 
             GameManager.Instance.SetGameState(GameState.Playing);
@@ -212,8 +219,9 @@ namespace Geckout
         public void NextLevel()
         {
             CurrentLevel++;
-            UIManager.Instance.ShowScreen<InGameScreenUI>();
+            
             StartCurrentLevel();
+            UIManager.Instance.ShowScreen<InGameScreenUI>();
         }
         #endregion
     }

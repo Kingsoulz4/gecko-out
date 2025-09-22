@@ -1,5 +1,7 @@
+using AYellowpaper.SerializedCollections;
 using DG.Tweening;
 using Geckout;
+using Geckout.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,6 +19,8 @@ public class InGameScreenUI : ScreenUI
 
     [SerializeField] Button btn_pause;
     [SerializeField] Button btn_Replay;
+
+    [SerializeField] SerializedDictionary<LevelType, GameObject> m_listTimeBarBackground;
 
     [Space, Header("Booster")]
     BoosterDataSO boosterDataSO;
@@ -231,7 +235,17 @@ public class InGameScreenUI : ScreenUI
         txt_Level.text = $"{LevelManager.Instance.CurrentLevel}";
         currentTopY = rect_Top.anchoredPosition.y;
         UpdateTimeText(LevelController.CurrentTimeLevelRemaining);
+        UpdateTimeBar();
         PoupNewFeature();
+    }
+
+    private void UpdateTimeBar()
+    {
+        foreach(var item in m_listTimeBarBackground)
+        {
+            item.Value.SetActive(false);
+        }
+        m_listTimeBarBackground[LevelController.GameLevelData.type].SetActive(true);
     }
 
     private void PoupNewFeature()
@@ -288,16 +302,33 @@ public class InGameScreenUI : ScreenUI
 
         };
     }
+    #region Booster Add Time
 
-    public void ShowAddTimeAnim()
+    public void ShowAddTimeAnim(int valAdd)
     {
-
+        StartCoroutine(IEAnimateAddTime(valAdd));
     }
         
-    private IEnumerator IEAnimateAddTime()
+    private IEnumerator IEAnimateAddTime(int valAdd)
     {
         yield return null;
-        //var currentTime = 
+        m_iconClock.transform.DOScale(1.1f, 0.25f);
+        txt_Time.transform.DOScale(1.1f, 0.25f);
+        yield return new WaitForSeconds(0.3f);
+        var currentVal = LevelController.CurrentTimeLevelRemaining - valAdd;
+        DOTween.To(() => currentVal, (val) =>
+        {
+            txt_Time.text = GetTimeValueToString(val);
+        }, LevelController.CurrentTimeLevelRemaining, 0.5f);
+
+        yield return new WaitForSeconds(0.5f);
+        m_iconClock.transform.DOScale(1f, 0.25f);
+        txt_Time.transform.DOScale(1f, 0.25f);
     }
-        
+
+    public Vector3 GetClockIconPosition()
+    {
+        return m_iconClock.transform.position;
+    }    
+    #endregion
 }
