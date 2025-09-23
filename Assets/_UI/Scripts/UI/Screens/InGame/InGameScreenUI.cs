@@ -250,7 +250,8 @@ public class InGameScreenUI : ScreenUI
         {
             if (feature.displayType == NewFeatureTutDisplayType.POPOP_VID)
             {
-                UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
+                var pop = UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
+                pop.SetData(feature.title, feature.desInTutorial, feature.icon);
                 UserDataManager.LastFeatureCount = feature.level;
             }
             else
@@ -259,6 +260,14 @@ public class InGameScreenUI : ScreenUI
                 pop.SetData(feature);
             }
         }
+
+        var boosterUnlock = BoosterManager.Instance.BoosterData.boosterItemDatas.Find(x => x.levelUnlock == LevelManager.Instance.CurrentLevel);
+        if(boosterUnlock != null)
+        {
+            var pop = UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
+            pop.SetData(boosterUnlock.title, boosterUnlock.description, boosterUnlock.icon);
+        }
+            
     }
 
     public void UpdateTimeText(float timeLevel)

@@ -20,7 +20,7 @@ MonoBehaviour:
     iconBig: {fileID: 21300000, guid: 77695f78dff86fd47bc37a323a96affe, type: 3}
     price: 900
     quantity: 3
-    levelUnlock: 0
+    levelUnlock: 13
   - boosterType: 2
     title: Hammer
     description: Tap Wall To Destroy
@@ -28,7 +28,7 @@ MonoBehaviour:
     iconBig: {fileID: 21300000, guid: df0c0932fc9e2394c823dbc589e20fb0, type: 3}
     price: 1400
     quantity: 3
-    levelUnlock: 0
+    levelUnlock: 9
   - boosterType: 4
     title: Hand pick
     description: Pick a Dog To  Move
@@ -36,7 +36,7 @@ MonoBehaviour:
     iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     price: 1900
     quantity: 3
-    levelUnlock: 0
+    levelUnlock: 15
   - boosterType: 1
     title: Add Time
     description: Add Time In Game
@@ -44,7 +44,7 @@ MonoBehaviour:
     iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     price: 900
     quantity: 3
-    levelUnlock: 5
+    levelUnlock: 16
   - boosterType: 3
     title: Scissor
     description: Cut out Dog
@@ -52,4 +52,4 @@ MonoBehaviour:
     iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     price: 900
     quantity: 3
-    levelUnlock: 10
+    levelUnlock: 19
