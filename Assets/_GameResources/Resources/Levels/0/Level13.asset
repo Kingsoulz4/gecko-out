@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelNum: 13
   levelIndex: 0
-  fieldOfView: 20
+  fieldOfView: 16
   mapSize: {x: 7, y: 11}
   time: 100
   type: 0
