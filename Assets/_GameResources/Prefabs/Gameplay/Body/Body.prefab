@@ -286,6 +286,8 @@ MonoBehaviour:
   _spline: {fileID: 3626055781503237806}
   tubeRadius: 0.6
   _tubeGenerator: {fileID: 9047026933609085666}
+  m_arrowSprite: {fileID: 5584027278633758856}
+  m_listBodyColor: {fileID: 11400000, guid: 29487e4b2a151d7488d00ae616a352d4, type: 2}
 --- !u!114 &2788433321168617802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -588,6 +590,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3707221852236498670, guid: 16b78289a1dd6e648b0990603f852fc7, type: 3}
   m_PrefabInstance: {fileID: 963208807903678464}
   m_PrefabAsset: {fileID: 0}
+--- !u!212 &5584027278633758856 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 4620819076341440648, guid: 16b78289a1dd6e648b0990603f852fc7, type: 3}
+  m_PrefabInstance: {fileID: 963208807903678464}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4957257871641923439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -636,6 +643,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7833994475436521715, guid: a442355917e79054d8f791998cf8e814, type: 3}
+      propertyPath: m_listMaterial._serializedList.Array.data[5].Value
+      value: 
+      objectReference: {fileID: 2100000, guid: cbcbcb2cbf64153429087fa5796dce32, type: 2}
     - target: {fileID: 7838665600272700627, guid: a442355917e79054d8f791998cf8e814, type: 3}
       propertyPath: m_Name
       value: HeadSegment

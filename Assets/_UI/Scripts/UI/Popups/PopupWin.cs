@@ -39,7 +39,7 @@ namespace Geckout
             m_buttonClaim.onClick.AddListener(OnClickClaim);
             m_buttonClaimX2.onClick.AddListener(OnClickClaimX2);
             m_buttonContinue.onClick.AddListener(OnClickContinue);
-            finalFeatureLv = NewFeatureManager.Instance.FeaturePopupDataDic.Last().Key;
+            finalFeatureLv = NewFeatureManager.Instance.FeaturePopupDataDic.Last(x => x.Value.displayType == NewFeatureTutDisplayType.POPUP_TEXT).Key;
         }
 
         private void OnClickContinue()

@@ -13,6 +13,8 @@ namespace Geckout
         [SerializeField] private SplineComputer _spline;
         [SerializeField] private float tubeRadius = 0.5f;
         [SerializeField] private TubeGenerator _tubeGenerator;
+        [SerializeField] private SpriteRenderer m_arrowSprite;
+        [SerializeField] private ListColorByColorType m_listBodyColor;
 
         private List<Segment> _segments;
         private Vector3[] _lastPositions; // Cache để check thay đổi
@@ -39,6 +41,7 @@ namespace Geckout
         public void UpdateBodyColor()
         {
             bodyPartColorChangers.ForEach(x => x.UpdateColor(BodyController.BodyData.listColor.First()));
+            m_arrowSprite.color = m_listBodyColor.listColor[BodyController.BodyData.listColor.First()];
         }
 
         public void FadeBodyColor(ColorType color)

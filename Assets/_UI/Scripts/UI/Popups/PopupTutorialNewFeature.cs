@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static ToonyColorsPro.Legacy.TCP2_ShaderGenerator;
 
 namespace Geckout
 {
@@ -21,14 +22,21 @@ namespace Geckout
 
         private void OnEnable()
         {
-            var feature = NewFeatureManager.Instance.GetNewFeatureInProgress();
-            if (feature != null )
-            {
-                m_textFeatureDes.text = feature.des;
-                m_imageFeatureIcon.sprite = feature.icon;
-                m_textFeatureName.text = feature.title;
-            }
+            //var feature = NewFeatureManager.Instance.GetNewFeatureInProgress();
+            //if (feature != null )
+            //{
+            //    m_textFeatureDes.text = feature.des;
+            //    m_imageFeatureIcon.sprite = feature.icon;
+            //    m_textFeatureName.text = feature.title;
+            //}
         }
+
+        public void SetData(string name, string des, Sprite icon)
+        {
+            m_textFeatureDes.text = des;
+            m_imageFeatureIcon.sprite = icon;
+            m_textFeatureName.text = name;
+        }    
 
         private void OnClickGotIt()
         {

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 namespace Geckout
 {
+    [DefaultExecutionOrder(-10)]
     public class TestManager : SingletonMono<TestManager>
     {
         [SerializeField] Button btn_Load;
