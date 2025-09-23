@@ -64,7 +64,7 @@ namespace Geckout
                 extendedPath.Add(portalCoord);
             }
 
-            bodyController.StartMovePath(extendedPath);
+            bodyController.StartMovePath(extendedPath, true);
         }
 
         public IEnumerator AnimateSegmentDown(Segment segment, Vector3 portalCenter, bool isLast = false)

@@ -57,17 +57,14 @@ namespace Geckout
         private bool canControl = true;
         private bool canMovePortal = true;
         private List<MechanicRendererBase> listMechanicRender = new();
-
+        private bool isMoving;
         public List<Segment> Segments { private set; get; }
         public OccupiedTileController OccupiedTileController { get => occupiedTileController; set => occupiedTileController = value; }
         public bool IsMoving
         {
             get
             {
-                if (moveCoroutine != null) return true;
-
-                //if (gridClamper != null && !gridClamper.IsAtTileCenter) return true;
-                return false;
+                return isMoving;
             }
         }
         public GridHeadClamper GridClamper { get => gridClamper; set => gridClamper = value; }
@@ -145,7 +142,7 @@ namespace Geckout
         {
             BodyData = dogData;
             List<Vector2Int> listDefaultCoordinate = dogData.listCoordinate;
-            
+
             ResetAllComponents();
 
             // ===== Tính toán tổng số segment =====
@@ -166,7 +163,7 @@ namespace Geckout
 
             // ===== Body segments =====
             // chỉ spawn từ 1 đến totalSegments - 2 (dành chỗ cho Tail)
-            
+
 
             for (int i = 1; i < totalSegments - 1; i++)
             {
@@ -257,7 +254,7 @@ namespace Geckout
             }
             Segments = new List<Segment>();
         }
-            
+
 
         public List<Segment> GetOrderedSegments()
         {
@@ -267,7 +264,7 @@ namespace Geckout
                 return Segments.AsEnumerable().Reverse().ToList();
         }
 
-        public void StartMovePath(List<Vector2Int> path)
+        public void StartMovePath(List<Vector2Int> path, bool isMovingPortal = false)
         {
             if (path == null || path.Count == 0) return;
 
@@ -281,7 +278,7 @@ namespace Geckout
                 gridClamper.SetPath(path);
             }
 
-            moveCoroutine = StartCoroutine(StartMovePathIE());
+            moveCoroutine = StartCoroutine(StartMovePathIE(isMovingPortal));
         }
 
         public void StopMoveCoroutine()
@@ -310,13 +307,13 @@ namespace Geckout
             currentPath.Clear();
         }
 
-        IEnumerator StartMovePathIE()
+        IEnumerator StartMovePathIE(bool isMovingPortal = false)
         {
             if (currentPath.Count == 0) yield break;
 
             OnStartMove?.Invoke();
             worldPath.Clear();
-
+            isMoving = true;
 
             // Get current anchor position (always the leading segment in ordered view)
             var orderedSegments = GetOrderedSegments();
@@ -328,15 +325,16 @@ namespace Geckout
                     worldPath.Add(tile.transform.position);
             }
 
-            yield return MovePath(worldPath);
+            yield return MovePath(worldPath, isMovingPortal);
 
             moveCoroutine = null;
 
+            isMoving = false;
             OnEndMove?.Invoke();
             currentPath.Clear();
         }
 
-        IEnumerator MovePath(List<Vector3> worldPath)
+        IEnumerator MovePath(List<Vector3> worldPath, bool isMovingToPortal = false)
         {
             if (worldPath.Count < 2) yield break;
 
@@ -361,15 +359,9 @@ namespace Geckout
 
                 // Precise movement towards target waypoint
                 Vector3 intendedPos = Vector3.MoveTowards(lastAnchorPos, currentTarget, currentMoveSpeed * Time.deltaTime);
-                // Clamp theo lưới (head/tail đều dùng được)
-                if (gridClamper != null)
-                {
-                    anchorPos = gridClamper.ClampHeadPosition(intendedPos);
-                }
-                else
-                {
-                    anchorPos = intendedPos;
-                }
+
+                anchorPos = gridClamper.ClampHeadPosition(intendedPos);
+                //anchorPos = intendedPos;
 
                 // Đến waypoint?
                 if (Vector3.Distance(anchorPos, currentTarget) < gridClamper.TileCenterThreshold)
@@ -383,13 +375,26 @@ namespace Geckout
                     AddAnchorSample(anchorPos);
                     lastAnchorPos = anchorPos;
                 }
+                else
+                {
+                    AddAnchorSample(intendedPos);
+                    lastAnchorPos = intendedPos;
+                }
+
 
                 // Cập nhật vị trí mọi segment theo history
                 for (int segIdx = 0; segIdx < orderedSegments.Count; segIdx++)
                 {
+                    if (orderedSegments[segIdx].IsPortalAnimating) continue;
+
                     float backDist = segIdx * segmentSpacing;
                     Vector3 pos = GetHistoryPointAtDistanceBack(backDist);
                     orderedSegments[segIdx].transform.position = pos;
+
+                    if (isMovingToPortal)
+                    {
+                        CheckAndTriggerPortalAnimation(orderedSegments[segIdx], segIdx, orderedSegments.Count);
+                    }
                 }
 
                 occupiedTileController?.UpdateAllSegmentPositions();
@@ -409,7 +414,27 @@ namespace Geckout
                 orderedSegments[segIdx].transform.position = pos;
             }
         }
+        private void CheckAndTriggerPortalAnimation(Segment segment, int segmentIndex, int totalSegments)
+        {
+            if (!moveToPortal.IsEnteringPortal) return;
+            if (moveToPortal.TargetPortal == null) return;
 
+            Vector3 portalCenter = moveToPortal.TargetPortal.transform.position;
+            float distanceToPortal = Vector3.Distance(segment.transform.position, portalCenter);
+
+            if (distanceToPortal <= moveToPortal.PortalEnterDistance)
+            {
+                Debug.Log($"Animating segment {segmentIndex} into portal");
+
+                // Mark segment as animating
+                segment.IsPortalAnimating = true;
+
+                bool isLastSegment = (segmentIndex == totalSegments - 1);
+
+                // Trigger animation
+                StartCoroutine(moveToPortal.AnimateSegmentDown(segment, portalCenter, isLastSegment));
+            }
+        }
         #region History system
         private float RequiredHistoryLength()
         {
