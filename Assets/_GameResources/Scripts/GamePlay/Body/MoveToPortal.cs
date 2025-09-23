@@ -20,6 +20,8 @@ namespace Geckout
         private Coroutine portalMovementCoroutine = null;
 
         public bool IsEnteringPortal { get => isEnteringPortal; }
+        public float PortalEnterDistance { get => portalEnterDistance; }
+        public Portal TargetPortal { get => targetPortal;}
 
         private void Start()
         {
@@ -36,76 +38,36 @@ namespace Geckout
                 return;
             }
 
+            isEnteringPortal = true;
+
             targetPortal = portal;
             bodyController.OccupiedTileController.ForceRestoreAll();
 
             DebugLog($"Initiating portal movement to {portal.name}");
 
-            StartPortalEnterAnimation();
+            //StartPortalEnterAnimation();
+            ExtendPathToPortalCenter();
             bodyController.CanControl = false;
         }
 
-        private void StartPortalEnterAnimation()
+        void ExtendPathToPortalCenter()
         {
-            if (isEnteringPortal) return;
+            if (targetPortal == null) return;
 
-            isEnteringPortal = true;
+            Vector2Int portalCoord = GameMap.WorldToGridPosition(targetPortal.transform.position);
 
-            if (portalMovementCoroutine != null)
+            List<Vector2Int> extendedPath = new List<Vector2Int>();
+
+            int segmentCount = bodyController.GetOrderedSegments().Count;
+            for (int i = 0; i < segmentCount; i++)
             {
-                StopCoroutine(portalMovementCoroutine);
-                portalMovementCoroutine = null;
+                extendedPath.Add(portalCoord);
             }
 
-            ExtendPathToPortalCenter();
-            StartCoroutine(EnterPortalAnimation());
-
-            void ExtendPathToPortalCenter()
-            {
-                if (targetPortal == null) return;
-
-                Vector2Int portalCoord = GameMap.WorldToGridPosition(targetPortal.transform.position);
-
-                List<Vector2Int> extendedPath = new List<Vector2Int>();
-
-                int segmentCount = bodyController.GetOrderedSegments().Count;
-                for (int i = 0; i < segmentCount; i++)
-                {
-                    extendedPath.Add(portalCoord);
-                }
-
-                bodyController.StartMovePath(extendedPath);
-            }
+            bodyController.StartMovePath(extendedPath);
         }
 
-        private IEnumerator EnterPortalAnimation()
-        {
-            //yield return new WaitForSeconds(1f);
-
-            if (targetPortal == null || bodyController == null) yield break;
-            Vector3 portalCenter = targetPortal.transform.position;
-            var orderedSegments = bodyController.GetOrderedSegments();
-            List<bool> segmentAnimated = new List<bool>(new bool[orderedSegments.Count]);
-            while (!segmentAnimated.All(x => x))
-            {
-                for (int i = 0; i < orderedSegments.Count; i++)
-                {
-                    if (segmentAnimated[i]) continue;
-                    var segment = orderedSegments[i];
-                    float distanceToPortal = Vector3.Distance(segment.transform.position, portalCenter);
-                    if (distanceToPortal <= portalEnterDistance )
-                    { 
-                        Debug.Log($"Animating segment {i} into portal");
-                        segmentAnimated[i] = true;
-                        segment.IsPortalAnimating = true;
-                        StartCoroutine(AnimateSegmentDown(segment, portalCenter, i == orderedSegments.Count - 1));
-                    }
-                }
-                yield return null;
-            }
-        }
-
-        private IEnumerator AnimateSegmentDown(Segment segment, Vector3 portalCenter, bool isLast = false)
+        public IEnumerator AnimateSegmentDown(Segment segment, Vector3 portalCenter, bool isLast = false)
         {
             if (isLast)
             {
