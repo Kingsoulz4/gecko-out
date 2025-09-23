@@ -1,9 +1,10 @@
 using Geckout.Data;
+using Geckout.PathFinding;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using System.Linq;
 
 namespace Geckout
 {
@@ -13,6 +14,10 @@ namespace Geckout
         [SerializeField] protected GameMap m_gameMap;
         [SerializeField] protected BodyController m_bodyPrefab;
         [SerializeField] protected Transform m_bodyParent;
+
+
+        [Header("Tutorial")]
+        [SerializeField] private TutorialHandGuide m_tutorialHandGuide;
 
         private float currentTimeRemaining = 0;
         private Coroutine countDownCoroutine;
@@ -180,6 +185,55 @@ namespace Geckout
             IsFreezingTime = false;
 
         }
+        #endregion
+
+
+        #region Tutorial
+        public void ShowTurialHandGuide(List<Vector3> path)
+        {
+            m_tutorialHandGuide.ShowGuidePath(path);
+        }
+
+        public void ActiveTutLevel1()
+        {
+            StartCoroutine(IEActiveTutLevel1());
+        }
+
+        private IEnumerator IEActiveTutLevel1()
+        {
+            m_tutorialHandGuide.gameObject.SetActive(true);
+            var bodyGuide = ListBody.First();
+            var startCoord = bodyGuide.Segments.First().Coordinate;
+
+            var endCoord = GameMap.ListPortal.Find(x => x.PortalData.listColor.First() == bodyGuide.BodyData.listColor.First()).PortalData.Coordinate;
+            GameMap.TryGetTileAtCoord(endCoord, out var tilePortal);
+            tilePortal.SetOccupied(false);
+
+            bool[] mapState = GameMap.GetCurrentMapState();
+            ASGrid grid = new ASGrid(GameMap.MapSize.x, GameMap.MapSize.y, mapState);
+            var pathfinder = new ASPathFinding(grid);
+
+            var pathMove = new List<Vector3>();
+            pathMove.Add(bodyGuide.Segments.First().transform.position);
+            pathfinder.Reset();
+            pathfinder.FindPath(startCoord, endCoord, (path) =>
+            {
+                path.ForEach(x =>
+                {
+                    GameMap.TryGetTileAtCoord(x.Position, out var tile);
+                    pathMove.Add(tile.transform.position);
+                });
+            });
+
+            while (bodyGuide.gameObject.activeInHierarchy)
+            {
+                ShowTurialHandGuide(pathMove);
+                yield return new WaitForSeconds(2f);
+            }
+
+            m_tutorialHandGuide.gameObject.SetActive(false);
+        }
+
         #endregion
 
     }

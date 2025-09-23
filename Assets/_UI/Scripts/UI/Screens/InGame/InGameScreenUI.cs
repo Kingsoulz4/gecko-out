@@ -340,6 +340,7 @@ public class InGameScreenUI : ScreenUI
     public Vector3 GetClockIconPosition()
     {
         return m_iconClock.transform.position;
-    }    
+    }
     #endregion
+
 }

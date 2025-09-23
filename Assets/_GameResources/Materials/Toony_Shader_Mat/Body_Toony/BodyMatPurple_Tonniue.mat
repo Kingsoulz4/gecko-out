@@ -166,10 +166,10 @@ Material:
     - _UseSpecular: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.6384991, g: 0.29814878, b: 0.9433962, a: 1}
+    - _BaseColor: {r: 0.5137255, g: 0.3764706, b: 0.7372549, a: 1}
     - _Color: {r: 0.66365993, g: 0.28627455, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HColor: {r: 0.9377359, g: 0.5330188, b: 1, a: 1}
+    - _HColor: {r: 0.7372549, g: 0.53333336, b: 1, a: 1}
     - _MatCapColor: {r: 1, g: 1, b: 1, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _ReflectionColor: {r: 1, g: 1, b: 1, a: 1}
