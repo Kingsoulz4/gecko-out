@@ -262,7 +262,7 @@ public class InGameScreenUI : ScreenUI
         }
 
         var boosterUnlock = BoosterManager.Instance.BoosterData.boosterItemDatas.Find(x => x.levelUnlock == LevelManager.Instance.CurrentLevel);
-        if(boosterUnlock != null)
+        if(boosterUnlock != null && boosterUnlock.boosterType != BoosterType.TIME_PRE && boosterUnlock.boosterType != BoosterType.CISSOR)
         {
             var pop = UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
             pop.SetData(boosterUnlock.title, boosterUnlock.description, boosterUnlock.icon);
