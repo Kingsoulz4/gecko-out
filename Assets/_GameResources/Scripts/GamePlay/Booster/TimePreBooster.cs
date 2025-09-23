@@ -46,7 +46,7 @@ public class TimePreBooster : BoosterBase
     {
         if (!IsSelectedToUse) return;
 
-        IsSelectedToUse = true;
+        //IsSelectedToUse = true;
 
         base.ActiveBooster();
         UserDataManager.TimePreBooster = CurrentCount;

@@ -21,7 +21,7 @@ namespace Geckout
         {
             if (!IsSelectedToUse) return;
 
-            IsSelectedToUse = true;
+            //IsSelectedToUse = true;
 
             base.ActiveBooster();
             UserDataManager.TimeIngameBooster = CurrentCount;
