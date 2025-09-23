@@ -26,8 +26,8 @@ MonoBehaviour:
     type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 0}
-    type: 3
-    rotation: {x: 180, y: 90, z: -90}
+    type: 2
+    rotation: {x: 90, y: 90, z: -90}
   - coordinate: {x: 3, y: 0}
     type: 3
     rotation: {x: 180, y: 90, z: -90}
@@ -35,7 +35,7 @@ MonoBehaviour:
     type: 3
     rotation: {x: 180, y: 90, z: -90}
   - coordinate: {x: 5, y: 0}
-    type: 3
+    type: 2
     rotation: {x: 180, y: 90, z: -90}
   - coordinate: {x: 6, y: 0}
     type: 6
@@ -242,7 +242,7 @@ MonoBehaviour:
     type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 9}
-    type: 3
+    type: 2
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 3, y: 9}
     type: 3
@@ -251,8 +251,8 @@ MonoBehaviour:
     type: 3
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 9}
-    type: 3
-    rotation: {x: 0, y: 90, z: -90}
+    type: 2
+    rotation: {x: -90, y: 90, z: -90}
   - coordinate: {x: 6, y: 9}
     type: 6
     rotation: {x: 0, y: 90, z: -90}

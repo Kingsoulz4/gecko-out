@@ -53,8 +53,6 @@ namespace Geckout
         private void Awake()
         {
             _instance = this;
-            //Initialize(levelData);
-
         }
 
         public void ShowHammerIcon()
@@ -69,24 +67,9 @@ namespace Geckout
 
         public void HideHammerIcon()
         {
+            for (int i = 0; i < TilesWall.Count; i++)
             {
-                for (int i = 0; i < TilesWall.Count; i++)
-                {
-                    TilesWall[i].ShowHammer(false);
-                }
-            }
-
-            void CreateContainers()
-            {
-                DestroyContainers();
-                _tilesContainer = CreateChild("TilesContainer");
-                _entitiesContainer = CreateChild("EntitiesContainer");
-            }
-
-            void DestroyContainers()
-            {
-                if (_tilesContainer != null) Destroy(_tilesContainer.gameObject);
-                if (_entitiesContainer != null) Destroy(_entitiesContainer.gameObject);
+                TilesWall[i].ShowHammer(false);
             }
         }
         private Transform CreateChild(string childName)
@@ -95,13 +78,6 @@ namespace Geckout
             child.SetParent(transform);
             child.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             return child;
-        }
-
-        public void Initialize(GameLevelData levelData)
-        {
-            //CreateContainers();
-            //SpawnAllTiles(levelData);
-            //GetAllTilesTest(levelData);
         }
 
         public static Vector3 GetTileWorldPosition(Vector2Int coord)
@@ -165,7 +141,6 @@ namespace Geckout
         void GetAllTilesTest(GameLevelData levelData)
         {
             _mapSize = levelData.mapSize;
-            _entitiesContainer = CreateChild("EntitiesContainer");
             if (_tilesContainer == null)
             {
                 _tilesContainer = GameObject.Find("TilesContainer").transform;
@@ -196,6 +171,10 @@ namespace Geckout
                 levelData.mapTileDatas.Clear();
             }
 
+            _mapSize = levelData.mapSize;
+            tiles = new GameTile[levelData.mapSize.x * levelData.mapSize.y];
+            gridOffset = new Vector2(levelData.mapSize.x - 1, levelData.mapSize.y - 1) * 0.5f;
+
             if (levelData.mapTileDatas != null && levelData.mapTileDatas.Count > 0)
             {
                 SpawnAllTiles(levelData.mapTileDatas);
@@ -205,7 +184,7 @@ namespace Geckout
                 SpawnAllTiles();
             }
 
-            GetAllTilesTest(levelData);
+            //GetAllTilesTest(levelData);
 
             SpawnPortals();
 
@@ -331,6 +310,8 @@ namespace Geckout
                     obj.transform.localPosition = pos;
                     obj.transform.localScale = Vector3.one * cubeSize;
                     obj.name = $"Tile_{c.x}_{c.y}_{tile.type}";
+                    tiles[x + y * _mapSize.x] = obj;
+                    obj.InitializeMaterials(defaultMaterial, moveMaterial);
                     obj.Initialize(tile);
                 }
             }
@@ -386,6 +367,8 @@ namespace Geckout
                 obj.SetCoordinate(c.x, c.y);
                 obj.transform.localPosition = pos;
                 obj.transform.localScale = Vector3.one * cubeSize;
+                tiles[c.x + c.y * levelData.mapSize.x] = obj;
+                obj.InitializeMaterials(defaultMaterial, moveMaterial);
                 obj.Initialize(tile);
 
                 if (tile.type != MapTileType.Portal && tile.type != MapTileType.Normal)
@@ -424,52 +407,86 @@ namespace Geckout
             var wallCornerPrefab = m_tileWallCorner;
             var wallEdgePrefab = m_tileWallEdge;
 
-            var angleCornerBottomLeft = new Vector3(270, -90, 90);
+            var angleCornerBottomLeft = new Vector3Int(270, -90, 90);
             PlaceWall(wallCornerPrefab, new Vector2Int(-1, -1), cellSize, cubeSize, centerOffset, "Corner_BottomLeft", angleCornerBottomLeft);
-            var angleCornerBottomRight = new Vector3(0, -90, 90);
+            var angleCornerBottomRight = new Vector3Int(0, -90, 90);
             PlaceWall(wallCornerPrefab, new Vector2Int(gridSize.x, -1), cellSize, cubeSize, centerOffset, "Corner_BottomRight", angleCornerBottomRight);
-            var angleCornerTopLeft = new Vector3(0, 90, -90);
+            var angleCornerTopLeft = new Vector3Int(0, 90, -90);
             PlaceWall(wallCornerPrefab, new Vector2Int(-1, gridSize.y), cellSize, cubeSize, centerOffset, "Corner_TopLeft", angleCornerTopLeft);
-            var angleCornerTopRight = new Vector3(90, -90, 90);
+            var angleCornerTopRight = new Vector3Int(90, -90, 90);
             PlaceWall(wallCornerPrefab, new Vector2Int(gridSize.x, gridSize.y), cellSize, cubeSize, centerOffset, "Corner_TopRight", angleCornerTopRight);
 
             // Bottom edge
-            var angleBottomEdge = new Vector3(180, 90, -90);
+            var angleBottomEdge = new Vector3Int(180, 90, -90);
             for (int x = 0; x < gridSize.x; x++)
-                PlaceWall(wallEdgePrefab, new Vector2Int(x, -1), cellSize, cubeSize, centerOffset, $"Wall_Bottom_{x}", angleBottomEdge);
+                PlaceWall(wallEdgePrefab, new Vector2Int(x, -1), cellSize, cubeSize, centerOffset, $"Wall_Bottom_{x}", angleBottomEdge, Vector3.down);
 
             // Top edge
-            var angleTopEdge = new Vector3(0, 90, -90);
+            var angleTopEdge = new Vector3Int(0, 90, -90);
             for (int x = 0; x < gridSize.x; x++)
-                PlaceWall(wallEdgePrefab, new Vector2Int(x, gridSize.y), cellSize, cubeSize, centerOffset, $"Wall_Top_{x}", angleTopEdge);
+                PlaceWall(wallEdgePrefab, new Vector2Int(x, gridSize.y), cellSize, cubeSize, centerOffset, $"Wall_Top_{x}", angleTopEdge, Vector3.up);
 
             // Left edge
-            var angleLeftEdge = new Vector3(270, -90, 90);
+            var angleLeftEdge = new Vector3Int(-90, 90, -90);
             for (int y = 0; y < gridSize.y; y++)
-                PlaceWall(wallEdgePrefab, new Vector2Int(-1, y), cellSize, cubeSize, centerOffset, $"Wall_Left_{y}", angleLeftEdge);
+                PlaceWall(wallEdgePrefab, new Vector2Int(-1, y), cellSize, cubeSize, centerOffset, $"Wall_Left_{y}", angleLeftEdge, Vector3.left);
 
             // Right edge
-            var angleRightEdge = new Vector3(90, -90, 90);
+            var angleRightEdge = new Vector3Int(90, 90, -90);
             for (int y = 0; y < gridSize.y; y++)
-                PlaceWall(wallEdgePrefab, new Vector2Int(gridSize.x, y), cellSize, cubeSize, centerOffset, $"Wall_Right_{y}", angleRightEdge);
+                PlaceWall(wallEdgePrefab, new Vector2Int(gridSize.x, y), cellSize, cubeSize, centerOffset, $"Wall_Right_{y}", angleRightEdge, Vector3.right);
         }
 
-        private void PlaceWall(GameTile prefab, Vector2Int c, float cellSize, float cubeSize, Vector3 centerOffset, string name, Vector3 localRotation)
+        private void PlaceWall(GameTile prefab, Vector2Int c, float cellSize, float cubeSize, Vector3 centerOffset, string name, Vector3Int localRotation, Vector3 dir = default)
         {
             if (prefab == null) return;
 
             Vector3 pos = new Vector3(c.x * cellSize, c.y * cellSize, 0) - centerOffset;
 
-            GameObject obj;
+            var tileData = new MapTileData();
+            tileData.coordinate = c;
+
+            bool haveEdge = false;
+
+            if (dir == Vector3.left)
+            {
+                GameMap.TryGetTileAtCoord(c + Vector2Int.right, out var tileLeft);
+                haveEdge = !(tileLeft == null || (tileLeft.MapTileData.type != MapTileType.Normal && tileLeft.MapTileData.type != MapTileType.Portal));
+            }
+            else if (dir == Vector3.right)
+            {
+                GameMap.TryGetTileAtCoord(c + Vector2Int.left, out var tileRight);
+                haveEdge = !(tileRight == null 
+                    || (tileRight.MapTileData.type != MapTileType.Normal && tileRight.MapTileData.type != MapTileType.Portal));
+            }
+            else if(dir == Vector3.up)
+            {
+                GameMap.TryGetTileAtCoord(c + Vector2Int.down, out var tileUp);
+                haveEdge = !(tileUp == null || (tileUp.MapTileData.type != MapTileType.Normal && tileUp.MapTileData.type != MapTileType.Portal));
+            }
+            else if(dir == Vector3.down)
+            {
+                GameMap.TryGetTileAtCoord(c + Vector2Int.up, out var tileDown);
+                haveEdge = !(tileDown == null || (tileDown.MapTileData.type != MapTileType.Normal && tileDown.MapTileData.type != MapTileType.Portal));
+            }
+
+           
+
+            GameTile obj;
 #if UNITY_EDITOR
-            obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, m_wallContainer)).gameObject;
+            obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, m_wallContainer));
 #else
-            obj = Instantiate(prefab.gameObject, m_wallContainer);
+            obj = Instantiate(prefab, m_wallContainer);
 #endif
             obj.name = name;
             obj.transform.localPosition = pos;
             obj.transform.localScale = Vector3.one * cubeSize;
-            obj.transform.localRotation = Quaternion.Euler(localRotation);
+            //obj.transform.localRotation = Quaternion.Euler(localRotation);
+            obj.RotateTo(localRotation);
+            obj.SetOccupied(true);
+
+            if (!haveEdge) obj.SetTileType(MapTileType.WallCenter);
+            else obj.SetTileType(MapTileType.Wall1Side);
         }
 
         void SpawnAllTiles(GameLevelData levelData)

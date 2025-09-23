@@ -43,11 +43,13 @@ namespace Geckout
             {
                 UserDataManager.AddHeart(1, "test", false);
                 LevelManager.Instance.StartLevel(LevelManager.Instance.CurrentLevel -= 1);
+                UIManager.Instance.GetScreenActive<InGameScreenUI>().UpdateUI();
             });
             btn_nextLevel.onClick.AddListener(() =>
             {
                 UserDataManager.AddHeart(1, "test", false);
                 LevelManager.Instance.StartLevel(LevelManager.Instance.CurrentLevel += 1);
+                UIManager.Instance.GetScreenActive<InGameScreenUI>().UpdateUI();
             });
         }
 
