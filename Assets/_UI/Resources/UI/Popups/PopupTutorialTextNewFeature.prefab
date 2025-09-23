@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6943a82038887d645a88775e92adb41a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCache: 0
+  isCache: 1
   isAniClose: 1
   duration: 0.3
   animType: 2
