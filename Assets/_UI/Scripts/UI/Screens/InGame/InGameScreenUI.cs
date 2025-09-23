@@ -89,12 +89,16 @@ public class InGameScreenUI : ScreenUI
         hammerBoosterCount.Init(UserDataManager.HammerBooster, BoosterType.HAMMER);
         handMoveBoosterCount.Init(UserDataManager.HandMoveBooster, BoosterType.HAND_MOVE);
         //suffleBoosterCount.Init(UserDataManager.SuffleBooster, BoosterType.SUFFLE);
+    }
 
-       
+    private void OnDisable()
+    {
+        HideAllTuts();
     }
 
     private void OnDestroy()
     {
+        HideAllTuts();
         if (BoosterManager.Instance == null) return;
         foreach (var booster in BoosterManager.Instance.Boosters)
         {
@@ -269,6 +273,16 @@ public class InGameScreenUI : ScreenUI
         }
             
     }
+
+    private void HideAllTuts()
+    {
+        var popupTut = UIManager.Instance.GetPopupActive<PopupTutorialTextNewFeature>();
+        if(popupTut != null)
+        {
+            popupTut.Hide();
+        }    
+    }
+        
 
     public void UpdateTimeText(float timeLevel)
     {
