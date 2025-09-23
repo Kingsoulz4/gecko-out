@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace Geckout
 {
+    [DefaultExecutionOrder(-10)]
     public class TestManager : SingletonMono<TestManager>
     {
         [SerializeField] Button btn_Load;
@@ -36,11 +37,13 @@ namespace Geckout
             {
                 UserDataManager.AddHeart(1, "test", false);
                 LevelManager.Instance.StartLevel(LevelManager.Instance.CurrentLevel -= 1);
+                UIManager.Instance.GetScreenActive<InGameScreenUI>().UpdateUI();
             });
             btn_nextLevel.onClick.AddListener(() =>
             {
                 UserDataManager.AddHeart(1, "test", false);
                 LevelManager.Instance.StartLevel(LevelManager.Instance.CurrentLevel += 1);
+                UIManager.Instance.GetScreenActive<InGameScreenUI>().UpdateUI();
             });
         }
 

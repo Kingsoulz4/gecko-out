@@ -220,12 +220,18 @@ public class InGameScreenUI : ScreenUI
     public override void Active()
     {
         base.Active();
-        txt_Level.text = $"{LevelManager.Instance.CurrentLevel}";
         currentTopY = rect_Top.anchoredPosition.y;
-        UpdateTimeText(LevelController.CurrentTimeLevelRemaining);
-        UpdateTimeBar();
+        UpdateUI();
         PoupNewFeature();
     }
+
+    public void UpdateUI()
+    {
+        txt_Level.text = $"{LevelManager.Instance.CurrentLevel}";
+        UpdateTimeText(LevelController.CurrentTimeLevelRemaining);
+        UpdateTimeBar();
+    }
+        
 
     private void UpdateTimeBar()
     {
@@ -242,8 +248,16 @@ public class InGameScreenUI : ScreenUI
         var feature = NewFeatureManager.Instance.GetNewFeatureInProgress();
         if (feature != null && LevelManager.Instance.CurrentLevel == feature.level && UserDataManager.LastFeatureCount < feature.level)
         {
-            UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
-            UserDataManager.LastFeatureCount = feature.level;
+            if (feature.displayType == NewFeatureTutDisplayType.POPOP_VID)
+            {
+                UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
+                UserDataManager.LastFeatureCount = feature.level;
+            }
+            else
+            {
+                var pop = UIManager.Instance.ShowPopup<PopupTutorialTextNewFeature>(null);
+                pop.SetData(feature);
+            }
         }
     }
 
