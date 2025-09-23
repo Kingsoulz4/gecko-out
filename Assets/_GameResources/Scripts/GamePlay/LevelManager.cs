@@ -1,7 +1,12 @@
 using Geckout.Data;
+using Geckout.PathFinding;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.NetworkInformation;
 using UnityEngine;
+using static DG.Tweening.DOTweenAnimation;
 
 namespace Geckout
 {
@@ -164,12 +169,22 @@ namespace Geckout
         public void OnStartGame(int level)
         {
             LevelGame.StartLevel();
+
+            CheckShowTutorials();
+
             ActiveBeginingBoosters();
+        }
+
+        private void CheckShowTutorials()
+        {
+            if(CurrentLevel == 1 || CurrentLevel == 2)
+            {
+                LevelGame.ActiveTutLevel1();
+            }
         }
 
         private void ActiveBeginingBoosters()
         {
-
             StartCoroutine(IEActiveBeginingBoosters());
         }
 
