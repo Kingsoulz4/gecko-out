@@ -72,6 +72,10 @@ namespace Geckout
             if (isLast)
             {
                 bodyController.StopMoveCoroutine();
+                this.Wait(Time.deltaTime * 6, () =>
+                {
+                    TargetPortal.PlayDoneAnim();
+                });
             }
 
             Vector3 startPos = segment.transform.position;
@@ -148,7 +152,6 @@ namespace Geckout
             bodyController.OccupiedTileController.ClearAllOccupied();
             LevelEvent.OnMoveToPortalDone?.Invoke(bodyController, targetPortal);
             DebugLog("Finish move portal");
-            targetPortal.PlayDoneAnim();
             gameObject.SetActive(false);
             ResetPortalState();
         }
