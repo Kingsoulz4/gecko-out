@@ -31,7 +31,7 @@ namespace Geckout
             {
                 btn_Gold.onClick.AddListener(showPopupMiniShop);
             }
-           
+            txt_Gold.text = UserDataManager.Gold + "";
         }
 
         private void showPopupMiniShop()

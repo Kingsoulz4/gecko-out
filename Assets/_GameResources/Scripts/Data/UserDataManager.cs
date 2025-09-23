@@ -37,8 +37,8 @@ public class UserDataManager : MonoBehaviour
 
     public static void AddGold(int value, string where, bool isLog = false, string reason = "", float timeDelay = 0)
     {
+        Gold = Mathf.Clamp(Gold + value, 0, int.MaxValue);
         OnUpdateGold?.Invoke(Gold, value + Gold, timeDelay);
-        Gold = value;
     }
 
     public static Action<int, int, bool> OnAddHeart;
