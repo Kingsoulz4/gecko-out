@@ -287,7 +287,7 @@ MonoBehaviour:
   tubeRadius: 0.6
   _tubeGenerator: {fileID: 9047026933609085666}
   m_arrowSprite: {fileID: 5584027278633758856}
-  m_listBodyColor: {fileID: 11400000, guid: 58e29ccb3985dee4482a8db47cc64ff1, type: 2}
+  m_listBodyColor: {fileID: 11400000, guid: 29487e4b2a151d7488d00ae616a352d4, type: 2}
 --- !u!114 &2788433321168617802
 MonoBehaviour:
   m_ObjectHideFlags: 0
