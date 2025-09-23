@@ -23,6 +23,7 @@ namespace Geckout
         private void OnEnable()
         {
             UserDataManager.OnUpdateGold += UpdateTextGold;
+            setUpVisual();
         }
 
         private void setUpVisual()

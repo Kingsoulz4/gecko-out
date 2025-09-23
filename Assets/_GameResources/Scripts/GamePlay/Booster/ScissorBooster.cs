@@ -54,7 +54,7 @@ namespace Geckout
             float flightDuration = 0.5f;
 
             Vector3 startPos = scissorObject.transform.position;
-            Vector3 endPos = target.position;
+            Vector3 endPos = target.position - Vector3.forward * 0.5f;
             Transform controlPointA = null;
             Transform controlPointB = null;
             Vector3 cpA = controlPointA ? controlPointA.position : (startPos + (endPos - startPos) * 0.33f + new Vector3(3, 2, 0));
@@ -65,10 +65,15 @@ namespace Geckout
 
             Tween flightTween = scissorObject.transform
                 .DOPath(path, flightDuration, PathType.CatmullRom, PathMode.Full3D, 10, Color.green)
-                .SetEase(Ease.InOutSine)
-                .SetLookAt(0.01f); // rotate toward movement
+                .SetEase(Ease.InOutSine);
+                //.SetLookAt(0.01f); // rotate toward movement
 
             yield return new WaitForSeconds(flightDuration);
+
+            scissorObject.transform.DOLocalRotate(Vector3.forward * 30, 0.5f).SetLoops(2, LoopType.Yoyo);
+
+            yield return new WaitForSeconds(0.8f);
+
             body.CutOutLastSegment();
             yield return new WaitForSeconds(0.5f);
             Destroy(scissorObject.gameObject);
