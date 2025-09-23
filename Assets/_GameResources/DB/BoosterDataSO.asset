@@ -15,7 +15,7 @@ MonoBehaviour:
   boosterItemDatas:
   - boosterType: 0
     title: Freeze Time
-    description: Freezes time for 20 seconds
+    description: Freeze timer for 10 seconds
     icon: {fileID: 21300000, guid: 77695f78dff86fd47bc37a323a96affe, type: 3}
     iconBig: {fileID: 21300000, guid: 77695f78dff86fd47bc37a323a96affe, type: 3}
     price: 900
@@ -23,7 +23,7 @@ MonoBehaviour:
     levelUnlock: 13
   - boosterType: 2
     title: Hammer
-    description: Tap Wall To Destroy
+    description: Break any wall on the playing area
     icon: {fileID: 21300000, guid: df0c0932fc9e2394c823dbc589e20fb0, type: 3}
     iconBig: {fileID: 21300000, guid: df0c0932fc9e2394c823dbc589e20fb0, type: 3}
     price: 1400
@@ -31,7 +31,7 @@ MonoBehaviour:
     levelUnlock: 9
   - boosterType: 4
     title: Hand pick
-    description: Pick a Dog To  Move
+    description: Pick any dog and put in the hole
     icon: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     price: 1900
@@ -39,7 +39,7 @@ MonoBehaviour:
     levelUnlock: 15
   - boosterType: 1
     title: Add Time
-    description: Add Time In Game
+    description: Use "Add Time" booster to get +5 second at the start of the level
     icon: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     price: 900
@@ -47,7 +47,7 @@ MonoBehaviour:
     levelUnlock: 16
   - boosterType: 3
     title: Scissor
-    description: Cut out Dog
+    description: Use "Scissors" booster to shorten a random dog
     icon: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     price: 900

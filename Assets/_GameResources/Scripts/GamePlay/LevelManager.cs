@@ -217,6 +217,9 @@ namespace Geckout
                 {
                     yield return new WaitUntil(() => !scissorBooster.InProgress);
                 }
+
+                timeBeginBooster.IsSelectedToUse = false;
+                scissorBooster.IsSelectedToUse = false;
             }
 
             GameManager.Instance.SetGameState(GameState.Playing);
