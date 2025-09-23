@@ -138,6 +138,7 @@ MonoBehaviour:
   - {fileID: 5929815014859267425}
   m_mechanicReferences: {fileID: 11400000, guid: 02be985aef8091640a0461956780b270, type: 2}
   icePortal: {fileID: -7696578326260665323}
+  visual: {fileID: 243650831360515256}
 --- !u!114 &-7696578326260665323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,15 +162,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 2e87de4806b9daa48a679b845c37236f, type: 3}
       propertyPath: m_LocalScale.x
-      value: 43
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2e87de4806b9daa48a679b845c37236f, type: 3}
       propertyPath: m_LocalScale.y
-      value: 43
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2e87de4806b9daa48a679b845c37236f, type: 3}
       propertyPath: m_LocalScale.z
-      value: 43
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2e87de4806b9daa48a679b845c37236f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -235,6 +236,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 5929815014859267425}
   m_SourcePrefab: {fileID: 100100000, guid: 2e87de4806b9daa48a679b845c37236f, type: 3}
+--- !u!1 &243650831360515256 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2e87de4806b9daa48a679b845c37236f, type: 3}
+  m_PrefabInstance: {fileID: 1126171426092868073}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &588370179051259394 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2e87de4806b9daa48a679b845c37236f, type: 3}
@@ -295,3 +301,4 @@ MonoBehaviour:
       Value: {fileID: 2100000, guid: bc09f8cd0f70bf54b908bd088c3ab0ee, type: 2}
     - Key: 14
       Value: {fileID: 2100000, guid: f053de6b1f1dfb143b1a74b47f594f21, type: 2}
+  m_listMaterialByColor: {fileID: 0}

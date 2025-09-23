@@ -47,8 +47,8 @@ public class Hammer : MonoBehaviour
         OnDone?.Invoke();
     }
 
-    public void Destroy()
+    public void OnDestroy()
     {
-        Destroy(gameObject);
+        tweenMove.Kill();
     }
 }

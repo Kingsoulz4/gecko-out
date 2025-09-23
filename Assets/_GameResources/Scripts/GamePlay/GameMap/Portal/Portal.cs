@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Geckout.Data;
 using System;
 using System.Collections;
@@ -13,6 +14,7 @@ namespace Geckout
         [SerializeField] private List<BodyPartColorChanger> bodyPartColorChangers = new();
         [SerializeField] private MechanicsReferences m_mechanicReferences;
         [SerializeField] private IcePortal icePortal;
+        [SerializeField] private GameObject visual;
 
         private List<MechanicRendererBase> listMechanicRender = new();
         private bool isMovingToPortal = false;
@@ -44,6 +46,19 @@ namespace Geckout
             {
                 MoveToPortal(segment);
             }
+        }
+
+        public void PlayDoneAnim()
+        {
+            visual.transform.DOScale(Vector3.zero, 0.2f).OnComplete(() =>
+            {
+                Disappear();
+            }).SetId(this);
+        }
+
+        private void OnDisable()
+        {
+            DOTween.Kill(this);
         }
 
         protected virtual void MoveToPortal(Segment segment)
@@ -91,7 +106,7 @@ namespace Geckout
             bodyPartColorChangers.ForEach(x => x.UpdateColor(PortalData.listColor.First()));
         }
 
-        internal void Disappear()
+        private void Disappear()
         {
             this.gameObject.SetActive(false);
         }
