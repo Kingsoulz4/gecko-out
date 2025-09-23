@@ -51,7 +51,7 @@ namespace Geckout
         {
             m_textLevel.text = $"Level {LevelManager.Instance.CurrentLevel}";
             m_buttonSelectBoosterTime.Init(BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.TIME_PRE).levelUnlock, UserDataManager.TimePreBooster);
-            m_buttonSelectBoosterScissor.Init(BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.TIME_PRE).levelUnlock, UserDataManager.CissorBooster);
+            m_buttonSelectBoosterScissor.Init(BoosterManager.Instance.BoosterData.GetBoosterItemData(BoosterType.CISSOR).levelUnlock, UserDataManager.CissorBooster);
         }
             
 
