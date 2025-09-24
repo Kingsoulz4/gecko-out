@@ -33,7 +33,7 @@ public class Hammer : MonoBehaviour
         });
     }
 
-    public void SmashDone()
+    public void SmashDone()// Animation event
     {
         //LevelManager.Instance.CameraController.ShakeCamera();
         if (smashClip)
@@ -47,7 +47,7 @@ public class Hammer : MonoBehaviour
         OnDone?.Invoke();
     }
 
-    public void OnDestroy()
+    public void Destroy()// Animation event
     {
         tweenMove.Kill();
     }
