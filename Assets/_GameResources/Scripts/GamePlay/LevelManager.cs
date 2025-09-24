@@ -108,24 +108,34 @@ namespace Geckout
         {
             var levelData = LoadLevel(CurrentLevel, CurrentLevelSetID);
             return levelData.type;
-        }    
+        }
 
         #region GameState
 
         public void OnLoseGame(int level)
         {
-            var popupLose = UIManager.Instance.ShowPopup<PopupLose>(() =>
+            if (BoosterManager.Instance.BoosterData.boosterItemDatas.First().levelUnlock > CurrentLevel)
             {
-                //UIManager.Instance.ShowScreen<MainScreenUI>();
-            });
+                var popupLose = UIManager.Instance.ShowPopup<PopupLose>(null);
 
-            HeartManager.UseHeart(1);
+                HeartManager.UseHeart(1);
 
-            popupLose.OnClose = () =>
+                popupLose.OnClose = () =>
+                {
+                    UIManager.Instance.ShowScreen<MainScreenUI>();
+                };
+                popupLose.OnRetry = OnRetryGame;
+            }
+            else
             {
-                UIManager.Instance.ShowScreen<MainScreenUI>();
-            };
-            popupLose.OnRetry = OnRetryGame;
+                var popupLose = UIManager.Instance.ShowPopup<PopupLoseHaveSelectBooster>(null);
+                popupLose.OnClose = () =>
+                {
+                    UIManager.Instance.ShowScreen<MainScreenUI>();
+                };
+                popupLose.OnRetry = OnRetryGame;
+
+            }
         }
 
         public void OnRetryGame()
