@@ -249,8 +249,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCache: 1
   isAniClose: 1
+  duration: 0.3
   animType: 2
   mainPopUp: {fileID: 4964511045247718339}
+  m_background: {fileID: 3982887445572084129}
   m_buttonRetry: {fileID: 2414967931837647645}
   m_buttonClose: {fileID: 3348094472192806340}
   m_textLevel: {fileID: 6173115639970994033}

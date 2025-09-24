@@ -45,7 +45,7 @@ namespace Geckout
             {
                 return;
             }
-            txt_Gold.DOCounter(goldCurrent, goldUpdate, 0.75f).SetDelay(timeDelay).SetId(this).OnComplete(() =>
+            txt_Gold.DOCounter(goldCurrent, goldUpdate, 0.75f, addThousandsSeparator: false).SetDelay(timeDelay).SetId(this).OnComplete(() =>
             {
                 txt_Gold.text = UIManager.FormatString(goldUpdate);
             });

@@ -15,6 +15,8 @@ namespace Geckout
         [SerializeField] private LevelController m_levelGameOriginal;
         [SerializeField] private int levelTest;
 
+        private SortedDictionary<int, IFlowCallback> queueFlowStartGame = new();
+
         public bool IsEdittingLevel { get; set; } = false;
 
         private LevelController levelGame;
@@ -106,24 +108,34 @@ namespace Geckout
         {
             var levelData = LoadLevel(CurrentLevel, CurrentLevelSetID);
             return levelData.type;
-        }    
+        }
 
         #region GameState
 
         public void OnLoseGame(int level)
         {
-            var popupLose = UIManager.Instance.ShowPopup<PopupLose>(() =>
+            if (BoosterManager.Instance.BoosterData.boosterItemDatas.First().levelUnlock > CurrentLevel)
             {
-                //UIManager.Instance.ShowScreen<MainScreenUI>();
-            });
+                var popupLose = UIManager.Instance.ShowPopup<PopupLose>(null);
 
-            HeartManager.UseHeart(1);
+                HeartManager.UseHeart(1);
 
-            popupLose.OnClose = () =>
+                popupLose.OnClose = () =>
+                {
+                    UIManager.Instance.ShowScreen<MainScreenUI>();
+                };
+                popupLose.OnRetry = OnRetryGame;
+            }
+            else
             {
-                UIManager.Instance.ShowScreen<MainScreenUI>();
-            };
-            popupLose.OnRetry = OnRetryGame;
+                var popupLose = UIManager.Instance.ShowPopup<PopupLoseHaveSelectBooster>(null);
+                popupLose.OnClose = () =>
+                {
+                    UIManager.Instance.ShowScreen<MainScreenUI>();
+                };
+                popupLose.OnRetry = OnRetryGame;
+
+            }
         }
 
         public void OnRetryGame()
@@ -172,7 +184,13 @@ namespace Geckout
 
             CheckShowTutorials();
 
-            ActiveBeginingBoosters();
+            var popupTutNewFeature = UIManager.Instance.GetPopup<PopupTutorialNewFeature>();
+            InjectToFlowStartGame(popupTutNewFeature, 1);
+            var popupWarningDifficultLevel = UIManager.Instance.GetPopup<PopupWarningDifficultLevel>();
+            InjectToFlowStartGame(popupWarningDifficultLevel, 0);
+
+            ExecuteNextFlowStep();
+
         }
 
         private void CheckShowTutorials()
@@ -181,49 +199,6 @@ namespace Geckout
             {
                 LevelGame.ActiveTutLevel1();
             }
-        }
-
-        private void ActiveBeginingBoosters()
-        {
-            StartCoroutine(IEActiveBeginingBoosters());
-        }
-
-        private IEnumerator IEActiveBeginingBoosters()
-        {
-            yield return new WaitForEndOfFrame();
-            GameManager.Instance.SetGameState(GameState.Paused);
-            var timeBeginBooster = (TimePreBooster)BoosterManager.Instance.TimePreBooster;
-            var scissorBooster = (ScissorBooster)BoosterManager.Instance.ScissorBooster;
-            if (timeBeginBooster.IsSelectedToUse || scissorBooster.IsSelectedToUse)
-            {
-                if (timeBeginBooster.IsSelectedToUse)
-                {
-                    timeBeginBooster.ActiveBooster();
-                    LevelGame.AddTime(timeBeginBooster.bonusTime);
-                    
-                }
-
-                if (scissorBooster.IsSelectedToUse)
-                {
-                    scissorBooster.ActiveBooster(LevelGame.ListBody.Find(x => x.Length > 3));
-                }
-
-                if (timeBeginBooster.IsSelectedToUse)
-                {
-                    yield return new WaitUntil(() => !timeBeginBooster.InProgress);
-                    UIManager.Instance.GetScreenActive<InGameScreenUI>().ShowAddTimeAnim((int)timeBeginBooster.bonusTime);
-                }
-                if (scissorBooster.IsSelectedToUse)
-                {
-                    yield return new WaitUntil(() => !scissorBooster.InProgress);
-                }
-
-                timeBeginBooster.IsSelectedToUse = false;
-                scissorBooster.IsSelectedToUse = false;
-            }
-
-            GameManager.Instance.SetGameState(GameState.Playing);
-
         }
 
         public void OnWinGame(int level)
@@ -242,6 +217,42 @@ namespace Geckout
             StartCurrentLevel();
             UIManager.Instance.ShowScreen<InGameScreenUI>();
         }
+        #endregion
+
+        #region Flow Start Game
+
+        public void InjectToFlowStartGame(IFlowCallback step, int priority = -1)
+        {
+            if (priority < 0)
+            {
+                queueFlowStartGame[queueFlowStartGame.Count] = step;
+            }
+            else
+            {
+                queueFlowStartGame[priority] = step;
+            }
+        }
+
+        public void ExecuteNextFlowStep()
+        {
+            if (queueFlowStartGame.Count <= 0)
+            {
+                DoneFlowStartGame();
+                return;
+            }
+
+            var topElement = queueFlowStartGame.First();
+            queueFlowStartGame.Remove(topElement.Key);
+            topElement.Value.Execute(ExecuteNextFlowStep);
+            
+        }
+
+        public void DoneFlowStartGame()
+        {
+            GameManager.Instance.SetGameState(GameState.Playing);
+
+        }
+
         #endregion
     }
 }

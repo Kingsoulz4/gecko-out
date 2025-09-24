@@ -40,15 +40,15 @@ namespace Geckout
         private List<BoxMove> listMovableBox = new();
         private List<Crate> listCrate = new();
         private List<GameTile> tileInGame = new();
+        private List<GameTile> listWallBorder = new();
 
         private static Vector2 gridOffset;
 
         public static Vector2Int MapSize => _instance._mapSize;
-
         public List<Portal> ListPortal { get => listPortal; }
-
         public bool IsDebug { get => isDebug; }
         public List<GameTile> TilesWall { get => tileInGame; set => tileInGame = value; }
+        public List<GameTile> ListWallBorder { get => listWallBorder; }
 
         private void Awake()
         {
@@ -135,6 +135,21 @@ namespace Geckout
             }
 
             result = listPortal.Find(x => x.PortalData.Coordinate == coordinate);
+            return result != null;
+        }
+
+        public bool TryGetWallBorderAtCoord(Vector2Int coordinate, out GameTile result)
+        {
+            var x = coordinate.x;
+            var y = coordinate.y;
+            if (x < 0 || y < 0 || x >= _instance.levelData.mapSize.x || y >= _instance.levelData.mapSize.y)
+            {
+                result = null;
+                return false;
+            }
+
+            result = _instance.ListWallBorder.ToList().Find(x => x.Coordinate == coordinate);
+
             return result != null;
         }
 
@@ -490,8 +505,6 @@ namespace Geckout
                 haveEdge = !(tileDown == null || (tileDown.MapTileData.type != MapTileType.Normal && tileDown.MapTileData.type != MapTileType.Portal));
             }
 
-
-
             GameTile obj;
 #if UNITY_EDITOR
             obj = ((GameTile)PrefabUtility.InstantiatePrefab(prefab, m_wallContainer));
@@ -504,11 +517,23 @@ namespace Geckout
             //obj.transform.localRotation = Quaternion.Euler(localRotation);
             obj.RotateTo(localRotation);
             obj.SetOccupied(true);
-            obj.SetCoordinate(0, 2);
+            listWallBorder.Add(obj);
             if (!haveEdge) obj.SetTileType(MapTileType.WallCenter);
             else obj.SetTileType(MapTileType.Wall1Side);
 
             return obj;
+        }
+
+        public void UpdateVisualAllBorderWalls()
+        {
+            foreach (var wallBorder in ListWallBorder)
+            {
+                TryGetTileAtCoord(wallBorder.Coordinate, out var tileLeft);
+                bool haveEdge = !(tileLeft == null || (tileLeft.MapTileData.type != MapTileType.Normal && tileLeft.MapTileData.type != MapTileType.Portal));
+                if (!haveEdge) wallBorder.SetTileType(MapTileType.WallCenter);
+                else wallBorder.SetTileType(MapTileType.Wall1Side);
+                wallBorder.RotateTo(wallBorder.MapTileData.rotation);
+            }
         }
 
         public static Vector2Int WorldToGridPositionForward(Vector3 worldPos, BodyController bodyController)

@@ -1961,8 +1961,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCache: 0
   isAniClose: 1
+  duration: 0.3
   animType: 0
   mainPopUp: {fileID: 5588991502934135257}
+  m_background: {fileID: 2295181956545337443}
   m_buttonClaimByCoin: {fileID: 4574129932080184734}
   m_buttonClaimByAds: {fileID: 1314038512087935062}
   m_buttonClose: {fileID: 4725981238346490363}

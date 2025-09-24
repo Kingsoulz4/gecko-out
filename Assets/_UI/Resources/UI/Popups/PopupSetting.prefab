@@ -1722,6 +1722,7 @@ MonoBehaviour:
   duration: 0.3
   animType: 2
   mainPopUp: {fileID: 4115894757074722732}
+  m_background: {fileID: 3167227791542685982}
   btn_Close: {fileID: 2419343150435730750}
   btn_Restore: {fileID: 6938155999441099013}
   m_buttonExitGame: {fileID: 8143248847520853272}

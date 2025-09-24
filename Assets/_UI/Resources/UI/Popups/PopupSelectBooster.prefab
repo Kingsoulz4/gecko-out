@@ -59,7 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -770,6 +770,7 @@ MonoBehaviour:
   duration: 0.3
   animType: 0
   mainPopUp: {fileID: 5827286767857965272}
+  m_background: {fileID: 6393150696430908877}
   m_buttonPlay: {fileID: 5650797489322643285}
   m_buttonClose: {fileID: 8072416688040864337}
   m_textLevel: {fileID: 950270103729070514}
