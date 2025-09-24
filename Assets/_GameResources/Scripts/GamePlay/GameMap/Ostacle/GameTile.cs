@@ -155,7 +155,7 @@ namespace Geckout
         public void RotateTo(Vector3Int angle)
         {
             if (m_displayObject != null)
-            m_displayObject.transform.localRotation = Quaternion.Euler(angle);
+                m_displayObject.transform.localRotation = Quaternion.Euler(angle);
             MapTileData.rotation = angle;
         }
 
@@ -172,7 +172,7 @@ namespace Geckout
         }
         public void SetCoordinate(int x, int y)
         {
-            Coordinate = new Vector2Int(x, y);
+            MapTileData.coordinate = new Vector2Int(x, y);
         }
 
         #region Occupancy Management

@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 6955255214888356487}
   - component: {fileID: 960298377915506980}
   - component: {fileID: 5415367166614964074}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TileWallCorner
   m_TagString: Untagged
   m_Icon: {fileID: 0}

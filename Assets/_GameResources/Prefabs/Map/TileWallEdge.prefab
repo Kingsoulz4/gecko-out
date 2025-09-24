@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 721760344505821029}
   - component: {fileID: 7480928374373256390}
   - component: {fileID: 2424358606838639240}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TileWallEdge
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -420,11 +420,6 @@ namespace Geckout
                 GameTile tile = hit.collider.transform.GetComponent<GameTile>();
                 if (tile != null)
                 {
-                    // Chỉ block occupied tiles trong drag mode
-                    if (tile.IsOccupied && isDragging)
-                    {
-                        return null;
-                    }
                     return tile.Coordinate;
                 }
                 else
@@ -432,7 +427,6 @@ namespace Geckout
                     DebugLog("Raycast hit but no GameTile component found");
                 }
             }
-
             return null;
         }
 
