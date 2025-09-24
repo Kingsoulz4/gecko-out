@@ -43,7 +43,7 @@ namespace Geckout
                 // Offset the angle by +90 degrees so the head points correctly
                 Quaternion targetRot = Quaternion.Euler(0, 0, angle - 90f);
 
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime * 20);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime * 50);
             }
 
             if (segmentType == SegmentType.TAIL && PrevSegment != null)
@@ -55,7 +55,7 @@ namespace Geckout
                 // Offset the angle by +90 degrees so the head points correctly
                 Quaternion targetRot = Quaternion.Euler(0, 0, angle + 90f);
 
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime * 20);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime * 50);
             }
         }
 
