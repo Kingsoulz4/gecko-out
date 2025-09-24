@@ -235,7 +235,6 @@ public class InGameScreenUI : ScreenUI
         UpdateTimeText(LevelController.CurrentTimeLevelRemaining);
         UpdateTimeBar();
     }
-        
 
     private void UpdateTimeBar()
     {
@@ -264,14 +263,6 @@ public class InGameScreenUI : ScreenUI
                 pop.SetData(feature);
             }
         }
-
-        var boosterUnlock = BoosterManager.Instance.BoosterData.boosterItemDatas.Find(x => x.levelUnlock == LevelManager.Instance.CurrentLevel);
-        if(boosterUnlock != null && boosterUnlock.boosterType != BoosterType.TIME_PRE && boosterUnlock.boosterType != BoosterType.CISSOR)
-        {
-            var pop = UIManager.Instance.ShowPopup<PopupTutorialNewFeature>(null);
-            pop.SetData(boosterUnlock.title, boosterUnlock.description, boosterUnlock.icon);
-        }
-            
     }
 
     private void HideAllTuts()

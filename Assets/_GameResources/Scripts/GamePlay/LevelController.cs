@@ -15,13 +15,15 @@ namespace Geckout
         [SerializeField] protected BodyController m_bodyPrefab;
         [SerializeField] protected Transform m_bodyParent;
 
+        [Header("Booster")]
+        [SerializeField] private BeginingBoosterManager m_beginingBoosterManager;
 
         [Header("Tutorial")]
         [SerializeField] private TutorialHandGuide m_tutorialHandGuide;
+       
 
         private float currentTimeRemaining = 0;
         private Coroutine countDownCoroutine;
-
 
         private List<BodyController> listBody = new();
 
@@ -41,6 +43,11 @@ namespace Geckout
         private Coroutine freezeTimeCoroutine { get; set; }
 
         #endregion
+
+        private void Awake()
+        {
+            
+        }
 
         private void OnEnable()
         {
