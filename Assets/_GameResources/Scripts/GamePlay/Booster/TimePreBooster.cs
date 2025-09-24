@@ -69,8 +69,13 @@ public class TimePreBooster : BoosterBase
         //scissorObject.transform.DOMove(body.Segments.Last().transform.position, 0.5f);
 
         
-        var target = m_targetPoint.position;
-        target = new Vector3(target.x, target.y, m_spawnPoint.position.z);
+        //var target = m_targetPoint.position;
+
+        var target = UIManager.Instance.GetScreenActive<InGameScreenUI>().GetClockIconPosition();
+        var screenPoint = RectTransformUtility.WorldToScreenPoint(UIManager.Instance.UICamera, target);
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(UIManager.Instance.GetScreenActive<InGameScreenUI>().GetComponent<RectTransform>(), screenPoint, Camera.main, out target);
+
+        //target = new Vector3(target.x, target.y, m_spawnPoint.position.z);
         float flightDuration = 0.5f;
 
         Vector3 startPos = scissorObject.transform.position;

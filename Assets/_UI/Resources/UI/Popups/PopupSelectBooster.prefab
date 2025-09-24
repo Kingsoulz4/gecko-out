@@ -216,7 +216,6 @@ GameObject:
   - component: {fileID: 6476827705964565856}
   - component: {fileID: 4347467217159189008}
   - component: {fileID: 2614082361611305459}
-  - component: {fileID: 4796080653974582677}
   m_Layer: 5
   m_Name: Tut
   m_TagString: Untagged
@@ -285,18 +284,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!225 &4796080653974582677
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1519544837826584764}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 0
-  m_IgnoreParentGroups: 0
 --- !u!1 &2037971767601342675
 GameObject:
   m_ObjectHideFlags: 0

@@ -40,7 +40,7 @@ namespace Geckout
             m_quantityObj.gameObject.SetActive(!IsSelected && IsUnLocked);
         }
 
-        private void OnClickButton()
+        public void OnClickButton()
         {
             if (!IsUnLocked) return;
 

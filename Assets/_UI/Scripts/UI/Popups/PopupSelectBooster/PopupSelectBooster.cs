@@ -28,6 +28,8 @@ namespace Geckout
             m_buttonClose.onClick.AddListener(OnClickClose);
             m_buttonSelectBoosterTime.OnClick = OnClickSelectBoosterTime;
             m_buttonSelectBoosterScissor.OnClick = OnClickSelectBoosterScissor;
+            m_buttonSelectBoosterScissorTut.OnClick = m_buttonSelectBoosterScissor.OnClickButton;
+            m_buttonSelectBoosterTimeTut.OnClick = m_buttonSelectBoosterTime.OnClickButton;
             HideTut();
         }
 
