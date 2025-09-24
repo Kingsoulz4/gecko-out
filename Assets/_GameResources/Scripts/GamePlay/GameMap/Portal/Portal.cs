@@ -108,6 +108,8 @@ namespace Geckout
 
         private void Disappear()
         {
+            GameMap.TryGetTileAtCoord(PortalData.Coordinate, out GameTile tile);
+            tile.MapTileData.type = MapTileType.Normal;
             this.gameObject.SetActive(false);
         }
 
