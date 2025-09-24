@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
@@ -27,41 +27,87 @@ namespace Geckout.PathFinding
             }
         }
 
-        public void FindPath(Vector2Int startPos, Vector2Int endPos, Action<List<ASNode>> successCallback) {
+        public void FindPath(Vector2Int startPos, Vector2Int targetPos, Action<List<ASNode>> successCallback)
+        {
             ASNode startNode = grid.GetNodes()[startPos.x, startPos.y];
-            ASNode endNode = grid.GetNodes()[endPos.x, endPos.y];
+            ASNode targetNode = grid.GetNodes()[targetPos.x, targetPos.y];
 
+            ASNode endNode;
+            if (targetNode.Walkable)
+            {
+                endNode = targetNode;
+            }
+            else
+            {
+                endNode = FindNearestWalkableNeighbor(targetNode, startNode);
+                if (endNode == null)
+                {
+                    // Không có neighbor walkable, fail như code cũ
+                    return;
+                }
+            }
+
+            // A* algorithm
             Heap<ASNode> openSet = new Heap<ASNode>(grid.GridArea);
             HashSet<ASNode> closedSet = new HashSet<ASNode>();
-
             openSet.Add(startNode);
-            while (openSet.Count > 0) {
+
+            while (openSet.Count > 0)
+            {
                 ASNode currentNode = openSet.RemoveFirst();
                 closedSet.Add(currentNode);
-                if (currentNode == endNode) {
+
+                if (currentNode == endNode)
+                {
                     successCallback(Retrace(startNode, endNode));
                     return;
                 }
 
                 List<ASNode> currentNodeNeighbors = grid.GetNeighBors(currentNode);
-                foreach (var node in currentNodeNeighbors) {
-                    if (!node.Walkable || closedSet.Contains(node)) {
+                foreach (var node in currentNodeNeighbors)
+                {
+                    if (!node.Walkable || closedSet.Contains(node))
+                    {
                         continue;
                     }
 
-                    int newMovementCostToNeighbor = currentNode.gCost + GetDistance(currentNode, node) /*+ (int)(node.movementPenalty * 255)*/;
-                    if (newMovementCostToNeighbor < node.gCost || !openSet.Contains(node)) {
+                    int newMovementCostToNeighbor = currentNode.gCost + GetDistance(currentNode, node);
+                    if (newMovementCostToNeighbor < node.gCost || !openSet.Contains(node))
+                    {
                         node.gCost = newMovementCostToNeighbor;
                         node.hCost = GetDistance(node, endNode);
-
                         node.parrent = currentNode;
 
-                        if (!openSet.Contains(node)) {
+                        if (!openSet.Contains(node))
+                        {
                             openSet.Add(node);
                         }
                     }
-                }  
+                }
             }
+            // Implicit fail - no callback called
+        }
+
+        private ASNode FindNearestWalkableNeighbor(ASNode targetNode, ASNode startNode)
+        {
+            var neighbors = grid.GetNeighBors(targetNode);
+            ASNode closestNeighbor = null;
+            int minDistance = int.MaxValue;
+
+            foreach (var neighbor in neighbors)
+            {
+                if (neighbor.Walkable)
+                {
+                    int distance = GetDistance(startNode, neighbor);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        closestNeighbor = neighbor;
+                    }
+                }
+            }
+
+            return closestNeighbor;
         }
 
         List<ASNode> Retrace(ASNode startNode, ASNode endNode) {
