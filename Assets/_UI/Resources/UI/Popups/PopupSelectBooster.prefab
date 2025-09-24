@@ -770,6 +770,7 @@ MonoBehaviour:
   duration: 0.3
   animType: 0
   mainPopUp: {fileID: 5827286767857965272}
+  m_background: {fileID: 6393150696430908877}
   m_buttonPlay: {fileID: 5650797489322643285}
   m_buttonClose: {fileID: 8072416688040864337}
   m_textLevel: {fileID: 950270103729070514}

@@ -3937,6 +3937,7 @@ MonoBehaviour:
   duration: 0.3
   animType: 2
   mainPopUp: {fileID: 6215607685150547507}
+  m_background: {fileID: 3326866014378213556}
   m_buttonClaim: {fileID: 7307710281488415342}
   m_buttonClaimX2: {fileID: 6210391608319102448}
   progressText: {fileID: 6309919486588612159}

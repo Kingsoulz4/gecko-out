@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 public enum AnimShowPopUp
 {
     None,
@@ -22,6 +23,7 @@ public abstract class PopupUI : MonoBehaviour
     [SerializeField] protected float duration = 0.3f;
     [SerializeField] private AnimShowPopUp animType;
     [SerializeField] protected RectTransform mainPopUp;
+    [SerializeField] protected Image m_background;
 
     public bool isShowing { get; protected set; }
     public virtual void Initialize(UIManager manager)
@@ -49,6 +51,10 @@ public abstract class PopupUI : MonoBehaviour
                         mainPopUp.DOScale(1, 0.1f);
                     });
                     break;
+            }
+            if (m_background != null)
+            {
+                m_background.DOFade(1, 0.4f);
             }
         }
         gameObject.SetActive(true);
@@ -84,7 +90,10 @@ public abstract class PopupUI : MonoBehaviour
                     break;
 
             }
-
+            if(m_background != null)
+            {
+                m_background.DOFade(0, 0.4f);
+            }
         }
 
         DOVirtual.DelayedCall(time, () =>

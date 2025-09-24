@@ -366,6 +366,7 @@ MonoBehaviour:
   duration: 0.3
   animType: 2
   mainPopUp: {fileID: 6240495250130944093}
+  m_background: {fileID: 8227183872211657473}
   m_buttonGotIt: {fileID: 5066952976318464475}
   m_textFeatureName: {fileID: 603483616332331897}
   m_textFeatureDes: {fileID: 5751953617634648578}

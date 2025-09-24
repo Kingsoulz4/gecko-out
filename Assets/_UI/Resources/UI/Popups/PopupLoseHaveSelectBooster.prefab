@@ -907,6 +907,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 629ef2ca8eabae64b8961102043de861, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCache: 0
+  isAniClose: 1
+  duration: 0.3
+  animType: 0
+  mainPopUp: {fileID: 2481458930297670635}
+  m_background: {fileID: 3982887445572084129}
 --- !u!1 &2691972075922118779
 GameObject:
   m_ObjectHideFlags: 0
