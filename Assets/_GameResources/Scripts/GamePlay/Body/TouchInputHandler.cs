@@ -316,21 +316,6 @@ namespace Geckout
             DebugLog($"Map size: {GameMap.MapSize}, total tiles: {mapState.Length}");
         }
 
-        Vector2Int GetDirectionToTarget(Vector2Int start, Vector2Int target)
-        {
-            Vector2Int diff = target - start;
-
-            if (Mathf.Abs(diff.x) > Mathf.Abs(diff.y))
-            {
-                return new Vector2Int(diff.x > 0 ? 1 : -1, 0);
-            }
-            else if (Mathf.Abs(diff.y) > 0)
-            {
-                return new Vector2Int(0, diff.y > 0 ? 1 : -1);
-            }
-
-            return Vector2Int.zero;
-        }
         Vector2Int startPosCache;
         void FindAndSetSmoothPath(Vector2Int targetTile)
         {
