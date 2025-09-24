@@ -94,6 +94,8 @@ namespace Geckout
 
         private void OnBodyMoveToPortal(BodyController body, Portal portal)
         {
+            HideAllTuts();
+
             if (listBody.Contains(body))
             {
                 listBody.Remove(body);
@@ -189,6 +191,12 @@ namespace Geckout
 
 
         #region Tutorial
+
+        public void HideAllTuts()
+        {
+            m_tutorialHandGuide.gameObject.SetActive(false);
+        }    
+
         public void ShowTurialHandGuide(List<Vector3> path)
         {
             m_tutorialHandGuide.ShowGuidePath(path);
@@ -224,6 +232,7 @@ namespace Geckout
                     pathMove.Add(tile.transform.position);
                 });
             });
+            tilePortal.SetOccupied(true);
 
             while (bodyGuide.gameObject.activeInHierarchy)
             {
