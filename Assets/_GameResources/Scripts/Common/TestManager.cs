@@ -23,7 +23,7 @@ namespace Geckout
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                btn_backLevel.onClick.Invoke();
+                btn_nextLevel.onClick.Invoke();
             }
 
             if (Input.GetKeyDown(KeyCode.R))

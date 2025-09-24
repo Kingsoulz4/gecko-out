@@ -424,7 +424,7 @@ namespace Geckout
 
             if (distanceToPortal <= moveToPortal.PortalEnterDistance)
             {
-                Debug.Log($"Animating segment {segmentIndex} into portal");
+                //Debug.Log($"Animating segment {segmentIndex} into portal");
 
                 // Mark segment as animating
                 segment.IsPortalAnimating = true;
