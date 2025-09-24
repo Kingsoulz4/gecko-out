@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Level1
   m_EditorClassIdentifier: 
   levelNum: 1
-  levelIndex: 1
-  fieldOfView: 20
-  mapSize: {x: 7, y: 7}
+  levelIndex: 2
+  fieldOfView: 17
+  mapSize: {x: 6, y: 6}
   time: 120
   type: 0
   mapTileDatas:
@@ -26,18 +26,15 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 0}
-    type: 0
+    type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 3, y: 0}
-    type: 0
+    type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 4, y: 0}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 0}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 0}
     type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 0, y: 1}
@@ -58,9 +55,6 @@ MonoBehaviour:
   - coordinate: {x: 5, y: 1}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 1}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 0, y: 2}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
@@ -77,9 +71,6 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 2}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 2}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 0, y: 3}
@@ -100,9 +91,6 @@ MonoBehaviour:
   - coordinate: {x: 5, y: 3}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 3}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 0, y: 4}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
@@ -119,9 +107,6 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 4}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 4}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 0, y: 5}
@@ -142,84 +127,62 @@ MonoBehaviour:
   - coordinate: {x: 5, y: 5}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 5}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 0, y: 6}
-    type: 6
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 1, y: 6}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 2, y: 6}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 3, y: 6}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 4, y: 6}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 5, y: 6}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 6, y: 6}
-    type: 6
-    rotation: {x: 0, y: 90, z: -90}
   listDogData:
   - bodyType: 0
-    listColor: 00000000
+    listColor: 02000000
     listCoordinate:
-    - {x: 1, y: 5}
+    - {x: 2, y: 2}
+    - {x: 2, y: 3}
+    - {x: 2, y: 4}
     - {x: 2, y: 5}
-    - {x: 3, y: 5}
-    - {x: 4, y: 5}
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
-    listColor: 04000000
+    listColor: 00000000
     listCoordinate:
-    - {x: 1, y: 1}
-    - {x: 1, y: 2}
-    - {x: 1, y: 3}
-    - {x: 1, y: 4}
+    - {x: 3, y: 2}
+    - {x: 3, y: 3}
+    - {x: 3, y: 4}
+    - {x: 3, y: 5}
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
     listColor: 03000000
     listCoordinate:
-    - {x: 5, y: 1}
-    - {x: 4, y: 1}
-    - {x: 3, y: 1}
-    - {x: 2, y: 1}
+    - {x: 0, y: 2}
+    - {x: 0, y: 3}
+    - {x: 0, y: 4}
+    - {x: 0, y: 5}
+    - {x: 1, y: 5}
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
-    listColor: 02000000
+    listColor: 04000000
     listCoordinate:
-    - {x: 5, y: 5}
-    - {x: 5, y: 4}
-    - {x: 5, y: 3}
     - {x: 5, y: 2}
+    - {x: 5, y: 3}
+    - {x: 5, y: 4}
+    - {x: 5, y: 5}
+    - {x: 4, y: 5}
     freezeTimeCount: 0
     hiddenCount: 0
   listPortalData:
   - portalType: 0
-    Coordinate: {x: 0, y: 6}
-    freezeTimeCount: 0
-    listColor: 02000000
-  - portalType: 0
-    Coordinate: {x: 6, y: 6}
-    freezeTimeCount: 0
-    listColor: 03000000
-  - portalType: 0
-    Coordinate: {x: 6, y: 0}
+    Coordinate: {x: 0, y: 0}
     freezeTimeCount: 0
     listColor: 04000000
   - portalType: 0
-    Coordinate: {x: 0, y: 0}
+    Coordinate: {x: 5, y: 0}
+    freezeTimeCount: 0
+    listColor: 03000000
+  - portalType: 0
+    Coordinate: {x: 3, y: 0}
     freezeTimeCount: 0
     listColor: 00000000
+  - portalType: 0
+    Coordinate: {x: 2, y: 0}
+    freezeTimeCount: 0
+    listColor: 02000000
   listMovableBoxData: []
   listCrateData: []
   colorAndMaterialData: {fileID: 11400000, guid: bea4b031ece8d284482119e23bace87e, type: 2}
