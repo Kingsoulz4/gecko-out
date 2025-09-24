@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.WebSockets;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +24,12 @@ namespace Geckout
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 btn_backLevel.onClick.Invoke();
+            }
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                var ingameUI = UIManager.Instance.GetScreenActive<InGameScreenUI>();
+                ingameUI.OnReplayClick();
             }
         }
 
