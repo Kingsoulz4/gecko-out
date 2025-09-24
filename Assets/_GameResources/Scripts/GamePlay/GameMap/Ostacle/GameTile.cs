@@ -95,11 +95,88 @@ namespace Geckout
 
         public void HideWall()
         {
-            IsOccupied = false;
-            m_tilesTypeDisplay[MapTileData.type].SetActive(false);
+            //IsOccupied = false;
+            //m_tilesTypeDisplay[MapTileData.type].SetActive(false);
+            SetTileType(MapTileType.Normal);
             hammer.SetActive(false);
             GameMap.Instance.TilesWall.Remove(this);
+            GameMap.Instance.UpdateVisualAllBorderWalls();
+            UpdateNeighborTiles();
         }
+
+        public void UpdateNeighborTiles()
+        {
+            var dirs = new List<Vector2Int>() { Vector2Int.up, Vector2Int.down, Vector2Int.right, Vector2Int.left };
+            foreach(var dir in dirs)
+            {
+                GameMap.TryGetTileAtCoord(Coordinate + dir, out var tile);
+                if (tile != null && tile.MapTileData.type != MapTileType.Normal && tile.MapTileData.type != MapTileType.Portal)
+                {
+                    tile.UpdateVisualTile();
+                }
+            }
+        }    
+
+        public void UpdateVisualTile()
+        {
+            var tile = this;
+
+            GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.up, out var tileUp);
+            bool up = !(tileUp == null || (tileUp.MapTileData.type != MapTileType.Normal && tileUp.MapTileData.type != MapTileType.Portal));
+            GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.down, out var tileDown);
+            bool down = !(tileDown == null || (tileDown.MapTileData.type != MapTileType.Normal && tileDown.MapTileData.type != MapTileType.Portal));
+            GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.left, out var tileLeft);
+            bool left = !(tileLeft == null || (tileLeft.MapTileData.type != MapTileType.Normal && tileLeft.MapTileData.type != MapTileType.Portal));
+            GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.right, out var tileRight);
+            bool right = !(tileRight == null || (tileRight.MapTileData.type != MapTileType.Normal && tileRight.MapTileData.type != MapTileType.Portal));
+
+            var rot = Vector3Int.zero;
+
+            // Example logic: you need to replace these rules with your 6 types
+            if (up && down && left && right)
+            {
+                tile.SetTileType(MapTileType.Wall4Side); // cross
+                rot = new Vector3Int(0, 90, -90);
+            }
+            else if ((up && down && left) || (up && down && right) ||
+                     (up && left && right) || (down && left && right))
+            {
+                tile.SetTileType(MapTileType.Wall3Side); // cross
+                if (!up) rot = new Vector3Int(0, 90, -90);
+                if (!down) rot = new Vector3Int(180, 90, -90);
+                if (!left) rot = new Vector3Int(-90, 90, -90);
+                if (!right) rot = new Vector3Int(90, 90, -90);
+            }
+            else if ((up && down) || (left && right))
+            {
+                tile.SetTileType(MapTileType.Wall2Side);
+                if (left && right) rot = new Vector3Int(0, 90, -90);
+                else rot = new Vector3Int(90, 90, -90);
+            }
+            else if ((up && right) || (right && down) || (down && left) || (left && up))
+            {
+                tile.SetTileType(MapTileType.WallCornerInside); // corner
+                if (up && right) rot = new Vector3Int(180, 90, -90);
+                if (right && down) rot = new Vector3Int(-90, 90, -90);
+                if (down && left) rot = new Vector3Int(0, 90, -90);
+                if (left && up) rot = new Vector3Int(90, 90, -90);
+            }
+            else if (up || down || left || right)
+            {
+                tile.SetTileType(MapTileType.Wall1Side); // dead end
+                if (up) rot = new Vector3Int(180, 90, -90);
+                if (down) rot = new Vector3Int(0, 90, -90);
+                if (left) rot = new Vector3Int(90, 90, -90);
+                if (right) rot = new Vector3Int(-90, 90, -90);
+            }
+            else
+            {
+                tile.SetTileType(MapTileType.WallCenter); // single block
+                rot = new Vector3Int(0, 90, -90);
+            }
+
+            tile.RotateTo(rot);
+        }    
 
         public void SetTileType(MapTileType tileType)
         {

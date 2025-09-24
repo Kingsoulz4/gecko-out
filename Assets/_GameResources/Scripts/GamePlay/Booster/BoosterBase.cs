@@ -70,8 +70,10 @@ public abstract class BoosterBase : MonoBehaviour
             PopupBuyBooster poup = UIManager.Instance.GetPopupActive<PopupBuyBooster>();
             if (poup == null)
             {
+                GameManager.Instance.SetGameState(GameState.Paused);
                 poup = UIManager.Instance.ShowPopup<PopupBuyBooster>(() =>
                 {
+                    GameManager.Instance.SetGameState(GameState.Playing);
                     OnUseBoosterDone?.Invoke(this, CurrentCount);
                 });
                 
