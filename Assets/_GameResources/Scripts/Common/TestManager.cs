@@ -13,6 +13,7 @@ namespace Geckout
         [SerializeField] Button btn_nextLevel;
         [SerializeField] Button btn_backLevel;
         [SerializeField] InputField inputField;
+        [SerializeField] InputField inputLevelSet;
 
         private void Update()
         {
@@ -52,6 +53,14 @@ namespace Geckout
                 LevelManager.Instance.StartLevel(LevelManager.Instance.CurrentLevel += 1);
                 UIManager.Instance.GetScreenActive<InGameScreenUI>().UpdateUI();
             });
+
+            if (inputLevelSet != null)
+            {
+                inputLevelSet.onSubmit.AddListener((s) =>
+                {
+                    LevelManager.Instance.CurrentLevelSetID = int.Parse(inputLevelSet.text);
+                });
+            }    
         }
 
         private void LoadLevel()
