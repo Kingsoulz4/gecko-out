@@ -15,7 +15,7 @@ MonoBehaviour:
   listColor:
     _serializedList:
     - Key: 0
-      Value: {r: 0.5566038, g: 0.002625496, b: 0.017203817, a: 1}
+      Value: {r: 0.6037736, g: 0.07119971, b: 0.082531, a: 1}
     - Key: 1
       Value: {r: 0.6320754, g: 0.2625899, b: 0.020870427, a: 1}
     - Key: 2
