@@ -65,8 +65,8 @@ public class MainScreenUI : ScreenUI
         UpdateButtonRemoveAds();
         btn_RemoveAds.onClick.AddListener(() =>
         {
-            UIRemoveAds uiRemove = UIManager.Instance.ShowPopup<UIRemoveAds>(null);
-            uiRemove.OnBuySS = deActionButtonRemoveAds;
+            var popupRemoveAds = UIManager.Instance.ShowPopup<PopupRemoveAds>(null);
+            //uiRemove.OnBuySS = deActionButtonRemoveAds;
         });
     }
 
