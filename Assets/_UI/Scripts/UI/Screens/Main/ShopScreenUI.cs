@@ -18,9 +18,9 @@ namespace Geckout
         [SerializeField] private Transform m_listShopCoinPackContainer;
         [SerializeField] private Transform m_listPackContainer;
 
-        public void Show()
+        private void Awake()
         {
-
-        }    
+            
+        }
     }
 }
