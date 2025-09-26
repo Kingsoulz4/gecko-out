@@ -330,7 +330,11 @@ namespace Geckout
             Debug.Log($"11111StartDragging called for gecko:fromHead: {controlAnchorOriginal}");
             if (bodyController == null || !bodyController.CanControl) return;
 
-            bodyController.SetControlAnchor(controlAnchorOriginal);
+            if (!bodyController.IsMoving && !IsPushTrigger(bodyController, isDraggingFromHead, targetTile))
+            {
+                bodyController.SetControlAnchor(controlAnchorOriginal);
+            }
+
             isDraggingFromHead = (bodyController.controlAnchor == BodyController.ControlAnchor.Head);
 
 
@@ -484,6 +488,11 @@ namespace Geckout
         void HandlePushMovement()
         {
             if (bodyController == null) return;
+            if (bodyController.IsMoving)
+            {
+                DebugLog("Push blocked - body is currently moving");
+                return;
+            }
 
             var newAnchor = isDraggingFromHead ?
                 BodyController.ControlAnchor.Tail : BodyController.ControlAnchor.Head;
