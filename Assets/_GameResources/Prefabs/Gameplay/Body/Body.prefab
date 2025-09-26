@@ -329,8 +329,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   length: 5
-  moveSpeed: 5
-  lowSpeed: 5
+  moveSpeed: 18
+  lowSpeed: 10
   lowDistance: 2
   minSampleStep: 0.02
   headPrefab: {fileID: 977039008493845289, guid: a442355917e79054d8f791998cf8e814, type: 3}
