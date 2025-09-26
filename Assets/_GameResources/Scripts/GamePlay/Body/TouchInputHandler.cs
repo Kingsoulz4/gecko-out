@@ -507,32 +507,45 @@ namespace Geckout
         }
 
         #region Push Movement
+        bool IsContinuousPush()
+        {
+            // Check nếu current movement cùng hướng với push intent
+            return bodyController.controlAnchor != controlAnchorOriginal;
+        }
+
         void HandlePushMovement()
         {
             if (bodyController == null) return;
-            if (bodyController.IsMoving)
+            bool canPush = !bodyController.IsMoving || IsContinuousPush();
+
+            if (!canPush)
             {
-                DebugLog("Push blocked - body is currently moving");
+                DebugLog("Push blocked - conflicting movement");
                 return;
             }
 
-            var newAnchor = isDraggingFromHead ?
+            // Calculate push distance từ original anchor position
+            Vector2Int originalAnchorPos = controlAnchorOriginal == ControlAnchor.Head ?
+                bodyController.Segments[0].Coordinate :
+                bodyController.Segments[bodyController.Segments.Count - 1].Coordinate;
+
+            Vector2Int pushDistance = lastTargetTile - originalAnchorPos;
+            Debug.LogError($"lastTargetTile: {lastTargetTile}, originalAnchorPos: {originalAnchorPos}, pushDistance: {pushDistance}");
+            int pushMagnitude = Mathf.Max(Mathf.Abs(pushDistance.x), Mathf.Abs(pushDistance.y));
+
+            // Switch to opposite anchor
+            var newAnchor = controlAnchorOriginal == ControlAnchor.Head ?
                 BodyController.ControlAnchor.Tail : BodyController.ControlAnchor.Head;
 
             bodyController.SetControlAnchor(newAnchor);
 
-            Vector2Int oppositeAnchorPos;
-            if (newAnchor == BodyController.ControlAnchor.Head)
-            {
-                oppositeAnchorPos = GameMap.WorldToGridPosition(bodyController.Segments[0].transform.position);
-            }
-            else
-            {
-                oppositeAnchorPos = GameMap.WorldToGridPosition(
-                    bodyController.Segments[bodyController.Segments.Count - 1].transform.position);
-            }
+            // Find target với same distance
+            Vector2Int oppositeAnchorPos = newAnchor == ControlAnchor.Head ?
+                bodyController.Segments[0].Coordinate :
+                bodyController.Segments[bodyController.Segments.Count - 1].Coordinate;
 
-            Vector2Int? targetTile = FindPushTarget(oppositeAnchorPos);
+            Vector2Int? targetTile = FindPushTargetWithDistance(oppositeAnchorPos, pushMagnitude);
+            Debug.LogError($"targetTile: {targetTile}");
 
             if (!targetTile.HasValue)
             {
@@ -543,29 +556,41 @@ namespace Geckout
             ExecutePushPath(targetTile.Value);
         }
 
-        Vector2Int? FindPushTarget(Vector2Int startPos)
+        Vector2Int? FindPushTargetWithDistance(Vector2Int startPos, int targetDistance)
         {
             Vector2Int[] directions = {
-        new Vector2Int(0, 1),
-        new Vector2Int(1, 0),
-        new Vector2Int(0, -1),
-        new Vector2Int(-1, 0)
+        new Vector2Int(0, 1), new Vector2Int(1, 0),
+        new Vector2Int(0, -1), new Vector2Int(-1, 0)
     };
 
             foreach (var direction in directions)
             {
-                Vector2Int candidate = startPos + direction;
+                Vector2Int target = startPos + direction * targetDistance;
+                GameMap.TryGetTileAtCoord(target, out GameTile tile);
 
-                // Check if tile is valid and empty
-                GameMap.TryGetTileAtCoord(candidate, out GameTile tile);
                 if (tile != null && !tile.IsOccupied)
                 {
-                    DebugLog($"Found valid neighbor push target: {candidate}");
-                    return candidate;
+                    // Verify path is clear
+                    bool pathClear = true;
+                    for (int i = 1; i <= targetDistance; i++)
+                    {
+                        Vector2Int checkPos = startPos + direction * i;
+                        GameMap.TryGetTileAtCoord(checkPos, out GameTile checkTile);
+                        if (checkTile == null || checkTile.IsOccupied)
+                        {
+                            pathClear = false;
+                            break;
+                        }
+                    }
+
+                    if (pathClear)
+                    {
+                        DebugLog($"Push target: {target}, distance: {targetDistance}");
+                        return target;
+                    }
                 }
             }
 
-            DebugLog("No valid neighbor tile found for push");
             return null;
         }
 
