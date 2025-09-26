@@ -16,6 +16,7 @@ namespace Geckout
         private Vector2 gridOffset;
 
         public Vector2Int[] LastGridPositions { get => lastGridPositions; }
+        public GameTile[] CurrentOccupiedTiles { get => currentOccupiedTiles;}
 
         void Start()
         {
