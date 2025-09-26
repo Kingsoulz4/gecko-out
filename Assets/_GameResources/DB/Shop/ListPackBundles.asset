@@ -12,4 +12,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbf9d14d9a45e234a9b5ff2791b1e5f6, type: 3}
   m_Name: ListPackBundles
   m_EditorClassIdentifier: 
-  listShopPack: []
+  listShopPack:
+  - id: boost_bundle
+    googleID: boost_bundle
+    appleID: boost_bundle
+    title: Boost Bundle
+    description: boost
+    icon: {fileID: 21300000, guid: 278e4320ce504c54494354285a618103, type: 3}
+    listReward:
+    - type: 0
+      quantity: 6000
+    - type: 1
+      quantity: 3600
+  - id: mega_bundle
+    googleID: mega_bundle
+    appleID: mega_bundle
+    title: Mega Bundle
+    description: boost
+    icon: {fileID: 21300000, guid: d89e1da3f23a4d04dbd2a263c2fedb3d, type: 3}
+    listReward:
+    - type: 0
+      quantity: 10000
+    - type: 4
+      quantity: 3
+    - type: 5
+      quantity: 3
+    - type: 6
+      quantity: 3
+    - type: 1
+      quantity: 10800
+  - id: ultra_bundle
+    googleID: ultra_bundle
+    appleID: ultra_bundle
+    title: Ultra Bundle
+    description: boost
+    icon: {fileID: 21300000, guid: 33794141aa455cb4b8fb459a7462ad9b, type: 3}
+    listReward:
+    - type: 0
+      quantity: 16000
+    - type: 4
+      quantity: 6
+    - type: 5
+      quantity: 6
+    - type: 6
+      quantity: 6
+    - type: 1
+      quantity: 21600

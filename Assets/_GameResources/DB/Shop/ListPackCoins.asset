@@ -12,4 +12,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbf9d14d9a45e234a9b5ff2791b1e5f6, type: 3}
   m_Name: ListPackCoins
   m_EditorClassIdentifier: 
-  listShopPack: []
+  listShopPack:
+  - id: coin1
+    googleID: coin1
+    appleID: coin1
+    title: Coin 1
+    description: Coin 1
+    icon: {fileID: 21300000, guid: 360d0544c58c68f49bb16df8fd1a5e4c, type: 3}
+    listReward:
+    - type: 0
+      quantity: 1000
+  - id: coin2
+    googleID: coin2
+    appleID: coin2
+    title: Coin 2
+    description: Coin 2
+    icon: {fileID: 21300000, guid: 278e4320ce504c54494354285a618103, type: 3}
+    listReward:
+    - type: 0
+      quantity: 5000
+  - id: coin3
+    googleID: coin3
+    appleID: coin3
+    title: Coin 3
+    description: Coin 3
+    icon: {fileID: 21300000, guid: f4fe3da76017557499d147bdb86c7907, type: 3}
+    listReward:
+    - type: 0
+      quantity: 10000
+  - id: coin4
+    googleID: coin4
+    appleID: coin4
+    title: Coin 4
+    description: Coin 4
+    icon: {fileID: 21300000, guid: 0d9d525f541faf248b20da85768c9c3a, type: 3}
+    listReward:
+    - type: 0
+      quantity: 25000
+  - id: coin5
+    googleID: coin5
+    appleID: coin5
+    title: Coin 5
+    description: Coin 5
+    icon: {fileID: 21300000, guid: 89619ea76a564844eb77b58ab3d131bf, type: 3}
+    listReward:
+    - type: 0
+      quantity: 25000
+  - id: coin6
+    googleID: coin6
+    appleID: coin6
+    title: Coin 6
+    description: Coin 6
+    icon: {fileID: 21300000, guid: c9c73c35ba136254eba792f7141a0b07, type: 3}
+    listReward:
+    - type: 0
+      quantity: 100000
