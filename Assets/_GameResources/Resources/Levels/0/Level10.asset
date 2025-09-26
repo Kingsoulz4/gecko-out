@@ -259,15 +259,6 @@ MonoBehaviour:
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
-    listColor: 04000000
-    listCoordinate:
-    - {x: 6, y: 2}
-    - {x: 6, y: 3}
-    - {x: 6, y: 4}
-    - {x: 5, y: 4}
-    freezeTimeCount: 0
-    hiddenCount: 0
-  - bodyType: 0
     listColor: 05000000
     listCoordinate:
     - {x: 2, y: 1}
@@ -293,6 +284,17 @@ MonoBehaviour:
     - {x: 4, y: 6}
     - {x: 3, y: 6}
     - {x: 3, y: 7}
+    freezeTimeCount: 0
+    hiddenCount: 0
+  - bodyType: 0
+    listColor: 04000000
+    listCoordinate:
+    - {x: 6, y: 2}
+    - {x: 6, y: 3}
+    - {x: 6, y: 4}
+    - {x: 5, y: 4}
+    - {x: 4, y: 4}
+    - {x: 3, y: 4}
     freezeTimeCount: 0
     hiddenCount: 0
   listPortalData:

@@ -10,7 +10,6 @@ namespace Geckout
     public partial class LevelGameEditTool: LevelController
     {
         private HashSet<GameTile> listSelectedTile = new();
-        private List<BodyController> listBody = new();
 
         public List<GameTile> ListSelectedTile { get => listSelectedTile.ToList(); }
 

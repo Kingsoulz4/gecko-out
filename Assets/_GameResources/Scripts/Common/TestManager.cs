@@ -84,11 +84,11 @@ namespace Geckout
         {
             UserDataManager.AddGold(1000, "test", false);
             UserDataManager.AddHeart(5, "test", false);
-            UserDataManager.HammerBooster = 3;
-            UserDataManager.HandMoveBooster = 3;
-            UserDataManager.TimeIngameBooster = 3;
-            UserDataManager.TimePreBooster = 3;
-            UserDataManager.CissorBooster = 3;
+            UserDataManager.HammerBooster += 3;
+            UserDataManager.HandMoveBooster += 3;
+            UserDataManager.TimeIngameBooster += 3;
+            UserDataManager.TimePreBooster += 3;
+            UserDataManager.CissorBooster += 3;
         }
     }
 }

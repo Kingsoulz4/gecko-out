@@ -168,7 +168,7 @@ MonoBehaviour:
     rotation: {x: 90, y: 90, z: -90}
   listDogData:
   - bodyType: 0
-    listColor: 00000000
+    listColor: 03000000
     listCoordinate:
     - {x: 0, y: 1}
     - {x: 0, y: 0}
@@ -194,7 +194,7 @@ MonoBehaviour:
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
-    listColor: 03000000
+    listColor: 00000000
     listCoordinate:
     - {x: 1, y: 2}
     - {x: 2, y: 2}
@@ -203,19 +203,21 @@ MonoBehaviour:
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
-    listColor: 05000000
-    listCoordinate:
-    - {x: 6, y: 4}
-    - {x: 5, y: 4}
-    - {x: 5, y: 3}
-    freezeTimeCount: 0
-    hiddenCount: 0
-  - bodyType: 0
     listColor: 04000000
     listCoordinate:
     - {x: 3, y: 4}
     - {x: 2, y: 4}
     - {x: 1, y: 4}
+    freezeTimeCount: 0
+    hiddenCount: 0
+  - bodyType: 0
+    listColor: 05000000
+    listCoordinate:
+    - {x: 6, y: 4}
+    - {x: 5, y: 4}
+    - {x: 5, y: 3}
+    - {x: 5, y: 2}
+    - {x: 5, y: 1}
     freezeTimeCount: 0
     hiddenCount: 0
   listPortalData:

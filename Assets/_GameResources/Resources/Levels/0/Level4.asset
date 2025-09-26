@@ -147,39 +147,39 @@ MonoBehaviour:
     rotation: {x: 0, y: 90, z: -90}
   listDogData:
   - bodyType: 0
-    listColor: 00000000
-    listCoordinate:
-    - {x: 2, y: 5}
-    - {x: 1, y: 5}
-    - {x: 1, y: 4}
-    - {x: 1, y: 3}
-    freezeTimeCount: 0
-    hiddenCount: 0
-  - bodyType: 0
-    listColor: 04000000
-    listCoordinate:
-    - {x: 4, y: 6}
-    - {x: 4, y: 5}
-    - {x: 4, y: 4}
-    - {x: 4, y: 3}
-    freezeTimeCount: 0
-    hiddenCount: 0
-  - bodyType: 0
-    listColor: 02000000
-    listCoordinate:
-    - {x: 3, y: 2}
-    - {x: 3, y: 1}
-    - {x: 4, y: 1}
-    - {x: 5, y: 1}
-    freezeTimeCount: 0
-    hiddenCount: 0
-  - bodyType: 0
     listColor: 03000000
     listCoordinate:
     - {x: 2, y: 2}
     - {x: 2, y: 1}
     - {x: 1, y: 1}
     - {x: 1, y: 0}
+    freezeTimeCount: 0
+    hiddenCount: 0
+  - bodyType: 0
+    listColor: 04000000
+    listCoordinate:
+    - {x: 4, y: 4}
+    - {x: 4, y: 5}
+    - {x: 4, y: 6}
+    - {x: 5, y: 6}
+    freezeTimeCount: 0
+    hiddenCount: 0
+  - bodyType: 0
+    listColor: 02000000
+    listCoordinate:
+    - {x: 5, y: 3}
+    - {x: 4, y: 3}
+    - {x: 3, y: 3}
+    - {x: 2, y: 3}
+    freezeTimeCount: 0
+    hiddenCount: 0
+  - bodyType: 0
+    listColor: 00000000
+    listCoordinate:
+    - {x: 2, y: 5}
+    - {x: 1, y: 5}
+    - {x: 1, y: 4}
+    - {x: 1, y: 3}
     freezeTimeCount: 0
     hiddenCount: 0
   listPortalData:
