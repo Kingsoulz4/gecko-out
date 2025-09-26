@@ -1,21 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Geckout
 {
     public class CoinPack : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        [SerializeField] private Image m_iconCoin;
+        [SerializeField] private Button m_buttonBuy;
+        [SerializeField] private Text m_textPrice;
+        [SerializeField] private Text m_textCoinQuantity;
+
+        private ShopPack shopPack;
+
+        private void Awake()
         {
-        
+            m_buttonBuy.onClick.AddListener(OnClickBuy);
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnClickBuy()
         {
-        
+            //Add Logic IAP Here
+            foreach (var item in shopPack.listReward)
+            {
+                item.Claim();
+            }
+        }
+
+        public void SetData(ShopPack packData)
+        {
+            this.shopPack = packData;
+            m_textCoinQuantity.text = packData.listReward.Find(x => x.type == ItemType.GOLD).quantity + "";
+            m_iconCoin.sprite = packData.icon;
+
+
         }
     }
 }

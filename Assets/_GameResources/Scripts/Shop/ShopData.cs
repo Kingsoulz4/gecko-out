@@ -13,7 +13,7 @@ namespace Geckout
 
     //[CreateAssetMenu(fileName = "ShopPack", menuName = "ScriptableObjects/ShopPack", order = 1)]
     [Serializable]
-    public class ShopPack/*: ScriptableObject*/
+    public class ShopPack
     {
         public string id;
         public string googleID;
