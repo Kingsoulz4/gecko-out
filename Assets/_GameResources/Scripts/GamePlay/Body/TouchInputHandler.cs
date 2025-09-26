@@ -244,7 +244,7 @@ namespace Geckout
         void StartAutomaticMovement(BodyController gecko, BodyController.ControlAnchor anchor, Vector2Int targetTile)
         {
             bodyController = gecko;
-            isDragging = true; // Enable drag mode ngay để có thể continue drag
+            isDragging = true;
             isDraggingFromHead = (anchor == BodyController.ControlAnchor.Head);
 
             // Set control anchor
@@ -283,14 +283,14 @@ namespace Geckout
             lastTargetTile = tileCoord.Value;
             lastPathUpdateTime = Time.time;
 
-            DebugLog($"Dragging to NEW target tile: {tileCoord.Value}");
+            DebugLog($"OnTouchDrag to NEW target tile: {tileCoord.Value}");
 
-            if (IsPushTrigger(bodyController, isDraggingFromHead, tileCoord.Value))
-            {
-                DebugLog("Push trigger detected!");
-                HandlePushMovement();
-                return;
-            }
+            //if (IsPushTrigger(bodyController, isDraggingFromHead, tileCoord.Value))
+            //{
+            //    DebugLog("Push trigger detected!");
+            //    HandlePushMovement();
+            //    return;
+            //}
             FindAndSetSmoothPath(tileCoord.Value);
         }
 
@@ -316,7 +316,7 @@ namespace Geckout
             isDraggingFromHead = fromHead;
             // Set control anchor based on drag source
             bodyController.SetControlAnchor(fromHead ? BodyController.ControlAnchor.Head : BodyController.ControlAnchor.Tail);
-            DebugLog($"Started dragging gecko from {(fromHead ? "HEAD" : "TAIL")}");
+            DebugLog($"StartDragging from {(fromHead ? "HEAD" : "TAIL")}");
 
             // Initialize pathfinder
             bool[] mapState = GameMap.GetCurrentMapState();
@@ -327,8 +327,15 @@ namespace Geckout
         Vector2Int startPosCache;
         void FindAndSetSmoothPath(Vector2Int targetTile)
         {
-            Debug.Log($"11111StartDragging called for gecko:fromHead: {controlAnchorOriginal}");
+            DebugLog($"FindAndSetSmoothPath");
             if (bodyController == null || !bodyController.CanControl) return;
+
+            if (IsPushTrigger(bodyController, isDraggingFromHead, targetTile))
+            {
+                DebugLog("Push trigger detected!");
+                HandlePushMovement();
+                return;
+            }
 
             if (!bodyController.IsMoving && !IsPushTrigger(bodyController, isDraggingFromHead, targetTile))
             {
@@ -373,7 +380,7 @@ namespace Geckout
                 return;
             }
 
-            DebugLog($"Raw path found with {path.Count} steps");
+            DebugLog($"OnSmoothPathFound {path.Count} steps");
 
             // Convert to coordinate list and remove starting position
             smoothPath.Clear();
@@ -405,12 +412,12 @@ namespace Geckout
                 return;
             }
 
-            DebugLog($"Executing smooth path with {path.Count} points for {(isDraggingFromHead ? "HEAD" : "TAIL")} control");
+            //DebugLog($"Executing smooth path with {path.Count} points for {(isDraggingFromHead ? "HEAD" : "TAIL")} control");
 
             bodyController.ClearPath();
             bodyController.StartMovePath(path);
 
-            DebugLog("Smooth path movement started");
+            DebugLog("StartMovePath");
         }
 
         Vector2Int? GetTileCoordinateFromScreen(Vector2 screenPosition)
@@ -461,19 +468,34 @@ namespace Geckout
             return null;
         }
 
-        bool IsPushTrigger(BodyController gecko, bool isDragFromHead, Vector2Int dragTarget)
+        bool IsPushTrigger(BodyController body, bool isDragFromHead, Vector2Int dragTarget)
         {
-            if (isDragFromHead && gecko.Segments.Count > 3)
-            {
-                Vector2Int targetSegmentCoord = gecko.Segments[3].Coordinate;
-                return dragTarget == targetSegmentCoord;
-            }
-            else if (!isDragFromHead && gecko.Segments.Count > 4)
-            {
-                Vector2Int targetSegmentCoord = gecko.Segments[gecko.Segments.Count - 4].Coordinate;
-                return dragTarget == targetSegmentCoord;
-            }
-            return false;
+            if (body.Segments.Count <= 3) return false;
+
+            Vector2Int anchorPos = controlAnchorOriginal == ControlAnchor.Head ?
+        body.Segments[0].Coordinate :body.Segments[body.Segments.Count - 1].Coordinate;
+
+            Vector2Int bodyDirection = controlAnchorOriginal == ControlAnchor.Head ?
+                anchorPos - body.Segments[3].Coordinate:
+                anchorPos - body.Segments[body.Segments.Count - 4].Coordinate;
+
+            Vector2Int dragDirection = dragTarget - anchorPos;
+
+            // Convert to Vector2 for normalization
+            Vector2 bodyDir = new Vector2(bodyDirection.x, bodyDirection.y);
+            Vector2 dragDir = new Vector2(dragDirection.x, dragDirection.y);
+
+            float dot = Vector2.Dot(bodyDir.normalized, dragDir.normalized);
+            Debug.Log($"Push check - bodyDir: {bodyDir}, dragDir: {dragDir}, " +
+                $"currentAchor: {controlAnchorOriginal}, dot: {dot}, anchorPos: {anchorPos}, dragTarget: {dragTarget}");
+            // Push nếu drag ngược hướng với body (dot < -0.5 = góc > 120 độ)
+            bool isOppositeDirection = dot < -0.5f;
+
+            // Và phải drag vào body territory
+            float dragDistance = dragDir.magnitude;
+            bool isWithinBodyRange = dragDistance <= body.Segments.Count * 0.8f;
+
+            return isOppositeDirection && isWithinBodyRange;
         }
 
         void DebugLog(string message)
@@ -497,10 +519,7 @@ namespace Geckout
             var newAnchor = isDraggingFromHead ?
                 BodyController.ControlAnchor.Tail : BodyController.ControlAnchor.Head;
 
-            var oldAnchor = bodyController.controlAnchor;
             bodyController.SetControlAnchor(newAnchor);
-
-            // DON'T update isDraggingFromHead here - keep it for chain push detection
 
             Vector2Int oppositeAnchorPos;
             if (newAnchor == BodyController.ControlAnchor.Head)
@@ -517,7 +536,7 @@ namespace Geckout
 
             if (!targetTile.HasValue)
             {
-                bodyController.SetControlAnchor(oldAnchor);
+                bodyController.SetControlAnchor(controlAnchorOriginal);
                 return;
             }
 
