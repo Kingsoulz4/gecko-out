@@ -377,14 +377,6 @@ namespace Geckout
             // Get current map state
             bool[] mapState = GameMap.GetCurrentMapState();
 
-            //// Block tiles occupied by gecko segments
-            //for (int i = 0; i < bodyController.Segments.Count; i++)
-            //{
-            //    if (i % bodyController.SubLength != 0 && i != 0 && i != bodyController.Segments.Count - 1)
-            //    {
-            //        continue;
-            //    }
-            //}
 
             // Create pathfinder with updated grid
             ASGrid grid = new ASGrid(GameMap.MapSize.x, GameMap.MapSize.y, mapState);
@@ -434,12 +426,7 @@ namespace Geckout
                 return;
             }
 
-            //if (!bodyController.IsMoving && bodyController.controlAnchor == touchAnchor)
-            //{
-            //    bodyController.SetControlAnchor(touchAnchor);
-            //}
-
-            //DebugLog($"Executing smooth path with {path.Count} points for {(isDraggingFromHead ? "HEAD" : "TAIL")} control");
+            // test set anchor here
 
             DebugLog("NORMAL execute path");
 
