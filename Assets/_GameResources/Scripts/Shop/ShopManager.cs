@@ -9,6 +9,24 @@ namespace Geckout
         [SerializeField] private ShopData m_listCoinPacks;
         [SerializeField] private ShopData m_listBundlePack;
 
+        public bool HasPurchasedRemoveInterAds
+        {
+            get => PlayerPrefs.GetInt("HasPurchasedRemoveInterAds", 0) > 0;
+            set => PlayerPrefs.SetInt("HasPurchasedRemoveInterAds", value? 1: 0);
+        }
+
+        public bool HasPurchasedRemoveAds
+        {
+            get => PlayerPrefs.GetInt("HasPurchasedRemoveBannerAds", 0) > 0;
+            set => PlayerPrefs.SetInt("HasPurchasedRemoveBannerAds", value ? 1 : 0);
+        }
+
+        public bool HasPurchasedNoAdsPack
+        {
+            get => PlayerPrefs.GetInt("HasPurchasedNoAdsPack", 0) > 0;
+            set => PlayerPrefs.SetInt("HasPurchasedNoAdsPack", value ? 1 : 0);
+        }
+
         private void Awake()
         {
             Init();

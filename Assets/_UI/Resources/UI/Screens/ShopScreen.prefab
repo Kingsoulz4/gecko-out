@@ -3709,6 +3709,7 @@ MonoBehaviour:
   m_listPackContainer: {fileID: 4505185387533986740}
   m_listBundlePackContainer: {fileID: 771096055171302576}
   m_buttonRemoveAdsPacks: {fileID: 2825930012595583981}
+  m_removeAdsPacks: {fileID: 1093576515779692269}
   m_goldBar: {fileID: 7039441942416767838}
 --- !u!1 &8945089143299597714
 GameObject:

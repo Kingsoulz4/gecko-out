@@ -23,6 +23,7 @@ namespace Geckout
 
         [Header("Others Packs")]
         [SerializeField] private Button m_buttonRemoveAdsPacks;
+        [SerializeField] private GameObject m_removeAdsPacks;
 
         [Header("UI")]
         [SerializeField] private GoldDisplay m_goldBar;
@@ -37,6 +38,16 @@ namespace Geckout
         private void OnClickRemoveAdPacks()
         {
             UIManager.Instance.ShowPopup<PopupRemoveAds>(null);
+        }
+
+        private void OnEnable()
+        {
+            UpdateUI();
+        }
+
+        private void UpdateUI()
+        {
+            m_removeAdsPacks.gameObject.SetActive(!ShopManager.Instance.HasPurchasedNoAdsPack);
         }
 
         public void Init()
