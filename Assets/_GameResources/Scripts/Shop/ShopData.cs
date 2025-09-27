@@ -42,6 +42,10 @@ namespace Geckout
         BOOSTER_3,
         BOOSTER_4,
         BOOSTER_5,
+        BOOSTER_6,
+        REMOVE_INTER_ADS,
+        REMOVE_BANNER_ADS,
+        REMOVE_ADS
     }
 
 }

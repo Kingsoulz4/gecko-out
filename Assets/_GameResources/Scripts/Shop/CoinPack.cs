@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,8 @@ namespace Geckout
 
         private ShopPack shopPack;
 
+        public Action OnPurchased { get; set; }
+
         private void Awake()
         {
             m_buttonBuy.onClick.AddListener(OnClickBuy);
@@ -22,7 +25,10 @@ namespace Geckout
         private void OnClickBuy()
         {
             //Add Logic IAP Here
-            var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(null);
+            var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(() =>
+            {
+                OnPurchased?.Invoke();
+            });
             popupReceiveReward.SetData(shopPack.listReward);
 
             foreach (var item in shopPack.listReward)

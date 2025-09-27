@@ -12,8 +12,17 @@ namespace Geckout
         [SerializeField] Text txt_Gold;
         [SerializeField] Button btn_Gold;
         [SerializeField] ParticleSystem vfxCoin;
+        [SerializeField] Image m_iconGold;
         [SerializeField] string where;
-        public static bool isUpadate = true;
+        [SerializeField] public bool isUpadate = true;
+
+        public bool Sync
+        {
+            get => isUpadate;
+            set => isUpadate = value;
+        }
+
+        public Image ImgCoinIcon => m_iconGold;
 
         private void Start()
         {
@@ -33,6 +42,11 @@ namespace Geckout
                 btn_Gold.onClick.AddListener(showPopupMiniShop);
             }
             txt_Gold.text = UserDataManager.Gold + "";
+        }
+
+        public void SetText(int quatity)
+        {
+            txt_Gold.text = quatity.ToString();
         }
 
         private void showPopupMiniShop()

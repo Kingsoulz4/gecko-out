@@ -19692,7 +19692,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a09616ce445c691458f79a3c765d23c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCache: 0
+  isCache: 1
   isAniClose: 1
   duration: 0.3
   animType: 0

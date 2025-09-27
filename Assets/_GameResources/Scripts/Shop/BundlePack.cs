@@ -17,6 +17,7 @@ namespace Geckout
         [SerializeField] private Text m_textCoinQuantity;
 
         private ShopPack shopPack;
+        public Action OnPurchased { get; set; }
 
         private void Awake()
         {
@@ -27,7 +28,10 @@ namespace Geckout
         {
             //Add Logic IAP Here
 
-            var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(null);
+            var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(() =>
+            {
+                OnPurchased?.Invoke();
+            });
             popupReceiveReward.SetData(shopPack.listReward);
 
             foreach(var item in shopPack.listReward)

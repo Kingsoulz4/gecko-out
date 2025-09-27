@@ -945,7 +945,9 @@ MonoBehaviour:
   txt_Gold: {fileID: 1211062624688284930}
   btn_Gold: {fileID: 4790703258373788342}
   vfxCoin: {fileID: 0}
+  m_iconGold: {fileID: 2140042459751632066}
   where: 
+  isUpadate: 1
 --- !u!1 &7354181662526398216
 GameObject:
   m_ObjectHideFlags: 0
