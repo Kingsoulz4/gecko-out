@@ -19704,6 +19704,7 @@ MonoBehaviour:
   - {fileID: 1052188766894474453}
   - {fileID: 3637410433186854233}
   m_buttonClaim: {fileID: 7883797434033639461}
+  m_ribbon: {fileID: 9197551464682995819}
 --- !u!1 &1046086116669011425
 GameObject:
   m_ObjectHideFlags: 0
