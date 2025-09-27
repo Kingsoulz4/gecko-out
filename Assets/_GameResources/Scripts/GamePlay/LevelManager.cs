@@ -98,7 +98,11 @@ namespace Geckout
             var levelData = Resources.Load<GameLevelData>($"Levels/{levelSetID}/Level{level}");
             if (levelData == null)
             {
-                levelData = Resources.Load<GameLevelData>($"Levels/0/Level1");
+                levelData = Resources.Load<GameLevelData>($"Levels/0/Level{level}");
+                if(levelData == null)
+                {
+                    levelData = Resources.Load<GameLevelData>($"Levels/0/Level{1}");
+                }
             }
 
             return new GameLevelData(levelData);   
