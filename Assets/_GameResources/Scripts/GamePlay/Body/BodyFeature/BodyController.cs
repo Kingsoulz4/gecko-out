@@ -294,6 +294,7 @@ namespace Geckout
 
                 // Rebuild history to match new control direction
                 InitHistoryFromSegments();
+                Debug.Log("SetAnchor " + anchor);
             }
         }
 

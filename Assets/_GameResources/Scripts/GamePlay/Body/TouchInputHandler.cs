@@ -377,14 +377,14 @@ namespace Geckout
             // Get current map state
             bool[] mapState = GameMap.GetCurrentMapState();
 
-            // Block tiles occupied by gecko segments
-            for (int i = 0; i < bodyController.Segments.Count; i++)
-            {
-                if (i % bodyController.SubLength != 0 && i != 0 && i != bodyController.Segments.Count - 1)
-                {
-                    continue;
-                }
-            }
+            //// Block tiles occupied by gecko segments
+            //for (int i = 0; i < bodyController.Segments.Count; i++)
+            //{
+            //    if (i % bodyController.SubLength != 0 && i != 0 && i != bodyController.Segments.Count - 1)
+            //    {
+            //        continue;
+            //    }
+            //}
 
             // Create pathfinder with updated grid
             ASGrid grid = new ASGrid(GameMap.MapSize.x, GameMap.MapSize.y, mapState);
@@ -433,6 +433,11 @@ namespace Geckout
                 DebugLog("Cannot execute path: invalid state");
                 return;
             }
+
+            //if (!bodyController.IsMoving && bodyController.controlAnchor == touchAnchor)
+            //{
+            //    bodyController.SetControlAnchor(touchAnchor);
+            //}
 
             //DebugLog($"Executing smooth path with {path.Count} points for {(isDraggingFromHead ? "HEAD" : "TAIL")} control");
 
@@ -511,7 +516,7 @@ namespace Geckout
             Debug.Log($"PUSH check - bodyDir: {bodyDir}, dragDir: {dragDir}, " +
                 $"currentAchor: {touchAnchor}, dot: {dot}, anchorPos: {anchorPos}, dragTarget: {targetTile}");
             // Push nếu drag ngược hướng với body (dot < -0.5 = góc > 120 độ)
-            bool isOppositeDirection = dot < -0.75f;
+            bool isOppositeDirection = dot < -0.5f;
 
             // BLOCK: không cho move vào tile occupied bởi body segments in normal move
             HashSet<Vector2Int> occupiedTiles = new HashSet<Vector2Int>();
@@ -582,7 +587,6 @@ namespace Geckout
             if (!targetTile.HasValue)
             {
                 DebugLog("PUSH blocked - !targetTile.HasValue");
-                bodyController.SetControlAnchor(touchAnchor);
                 return;
             }
 
