@@ -1,8 +1,10 @@
 ﻿using Geckout.PathFinding;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static DG.Tweening.DOTweenAnimation;
 using static Geckout.BodyController;
 using static UnityEngine.Rendering.HableCurve;
 
@@ -23,7 +25,7 @@ namespace Geckout
         private Vector2Int lastTargetTile = Vector2Int.one * -1;
         private ASPathFinding pathfinder;
         private float lastPathUpdateTime = 0f;
-        private ControlAnchor controlAnchorOriginal = ControlAnchor.Head;
+        private ControlAnchor touchAnchor = ControlAnchor.Head;
 
         private List<ASNode> currentPath;
         private List<Vector2Int> smoothPath = new List<Vector2Int>();
@@ -221,10 +223,21 @@ namespace Geckout
             return adjacent;
         }
 
-        void StartBodyDrag(BodyController gecko, BodyController.ControlAnchor anchor)
+        void SetBody(BodyController body)
         {
-            controlAnchorOriginal = anchor;
-            bodyController = gecko;
+            bodyController = body;
+            bodyController.OnEndMove += OnBodyEndMove;
+        }
+
+        private void OnBodyEndMove()
+        {
+            bodyController.SetControlAnchor(touchAnchor);
+        }
+
+        void StartBodyDrag(BodyController body, BodyController.ControlAnchor anchor)
+        {
+            touchAnchor = anchor;
+            SetBody(body);
             isDragging = true;
             isDraggingFromHead = (anchor == BodyController.ControlAnchor.Head);
 
@@ -242,10 +255,10 @@ namespace Geckout
             lastPathUpdateTime = 0f;
         }
 
-        void StartAutomaticMovement(BodyController gecko, BodyController.ControlAnchor anchor, Vector2Int targetTile)
+        void StartAutomaticMovement(BodyController body, BodyController.ControlAnchor anchor, Vector2Int targetTile)
         {
-            controlAnchorOriginal = anchor;
-            bodyController = gecko;
+            touchAnchor = anchor;
+            SetBody(body);
             isDragging = true;
             isDraggingFromHead = (anchor == BodyController.ControlAnchor.Head);
 
@@ -296,16 +309,20 @@ namespace Geckout
             }
 
             isDragging = false;
+            if (bodyController)
+            {
+                bodyController.OnEndMove -= OnBodyEndMove;
+            }
             bodyController = null;
             currentPath?.Clear();
             smoothPath.Clear();
             lastTargetTile = Vector2Int.one * -1;
         }
 
-        void StartDragging(BodyController gecko, bool fromHead)
+        void StartDragging(BodyController body, bool fromHead)
         {
-            controlAnchorOriginal = fromHead? ControlAnchor.Head : ControlAnchor.Tail;
-            bodyController = gecko;
+            touchAnchor = fromHead ? ControlAnchor.Head : ControlAnchor.Tail;
+            SetBody(body);
             isDragging = true;
             isDraggingFromHead = fromHead;
             // Set control anchor based on drag source
@@ -321,6 +338,7 @@ namespace Geckout
         Vector2Int startPosCache;
         void FindAndSetSmoothPath(Vector2Int targetTile)
         {
+            DebugLog("FindAndSetSmoothPath");
             if (bodyController == null || !bodyController.CanControl) return;
 
             if (IsPushTrigger(bodyController, isDraggingFromHead, targetTile))
@@ -328,12 +346,6 @@ namespace Geckout
                 DebugLog("PUSH FindAndSetSmoothPath trigger detected!");
                 HandlePushMovement();
                 return;
-            }
-
-
-            if (!bodyController.IsMoving && !IsPushTrigger(bodyController, isDraggingFromHead, targetTile))
-            {
-                bodyController.SetControlAnchor(controlAnchorOriginal);
             }
 
             // BLOCK: không cho move vào tile occupied bởi body segments in normal move
@@ -478,18 +490,18 @@ namespace Geckout
             return null;
         }
 
-        bool IsPushTrigger(BodyController body, bool isDragFromHead, Vector2Int dragTarget)
+        bool IsPushTrigger(BodyController body, bool isDragFromHead, Vector2Int targetTile)
         {
             if (body.Segments.Count <= 3) return false;
 
-            Vector2Int anchorPos = controlAnchorOriginal == ControlAnchor.Head ?
-        body.Segments[0].Coordinate :body.Segments[body.Segments.Count - 1].Coordinate;
+            Vector2Int anchorPos = touchAnchor == ControlAnchor.Head ?
+        body.Segments[0].Coordinate : body.Segments[body.Segments.Count - 1].Coordinate;
 
-            Vector2Int bodyDirection = controlAnchorOriginal == ControlAnchor.Head ?
-                anchorPos - body.Segments[3].Coordinate:
+            Vector2Int bodyDirection = touchAnchor == ControlAnchor.Head ?
+                anchorPos - body.Segments[3].Coordinate :
                 anchorPos - body.Segments[body.Segments.Count - 4].Coordinate;
 
-            Vector2Int dragDirection = dragTarget - anchorPos;
+            Vector2Int dragDirection = targetTile - anchorPos;
 
             // Convert to Vector2 for normalization
             Vector2 bodyDir = new Vector2(bodyDirection.x, bodyDirection.y);
@@ -497,13 +509,24 @@ namespace Geckout
 
             float dot = Vector2.Dot(bodyDir.normalized, dragDir.normalized);
             Debug.Log($"PUSH check - bodyDir: {bodyDir}, dragDir: {dragDir}, " +
-                $"currentAchor: {controlAnchorOriginal}, dot: {dot}, anchorPos: {anchorPos}, dragTarget: {dragTarget}");
+                $"currentAchor: {touchAnchor}, dot: {dot}, anchorPos: {anchorPos}, dragTarget: {targetTile}");
             // Push nếu drag ngược hướng với body (dot < -0.5 = góc > 120 độ)
-            bool isOppositeDirection = dot < -0.5f;
+            bool isOppositeDirection = dot < -0.75f;
 
-            // Và phải drag vào body territory
-            float dragDistance = dragDir.magnitude;
-            bool isWithinBodyRange = dragDistance <= body.Segments.Count * 0.8f;
+            // BLOCK: không cho move vào tile occupied bởi body segments in normal move
+            HashSet<Vector2Int> occupiedTiles = new HashSet<Vector2Int>();
+            for (int i = 0; i < bodyController.Segments.Count; i++)
+            {
+                if (i % bodyController.SubLength == 0 || i == 0 || i == bodyController.Segments.Count - 1)
+                {
+                    occupiedTiles.Add(bodyController.Segments[i].Coordinate);
+                }
+            }
+            bool isWithinBodyRange = false;
+            if (occupiedTiles.Contains(targetTile))
+            {
+                isWithinBodyRange = true;
+            }
 
             return isOppositeDirection && isWithinBodyRange;
         }
@@ -520,7 +543,7 @@ namespace Geckout
         bool IsContinuousPush()
         {
             // Check nếu current movement cùng hướng với push intent
-            return bodyController.controlAnchor != controlAnchorOriginal;
+            return bodyController.controlAnchor != touchAnchor;
         }
 
         void HandlePushMovement()
@@ -535,16 +558,16 @@ namespace Geckout
             }
 
             // Calculate push distance từ original anchor position
-            Vector2Int originalAnchorPos = controlAnchorOriginal == ControlAnchor.Head ?
+            Vector2Int touchAnchorPos = touchAnchor == ControlAnchor.Head ?
                 bodyController.Segments[0].Coordinate :
                 bodyController.Segments[bodyController.Segments.Count - 1].Coordinate;
 
-            Vector2Int pushDistance = lastTargetTile - originalAnchorPos;
-            Debug.LogError($"PUSH lastTargetTile: {lastTargetTile}, originalAnchorPos: {originalAnchorPos}, pushDistance: {pushDistance}");
-            int pushMagnitude = Mathf.Max(Mathf.Abs(pushDistance.x), Mathf.Abs(pushDistance.y));
+            Vector2Int pushDistance = lastTargetTile - touchAnchorPos;
+            Debug.LogError($"PUSH lastTargetTile: {lastTargetTile}, originalAnchorPos: {touchAnchorPos}, pushDistance: {pushDistance}");
+            int pushMagnitude = (Mathf.Abs(pushDistance.x) + Mathf.Abs(pushDistance.y));
 
             // Switch to opposite anchor
-            var newAnchor = controlAnchorOriginal == ControlAnchor.Head ?
+            var newAnchor = touchAnchor == ControlAnchor.Head ?
                 BodyController.ControlAnchor.Tail : BodyController.ControlAnchor.Head;
 
             bodyController.SetControlAnchor(newAnchor);
@@ -558,7 +581,8 @@ namespace Geckout
 
             if (!targetTile.HasValue)
             {
-                bodyController.SetControlAnchor(controlAnchorOriginal);
+                DebugLog("PUSH blocked - !targetTile.HasValue");
+                bodyController.SetControlAnchor(touchAnchor);
                 return;
             }
 
