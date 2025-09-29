@@ -469,9 +469,10 @@ namespace Geckout
                 var segments = segment.Controller.Segments;
 
                 if (segment != null
-                    && (segment.CurrentTile.Coordinate == segments[0].Coordinate
-                    || segment.CurrentTile.Coordinate == segments[segments.Count - 1].Coordinate)
-                    )
+                    && (segment.CurrentTile.Coordinate == segments[3].Coordinate
+                    || segment.CurrentTile.Coordinate == segments[segments.Count - 4].Coordinate
+                    || segment.CurrentTile.Coordinate == segments[segments.Count - 1].Coordinate
+                    || segment.CurrentTile.Coordinate == segments[0].Coordinate))
                 {
                     DebugLog($"Found segment: {segment.name}, Controller: {segment.Controller?.name}");
                     return segment.Controller;
