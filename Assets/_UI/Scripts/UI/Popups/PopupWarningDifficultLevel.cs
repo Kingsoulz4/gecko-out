@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Geckout
 {
@@ -14,6 +15,7 @@ namespace Geckout
         [SerializeField] private GameObject m_superHardLevelObject;
         [SerializeField] private SkeletonGraphic m_hardAnim;
         [SerializeField] private SkeletonGraphic m_superHardAnim;
+        [SerializeField] private Image m_frameImage;
 
         private LevelController LevelGame => LevelManager.Instance.LevelGame;
 
@@ -45,11 +47,12 @@ namespace Geckout
             objectShow.gameObject.SetActive(true);
             objectShow.transform.localScale = Vector3.zero;
             objectShow.transform.DOScale(1, 0.5f);
+            m_frameImage.DOFade(0.5f, 0.5f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
 
-            m_hardAnim.AnimationState.SetAnimation(0, "animation", false);
-            m_superHardAnim.AnimationState.SetAnimation(0, "animation hard", false);
+            m_hardAnim.AnimationState.SetAnimation(0, "animation hard", false);
+            m_superHardAnim.AnimationState.SetAnimation(0, "animation", false);
 
-            yield return new WaitForSeconds(3.4f);
+            yield return new WaitForSeconds(3f);
             Hide();
             callback?.Invoke();
         }
