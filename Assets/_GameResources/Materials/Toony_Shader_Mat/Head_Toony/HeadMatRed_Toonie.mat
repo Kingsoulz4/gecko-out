@@ -106,7 +106,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _IndirectIntensity: 0.646
+    - _IndirectIntensity: 1
     - _IndirectIntensityOutline: 0
     - _MatCapMaskChannel: 0
     - _MatCapType: 0
@@ -129,8 +129,8 @@ Material:
     - _RampBandsSmoothing: 0.1
     - _RampOffset: 0
     - _RampScale: 1
-    - _RampSmoothing: 0.248
-    - _RampThreshold: 0.442
+    - _RampSmoothing: 1
+    - _RampThreshold: 0.734
     - _RampType: 0
     - _ReceiveShadowsOff: 0
     - _ReflectionMapType: 0
@@ -165,7 +165,7 @@ Material:
     - _UseSpecular: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.6981132, g: 0.20087217, b: 0.22060388, a: 1}
+    - _BaseColor: {r: 0.8018868, g: 0.13238695, b: 0.15898941, a: 1}
     - _Color: {r: 0.6627451, g: 0.28627452, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _HColor: {r: 0.8490566, g: 0.23217885, b: 0.19624422, a: 1}
