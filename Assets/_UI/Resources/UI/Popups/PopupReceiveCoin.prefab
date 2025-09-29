@@ -1173,10 +1173,11 @@ MonoBehaviour:
   _startPos: {fileID: 4126745375353853888}
   _goldCounter: {fileID: 2379304763829655331}
   m_targetPointFx: {fileID: 0}
-  _moveOutDuration: 0.3
+  m_coinPrefab: {fileID: 8932363504775565009, guid: c2ecbd3d9bcd9754791ffd286ea2602d, type: 3}
+  _moveOutDuration: 0.15
   _moveOutDelay: 0.2
   _moveToTargetDuration: 0.5
-  _coinStaggerDelay: 0.15
+  _coinStaggerDelay: 0.075
 --- !u!1 &8738557635066023118
 GameObject:
   m_ObjectHideFlags: 0

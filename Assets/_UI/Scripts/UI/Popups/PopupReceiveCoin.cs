@@ -16,6 +16,7 @@ namespace Geckout
         [SerializeField] private Transform _startPos;
         [SerializeField] private GoldDisplay _goldCounter;
         [SerializeField] private ParticleSystem m_targetPointFx;
+        [SerializeField] private GameObject m_coinPrefab;
 
         [Header("Timings")]
         [SerializeField] private float _moveOutDuration = 0.3f;
@@ -68,6 +69,15 @@ namespace Geckout
             for (int i = 0; i < _coinContainer.childCount; i++)
             {
                 Transform coin = _coinContainer.GetChild(i);
+
+                
+                var spawnPos = coin.position;
+                var screenPoint = RectTransformUtility.WorldToScreenPoint(UIManager.Instance.UICamera, spawnPos);
+                RectTransformUtility.ScreenPointToWorldPointInRectangle(GetComponent<RectTransform>(), screenPoint, Camera.main, out spawnPos);
+                Transform coinObject = Instantiate(m_coinPrefab, spawnPos, Quaternion.identity, coin).transform;
+                //coinObject.position = ConvertUICoinPos;
+                coinObject.DOLocalRotate(coinObject.localRotation.eulerAngles + Vector3.forward * 360, 0.5f, RotateMode.FastBeyond360).SetLoops(-1, LoopType.Incremental);
+                
                 int index = i;
 
                 Sequence coinSeq = DOTween.Sequence();
@@ -93,6 +103,7 @@ namespace Geckout
 
                                //m_targetPointFx?.Play();
                                onFinish?.Invoke();
+                               Hide();
                            }
                        });
                 
@@ -108,6 +119,13 @@ namespace Geckout
 
             yield return null;
         }
+
+        Vector3 ConvertUICoinPos(Vector3 pos)
+        {
+            var screenPoint = RectTransformUtility.WorldToScreenPoint(UIManager.Instance.UICamera, pos);
+            RectTransformUtility.ScreenPointToWorldPointInRectangle(GetComponent<RectTransform>(), screenPoint, Camera.main, out var newPos);
+            return new Vector3(newPos.x, newPos.y, -10);
+        }    
 
         private void PlayTextFx(int coinCount)
         {
