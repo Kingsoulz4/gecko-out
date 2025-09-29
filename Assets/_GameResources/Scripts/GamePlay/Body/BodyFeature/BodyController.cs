@@ -164,7 +164,6 @@ namespace Geckout
             // ===== Body segments =====
             // chỉ spawn từ 1 đến totalSegments - 2 (dành chỗ cho Tail)
 
-
             for (int i = 1; i < totalSegments - 1; i++)
             {
                 Segment seg = Instantiate(this.segment, transform);
@@ -201,7 +200,6 @@ namespace Geckout
                 currentSegment.Setup(prevSegment, nextSegment);
                 currentSegment.SetController(this);
             }
-
 
             for (int i = 0; i < Segments.Count; i++)
             {
@@ -254,8 +252,6 @@ namespace Geckout
             }
             Segments = new List<Segment>();
         }
-
-
         public List<Segment> GetOrderedSegments()
         {
             if (controlAnchor == ControlAnchor.Head)
@@ -666,17 +662,11 @@ namespace Geckout
         #endregion
 
         #region Booster
-
         public void CutOutLastSegment()
         {
             var bodyData = new BodyData(BodyData);
             bodyData.listCoordinate.Remove(bodyData.listCoordinate.Last());
             Initialize(bodyData);
-        }
-
-        private IEnumerator IECutOutAnim()
-        {
-            yield return null;
         }
 
         #endregion
