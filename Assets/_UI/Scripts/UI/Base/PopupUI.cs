@@ -19,7 +19,7 @@ public abstract class PopupUI : MonoBehaviour
     public static event Action<PopupUI> OnHide;
     public static event Action<PopupUI> OnShow;
     public bool isCache = false;
-    public bool isAniClose = true;
+    public bool isCloseAnim = false;
     [SerializeField] protected float duration = 0.3f;
     [SerializeField] private AnimShowPopUp animType;
     [SerializeField] protected RectTransform mainPopUp;
@@ -73,7 +73,7 @@ public abstract class PopupUI : MonoBehaviour
         //AudioManager.Instance.PlayOneShot("SFX_ClosePopup", 1f);
         isShowing = false;
         float time = 0;
-        if (mainPopUp && isAniClose)
+        if (mainPopUp && isCloseAnim)
         {
             switch (animType)
             {
