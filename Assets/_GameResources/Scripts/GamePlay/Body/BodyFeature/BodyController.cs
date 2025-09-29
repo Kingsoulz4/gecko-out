@@ -294,6 +294,7 @@ namespace Geckout
 
                 // Rebuild history to match new control direction
                 InitHistoryFromSegments();
+                Debug.Log("SetAnchor " + anchor);
             }
         }
 
@@ -326,6 +327,7 @@ namespace Geckout
             moveCoroutine = null;
 
             isMoving = false;
+            Debug.Log("endMove");
             OnEndMove?.Invoke();
             currentPath.Clear();
         }

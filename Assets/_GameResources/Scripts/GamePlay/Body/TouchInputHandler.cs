@@ -1,8 +1,12 @@
-﻿using UnityEngine;
-using UnityEngine.EventSystems;
-using Geckout.PathFinding;
+﻿using Geckout.PathFinding;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using static DG.Tweening.DOTweenAnimation;
+using static Geckout.BodyController;
+using static UnityEngine.Rendering.HableCurve;
 
 namespace Geckout
 {
@@ -21,6 +25,7 @@ namespace Geckout
         private Vector2Int lastTargetTile = Vector2Int.one * -1;
         private ASPathFinding pathfinder;
         private float lastPathUpdateTime = 0f;
+        private ControlAnchor touchAnchor = ControlAnchor.Head;
 
         private List<ASNode> currentPath;
         private List<Vector2Int> smoothPath = new List<Vector2Int>();
@@ -37,9 +42,9 @@ namespace Geckout
 
         void Update()
         {
-            if(!LevelManager.Instance.IsEdittingLevel)
-            if (canClick && GameManager.GameState == GameState.Playing)
-            HandleTouchInput();
+            if (!LevelManager.Instance.IsEdittingLevel)
+                if (canClick && GameManager.GameState == GameState.Playing)
+                    HandleTouchInput();
         }
 
         void HandleTouchInput()
@@ -60,7 +65,6 @@ namespace Geckout
 
         void OnTouchStart(Vector2 screenPosition)
         {
-            DebugLog($"Touch start at screen: {screenPosition}");
             if (GameManager.GameState == GameState.Playing && !LevelManager.Instance.LevelGame.IsFirstClick)
             {
                 LevelManager.Instance.LevelGame.IsFirstClick = true;
@@ -69,11 +73,11 @@ namespace Geckout
             Vector2Int? tileCoord = GetTileCoordinateFromScreen(screenPosition);
             if (!tileCoord.HasValue)
             {
-                DebugLog("No tile found at touch position");
+                DebugLog("OnTouchStart No tile found at touch position");
                 return;
             }
 
-            DebugLog($"Touch at tile coordinate: {tileCoord.Value}");
+            DebugLog($"OnTouchStart Touch at tile coordinate: {tileCoord.Value}");
 
             // Kiểm tra xem có click trực tiếp lên segment không
             var body = GetBodyControllerByMouse(screenPosition);
@@ -90,55 +94,55 @@ namespace Geckout
                 if (adjacentResult.HasValue)
                 {
                     var (gecko, anchor, anchorPos) = adjacentResult.Value;
-                    DebugLog($"Found adjacent {anchor} at {anchorPos} for target {tileCoord.Value}");
+                    DebugLog($"OnTouchStart Found adjacent {anchor} at {anchorPos} for target {tileCoord.Value}");
                     StartAutomaticMovement(gecko, anchor, tileCoord.Value);
                 }
                 else
                 {
-                    DebugLog("No adjacent head/tail found within 1 tile distance");
+                    DebugLog("OnTouchStart No adjacent head/tail found within 1 tile distance");
                 }
             }
             else
             {
-                DebugLog("Tile is occupied or invalid");
+                DebugLog("OnTouchStart Tile is occupied or invalid");
             }
         }
 
-        void HandleDirectBodyTouch(BodyController gecko, Vector2Int tileCoord)
+        void HandleDirectBodyTouch(BodyController body, Vector2Int tileCoord)
         {
-            Vector2Int headCoord = gecko.Segments[0].Coordinate;
-            Vector2Int tailCoord = gecko.Segments[gecko.Segments.Count - 1].Coordinate;
+            Vector2Int headCoord = body.Segments[0].Coordinate;
+            Vector2Int tailCoord = body.Segments[body.Segments.Count - 1].Coordinate;
 
-            DebugLog($"Gecko head at: {headCoord}, tail at: {tailCoord}");
+            DebugLog($"HandleDirectBodyTouch head at: {headCoord}, tail at: {tailCoord}");
 
             // BLOCK: đang move theo HEAD thì không cho grab TAIL và ngược lại
-            if (gecko.IsMoving)
+            if (body.IsMoving)
             {
-                if (gecko.controlAnchor == BodyController.ControlAnchor.Head && tileCoord == tailCoord)
+                if (body.controlAnchor == BodyController.ControlAnchor.Head && tileCoord == tailCoord)
                 {
-                    DebugLog("Blocked: cannot start dragging from TAIL while gecko is moving from HEAD");
+                    DebugLog("HandleDirectBodyTouch Blocked: cannot start dragging from TAIL while gecko is moving from HEAD");
                     return;
                 }
-                else if (gecko.controlAnchor == BodyController.ControlAnchor.Tail && tileCoord == headCoord)
+                else if (body.controlAnchor == BodyController.ControlAnchor.Tail && tileCoord == headCoord)
                 {
-                    DebugLog("Blocked: cannot start dragging from HEAD while gecko is moving from TAIL");
+                    DebugLog("HandleDirectBodyTouch Blocked: cannot start dragging from HEAD while gecko is moving from TAIL");
                     return;
                 }
                 else
                 {
-                    DebugLog("Gecko is currently moving, but allowing path update from same anchor");
+                    DebugLog("HandleDirectBodyTouch Body is currently moving, but allowing path update from same anchor");
                 }
             }
 
             if (tileCoord == headCoord)
             {
-                DebugLog("Starting drag from HEAD");
-                StartDragging(gecko, true);
+                DebugLog("HandleDirectBodyTouch Starting drag from HEAD");
+                StartDragging(body, true);
             }
             else if (tileCoord == tailCoord)
             {
-                DebugLog("Starting drag from TAIL");
-                StartDragging(gecko, false);
+                DebugLog("HandleDirectBodyTouch Starting drag from TAIL");
+                StartDragging(body, false);
             }
             else
             {
@@ -152,12 +156,12 @@ namespace Geckout
                     BodyController.ControlAnchor.Head : BodyController.ControlAnchor.Tail;
 
                 // BLOCK: kiểm tra movement conflict cho body segment touch
-                if (gecko.IsMoving)
+                if (body.IsMoving)
                 {
-                    if ((gecko.controlAnchor == BodyController.ControlAnchor.Head && selectedAnchor == BodyController.ControlAnchor.Tail) ||
-                        (gecko.controlAnchor == BodyController.ControlAnchor.Tail && selectedAnchor == BodyController.ControlAnchor.Head))
+                    if ((body.controlAnchor == BodyController.ControlAnchor.Head && selectedAnchor == BodyController.ControlAnchor.Tail) ||
+                        (body.controlAnchor == BodyController.ControlAnchor.Tail && selectedAnchor == BodyController.ControlAnchor.Head))
                     {
-                        DebugLog($"Blocked: cannot start movement from {selectedAnchor} while gecko is moving from {gecko.controlAnchor}");
+                        DebugLog($"Blocked: cannot start movement from {selectedAnchor} while gecko is moving from {body.controlAnchor}");
                         return;
                     }
                 }
@@ -165,7 +169,7 @@ namespace Geckout
                 DebugLog($"Body segment clicked, selected nearest anchor: {selectedAnchor} (head dist: {headDistance}, tail dist: {tailDistance})");
 
                 // Bắt đầu drag mode với anchor đã chọn
-                StartBodyDrag(gecko, selectedAnchor);
+                StartBodyDrag(body, selectedAnchor);
             }
         }
 
@@ -219,9 +223,22 @@ namespace Geckout
             return adjacent;
         }
 
-        void StartBodyDrag(BodyController gecko, BodyController.ControlAnchor anchor)
+        void SetBody(BodyController body)
         {
-            bodyController = gecko;
+            bodyController = body;
+            bodyController.OnEndMove += OnBodyEndMove;
+        }
+
+        private void OnBodyEndMove()
+        {
+            bodyController.SetControlAnchor(touchAnchor);
+            Debug.Log("OnBodyEndMove");
+        }
+
+        void StartBodyDrag(BodyController body, BodyController.ControlAnchor anchor)
+        {
+            touchAnchor = anchor;
+            SetBody(body);
             isDragging = true;
             isDraggingFromHead = (anchor == BodyController.ControlAnchor.Head);
 
@@ -239,15 +256,16 @@ namespace Geckout
             lastPathUpdateTime = 0f;
         }
 
-        void StartAutomaticMovement(BodyController gecko, BodyController.ControlAnchor anchor, Vector2Int targetTile)
+        void StartAutomaticMovement(BodyController body, BodyController.ControlAnchor anchor, Vector2Int targetTile)
         {
-            bodyController = gecko;
-            isDragging = true; // Enable drag mode ngay để có thể continue drag
+            touchAnchor = anchor;
+            SetBody(body);
+            isDragging = true;
             isDraggingFromHead = (anchor == BodyController.ControlAnchor.Head);
 
             // Set control anchor
             bodyController.SetControlAnchor(anchor);
-            DebugLog($"Auto movement started: {anchor} -> {targetTile} (drag mode enabled)");
+            DebugLog($"StartAutomaticMovement movement started: {anchor} -> {targetTile} (drag mode enabled)");
 
             // Initialize pathfinder
             bool[] mapState = GameMap.GetCurrentMapState();
@@ -279,7 +297,7 @@ namespace Geckout
             lastTargetTile = tileCoord.Value;
             lastPathUpdateTime = Time.time;
 
-            DebugLog($"Dragging to NEW target tile: {tileCoord.Value}");
+            DebugLog($"OnTouchDrag to NEW target tile: {tileCoord.Value}");
 
             FindAndSetSmoothPath(tileCoord.Value);
         }
@@ -292,34 +310,63 @@ namespace Geckout
             }
 
             isDragging = false;
+            if (bodyController)
+            {
+                bodyController.OnEndMove -= OnBodyEndMove;
+            }
             bodyController = null;
             currentPath?.Clear();
             smoothPath.Clear();
             lastTargetTile = Vector2Int.one * -1;
         }
 
-        void StartDragging(BodyController gecko, bool fromHead)
+        void StartDragging(BodyController body, bool fromHead)
         {
-            bodyController = gecko;
+            touchAnchor = fromHead ? ControlAnchor.Head : ControlAnchor.Tail;
+            SetBody(body);
             isDragging = true;
             isDraggingFromHead = fromHead;
-
             // Set control anchor based on drag source
             bodyController.SetControlAnchor(fromHead ? BodyController.ControlAnchor.Head : BodyController.ControlAnchor.Tail);
-            DebugLog($"Started dragging gecko from {(fromHead ? "HEAD" : "TAIL")}");
+            DebugLog($"StartDragging from {(fromHead ? "HEAD" : "TAIL")}");
 
             // Initialize pathfinder
             bool[] mapState = GameMap.GetCurrentMapState();
             ASGrid grid = new ASGrid(GameMap.MapSize.x, GameMap.MapSize.y, mapState);
             pathfinder = new ASPathFinding(grid);
-
-            DebugLog($"Map size: {GameMap.MapSize}, total tiles: {mapState.Length}");
         }
 
         Vector2Int startPosCache;
         void FindAndSetSmoothPath(Vector2Int targetTile)
         {
+            DebugLog("FindAndSetSmoothPath");
             if (bodyController == null || !bodyController.CanControl) return;
+
+            if (IsPushTrigger(bodyController, isDraggingFromHead, targetTile))
+            {
+                DebugLog("PUSH FindAndSetSmoothPath trigger detected!");
+                HandlePushMovement();
+                return;
+            }
+
+            // BLOCK: không cho move vào tile occupied bởi body segments in normal move
+            HashSet<Vector2Int> occupiedTiles = new HashSet<Vector2Int>();
+            for (int i = 0; i < bodyController.Segments.Count; i++)
+            {
+                if (i % bodyController.SubLength == 0 || i == 0 || i == bodyController.Segments.Count - 1)
+                {
+                    occupiedTiles.Add(bodyController.Segments[i].Coordinate);
+                }
+            }
+
+            if (occupiedTiles.Contains(targetTile))
+            {
+                DebugLog($"Blocked: Cannot move to occupied body tile {targetTile}");
+                return;
+            }
+
+            isDraggingFromHead = (bodyController.controlAnchor == BodyController.ControlAnchor.Head);
+
 
             var headPos = GameMap.WorldToGridPositionForward(bodyController.Segments[0].transform.position, bodyController);
             var tailPos = GameMap.WorldToGridPositionForward(bodyController.Segments[bodyController.Segments.Count - 1].transform.position, bodyController);
@@ -331,14 +378,6 @@ namespace Geckout
             // Get current map state
             bool[] mapState = GameMap.GetCurrentMapState();
 
-            // Block tiles occupied by gecko segments
-            for (int i = 0; i < bodyController.Segments.Count; i++)
-            {
-                if (i % bodyController.SubLength != 0 && i != 0 && i != bodyController.Segments.Count - 1)
-                {
-                    continue;
-                }
-            }
 
             // Create pathfinder with updated grid
             ASGrid grid = new ASGrid(GameMap.MapSize.x, GameMap.MapSize.y, mapState);
@@ -352,15 +391,15 @@ namespace Geckout
         {
             if (path == null || path.Count == 0)
             {
-                DebugLog("No path found!");
+                DebugLog("NORMAL No path found!");
                 return;
             }
 
-            DebugLog($"Raw path found with {path.Count} steps");
+            DebugLog($"NORMAL OnSmoothPathFound {path.Count} steps");
 
             // Convert to coordinate list and remove starting position
             smoothPath.Clear();
-            
+
             foreach (var node in path)
             {
                 // Skip the starting position to avoid immediate completion
@@ -372,7 +411,7 @@ namespace Geckout
 
             if (smoothPath.Count == 0)
             {
-                DebugLog("No movement needed - already at target");
+                DebugLog("NORMAL No movement needed - already at target");
                 return;
             }
 
@@ -388,12 +427,17 @@ namespace Geckout
                 return;
             }
 
-            DebugLog($"Executing smooth path with {path.Count} points for {(isDraggingFromHead ? "HEAD" : "TAIL")} control");
+            // test set anchor here
+            if (bodyController.IsMoving && bodyController.controlAnchor != touchAnchor)
+            {
+                return;
+                //bodyController.SetControlAnchor(touchAnchor);
+            }
+
+            DebugLog("NORMAL execute path");
 
             bodyController.ClearPath();
             bodyController.StartMovePath(path);
-
-            DebugLog("Smooth path movement started");
         }
 
         Vector2Int? GetTileCoordinateFromScreen(Vector2 screenPosition)
@@ -418,34 +462,16 @@ namespace Geckout
         public BodyController GetBodyControllerByMouse(Vector2 screenPosition)
         {
             Ray ray = gameCamera.ScreenPointToRay(screenPosition);
-
-            // Test với all layers trước để debug
-            if (Physics.Raycast(ray, out RaycastHit debugHit, Mathf.Infinity))
-            {
-                DebugLog($"Debug raycast (all layers) hit: {debugHit.collider.name}, layer: {debugHit.collider.gameObject.layer}");
-            }
-
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, segmentLayer))
             {
-                DebugLog($"Raycast hit: {hit.collider.name}, layer: {hit.collider.gameObject.layer}");
-
                 // Try direct component on hit object
                 Segment segment = hit.collider.GetComponent<Segment>();
-                if (segment == null)
-                {
-                    // Try parent
-                    segment = hit.collider.transform.parent?.GetComponent<Segment>();
-                    DebugLog($"Tried parent: {hit.collider.transform.parent?.name}");
-                }
+                var segments = segment.Controller.Segments;
 
-                if (segment == null)
-                {
-                    // Try children
-                    segment = hit.collider.GetComponentInParent<Segment>();
-                    DebugLog("Tried GetComponentInParent");
-                }
-
-                if (segment != null)
+                if (segment != null
+                    && (segment.CurrentTile.Coordinate == segments[0].Coordinate
+                    || segment.CurrentTile.Coordinate == segments[segments.Count - 1].Coordinate)
+                    )
                 {
                     DebugLog($"Found segment: {segment.name}, Controller: {segment.Controller?.name}");
                     return segment.Controller;
@@ -462,6 +488,47 @@ namespace Geckout
             return null;
         }
 
+        bool IsPushTrigger(BodyController body, bool isDragFromHead, Vector2Int targetTile)
+        {
+            if (body.Segments.Count <= 3) return false;
+
+            Vector2Int anchorPos = touchAnchor == ControlAnchor.Head ?
+        body.Segments[0].Coordinate : body.Segments[body.Segments.Count - 1].Coordinate;
+
+            Vector2Int bodyDirection = touchAnchor == ControlAnchor.Head ?
+                anchorPos - body.Segments[3].Coordinate :
+                anchorPos - body.Segments[body.Segments.Count - 4].Coordinate;
+
+            Vector2Int dragDirection = targetTile - anchorPos;
+
+            // Convert to Vector2 for normalization
+            Vector2 bodyDir = new Vector2(bodyDirection.x, bodyDirection.y);
+            Vector2 dragDir = new Vector2(dragDirection.x, dragDirection.y);
+
+            float dot = Vector2.Dot(bodyDir.normalized, dragDir.normalized);
+            Debug.Log($"PUSH check - bodyDir: {bodyDir}, dragDir: {dragDir}, " +
+                $"currentAchor: {touchAnchor}, dot: {dot}, anchorPos: {anchorPos}, dragTarget: {targetTile}");
+            // Push nếu drag ngược hướng với body (dot < -0.5 = góc > 120 độ)
+            bool isOppositeDirection = dot < -0.5f;
+
+            // BLOCK: không cho move vào tile occupied bởi body segments in normal move
+            HashSet<Vector2Int> occupiedTiles = new HashSet<Vector2Int>();
+            for (int i = 0; i < bodyController.Segments.Count; i++)
+            {
+                if (i % bodyController.SubLength == 0 || i == 0 || i == bodyController.Segments.Count - 1)
+                {
+                    occupiedTiles.Add(bodyController.Segments[i].Coordinate);
+                }
+            }
+            bool isWithinBodyRange = false;
+            if (occupiedTiles.Contains(targetTile))
+            {
+                isWithinBodyRange = true;
+            }
+
+            return isOppositeDirection && isWithinBodyRange;
+        }
+
         void DebugLog(string message)
         {
             if (enableDebugLogs)
@@ -469,5 +536,165 @@ namespace Geckout
                 Debug.Log($"[TouchInput] {message}");
             }
         }
+
+        #region Push Movement
+        bool IsContinuousPush()
+        {
+            // Check nếu current movement cùng hướng với push intent
+            return bodyController.controlAnchor != touchAnchor;
+        }
+
+        void HandlePushMovement()
+        {
+            if (bodyController == null) return;
+            bool canPush = !bodyController.IsMoving || IsContinuousPush();
+
+            if (!canPush)
+            {
+                DebugLog("PUSH blocked - conflicting movement");
+                return;
+            }
+
+            // Calculate push distance từ original anchor position
+            Vector2Int touchAnchorPos = touchAnchor == ControlAnchor.Head ?
+                bodyController.Segments[0].Coordinate :
+                bodyController.Segments[bodyController.Segments.Count - 1].Coordinate;
+
+            Vector2Int pushDistance = lastTargetTile - touchAnchorPos;
+            Debug.LogError($"PUSH lastTargetTile: {lastTargetTile}, originalAnchorPos: {touchAnchorPos}, pushDistance: {pushDistance}");
+            int pushMagnitude = (Mathf.Abs(pushDistance.x) + Mathf.Abs(pushDistance.y));
+
+            // Switch to opposite anchor
+            var newAnchor = touchAnchor == ControlAnchor.Head ?
+                BodyController.ControlAnchor.Tail : BodyController.ControlAnchor.Head;
+
+
+            // Find target với same distance
+            Vector2Int oppositeAnchorPos = newAnchor == ControlAnchor.Head ?
+                bodyController.Segments[0].Coordinate :
+                bodyController.Segments[bodyController.Segments.Count - 1].Coordinate;
+
+            Vector2Int? targetTile = FindPushTargetWithDistance(oppositeAnchorPos, pushMagnitude);
+
+            if (!targetTile.HasValue)
+            {
+                DebugLog("PUSH blocked - !targetTile.HasValue");
+                return;
+            }
+
+            bodyController.SetControlAnchor(newAnchor);
+            ExecutePushPath(targetTile.Value);
+        }
+
+        Vector2Int? FindPushTargetWithDistance(Vector2Int startPos, int targetDistance)
+        {
+            Vector2Int[] directions = {
+        new Vector2Int(0, 1), new Vector2Int(1, 0),
+        new Vector2Int(0, -1), new Vector2Int(-1, 0)
+    };
+
+            foreach (var direction in directions)
+            {
+                Vector2Int target = startPos + direction * targetDistance;
+                GameMap.TryGetTileAtCoord(target, out GameTile tile);
+
+                if (tile != null && !tile.IsOccupied)
+                {
+                    // Verify path is clear
+                    bool pathClear = true;
+                    for (int i = 1; i <= targetDistance; i++)
+                    {
+                        Vector2Int checkPos = startPos + direction * i;
+                        GameMap.TryGetTileAtCoord(checkPos, out GameTile checkTile);
+                        if (checkTile == null || checkTile.IsOccupied)
+                        {
+                            pathClear = false;
+                            break;
+                        }
+                    }
+
+                    if (pathClear)
+                    {
+                        DebugLog($"PUSH target: {target}, distance: {targetDistance}");
+                        return target;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        void ExecutePushPath(Vector2Int targetTile)
+        {
+            if (bodyController == null) return;
+
+            // Get current anchor position based on new control anchor
+            Vector2Int startPos;
+            if (bodyController.controlAnchor == BodyController.ControlAnchor.Head)
+            {
+                startPos = GameMap.WorldToGridPositionForward(bodyController.Segments[0].transform.position, bodyController);
+            }
+            else
+            {
+                startPos = GameMap.WorldToGridPositionForward(
+                    bodyController.Segments[bodyController.Segments.Count - 1].transform.position, bodyController);
+            }
+
+            // Initialize pathfinder with current map state
+            bool[] mapState = GameMap.GetCurrentMapState();
+            ASGrid grid = new ASGrid(GameMap.MapSize.x, GameMap.MapSize.y, mapState);
+            pathfinder = new ASPathFinding(grid);
+
+            // Find and execute path
+            pathfinder.Reset();
+            pathfinder.FindPath(startPos, targetTile, OnPushPathFound);
+        }
+
+        void OnPushPathFound(List<ASNode> path)
+        {
+            if (path == null || path.Count == 0)
+            {
+                DebugLog("PUSH pathfinding failed!");
+                return;
+            }
+
+            DebugLog($"PUSH path found with {path.Count} steps");
+
+            // Convert to coordinate list and remove starting position
+            List<Vector2Int> pushPath = new List<Vector2Int>();
+            Vector2Int currentAnchorPos;
+
+            if (bodyController.controlAnchor == BodyController.ControlAnchor.Head)
+            {
+                currentAnchorPos = GameMap.WorldToGridPositionForward(bodyController.Segments[0].transform.position, bodyController);
+            }
+            else
+            {
+                currentAnchorPos = GameMap.WorldToGridPositionForward(
+                    bodyController.Segments[bodyController.Segments.Count - 1].transform.position, bodyController);
+            }
+
+            foreach (var node in path)
+            {
+                // Skip the starting position
+                if (node.Position != currentAnchorPos)
+                {
+                    pushPath.Add(node.Position);
+                }
+            }
+
+            if (pushPath.Count == 0)
+            {
+                DebugLog("No movement needed for push - already at target");
+                return;
+            }
+
+            // Execute the push movement
+            DebugLog($"PUSH Executing push movement with {pushPath.Count} steps");
+            bodyController.ClearPath();
+            bodyController.StartMovePath(pushPath);
+
+        }
+        #endregion
     }
 }
