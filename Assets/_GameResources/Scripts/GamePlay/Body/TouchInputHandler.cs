@@ -232,6 +232,7 @@ namespace Geckout
         private void OnBodyEndMove()
         {
             bodyController.SetControlAnchor(touchAnchor);
+            Debug.Log("OnBodyEndMove");
         }
 
         void StartBodyDrag(BodyController body, BodyController.ControlAnchor anchor)
@@ -427,7 +428,11 @@ namespace Geckout
             }
 
             // test set anchor here
-            //bodyController.SetControlAnchor(touchAnchor);
+            if (bodyController.IsMoving && bodyController.controlAnchor != touchAnchor)
+            {
+                return;
+                //bodyController.SetControlAnchor(touchAnchor);
+            }
 
             DebugLog("NORMAL execute path");
 

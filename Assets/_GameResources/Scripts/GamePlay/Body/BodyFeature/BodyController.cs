@@ -327,6 +327,7 @@ namespace Geckout
             moveCoroutine = null;
 
             isMoving = false;
+            Debug.Log("endMove");
             OnEndMove?.Invoke();
             currentPath.Clear();
         }

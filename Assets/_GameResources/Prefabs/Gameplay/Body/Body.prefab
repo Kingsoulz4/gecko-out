@@ -284,7 +284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spline: {fileID: 3626055781503237806}
-  tubeRadius: 0.7
+  tubeRadius: 0.65
   _tubeGenerator: {fileID: 9047026933609085666}
   m_arrowSprite: {fileID: 5584027278633758856}
   m_listBodyColor: {fileID: 11400000, guid: 29487e4b2a151d7488d00ae616a352d4, type: 2}
@@ -314,7 +314,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileCenterThreshold: 0.02
-  enableDebugLogs: 0
+  enableDebugLogs: 1
   bodyController: {fileID: 3655932188227585431}
 --- !u!114 &3655932188227585431
 MonoBehaviour:
