@@ -50,10 +50,12 @@ namespace Geckout
         private void OnClickClaimX2()
         {
             if (isLockClick) return;
+
+            UserDataManager.AddGold(80, "WinX2");
+
             if (currentProgressNewFeature < 1)
             {
                 Hide();
-                UserDataManager.AddGold(80, "WinX2");
             }
             else
             {
@@ -64,10 +66,12 @@ namespace Geckout
         private void OnClickClaim()
         {
             if (isLockClick) return;
+
+            UserDataManager.AddGold(40, "Win");
+
             if (currentProgressNewFeature < 1)
             {
                 Hide();
-                UserDataManager.AddGold(40, "Win");
             }
             else
             {

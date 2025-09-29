@@ -1,0 +1,79 @@
+Anim_hard_level.png
+size:624,1040
+filter:Linear,Linear
+pma:true
+scale:0.8
+Ellipse 1493
+bounds:0,102,248,217
+Layer 14
+bounds:403,319,239,76
+offsets:8,4,254,82
+rotate:90
+Layer 15
+bounds:0,0,104,246
+rotate:90
+Shape 1493
+bounds:515,4,70,82
+rotate:90
+arrow
+bounds:386,16,129,142
+bar
+bounds:246,19,300,140
+rotate:90
+bar hl
+bounds:0,636,382,222
+rotate:90
+center
+bounds:261,319,519,142
+rotate:90
+eye
+bounds:555,960,78,63
+rotate:90
+eye 2
+bounds:515,531,77,76
+offsets:0,1,78,77
+eyeball
+bounds:546,833,77,77
+offsets:0,0,78,77
+rotate:90
+face
+bounds:479,340,106,69
+rotate:90
+fire1
+bounds:403,557,136,170
+fire2
+bounds:413,723,130,158
+offsets:3,0,136,170
+rotate:90
+firebloom
+bounds:386,158,161,114
+offsets:3,2,167,118
+rotate:90
+firehl
+bounds:537,607,61,81
+gradiant
+bounds:0,319,317,261
+offsets:0,10,317,271
+rotate:90
+hand l
+bounds:515,74,84,78
+rotate:90
+hand r
+bounds:479,446,86,85
+horn 2
+bounds:565,158,55,82
+horn 3
+bounds:548,340,60,82
+mouth
+bounds:0,1018,154,20
+mouth 2
+bounds:504,853,167,51
+rotate:90
+nhan
+bounds:222,811,8,27
+sh body
+bounds:222,838,248,198
+offsets:0,0,248,204
+tooth 2
+bounds:515,158,182,50
+rotate:90

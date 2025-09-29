@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Geckout.Data;
+using Spine.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace Geckout
     {
         [SerializeField] private GameObject m_hardLevelObject;
         [SerializeField] private GameObject m_superHardLevelObject;
+        [SerializeField] private SkeletonGraphic m_hardAnim;
+        [SerializeField] private SkeletonGraphic m_superHardAnim;
 
         private LevelController LevelGame => LevelManager.Instance.LevelGame;
 
@@ -42,7 +45,11 @@ namespace Geckout
             objectShow.gameObject.SetActive(true);
             objectShow.transform.localScale = Vector3.zero;
             objectShow.transform.DOScale(1, 0.5f);
-            yield return new WaitForSeconds(2f);
+
+            m_hardAnim.AnimationState.SetAnimation(0, "animation", false);
+            m_superHardAnim.AnimationState.SetAnimation(0, "animation hard", false);
+
+            yield return new WaitForSeconds(3.4f);
             Hide();
             callback?.Invoke();
         }
