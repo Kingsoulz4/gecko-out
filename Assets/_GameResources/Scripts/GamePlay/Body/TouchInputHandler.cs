@@ -427,6 +427,7 @@ namespace Geckout
             }
 
             // test set anchor here
+            //bodyController.SetControlAnchor(touchAnchor);
 
             DebugLog("NORMAL execute path");
 
@@ -562,7 +563,6 @@ namespace Geckout
             var newAnchor = touchAnchor == ControlAnchor.Head ?
                 BodyController.ControlAnchor.Tail : BodyController.ControlAnchor.Head;
 
-            bodyController.SetControlAnchor(newAnchor);
 
             // Find target với same distance
             Vector2Int oppositeAnchorPos = newAnchor == ControlAnchor.Head ?
@@ -577,6 +577,7 @@ namespace Geckout
                 return;
             }
 
+            bodyController.SetControlAnchor(newAnchor);
             ExecutePushPath(targetTile.Value);
         }
 
