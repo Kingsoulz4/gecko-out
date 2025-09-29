@@ -70,23 +70,24 @@ namespace Geckout
             {
                 Transform coin = _coinContainer.GetChild(i);
 
-                
-                var spawnPos = coin.position;
-                var screenPoint = RectTransformUtility.WorldToScreenPoint(UIManager.Instance.UICamera, spawnPos);
-                RectTransformUtility.ScreenPointToWorldPointInRectangle(GetComponent<RectTransform>(), screenPoint, Camera.main, out spawnPos);
-                Transform coinObject = Instantiate(m_coinPrefab, spawnPos, Quaternion.identity, coin).transform;
-                //coinObject.position = ConvertUICoinPos;
-                coinObject.DOLocalRotate(coinObject.localRotation.eulerAngles + Vector3.forward * 360, 0.5f, RotateMode.FastBeyond360).SetLoops(-1, LoopType.Incremental);
+                Transform coinObject = Instantiate(m_coinPrefab, coin).transform;
+                coinObject.localPosition = Vector3.zero + Vector3.forward * Random.Range(-100f, -120f);
+                //coinObject.DOLocalRotate(coinObject.localRotation.eulerAngles + Vector3.forward * 360, 0.5f, RotateMode.FastBeyond360)
+                //    .SetEase(Ease.Linear)
+                //    .SetLoops(-1, LoopType.Restart);
                 
                 int index = i;
 
                 Sequence coinSeq = DOTween.Sequence();
                 coinSeq.Append(coin.DOScale(1f, _moveOutDuration).SetEase(Ease.OutBack))
                        .Join(coin.DOLocalMove(_initialPos[i], _moveOutDuration).SetEase(Ease.OutBack))
+                       .Join(coinObject.DOLocalRotate(coinObject.localRotation.eulerAngles + Vector3.forward * 360, _moveOutDuration * 5, RotateMode.FastBeyond360)
+                            .SetEase(Ease.Linear)
+                            /*.SetLoops(-1, LoopType.Restart)*/)
                        .AppendInterval(_moveOutDelay)
-                       .Append(coin.DOMove(_goldCounter.ImgCoinIcon.transform.position, _moveToTargetDuration).SetEase(Ease.InBack))
-                       .Join(coin.DOScale(0.5f, _moveToTargetDuration))
-                       .Join(coin.DORotate(Vector3.zero, _moveToTargetDuration, RotateMode.Fast))
+                       .Append(coin.DOMove(_goldCounter.ImgCoinIcon.transform.position + Vector3.forward * 5, _moveToTargetDuration).SetEase(Ease.InBack))
+                       .Join(coin.DOScale(0.8f, _moveToTargetDuration))
+                       .Join(coinObject.DORotate(coinObject.localRotation.eulerAngles + Vector3.forward * 360, _moveToTargetDuration * 2, RotateMode.FastBeyond360).SetEase(Ease.Linear))
                        .Append(coin.DOScale(0f, 0.25f).SetEase(Ease.InBack))
                        .SetDelay(delayCount)
                        .OnComplete(() =>
@@ -94,6 +95,7 @@ namespace Geckout
                            //AudioManager.Instance.PlayCoinDingFX();
                            //VibrationManager.VibrateWeak();
                            _goldCounter.SetText(UserDataManager.Gold - coinCount + coinCount / _coinContainer.childCount * (index + 1));
+                           Destroy(coinObject.gameObject);
 
                            if (index == _coinContainer.childCount - 1)
                            {
@@ -103,10 +105,38 @@ namespace Geckout
 
                                //m_targetPointFx?.Play();
                                onFinish?.Invoke();
+                               
+
                                Hide();
                            }
                        });
-                
+
+                //Sequence coinSeq = DOTween.Sequence();
+                //coinSeq.Append(coinObject.DOScale(1f, _moveOutDuration).SetEase(Ease.OutBack))
+                //       .Join(coinObject.DOMove(ConvertUICoinPos(_initialPos[i]), _moveOutDuration).SetEase(Ease.OutBack))
+                //       .AppendInterval(_moveOutDelay)
+                //       .Append(coinObject.DOMove(ConvertUICoinPos(_goldCounter.ImgCoinIcon.transform.position), _moveToTargetDuration).SetEase(Ease.InBack))
+                //       .Join(coinObject.DOScale(0.5f, _moveToTargetDuration))
+                //       .Append(coinObject.DOScale(0f, 0.25f).SetEase(Ease.InBack))
+                //       .SetDelay(delayCount)
+                //       .OnComplete(() =>
+                //       {
+                //           //AudioManager.Instance.PlayCoinDingFX();
+                //           //VibrationManager.VibrateWeak();
+                //           _goldCounter.SetText(UserDataManager.Gold - coinCount + coinCount / _coinContainer.childCount * (index + 1));
+
+                //           if (index == _coinContainer.childCount - 1)
+                //           {
+                //               // Final sync
+                //               _goldCounter.SetText(UserDataManager.Gold);
+                //               _goldCounter.Sync = true;
+
+                //               //m_targetPointFx?.Play();
+                //               onFinish?.Invoke();
+                //               Hide();
+                //           }
+                //       });
+
 
                 delayCount += _coinStaggerDelay;
             }
@@ -124,7 +154,7 @@ namespace Geckout
         {
             var screenPoint = RectTransformUtility.WorldToScreenPoint(UIManager.Instance.UICamera, pos);
             RectTransformUtility.ScreenPointToWorldPointInRectangle(GetComponent<RectTransform>(), screenPoint, Camera.main, out var newPos);
-            return new Vector3(newPos.x, newPos.y, -10);
+            return new Vector3(newPos.x, newPos.y, -6);
         }    
 
         private void PlayTextFx(int coinCount)
