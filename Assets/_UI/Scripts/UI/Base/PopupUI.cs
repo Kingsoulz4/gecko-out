@@ -20,7 +20,7 @@ public abstract class PopupUI : MonoBehaviour
     public static event Action<PopupUI> OnShow;
     public bool isCache = false;
     public bool isCloseAnim = false;
-    [SerializeField] protected float duration = 0.3f;
+    [SerializeField] protected float duration = 0.2f;
     [SerializeField] private AnimShowPopUp animType;
     [SerializeField] protected RectTransform mainPopUp;
     [SerializeField] protected Image m_background;
@@ -28,6 +28,7 @@ public abstract class PopupUI : MonoBehaviour
     public bool isShowing { get; protected set; }
     public virtual void Initialize(UIManager manager)
     {
+        duration = 0.2f;
         this.uiManager = manager;
         gameObject.SetActive(false);
         isShowing = false;
