@@ -241,6 +241,7 @@ MonoBehaviour:
   eventOnPointUp:
     m_PersistentCalls:
       m_Calls: []
+  soundClick: {fileID: 0}
 --- !u!114 &3372299886735338381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1718,7 +1719,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isCache: 1
-  isAniClose: 1
+  isCloseAnim: 0
   duration: 0.3
   animType: 2
   mainPopUp: {fileID: 4115894757074722732}
@@ -1925,7 +1926,6 @@ GameObject:
   - component: {fileID: 2405758693834858243}
   - component: {fileID: 8421855085211318327}
   - component: {fileID: 667777067951865880}
-  - component: {fileID: 8935112875687820633}
   m_Layer: 5
   m_Name: ButtonLanguage
   m_TagString: Untagged
@@ -2056,18 +2056,6 @@ MonoBehaviour:
   eventOnPointUp:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &8935112875687820633
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3931524597642133202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 381e6680138801e4897eb890e542ec14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   soundClick: {fileID: 0}
 --- !u!1 &4184931020524832316
 GameObject:
@@ -2213,6 +2201,7 @@ MonoBehaviour:
   eventOnPointUp:
     m_PersistentCalls:
       m_Calls: []
+  soundClick: {fileID: 0}
 --- !u!114 &2948986086042755331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2616,6 +2605,7 @@ GameObject:
   - component: {fileID: 5683198376046145401}
   - component: {fileID: 6701245708116794868}
   - component: {fileID: 7401018397154043063}
+  - component: {fileID: 6324840152194293111}
   m_Layer: 5
   m_Name: TextPrivacy
   m_TagString: Untagged
@@ -2685,6 +2675,28 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Privacy
+--- !u!114 &6324840152194293111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5889334936583534120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97b406c0e2aedaa4dba07edc643001cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startScale: {x: 1, y: 1}
+  endScale: {x: 0.95, y: 0.95}
+  targetTF: {fileID: 5683198376046145401}
+  eventOnPointDown:
+    m_PersistentCalls:
+      m_Calls: []
+  eventOnPointUp:
+    m_PersistentCalls:
+      m_Calls: []
+  soundClick: {fileID: 0}
 --- !u!1 &5904286215392465082
 GameObject:
   m_ObjectHideFlags: 0
@@ -2829,6 +2841,7 @@ MonoBehaviour:
   eventOnPointUp:
     m_PersistentCalls:
       m_Calls: []
+  soundClick: {fileID: 0}
 --- !u!114 &5908742607776924405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3156,6 +3169,7 @@ MonoBehaviour:
   eventOnPointUp:
     m_PersistentCalls:
       m_Calls: []
+  soundClick: {fileID: 0}
 --- !u!114 &8074770126375311904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3313,6 +3327,7 @@ MonoBehaviour:
   eventOnPointUp:
     m_PersistentCalls:
       m_Calls: []
+  soundClick: {fileID: 0}
 --- !u!114 &3829267885893029707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3547,6 +3562,7 @@ MonoBehaviour:
   eventOnPointUp:
     m_PersistentCalls:
       m_Calls: []
+  soundClick: {fileID: 0}
 --- !u!114 &793561399419238627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4141,6 +4157,7 @@ MonoBehaviour:
   eventOnPointUp:
     m_PersistentCalls:
       m_Calls: []
+  soundClick: {fileID: 0}
 --- !u!114 &8405347502647490904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4448,6 +4465,7 @@ MonoBehaviour:
   eventOnPointUp:
     m_PersistentCalls:
       m_Calls: []
+  soundClick: {fileID: 0}
 --- !u!114 &3382607162687166542
 MonoBehaviour:
   m_ObjectHideFlags: 0

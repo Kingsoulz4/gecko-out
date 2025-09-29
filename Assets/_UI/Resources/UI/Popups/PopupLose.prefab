@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isCache: 1
-  isAniClose: 1
+  isCloseAnim: 0
   duration: 0.3
   animType: 2
   mainPopUp: {fileID: 4964511045247718339}
@@ -438,6 +438,7 @@ GameObject:
   - component: {fileID: 4730084186725838964}
   - component: {fileID: 1241292242444333576}
   - component: {fileID: 2414967931837647645}
+  - component: {fileID: 947242537782164114}
   m_Layer: 5
   m_Name: ButtonRetry
   m_TagString: Untagged
@@ -547,6 +548,28 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &947242537782164114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4150156425825562681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97b406c0e2aedaa4dba07edc643001cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startScale: {x: 1, y: 1}
+  endScale: {x: 0.95, y: 0.95}
+  targetTF: {fileID: 4723568268207316726}
+  eventOnPointDown:
+    m_PersistentCalls:
+      m_Calls: []
+  eventOnPointUp:
+    m_PersistentCalls:
+      m_Calls: []
+  soundClick: {fileID: 0}
 --- !u!1 &4205394215439650148
 GameObject:
   m_ObjectHideFlags: 0
@@ -559,6 +582,7 @@ GameObject:
   - component: {fileID: 8679730644126356239}
   - component: {fileID: 1530581025990031805}
   - component: {fileID: 3348094472192806340}
+  - component: {fileID: 6813246548901909888}
   m_Layer: 5
   m_Name: ButtonClose
   m_TagString: Untagged
@@ -667,6 +691,28 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6813246548901909888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4205394215439650148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97b406c0e2aedaa4dba07edc643001cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startScale: {x: 1, y: 1}
+  endScale: {x: 0.95, y: 0.95}
+  targetTF: {fileID: 3338516453212563615}
+  eventOnPointDown:
+    m_PersistentCalls:
+      m_Calls: []
+  eventOnPointUp:
+    m_PersistentCalls:
+      m_Calls: []
+  soundClick: {fileID: 0}
 --- !u!1 &7514784117407932387
 GameObject:
   m_ObjectHideFlags: 0
