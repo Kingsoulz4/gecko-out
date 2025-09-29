@@ -3,13 +3,17 @@ using UnityEngine.EventSystems;
 using DG.Tweening;
 using UnityEngine.Events;
 
-public class ButtonScaler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class ButtonClickAnimate : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public Vector2 startScale = new Vector2(1f, 1f);
     public Vector2 endScale = new Vector2(0.95f, 0.95f);
     [SerializeField] Transform targetTF;
     [SerializeField] protected UnityEvent eventOnPointDown;
     [SerializeField] protected UnityEvent eventOnPointUp;
+
+    [Header("Audio")]
+    [SerializeField] AudioClip soundClick;
+
     private void Awake()
     {
         if(targetTF == null)
@@ -23,6 +27,15 @@ public class ButtonScaler : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         if (eventOnPointDown != null)
         {
             eventOnPointDown.Invoke();
+        }
+
+        if (soundClick != null)
+        {
+            AudioManager.Instance.PlayOneShot(soundClick, 1f);
+        }
+        else
+        {
+            AudioManager.Instance.PlayOneShot("SFX_UI_Button_Click_Open", 1);
         }
     }
     public void OnPointerUp(PointerEventData eventData)
