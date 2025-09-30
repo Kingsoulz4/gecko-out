@@ -42,7 +42,7 @@ namespace Geckout
 
             targetPortal = portal;
             bodyController.OccupiedTileController.ForceRestoreAll();
-
+            bodyController.OccupiedTileController.ClearAllOccupied();
             DebugLog($"Initiating portal movement to {portal.name}");
 
             //StartPortalEnterAnimation();
@@ -149,7 +149,6 @@ namespace Geckout
         {
             if (targetPortal == null || bodyController == null) return;
 
-            bodyController.OccupiedTileController.ClearAllOccupied();
             LevelEvent.OnMoveToPortalDone?.Invoke(bodyController, targetPortal);
             DebugLog("Finish move portal");
             gameObject.SetActive(false);
