@@ -15,6 +15,9 @@ namespace Geckout
         [SerializeField] private Button m_buttonBuy;
         [SerializeField] private Text m_textPrice;
         [SerializeField] private Text m_textCoinQuantity;
+        [SerializeField] private Text m_textPackName;
+        [SerializeField] private GameObject m_tagHighlight;
+        [SerializeField] private string packIDHighlight;
 
         private ShopPack shopPack;
         public Action OnPurchased { get; set; }
@@ -28,16 +31,28 @@ namespace Geckout
         {
             //Add Logic IAP Here
 
-            var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(() =>
+            IAPManager.Instance.BuyProductID(shopPack.id, (success) =>
             {
-                OnPurchased?.Invoke();
-            });
-            popupReceiveReward.SetData(shopPack.listReward);
+                if(success)
+                {
+                    var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(() =>
+                    {
+                        OnPurchased?.Invoke();
+                    });
+                    popupReceiveReward.SetData(shopPack.listReward);
 
-            foreach(var item in shopPack.listReward)
-            {
-                item.Claim();
-            }
+                    foreach (var item in shopPack.listReward)
+                    {
+                        item.Claim();
+                    }
+                }
+                else
+                {
+                    UIManager.Instance.ShowPopup<PopupNoti>(null).ShowPurchaseFail();
+                }
+            });
+
+            
         }
 
         public void SetData(ShopPack packData)
@@ -45,6 +60,8 @@ namespace Geckout
             this.shopPack = packData;
             m_textCoinQuantity.text = packData.listReward.Find(x => x.type == ItemType.GOLD).quantity + "";
             m_iconCoin.sprite = packData.icon;
+            m_textPackName.text = packData.title;
+            m_tagHighlight.gameObject.SetActive(packData.id == packIDHighlight);
             MyUlti.RemoveAllChilds(m_listRewardContainer);
             foreach(var item in packData.listReward.Where(x => x.type != ItemType.GOLD))
             {

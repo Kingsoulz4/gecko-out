@@ -24,19 +24,41 @@ public abstract class PopupUI : MonoBehaviour
     [SerializeField] private AnimShowPopUp animType;
     [SerializeField] protected RectTransform mainPopUp;
     [SerializeField] protected Image m_background;
+    [SerializeField] protected CanvasGroup m_canvasGroup;
 
     public bool isShowing { get; protected set; }
+
+    private CanvasGroup CanvasGroup
+    {
+        get
+        {
+            if(m_canvasGroup == null)
+            {
+                m_canvasGroup = gameObject.AddComponent<CanvasGroup>();
+            }
+
+            if(m_canvasGroup == null)
+            {
+                m_canvasGroup = gameObject.GetComponent<CanvasGroup>();
+            }
+
+            return m_canvasGroup;
+        }
+    }    
+
     public virtual void Initialize(UIManager manager)
     {
         duration = 0.2f;
         this.uiManager = manager;
         gameObject.SetActive(false);
         isShowing = false;
+
     }
     public virtual void Show(Action onClose)
     {
         this.onClose = onClose;
         isShowing = true;
+        CanvasGroup.alpha = 1;
         if (mainPopUp)
         {
             switch (animType)
@@ -74,7 +96,7 @@ public abstract class PopupUI : MonoBehaviour
         //AudioManager.Instance.PlayOneShot("SFX_ClosePopup", 1f);
         isShowing = false;
         float time = 0;
-        if (mainPopUp && isCloseAnim)
+        if (mainPopUp /*&& isCloseAnim*/)
         {
             switch (animType)
             {
@@ -85,9 +107,13 @@ public abstract class PopupUI : MonoBehaviour
                 case AnimShowPopUp.ScalePunch:
                     mainPopUp.DOScale(1.1f, 0.1f).OnComplete(() =>
                     {
-                        mainPopUp.DOScale(0, 0.3f).SetEase(Ease.OutQuart);
+                        mainPopUp.DOScale(0.3f, 0.32f).SetEase(Ease.OutQuart);
                     });
+                    
                     time = .42f;
+
+                    CanvasGroup.DOFade(0, time);
+
                     break;
 
             }

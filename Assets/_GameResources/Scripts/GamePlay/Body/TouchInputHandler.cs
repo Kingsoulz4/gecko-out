@@ -65,11 +65,7 @@ namespace Geckout
 
         void OnTouchStart(Vector2 screenPosition)
         {
-            if (GameManager.GameState == GameState.Playing && !LevelManager.Instance.LevelGame.IsFirstClick)
-            {
-                LevelManager.Instance.LevelGame.IsFirstClick = true;
-            }
-
+            
             Vector2Int? tileCoord = GetTileCoordinateFromScreen(screenPosition);
             if (!tileCoord.HasValue)
             {
@@ -78,6 +74,11 @@ namespace Geckout
             }
 
             DebugLog($"OnTouchStart Touch at tile coordinate: {tileCoord.Value}");
+
+            if (GameManager.GameState == GameState.Playing && !LevelManager.Instance.LevelGame.IsFirstClick)
+            {
+                LevelManager.Instance.LevelGame.IsFirstClick = true;
+            }
 
             // Kiểm tra xem có click trực tiếp lên segment không
             var body = GetBodyControllerByMouse(screenPosition);

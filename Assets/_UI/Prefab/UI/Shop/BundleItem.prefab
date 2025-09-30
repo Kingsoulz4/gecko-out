@@ -924,7 +924,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScale: {x: 1, y: 1}
-  endScale: {x: 0.95, y: 0.95}
+  targetScale: {x: 0.85, y: 0.85}
   targetTF: {fileID: 3644927441803472153}
   eventOnPointDown:
     m_PersistentCalls:
@@ -1311,7 +1311,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7096183797793934036
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1329,7 +1329,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -321.2098, y: 166.67}
+  m_AnchoredPosition: {x: -323.9, y: 166.67}
   m_SizeDelta: {x: 295.0644, y: 92.606}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6437932717985713727
@@ -1642,6 +1642,9 @@ MonoBehaviour:
   m_buttonBuy: {fileID: 5626467546857196502}
   m_textPrice: {fileID: 7617625324858050377}
   m_textCoinQuantity: {fileID: 7351161461855947513}
+  m_textPackName: {fileID: 2675001988614719646}
+  m_tagHighlight: {fileID: 7079592961773976924}
+  packIDHighlight: ultra_bundle
 --- !u!1 &9057345135669921538
 GameObject:
   m_ObjectHideFlags: 0

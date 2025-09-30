@@ -1611,6 +1611,7 @@ GameObject:
   - component: {fileID: 5164866592617576265}
   - component: {fileID: 8612261731795874214}
   - component: {fileID: 8733854916770986069}
+  - component: {fileID: 3344448437800361783}
   m_Layer: 5
   m_Name: FreeCoinPack
   m_TagString: Untagged
@@ -1678,6 +1679,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3344448437800361783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3930660920101182496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3b988b6ff699894fa247b7debfe9938, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_buttonGet: {fileID: 6326328723644580291}
+  m_textCoinQuantity: {fileID: 7697273728179193340}
 --- !u!1 &4030502833211346406
 GameObject:
   m_ObjectHideFlags: 0
@@ -2658,7 +2673,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScale: {x: 1, y: 1}
-  endScale: {x: 0.95, y: 0.95}
+  targetScale: {x: 0.85, y: 0.85}
   targetTF: {fileID: 6180323044998354967}
   eventOnPointDown:
     m_PersistentCalls:
@@ -2802,7 +2817,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScale: {x: 1, y: 1}
-  endScale: {x: 0.95, y: 0.95}
+  targetScale: {x: 0.85, y: 0.85}
   targetTF: {fileID: 768811246065316025}
   eventOnPointDown:
     m_PersistentCalls:
@@ -3512,7 +3527,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScale: {x: 1, y: 1}
-  endScale: {x: 0.95, y: 0.95}
+  targetScale: {x: 0.85, y: 0.85}
   targetTF: {fileID: 3760958802111458650}
   eventOnPointDown:
     m_PersistentCalls:
@@ -3779,6 +3794,7 @@ MonoBehaviour:
   m_listBundlePackContainer: {fileID: 771096055171302576}
   m_buttonRemoveAdsPacks: {fileID: 2825930012595583981}
   m_removeAdsPacks: {fileID: 1093576515779692269}
+  m_freeCoinPack: {fileID: 3344448437800361783}
   m_goldBar: {fileID: 7039441942416767838}
 --- !u!1 &8945089143299597714
 GameObject:
@@ -3970,6 +3986,14 @@ PrefabInstance:
     - target: {fileID: 2681471362440775575, guid: 444a5f25d06df0a4fbe8c0e166b85688, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6601058690836830306, guid: 444a5f25d06df0a4fbe8c0e166b85688, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7109138871272467761, guid: 444a5f25d06df0a4fbe8c0e166b85688, type: 3}
+      propertyPath: isUpadate
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7443735791085015656, guid: 444a5f25d06df0a4fbe8c0e166b85688, type: 3}
       propertyPath: m_Name

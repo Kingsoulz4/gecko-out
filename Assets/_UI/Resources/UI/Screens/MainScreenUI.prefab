@@ -252,7 +252,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 38ae9e945e1806b45a25c31c4477b747, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cac93e2195969244e98eb3e99e458560, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -424,6 +424,7 @@ MonoBehaviour:
   fx_Gold: {fileID: 0}
   txt_Gold: {fileID: 821194624419503281}
   txt_GoldShop: {fileID: 2012055371013136515}
+  m_goldBar: {fileID: 8719895773999649922}
   timeMoveCoinBack: 0.6
   timeMoveCoinUp: 1
   clip_SpawnItem: {fileID: 8300000, guid: df1102c579a01ce4d812b97e3ecd9f7b, type: 3}
@@ -769,6 +770,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4390921691319909525, guid: f4a97be15c08d6e4f9104783f7595052, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 4401344486575037114, guid: f4a97be15c08d6e4f9104783f7595052, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1111,7 +1116,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8073413124404652355, guid: f4a97be15c08d6e4f9104783f7595052, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -904.2019
+      value: -1548.118
       objectReference: {fileID: 0}
     - target: {fileID: 8116787105215642027, guid: f4a97be15c08d6e4f9104783f7595052, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1462,6 +1467,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8719895773999649922 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 829184656934595231, guid: f4a97be15c08d6e4f9104783f7595052, type: 3}
+  m_PrefabInstance: {fileID: 8251315851838864925}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d74e0238c95513745ae5503b37e22186, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &8720941871697971955 stripped

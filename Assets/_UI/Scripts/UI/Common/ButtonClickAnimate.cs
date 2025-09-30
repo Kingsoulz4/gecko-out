@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class ButtonClickAnimate : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public Vector2 startScale = new Vector2(1f, 1f);
-    public Vector2 endScale = new Vector2(0.85f, 0.85f);
+    public Vector2 targetScale = new Vector2(0.85f, 0.85f);
     [SerializeField] Transform targetTF;
     [SerializeField] protected UnityEvent eventOnPointDown;
     [SerializeField] protected UnityEvent eventOnPointUp;
@@ -23,7 +23,7 @@ public class ButtonClickAnimate : MonoBehaviour, IPointerDownHandler, IPointerUp
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        targetTF.DOScale(endScale, 0.1f).SetEase(Ease.Linear).SetUpdate(true).SetId(this);
+        targetTF.DOScale(targetScale, 0.1f).SetEase(Ease.Linear).SetUpdate(true).SetId(this);
         if (eventOnPointDown != null)
         {
             eventOnPointDown.Invoke();

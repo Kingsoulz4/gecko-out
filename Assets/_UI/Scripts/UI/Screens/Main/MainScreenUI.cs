@@ -33,6 +33,9 @@ public class MainScreenUI : ScreenUI
     [SerializeField] ParticleSystem fx_Gold;
     [SerializeField] Text txt_Gold;
     [SerializeField] Text txt_GoldShop;
+    [SerializeField] GoldDisplay m_goldBar;
+
+
     public float timeMoveCoinBack = 0.5f;
     public float timeMoveCoinUp = 0.75f;
     public AudioClip clip_SpawnItem;
@@ -53,14 +56,9 @@ public class MainScreenUI : ScreenUI
     {
         base.Initialize(uiManager);
         btn_Play.onClick.AddListener(PlayLevel);
-        txt_Level.text = $"Level {LevelManager.Instance.CurrentLevel}";
-        if (arrTextLevel != null)
-        {
-            for (int i = 0; i < arrTextLevel.Length; i++)
-            {
-                arrTextLevel[i].text = (LevelManager.Instance.CurrentLevel + i).ToString();
-            }
-        }
+
+        UpdateUI();
+
         UIManager.OnRefeshBannerAndAds += UpdateButtonRemoveAds;
         UpdateButtonRemoveAds();
         btn_RemoveAds.onClick.AddListener(() =>
@@ -70,23 +68,28 @@ public class MainScreenUI : ScreenUI
         });
     }
 
-    public void ResetVisual()
+    public void UpdateUI()
     {
-           
+        txt_Level.text = $"Level {LevelManager.Instance.CurrentLevel}";
+        if (arrTextLevel != null)
+        {
+            for (int i = 0; i < arrTextLevel.Length; i++)
+            {
+                arrTextLevel[i].text = (LevelManager.Instance.CurrentLevel + i).ToString();
+            }
+        }
     }
+
     private void UpdateButtonRemoveAds()
     {
-         
-        ResetVisual();
-    }
-    void deActionButtonRemoveAds()
-    {
-        btn_RemoveAds.gameObject.SetActive(false);
+        UpdateUI();
+        btn_RemoveAds.gameObject.SetActive(!ShopManager.Instance.HasPurchasedNoAdsPack);
     }
 
     public override void Active()
     {
         base.Active();
+        UpdateUI();
         //AudioManager.Instance.StopAllMusic();
         //this.Wait(0.5f, () => AudioManager.Instance.PlayMusic(soundBG, 0.5f, true));
     }
@@ -101,6 +104,17 @@ public class MainScreenUI : ScreenUI
     public void MoveCoin(int amount, string reason, string where)
     {
     }
+
+    public void ShowClaimReward(int quantity)
+    {
+        m_goldBar.Sync = false;
+        var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
+        popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, quantity, () =>
+        {
+            m_goldBar.SetText(UserDataManager.Gold);
+            m_goldBar.Sync = true;
+        });
+    }    
 
     private void MoveValueTop(float timeDelay, GameObject objSpawn, RectTransform targetPos, int currentCoinText, bool isCoin, Action playFx, bool isFinish)
     {

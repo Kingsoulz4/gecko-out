@@ -86,9 +86,12 @@ namespace Geckout
                             /*.SetLoops(-1, LoopType.Restart)*/)
                        .AppendInterval(_moveOutDelay)
                        .Append(coin.DOMove(_goldCounter.ImgCoinIcon.transform.position + Vector3.forward * 5, _moveToTargetDuration).SetEase(Ease.InBack))
-                       .Join(coin.DOScale(0.8f, _moveToTargetDuration))
+                       .Join(coin.DOScale(0.8f, _moveToTargetDuration * 0.8f).OnComplete(() =>
+                           {
+                                coin.DOScale(0f, _moveToTargetDuration * 0.2f).SetEase(Ease.InBack);
+                           }))
                        .Join(coinObject.DORotate(coinObject.localRotation.eulerAngles + Vector3.forward * 360, _moveToTargetDuration * 2, RotateMode.FastBeyond360).SetEase(Ease.Linear))
-                       .Append(coin.DOScale(0f, 0.25f).SetEase(Ease.InBack))
+                       //.Append(coin.DOScale(0f, 0.25f).SetEase(Ease.InBack))
                        .SetDelay(delayCount)
                        .OnComplete(() =>
                        {
@@ -102,6 +105,7 @@ namespace Geckout
                                // Final sync
                                _goldCounter.SetText(UserDataManager.Gold);
                                _goldCounter.Sync = true;
+                               _goldCounter.gameObject.SetActive(false);
 
                                //m_targetPointFx?.Play();
                                onFinish?.Invoke();
@@ -174,6 +178,7 @@ namespace Geckout
 
         private void ResetCoins()
         {
+            _goldCounter.gameObject.SetActive(true);
             for (int i = 0; i < _coinContainer.childCount; i++)
             {
                 Transform coin = _coinContainer.GetChild(i);

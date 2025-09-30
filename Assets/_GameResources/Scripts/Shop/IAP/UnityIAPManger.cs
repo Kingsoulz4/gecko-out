@@ -121,6 +121,7 @@ public class UnityIAPManger : IAPHandlerBase
         _storeController.OnPurchasesFetched += OnPurchasesFetched;
         _storeController.OnPurchaseFailed += OnPurchaseFailed;
         _storeController.OnPurchasePending += OnPurchasePending;
+        _storeController.OnPurchaseConfirmed += OnPurchaseConfirmed;
 
         try
         {
@@ -146,15 +147,23 @@ public class UnityIAPManger : IAPHandlerBase
             if (productDefinitions.Count > 0)
             {
                 //_storeController.FetchProducts(productDefinitions);
-                catalogProvider.FetchProducts((pds) => {
-                    _storeController.FetchProducts(pds);
-                });
+                
             }
+
+            catalogProvider.FetchProducts((pds) => {
+                _storeController.FetchProducts(pds);
+            });
         }
         catch (Exception ex)
         {
             Debug.LogError($"IAP Connect error: {ex.Message}");
         }
+    }
+
+    private void OnPurchaseConfirmed(Order order)
+    {
+        Debug.Log("Purchase Confirmed");
+        _storeController.FetchPurchases();
     }
 
     private void OnProductsFetched(List<Product> products)
@@ -194,7 +203,8 @@ public class UnityIAPManger : IAPHandlerBase
 
     private void OnPurchasePending(PendingOrder pending)
     {
-        Debug.Log($"OnPurchasePending: {pending.Info.PurchasedProductInfo.First().productId}");
+        Debug.Log($"OnPurchasePending: {pending.Info.TransactionID}");
+        _storeController.ConfirmPurchase(pending);
     }
 
     private void OnPurchaseFailed(FailedOrder failed)

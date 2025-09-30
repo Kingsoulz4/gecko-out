@@ -24,6 +24,7 @@ namespace Geckout
         [Header("Others Packs")]
         [SerializeField] private Button m_buttonRemoveAdsPacks;
         [SerializeField] private GameObject m_removeAdsPacks;
+        [SerializeField] private FreeCoinPack m_freeCoinPack;
 
         [Header("UI")]
         [SerializeField] private GoldDisplay m_goldBar;
@@ -61,7 +62,10 @@ namespace Geckout
                 {
                     var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
                     var goldQuantity = pack.listReward.Find(x => x.type == ItemType.GOLD).quantity;
-                    popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, goldQuantity);
+                    popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, goldQuantity, () =>
+                    {
+                        m_goldBar.SetText(UserDataManager.Gold);
+                    });
                 };
             }
             MyUlti.RemoveAllChilds(m_listShopCoinPackContainer);
@@ -73,9 +77,20 @@ namespace Geckout
                 {
                     var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
                     var goldQuantity = pack.listReward.Find(x => x.type == ItemType.GOLD).quantity;
-                    popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, goldQuantity);
+                    popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, goldQuantity, () =>
+                    {
+                        m_goldBar.SetText(UserDataManager.Gold);
+                    });
                 };
             }
+            m_freeCoinPack.OnGotCoin = (val) => {
+                var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
+                popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, val, () =>
+                {
+                    m_goldBar.SetText(UserDataManager.Gold);
+                });
+            };
+
         }
     }
 }

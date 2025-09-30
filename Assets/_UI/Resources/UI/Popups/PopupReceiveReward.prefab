@@ -19692,12 +19692,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a09616ce445c691458f79a3c765d23c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCache: 1
+  isCache: 0
   isCloseAnim: 0
   duration: 0.3
   animType: 0
   mainPopUp: {fileID: 2315524791822476737}
   m_background: {fileID: 8883745062393461403}
+  m_canvasGroup: {fileID: 0}
   m_itemPrefab: {fileID: 5973915371374199022}
   m_listRewardHolders:
   - {fileID: 3710687254436818850}
@@ -58898,7 +58899,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -78745,7 +78746,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScale: {x: 1, y: 1}
-  endScale: {x: 0.95, y: 0.95}
+  targetScale: {x: 0.85, y: 0.85}
   targetTF: {fileID: 2289008081298204168}
   eventOnPointDown:
     m_PersistentCalls:
@@ -83699,7 +83700,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -181572,7 +181573,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3403408103701379057, guid: fe91138e1c4e36a4f8f4a7d25ea96949, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 155.05
+      value: 182
       objectReference: {fileID: 0}
     - target: {fileID: 3403408103701379057, guid: fe91138e1c4e36a4f8f4a7d25ea96949, type: 3}
       propertyPath: m_SizeDelta.y

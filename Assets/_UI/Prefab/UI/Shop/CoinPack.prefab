@@ -400,7 +400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScale: {x: 1, y: 1}
-  endScale: {x: 0.95, y: 0.95}
+  targetScale: {x: 0.85, y: 0.85}
   targetTF: {fileID: 6734207069676872024}
   eventOnPointDown:
     m_PersistentCalls:
@@ -600,6 +600,8 @@ MonoBehaviour:
   m_buttonBuy: {fileID: 1366038919675474895}
   m_textPrice: {fileID: 8167614192728957439}
   m_textCoinQuantity: {fileID: 4743782060128998063}
+  m_tagHighlight: {fileID: 2819766666599824108}
+  packIDHighlight: coin4
 --- !u!1 &2819766666599824108
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,7 +619,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3400695285567682195
 RectTransform:
   m_ObjectHideFlags: 0
@@ -635,7 +637,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -115.223724, y: 178.13206}
+  m_AnchoredPosition: {x: -112.7, y: 178.13206}
   m_SizeDelta: {x: 121.4173, y: 95.6701}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2900033844715697398

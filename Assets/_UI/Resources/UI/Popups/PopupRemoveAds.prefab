@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0.08235294, g: 0.3137255, b: 0.03529412, a: 1}
-  m_EffectDistance: {x: 6, y: 6}
+  m_EffectDistance: {x: 3.5, y: 3.5}
   m_UseGraphicAlpha: 1
 --- !u!1 &293562919045605450
 GameObject:
@@ -1937,7 +1937,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScale: {x: 1, y: 1}
-  endScale: {x: 0.95, y: 0.95}
+  targetScale: {x: 0.85, y: 0.85}
   targetTF: {fileID: 2925510334203471566}
   eventOnPointDown:
     m_PersistentCalls:
@@ -2589,7 +2589,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScale: {x: 1, y: 1}
-  endScale: {x: 0.95, y: 0.95}
+  targetScale: {x: 0.85, y: 0.85}
   targetTF: {fileID: 3078605746428223568}
   eventOnPointDown:
     m_PersistentCalls:
@@ -2691,7 +2691,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0.08235294, g: 0.3137255, b: 0.03529412, a: 1}
-  m_EffectDistance: {x: 4, y: 4}
+  m_EffectDistance: {x: 3.5, y: 3.5}
   m_UseGraphicAlpha: 1
 --- !u!1 &6593331820120864683
 GameObject:
@@ -3131,7 +3131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0.08235294, g: 0.3137255, b: 0.03529412, a: 1}
-  m_EffectDistance: {x: 6, y: 6}
+  m_EffectDistance: {x: 3.5, y: 3.5}
   m_UseGraphicAlpha: 1
 --- !u!1 &7570556144968830322
 GameObject:
@@ -3229,6 +3229,7 @@ MonoBehaviour:
   animType: 2
   mainPopUp: {fileID: 8835844277765280709}
   m_background: {fileID: 2811440969837334891}
+  m_canvasGroup: {fileID: 0}
   m_listRemoveAdsPacks: {fileID: 11400000, guid: 7619d806419033146a88863fd25938fb, type: 2}
   m_buttonClose: {fileID: 2815345264938790178}
   m_buttonPurchaseRemoveInterPack: {fileID: 2411419368862589796}
@@ -3526,7 +3527,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScale: {x: 1, y: 1}
-  endScale: {x: 0.95, y: 0.95}
+  targetScale: {x: 0.85, y: 0.85}
   targetTF: {fileID: 6187980509374854805}
   eventOnPointDown:
     m_PersistentCalls:
@@ -3765,7 +3766,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScale: {x: 1, y: 1}
-  endScale: {x: 0.95, y: 0.95}
+  targetScale: {x: 0.85, y: 0.85}
   targetTF: {fileID: 1555889635299684326}
   eventOnPointDown:
     m_PersistentCalls:

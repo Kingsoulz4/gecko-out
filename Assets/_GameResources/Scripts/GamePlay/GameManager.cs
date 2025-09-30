@@ -22,6 +22,12 @@ namespace Geckout
         Action<GameState> OnGameStateChange;
         public static GameState GameState { get => gameState; }
 
+        public int CoinRewardWinGame
+        {
+            get => PlayerPrefs.GetInt("CoinRewardWinGame", 40);
+            set => PlayerPrefs.SetInt("CoinRewardWinGame", value);
+        }
+
         private void Start()
         {
             InitAllManager();

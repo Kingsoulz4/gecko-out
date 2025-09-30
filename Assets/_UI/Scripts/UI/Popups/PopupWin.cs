@@ -34,6 +34,8 @@ namespace Geckout
 
         private float currentProgressNewFeature = 0;
 
+        public Action<int> OnClaimedReward { get; set;}
+
         private void Awake()
         {
             m_buttonClaim.onClick.AddListener(OnClickClaim);
@@ -51,11 +53,12 @@ namespace Geckout
         {
             if (isLockClick) return;
 
-            UserDataManager.AddGold(80, "WinX2");
+            UserDataManager.AddGold(GameManager.Instance.CoinRewardWinGame * 2, "WinX2");
 
             if (currentProgressNewFeature < 1)
             {
                 Hide();
+                OnClaimedReward.Invoke(GameManager.Instance.CoinRewardWinGame * 2);
             }
             else
             {
@@ -67,11 +70,12 @@ namespace Geckout
         {
             if (isLockClick) return;
 
-            UserDataManager.AddGold(40, "Win");
+            UserDataManager.AddGold(GameManager.Instance.CoinRewardWinGame , "Win");
 
             if (currentProgressNewFeature < 1)
             {
                 Hide();
+                OnClaimedReward.Invoke(GameManager.Instance.CoinRewardWinGame);
             }
             else
             {

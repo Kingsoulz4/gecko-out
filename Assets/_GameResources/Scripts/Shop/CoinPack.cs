@@ -12,6 +12,8 @@ namespace Geckout
         [SerializeField] private Button m_buttonBuy;
         [SerializeField] private Text m_textPrice;
         [SerializeField] private Text m_textCoinQuantity;
+        [SerializeField] private GameObject m_tagHighlight;
+        [SerializeField] private string packIDHighlight;
 
         private ShopPack shopPack;
 
@@ -42,7 +44,7 @@ namespace Geckout
             this.shopPack = packData;
             m_textCoinQuantity.text = packData.listReward.Find(x => x.type == ItemType.GOLD).quantity + "";
             m_iconCoin.sprite = packData.icon;
-
+            m_tagHighlight.gameObject.SetActive(packData.id == packIDHighlight);
 
         }
     }

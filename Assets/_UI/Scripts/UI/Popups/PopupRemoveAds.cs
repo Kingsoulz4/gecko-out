@@ -41,11 +41,20 @@ namespace Geckout
                 x => x.listReward.FirstOrDefault(y => y.type == ItemType.REMOVE_INTER_ADS) != null);
             if (packInter == null) return;
 
-            var popupReceiveRewards = UIManager.Instance.ShowPopup<PopupReceiveReward>(null);
-            popupReceiveRewards.SetData(packInter.listReward);
-            ShopManager.Instance.HasPurchasedRemoveInterAds = true;
-
-            UpdateUI();
+            IAPManager.Instance.BuyProductID(packInter.id, (success) =>
+            {
+                if (success)
+                {
+                    UIManager.Instance.ShowPopup<PopupNoti>(null).ShowSuccess();
+                    ShopManager.Instance.HasPurchasedRemoveInterAds = true;
+                    UpdateUI();
+                }
+                else
+                {
+                    UIManager.Instance.ShowPopup<PopupNoti>(null).ShowPurchaseFail();
+                }
+            });
+            
         }
 
         private void OnClickPurchaseRemoveBannerPack()
@@ -54,11 +63,20 @@ namespace Geckout
                 x => x.listReward.FirstOrDefault(y => y.type == ItemType.REMOVE_BANNER_ADS) != null);
             if (packBanner == null) return;
 
-            var popupReceiveRewards = UIManager.Instance.ShowPopup<PopupReceiveReward>(null);
-            popupReceiveRewards.SetData(packBanner.listReward);
-            ShopManager.Instance.HasPurchasedRemoveAds = true;
+            IAPManager.Instance.BuyProductID(packBanner.id, (success) =>
+            {
+                if (success)
+                {
+                    UIManager.Instance.ShowPopup<PopupNoti>(null).ShowSuccess();
+                    ShopManager.Instance.HasPurchasedRemoveAds = true;
+                    UpdateUI();
+                }
+                else
+                {
+                    UIManager.Instance.ShowPopup<PopupNoti>(null).ShowPurchaseFail();
+                }
+            });
 
-            UpdateUI();
         }
 
         private void OnClickPurchaseNoAdsPack()
@@ -67,11 +85,22 @@ namespace Geckout
                x => x.listReward.FirstOrDefault(y => y.type == ItemType.REMOVE_ADS) != null);
             if (packNoAds == null) return;
 
-            var popupReceiveRewards = UIManager.Instance.ShowPopup<PopupReceiveReward>(null);
-            popupReceiveRewards.SetData(packNoAds.listReward);
-            ShopManager.Instance.HasPurchasedNoAdsPack = true;
+            IAPManager.Instance.BuyProductID(packNoAds.id, (success) =>
+            {
+                if (success)
+                {
 
-            Hide();
+                    var popupReceiveRewards = UIManager.Instance.ShowPopup<PopupReceiveReward>(null);
+                    popupReceiveRewards.SetData(packNoAds.listReward);
+                    ShopManager.Instance.HasPurchasedNoAdsPack = true;
+
+                    Hide();
+                }
+                else
+                {
+                    UIManager.Instance.ShowPopup<PopupNoti>(null).ShowPurchaseFail();
+                }
+            });
         }
 
         private void OnClickClose()
