@@ -32,6 +32,12 @@ namespace Geckout
             });
         }
 
+        public void ShowLocked()
+        {
+            m_image.sprite = m_listSpriteNotiType[NotiType.Warning];
+            m_textContent.text = "Locked";
+        }
+
         public void ShowProcessing()
         {
             m_image.sprite = m_listSpriteNotiType[NotiType.Warning];

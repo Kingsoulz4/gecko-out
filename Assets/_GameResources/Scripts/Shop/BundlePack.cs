@@ -62,6 +62,7 @@ namespace Geckout
             m_iconCoin.sprite = packData.icon;
             m_textPackName.text = packData.title;
             m_tagHighlight.gameObject.SetActive(packData.id == packIDHighlight);
+            //m_textPrice.text = IAPManager.Instance.
             MyUlti.RemoveAllChilds(m_listRewardContainer);
             foreach(var item in packData.listReward.Where(x => x.type != ItemType.GOLD))
             {

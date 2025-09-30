@@ -42,7 +42,11 @@ namespace Geckout
 
         public void OnClickButton()
         {
-            if (!IsUnLocked) return;
+            if (!IsUnLocked)
+            {
+                UIManager.Instance.ShowPopup<PopupNoti>(null).ShowLocked();
+                return;
+            } 
 
             OnClick?.Invoke();
             
