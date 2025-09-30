@@ -16,7 +16,7 @@ namespace Geckout
                     UserDataManager.AddGold(quantity, "Shop");
                     break;
                 case ItemType.INFINITY_LIVES:
-                    HeartManager.InfinityEndTime += quantity;
+                    UserDataManager.AddHeart(quantity * 1000, "Reward", true, typeHeart:1);
                     break;
                 case ItemType.BOOSTER_1:
                     UserDataManager.TimePreBooster += quantity;

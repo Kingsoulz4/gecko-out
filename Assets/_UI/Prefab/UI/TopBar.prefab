@@ -922,7 +922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScale: {x: 1, y: 1}
-  endScale: {x: 1.2, y: 1.2}
+  targetScale: {x: 0.85, y: 0.85}
   targetTF: {fileID: 4775879332054260132}
   eventOnPointDown:
     m_PersistentCalls:
@@ -930,6 +930,7 @@ MonoBehaviour:
   eventOnPointUp:
     m_PersistentCalls:
       m_Calls: []
+  soundClick: {fileID: 0}
 --- !u!114 &7109138871272467761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -966,7 +967,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3942754141514354019
 RectTransform:
   m_ObjectHideFlags: 0
@@ -984,8 +985,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -114, y: -0.5}
-  m_SizeDelta: {x: 102, y: 98}
+  m_AnchoredPosition: {x: -133.96, y: 0}
+  m_SizeDelta: {x: 105.42, y: 102}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1572007272189330020
 CanvasRenderer:
@@ -1015,7 +1016,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -5992417651934159166, guid: aea51e0559193fd4caea2fb021c186c7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f84cfeb1fedb9bc45b76c146276f93a2, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1342,7 +1343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScale: {x: 1, y: 1}
-  endScale: {x: 0.95, y: 0.95}
+  targetScale: {x: 0.85, y: 0.85}
   targetTF: {fileID: 8098463932665969655}
   eventOnPointDown:
     m_PersistentCalls:
@@ -1350,6 +1351,7 @@ MonoBehaviour:
   eventOnPointUp:
     m_PersistentCalls:
       m_Calls: []
+  soundClick: {fileID: 0}
 --- !u!114 &2448704663700035092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1515,7 +1517,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScale: {x: 1, y: 1}
-  endScale: {x: 1.2, y: 1.2}
+  targetScale: {x: 0.85, y: 0.85}
   targetTF: {fileID: 957495593942650827}
   eventOnPointDown:
     m_PersistentCalls:
@@ -1523,6 +1525,7 @@ MonoBehaviour:
   eventOnPointUp:
     m_PersistentCalls:
       m_Calls: []
+  soundClick: {fileID: 0}
 --- !u!114 &5441740178853990592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1537,6 +1540,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_textQuantity: {fileID: 6727603280390696795}
   m_textCountDown: {fileID: 3605764312155033120}
+  m_button: {fileID: 1549111147248870175}
+  m_normalHeart: {fileID: 2447196585717227229}
+  m_infinityHeart: {fileID: 7354181662526398216}
 --- !u!1 &8615608762177979758
 GameObject:
   m_ObjectHideFlags: 0

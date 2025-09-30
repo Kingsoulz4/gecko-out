@@ -12,6 +12,9 @@ namespace Geckout
         [SerializeField] private Button m_buttonClaimByAds;
         [SerializeField] private Button m_buttonClose;
 
+        [SerializeField] private Text m_textHeartQuantity;
+        [SerializeField] private Text m_textCountDown;
+
         public Action OnClose { get; set; }
 
         public Action OnRefilled { get; set; }
@@ -21,6 +24,16 @@ namespace Geckout
             m_buttonClaimByAds.onClick.AddListener(OnClickClaimByAds);
             m_buttonClaimByCoin.onClick.AddListener(OnClickClaimByCoin);
             m_buttonClose.onClick.AddListener(OnClickClose);
+        }
+
+        private void OnEnable()
+        {
+            m_textHeartQuantity.text = UserDataManager.Heart.ToString();
+        }
+
+        private void Update()
+        {
+            m_textCountDown.text = HeartManager.Instance.GetTimeRemaningText();
         }
 
         private void OnClickClose()

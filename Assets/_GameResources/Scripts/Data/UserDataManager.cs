@@ -65,12 +65,13 @@ public class UserDataManager : MonoBehaviour
             var now = GameTime.Instance.GetUtcTime();
             if (HeartManager.InfinityEndTime < now)
             {
-                HeartManager.InfinityEndTime = now + amount;
+                HeartManager.InfinityEndTime = now + amount ;
             }
             else
             {
                 HeartManager.InfinityEndTime += amount;
             }
+            OnAddHeart?.Invoke(Heart, Heart, hasAnimation);
         }
     }
     #endregion
