@@ -166,7 +166,7 @@ MonoBehaviour:
   triggerGroups: []
   _spline:
     points: []
-    type: 3
+    type: 1
     linearAverageDirection: 1
     customValueInterpolation:
       serializedVersion: 2
