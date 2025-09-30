@@ -45,7 +45,13 @@ namespace Geckout
 
         private void OnEnable()
         {
+            UIManager.Instance.OnRefeshBannerAndAds += UpdateUI;
             UpdateUI();
+        }
+
+        private void OnDisable()
+        {
+            UIManager.Instance.OnRefeshBannerAndAds -= UpdateUI;
         }
 
         private void UpdateUI()
@@ -58,6 +64,8 @@ namespace Geckout
             MyUlti.RemoveAllChilds(m_listBundlePackContainer);
             foreach(var pack in m_listBundlePacks.listShopPack)
             {
+                if (ShopManager.Instance.ListPurchasedPacks.Contains(pack.id)) continue;
+
                 var newPack = Instantiate(m_bundlePackPrefab, m_listBundlePackContainer);
                 newPack.SetData(pack);
                 newPack.OnPurchased = () =>

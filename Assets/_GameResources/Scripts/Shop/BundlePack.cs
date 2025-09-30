@@ -35,6 +35,7 @@ namespace Geckout
             {
                 if(success)
                 {
+                    ShopManager.Instance.AddPurchasedPack(shopPack);
                     var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(() =>
                     {
                         OnPurchased?.Invoke();
@@ -45,6 +46,7 @@ namespace Geckout
                     {
                         item.Claim();
                     }
+                    Destroy(gameObject);
                 }
                 else
                 {

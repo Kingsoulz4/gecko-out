@@ -27,6 +27,10 @@ namespace Geckout
         private void Start()
         {
             setUpVisual();
+            if (btn_Gold != null)
+            {
+                btn_Gold.onClick.AddListener(showPopupMiniShop);
+            }
         }
 
         private void OnEnable()
@@ -37,10 +41,6 @@ namespace Geckout
 
         private void setUpVisual()
         {
-            if(btn_Gold != null)
-            {
-                btn_Gold.onClick.AddListener(showPopupMiniShop);
-            }
             txt_Gold.text = UserDataManager.Gold + "";
         }
 
@@ -51,6 +51,7 @@ namespace Geckout
 
         private void showPopupMiniShop()
         {
+            UIManager.Instance.ShowPopup<PopupShop>(null);
         }
 
         public void UpdateTextGold(int goldCurrent, int goldUpdate, float timeDelay) 
