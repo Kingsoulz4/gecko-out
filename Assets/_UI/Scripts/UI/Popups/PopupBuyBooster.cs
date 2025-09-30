@@ -47,16 +47,20 @@ namespace Geckout
         private void OnClickBuy()
         {
             Hide();
-            UserDataManager.AddBooster(boosterType, 3);
-            OnBought?.Invoke();
-
-            if (UserDataManager.Gold >= 900)
+            
+            if (UserDataManager.Gold >= BoosterManager.Instance.BoosterData.GetBoosterItemData(boosterType).price)
             {
-                
+                UserDataManager.AddBooster(boosterType, 3);
+                OnBought?.Invoke();
             }
             else
             {
-
+                OnClose?.Invoke();
+                UIManager.Instance.ShowPopup<PopupShop>(() =>
+                {
+                    GameManager.Instance.SetGameState(GameState.Playing);
+                });
+                GameManager.Instance.SetGameState(GameState.Paused);
             }
         }
     }

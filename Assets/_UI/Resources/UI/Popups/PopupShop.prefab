@@ -1536,13 +1536,15 @@ GameObject:
   - component: {fileID: 1625688807282702546}
   - component: {fileID: 2961166535454421680}
   - component: {fileID: 15738382306393669}
+  - component: {fileID: 566398760503153176}
+  - component: {fileID: 1981218617541620744}
   m_Layer: 5
   m_Name: ButtonClose
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1625688807282702546
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1600,6 +1602,72 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &566398760503153176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3891014253244184908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97b406c0e2aedaa4dba07edc643001cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startScale: {x: 1, y: 1}
+  targetScale: {x: 0.85, y: 0.85}
+  targetTF: {fileID: 1625688807282702546}
+  eventOnPointDown:
+    m_PersistentCalls:
+      m_Calls: []
+  eventOnPointUp:
+    m_PersistentCalls:
+      m_Calls: []
+  soundClick: {fileID: 0}
+--- !u!114 &1981218617541620744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3891014253244184908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 15738382306393669}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3930660920101182496
 GameObject:
   m_ObjectHideFlags: 0
@@ -3704,7 +3772,7 @@ GameObject:
   - component: {fileID: 6913083419684119556}
   - component: {fileID: 1723696329226190675}
   m_Layer: 5
-  m_Name: ShopScreen
+  m_Name: PopupShop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3785,6 +3853,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c75ef53c323ce314cad3d4b6248e06c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCache: 0
+  isCloseAnim: 0
+  duration: 0.2
+  animType: 0
+  mainPopUp: {fileID: 0}
+  m_background: {fileID: 0}
+  m_canvasGroup: {fileID: 0}
   m_bundlePackPrefab: {fileID: 6995571570291309761, guid: d6da12e79d242b947bf985e155c0224c, type: 3}
   m_coinPackPrefab: {fileID: 7628482026447027070, guid: 3553ee9fd9274d84b912ed2e82c21dc7, type: 3}
   m_listBundlePacks: {fileID: 11400000, guid: 5f1c4d12c23eedf4293107300349750f, type: 2}
@@ -3796,6 +3871,7 @@ MonoBehaviour:
   m_removeAdsPacks: {fileID: 1093576515779692269}
   m_freeCoinPack: {fileID: 3344448437800361783}
   m_goldBar: {fileID: 7039441942416767838}
+  m_buttonClose: {fileID: 1981218617541620744}
 --- !u!1 &8945089143299597714
 GameObject:
   m_ObjectHideFlags: 0

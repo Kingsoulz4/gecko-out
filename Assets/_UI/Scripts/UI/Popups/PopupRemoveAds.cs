@@ -26,6 +26,7 @@ namespace Geckout
             m_buttonPurchaseNoAdsPack.onClick.AddListener(OnClickPurchaseNoAdsPack);
             m_buttonPurchaseRemoveBannerPack.onClick.AddListener(OnClickPurchaseRemoveBannerPack);
             m_buttonPurchaseRemoveInterPack.onClick.AddListener(OnClickPurchaseInterPack);
+            UpdateUI();
         }
 
         public void UpdateUI()
@@ -89,11 +90,10 @@ namespace Geckout
             {
                 if (success)
                 {
-
                     var popupReceiveRewards = UIManager.Instance.ShowPopup<PopupReceiveReward>(null);
                     popupReceiveRewards.SetData(packNoAds.listReward);
                     ShopManager.Instance.HasPurchasedNoAdsPack = true;
-
+                    UIManager.Instance.OnRefeshBannerAndAds?.Invoke();
                     Hide();
                 }
                 else

@@ -73,12 +73,17 @@ public abstract class BoosterBase : MonoBehaviour
                 GameManager.Instance.SetGameState(GameState.Paused);
                 poup = UIManager.Instance.ShowPopup<PopupBuyBooster>(() =>
                 {
-                    GameManager.Instance.SetGameState(GameState.Playing);
                     OnUseBoosterDone?.Invoke(this, CurrentCount);
                 });
-                
+                poup.OnClose = () =>
+                {
+                    GameManager.Instance.SetGameState(GameState.Playing);
+                };
                 poup.Show(boosterType);
-                poup.OnBought = UpdateVisualBooster;
+                poup.OnBought = () => {
+                    GameManager.Instance.SetGameState(GameState.Playing);
+                    UpdateVisualBooster();
+                };
             }
             callback?.Invoke(false);
         }

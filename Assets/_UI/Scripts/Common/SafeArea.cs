@@ -23,7 +23,7 @@ namespace Crystal.DX
         protected void Awake()
         {
             UIManager.OnChangeScreen += OnChangeScreen;
-            UIManager.OnRefeshBannerAndAds += Refresh;
+            UIManager.Instance.OnRefeshBannerAndAds += Refresh;
             RegisterListener();
         }
         protected bool hasRegisterEvent;

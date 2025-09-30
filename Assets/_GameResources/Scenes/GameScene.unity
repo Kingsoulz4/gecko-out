@@ -549,6 +549,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_listCoinPacks: {fileID: 11400000, guid: 317dad7677899534a9ed1529e2ca8509, type: 2}
   m_listBundlePack: {fileID: 11400000, guid: 5f1c4d12c23eedf4293107300349750f, type: 2}
+  m_listRemoveAdsPacks: {fileID: 11400000, guid: 7619d806419033146a88863fd25938fb, type: 2}
 --- !u!4 &1602501156 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2081370821875115684, guid: 53ab0c9f8001fd44cae1bb4ed18f3431, type: 3}

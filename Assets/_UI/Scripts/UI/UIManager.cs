@@ -26,7 +26,7 @@ public class UIManager : SingletonMono<UIManager>
     [SerializeField] List<ScreenUI> listScreenExist;
     public ScreenUI CurrentScreen { get; private set; }
     public static event Action<Vector2> OnChangeScreen;
-    public static event Action OnRefeshBannerAndAds;
+    public Action OnRefeshBannerAndAds;
     public Vector2 currentScreenSize;
     public static bool isFold { get; private set; }
     private bool ready;

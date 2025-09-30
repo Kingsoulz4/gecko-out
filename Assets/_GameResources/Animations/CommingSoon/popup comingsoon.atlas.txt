@@ -1,0 +1,15 @@
+popup comingsoon.png
+size:1024,512
+filter:Linear,Linear
+pma:true
+bb
+bounds:559,395,43,63
+dog
+bounds:2,138,555,320
+offsets:1,1,557,321
+ear
+bounds:2,52,128,84
+offsets:1,1,130,86
+z
+bounds:2,2,40,48
+offsets:1,1,42,50

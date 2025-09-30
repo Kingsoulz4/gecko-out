@@ -25,7 +25,7 @@ public class ShopScreenTab : MenuTabPanel
 
     private void OnEnable()
     {
-        UIManager.OnRefeshBannerAndAds += ResetVisual;
+        UIManager.Instance.OnRefeshBannerAndAds += ResetVisual;
     }
 
     private void ResetVisual()
@@ -34,7 +34,7 @@ public class ShopScreenTab : MenuTabPanel
 
     private void OnDisable()
     {
-        UIManager.OnRefeshBannerAndAds -= ResetVisual;
+        UIManager.Instance.OnRefeshBannerAndAds -= ResetVisual;
     }
 
     public void RollToShopGold()

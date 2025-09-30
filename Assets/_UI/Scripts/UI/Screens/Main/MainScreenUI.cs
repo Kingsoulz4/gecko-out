@@ -59,7 +59,7 @@ public class MainScreenUI : ScreenUI
 
         UpdateUI();
 
-        UIManager.OnRefeshBannerAndAds += UpdateButtonRemoveAds;
+        UIManager.Instance.OnRefeshBannerAndAds += UpdateButtonRemoveAds;
         UpdateButtonRemoveAds();
         btn_RemoveAds.onClick.AddListener(() =>
         {
@@ -187,7 +187,7 @@ public class MainScreenUI : ScreenUI
 
     private void OnDisable()
     {
-        UIManager.OnRefeshBannerAndAds -= UpdateButtonRemoveAds;
+        UIManager.Instance.OnRefeshBannerAndAds -= UpdateButtonRemoveAds;
         DOTween.Kill(this);
     }
 

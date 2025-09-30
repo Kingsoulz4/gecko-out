@@ -8,6 +8,7 @@ namespace Geckout
     {
         [SerializeField] private ShopData m_listCoinPacks;
         [SerializeField] private ShopData m_listBundlePack;
+        [SerializeField] private ShopData m_listRemoveAdsPacks;
 
         public bool HasPurchasedRemoveInterAds
         {
@@ -40,6 +41,11 @@ namespace Geckout
             }
 
             foreach (var item in m_listBundlePack.listShopPack)
+            {
+                IAPManager.Instance.AddProductConsume(item.id, item.googleID, item.appleID, null);
+            }
+
+            foreach (var item in m_listRemoveAdsPacks.listShopPack)
             {
                 IAPManager.Instance.AddProductConsume(item.id, item.googleID, item.appleID, null);
             }
