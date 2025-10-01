@@ -221,7 +221,7 @@ public class HeartManager : SingletonMono<HeartManager>
             {
                 return false;
             }
-            UserDataManager.AddHeart(-number, "start_level", false);
+            UserDataManager.AddHeart(-number, "start_level", true);
             return true;
         }
         else

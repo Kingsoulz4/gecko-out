@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,6 +27,35 @@ namespace Geckout
         {
             get => PlayerPrefs.GetInt("HasPurchasedNoAdsPack", 0) > 0;
             set => PlayerPrefs.SetInt("HasPurchasedNoAdsPack", value ? 1 : 0);
+        }
+
+        private List<string> listPurchasedPack;
+
+        public List<string> ListPurchasedPacks
+        {
+            get
+            {
+                if(listPurchasedPack == null)
+                {
+                    listPurchasedPack = JsonConvert.DeserializeObject<List<string>>(PlayerPrefs.GetString("ListPurchasedPacks", "[]"));
+                }
+                return listPurchasedPack;
+            }
+
+            set
+            {
+                listPurchasedPack = value;
+                PlayerPrefs.SetString("ListPurchasedPacks", JsonConvert.SerializeObject(listPurchasedPack));
+            }
+        }
+
+        public void AddPurchasedPack(ShopPack packID)
+        {
+            if(!ListPurchasedPacks.Contains(packID.id))
+            {
+                ListPurchasedPacks.Add(packID.id);
+                ListPurchasedPacks = ListPurchasedPacks;
+            }
         }
 
         private void Awake()

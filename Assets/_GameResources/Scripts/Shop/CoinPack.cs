@@ -27,16 +27,23 @@ namespace Geckout
         private void OnClickBuy()
         {
             //Add Logic IAP Here
-            var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(() =>
+            IAPManager.Instance.BuyProductID(shopPack.id, (success) =>
             {
-                OnPurchased?.Invoke();
-            });
-            popupReceiveReward.SetData(shopPack.listReward);
+                if (success)
+                {
+                    ShopManager.Instance.AddPurchasedPack(shopPack);
+                    var popupReceiveReward = UIManager.Instance.ShowPopup<PopupReceiveReward>(() =>
+                    {
+                        OnPurchased?.Invoke();
+                    });
+                    popupReceiveReward.SetData(shopPack.listReward);
 
-            foreach (var item in shopPack.listReward)
-            {
-                item.Claim();
-            }
+                    foreach (var item in shopPack.listReward)
+                    {
+                        item.Claim();
+                    }
+                }
+            });
         }
 
         public void SetData(ShopPack packData)

@@ -31,7 +31,7 @@ namespace Geckout
 
         public void UpdateUI()
         {
-            m_removeInterPack.gameObject.SetActive(!ShopManager.Instance.HasPurchasedRemoveInterAds);
+            m_removeInterPack.gameObject.SetActive(!ShopManager.Instance.HasPurchasedRemoveInterAds && !ShopManager.Instance.HasPurchasedRemoveAds);
             m_removeBannerPack.gameObject.SetActive(!ShopManager.Instance.HasPurchasedRemoveAds);
             m_removeAdsPack.gameObject.SetActive(!ShopManager.Instance.HasPurchasedNoAdsPack);
         }
