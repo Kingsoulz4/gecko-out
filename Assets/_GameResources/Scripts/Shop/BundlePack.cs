@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -46,7 +47,11 @@ namespace Geckout
                     {
                         item.Claim();
                     }
-                    Destroy(gameObject);
+
+                    transform.DOScale(0, 0.1f).OnComplete(() =>
+                    {
+                        Destroy(gameObject);
+                    });
                 }
                 else
                 {

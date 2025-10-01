@@ -19,13 +19,13 @@ namespace Geckout
             for (int i = 0; i < listPosition.Count; i++)
             {
                 var newIceTile = Instantiate(m_icePrefab, transform);
-                newIceTile.transform.position = listPosition[i];
+                newIceTile.transform.position = listPosition[i] - Vector3.forward * 0.5f;
                 newIceTile.gameObject.SetActive(true);
                 listIceTile.Add(newIceTile);
             }
             m_textMeltCount.text = meltCount + "";
             var midTile = listIceTile[listIceTile.Count / 2];
-            m_textMeltCount.transform.position = new Vector3(midTile.transform.position.x, midTile.transform.position.y, midTile.transform.position.z - 1);
+            m_textMeltCount.transform.position = new Vector3(midTile.transform.position.x, midTile.transform.position.y, m_textMeltCount.transform.position.z);
         }
 
         public void UpdateMeltCount(int meltCount)

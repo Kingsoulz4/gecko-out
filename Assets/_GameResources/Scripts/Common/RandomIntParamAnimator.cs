@@ -28,7 +28,7 @@ namespace Geckout
                 yield return new WaitForSeconds(delay);
 
                 // Pick random animation
-                var val = Random.Range(minVal, maxVal);
+                var val = Random.Range(minVal, maxVal + 1);
 
                 // Play it
                 animator.SetInteger(paramName, val);

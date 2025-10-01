@@ -92,12 +92,19 @@ namespace Geckout
                            }))
                        .Join(coinObject.DORotate(coinObject.localRotation.eulerAngles + Vector3.forward * 360, _moveToTargetDuration * 2, RotateMode.FastBeyond360).SetEase(Ease.Linear))
                        //.Append(coin.DOScale(0f, 0.25f).SetEase(Ease.InBack))
+                       .Join(_goldCounter.transform.DOScale(_originScale * 1.1f, 0.05f).SetEase(Ease.InOutSine)
+                            .SetDelay(_moveToTargetDuration)
+                            .OnComplete(() =>
+                            {
+                                _goldCounter.SetText(UserDataManager.Gold - coinCount + coinCount / _coinContainer.childCount * (index + 1));
+                                _goldCounter.transform.DOScale(_originScale, 0.05f);
+                            }))
                        .SetDelay(delayCount)
                        .OnComplete(() =>
                        {
                            //AudioManager.Instance.PlayCoinDingFX();
                            //VibrationManager.VibrateWeak();
-                           _goldCounter.SetText(UserDataManager.Gold - coinCount + coinCount / _coinContainer.childCount * (index + 1));
+                           
                            Destroy(coinObject.gameObject);
 
                            if (index == _coinContainer.childCount - 1)
@@ -146,10 +153,10 @@ namespace Geckout
             }
 
             // Counter bounce FX
-            _goldCounter.transform.DOScale(_originScale * 1.1f, 0.1f)
-                .SetLoops(8, LoopType.Yoyo)
-                .SetEase(Ease.InOutSine)
-                .SetDelay(1f);
+            //_goldCounter.transform.DOScale(_originScale * 1.1f, 0.1f)
+            //    .SetLoops(8, LoopType.Yoyo)
+            //    .SetEase(Ease.InOutSine)
+            //    .SetDelay(1f);
 
             yield return null;
         }

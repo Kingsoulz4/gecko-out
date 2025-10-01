@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,6 +30,9 @@ namespace Geckout
         [Header("UI")]
         [SerializeField] private GoldDisplay m_goldBar;
         [SerializeField] private Button m_buttonClose;
+
+        [Header("")]
+        [SerializeField] private ContentSizeFitter m_mainContentSizeFitter;
 
         private void Awake()
         {
@@ -59,6 +63,13 @@ namespace Geckout
             m_removeAdsPacks.gameObject.SetActive(!ShopManager.Instance.HasPurchasedNoAdsPack);
         }
 
+        private async void UpdateContainer()
+        {
+            m_mainContentSizeFitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+            await Task.Delay(100);
+            m_mainContentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        }
+
         public void Init()
         {
             MyUlti.RemoveAllChilds(m_listBundlePackContainer);
@@ -70,6 +81,7 @@ namespace Geckout
                 newPack.SetData(pack);
                 newPack.OnPurchased = () =>
                 {
+                    UpdateContainer();
                     var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
                     var goldQuantity = pack.listReward.Find(x => x.type == ItemType.GOLD).quantity;
                     popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, goldQuantity, () =>
@@ -78,10 +90,12 @@ namespace Geckout
                     });
                 };
             }
-            MyUlti.RemoveAllChilds(m_listShopCoinPackContainer);
-            foreach(var pack in m_listCoinPacks.listShopPack)
+            //MyUlti.RemoveAllChilds(m_listShopCoinPackContainer);
+            var listCoinPack = m_listShopCoinPackContainer.GetComponentsInChildren<CoinPack>();
+            for(int i=0; i<m_listCoinPacks.listShopPack.Count; i++)
             {
-                var newCoinPack = Instantiate(m_coinPackPrefab, m_listShopCoinPackContainer);
+                var pack = m_listCoinPacks.listShopPack[i];
+                var newCoinPack = listCoinPack[i];
                 newCoinPack.SetData(pack);
                 newCoinPack.OnPurchased = () =>
                 {

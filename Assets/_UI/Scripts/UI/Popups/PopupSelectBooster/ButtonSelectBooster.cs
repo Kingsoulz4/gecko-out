@@ -44,7 +44,7 @@ namespace Geckout
         {
             if (!IsUnLocked)
             {
-                UIManager.Instance.ShowPopup<PopupNoti>(null).ShowLocked();
+                UIManager.Instance.ShowPopup<PopupMiniNoti>(null).ShowNotiLock();
                 return;
             } 
 

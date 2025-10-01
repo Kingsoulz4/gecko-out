@@ -153,8 +153,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -100}
-  m_SizeDelta: {x: 365.77, y: 100}
+  m_AnchoredPosition: {x: 0, y: -132.4}
+  m_SizeDelta: {x: 365.77, y: 76.794}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &572305421289866016
 GameObject:
@@ -189,10 +189,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6839704199426798096}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0.00036621094, y: -3.6}
-  m_SizeDelta: {x: -0.032761, y: 72.0963}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2815768342869623778
 CanvasRenderer:
@@ -228,14 +228,14 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 3
-    m_MaxSize: 40
+    m_MaxSize: 100
     m_Alignment: 4
     m_AlignByGeometry: 1
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: +1000000
+  m_Text: +40
 --- !u!114 &2331349107369430419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,7 +249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0.45882353, g: 0.26666668, b: 0.21176471, a: 1}
-  m_EffectDistance: {x: 1, y: -1}
+  m_EffectDistance: {x: 5, y: 5}
   m_UseGraphicAlpha: 1
 --- !u!1 &847161159269850513
 GameObject:
@@ -1168,6 +1168,7 @@ MonoBehaviour:
   animType: 2
   mainPopUp: {fileID: 409005693109482706}
   m_background: {fileID: 1492458095040176474}
+  m_canvasGroup: {fileID: 0}
   _txtQuantity: {fileID: 8661025234733889580}
   _coinContainer: {fileID: 5468339935882172530}
   _startPos: {fileID: 4126745375353853888}

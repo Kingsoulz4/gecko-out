@@ -57,7 +57,7 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 89619ea76a564844eb77b58ab3d131bf, type: 3}
     listReward:
     - type: 0
-      quantity: 25000
+      quantity: 50000
   - id: coin6
     googleID: coin6
     appleID: coin6

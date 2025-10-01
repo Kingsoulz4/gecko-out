@@ -212,6 +212,7 @@ namespace Geckout
 
             popupWin.OnClaimedReward = (val) =>
             {
+                NextLevel();
                 var mainScreen = UIManager.Instance.ShowScreen<MainScreenUI>();
                 mainScreen.ShowClaimReward(val);
             };
@@ -222,9 +223,6 @@ namespace Geckout
         public void NextLevel()
         {
             CurrentLevel++;
-            
-            StartCurrentLevel();
-            UIManager.Instance.ShowScreen<InGameScreenUI>();
         }
         #endregion
 

@@ -27,7 +27,7 @@ public class UISettingModule : MonoBehaviour
         bool isActiveMusic = AudioManager.MusicSetting == 1;
         AudioManager.Instance.EnableMusic(!isActiveMusic);
         AudioManager.Instance.PlayOneShot(SFX_ButtonSwitch, 1);
-        musicAni.Play(!isActiveMusic ? "SettingChangeOn_New" : "SettingChangeOff_New");
+        musicAni.Play(!isActiveMusic ? "SettingOn_New" : "SettingOff_New");
     }
 
     private void OnClickSound()
@@ -35,7 +35,7 @@ public class UISettingModule : MonoBehaviour
         bool isActiveSFX = AudioManager.SoundSetting == 1;
         AudioManager.Instance.EnableSound(!isActiveSFX);
         AudioManager.Instance.PlayOneShot(SFX_ButtonSwitch, 1);
-        soundAni.Play(!isActiveSFX ? "SettingChangeOn_New" : "SettingChangeOff_New");
+        soundAni.Play(!isActiveSFX ? "SettingOn_New" : "SettingOff_New");
     }
 
     private void OnClickVibrate()
@@ -43,7 +43,7 @@ public class UISettingModule : MonoBehaviour
         bool isActiveVibrate = PlayerPrefs.GetInt("isActiveVibrate", 1) == 1;
         PlayerPrefs.SetInt("isActiveVibrate", !isActiveVibrate ? 1 : 0);
         AudioManager.Instance.PlayOneShot(SFX_ButtonSwitch, 1);
-        vibrateAni.Play(!isActiveVibrate ? "SettingChangeOn_New" : "SettingChangeOff_New");
+        vibrateAni.Play(!isActiveVibrate ? "SettingOn_New" : "SettingOff_New");
     }
 
     private void Refresh()

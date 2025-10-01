@@ -6,7 +6,8 @@ public enum AnimShowPopUp
 {
     None,
     Move,
-    ScalePunch
+    ScalePunch,
+    Fade
 }
 public abstract class PopupUI : MonoBehaviour
 {
@@ -87,6 +88,7 @@ public abstract class PopupUI : MonoBehaviour
             onShowDone?.Invoke();
         });
     }
+
     public virtual void Hide()
     {
         if (!isShowing)
@@ -105,13 +107,12 @@ public abstract class PopupUI : MonoBehaviour
                     time = .32f;
                     break;
                 case AnimShowPopUp.ScalePunch:
-                    mainPopUp.DOScale(1.1f, 0.1f).OnComplete(() =>
-                    {
-                        mainPopUp.DOScale(0.3f, 0.32f).SetEase(Ease.OutQuart);
-                    });
-                    
-                    time = .42f;
-
+                    time = .2f;
+                    mainPopUp.DOScale(0, time).SetEase(Ease.InBack).SetEase(Ease.OutQuart);
+                    CanvasGroup.DOFade(0, time * 0.7f);
+                    break;
+                case AnimShowPopUp.Fade:
+                    time = .3f;
                     CanvasGroup.DOFade(0, time);
 
                     break;
@@ -138,6 +139,8 @@ public abstract class PopupUI : MonoBehaviour
         });
 
     }
+
+
     protected virtual void OnPopupDestroyed()
     {
         Destroy(gameObject);

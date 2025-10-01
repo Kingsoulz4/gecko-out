@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,6 +20,9 @@ namespace Geckout
         [SerializeField] private Image iconFill;
         [SerializeField] private Slider m_sliderProgress;
         [SerializeField] private GameObject m_winContent;
+        [SerializeField] private GameObject m_ribbonObject;
+        [SerializeField] private Text m_textLevelComplete;
+        [SerializeField] private GameObject m_progressNewFeatureObject;
 
         [Header("New Feature")]
         [SerializeField] private GameObject m_newFeatureContent;
@@ -42,6 +46,7 @@ namespace Geckout
             m_buttonClaimX2.onClick.AddListener(OnClickClaimX2);
             m_buttonContinue.onClick.AddListener(OnClickContinue);
             finalFeatureLv = NewFeatureManager.Instance.FeaturePopupDataDic.Last(x => x.Value.displayType == NewFeatureTutDisplayType.POPUP_TEXT).Key;
+            UpdateFillInstant(out var _, out var _);
         }
 
         private void OnClickContinue()
@@ -89,38 +94,69 @@ namespace Geckout
             m_newFeatureContent.gameObject.SetActive(true);
         }
 
-        private void OnEnable()
-        {
-            onShowDone += UpdateFill;
-        }
-
-        private void OnDisable()
-        {
-            onShowDone -= UpdateFill;
-        }
 
         public override void Hide()
         {
             base.Hide();
-
+            m_buttonClaimX2.transform.DOKill();
         }
 
         public override void Show(Action onClose)
         {
             m_winContent.SetActive(true);
             m_newFeatureContent.SetActive(false);
+            UpdateFillInstant(out var _, out var _);
             base.Show(onClose);
          
             if (LevelManager.Instance.CurrentLevel > finalFeatureLv)
             {
-                onShowDone -= UpdateFill;
                 progressText.enabled = false;
                 iconFeatureDisplay.enabled = false;
                 iconFill.enabled = false;
             }
+
+            StartCoroutine(IEAnimateShow());
+            
         }
 
+        private IEnumerator IEAnimateShow()
+        {
+            m_ribbonObject.transform.localScale = Vector3.zero;
+            m_textLevelComplete.transform.localScale = Vector3.zero;
+            m_progressNewFeatureObject.transform.localScale = Vector3.zero;
+            m_buttonClaimX2.transform.localScale = Vector3.zero;
+            m_buttonClaim.transform.localScale = Vector3.zero;
+            yield return null;
+            m_ribbonObject.transform.DOScale(1f, 0.25f).SetEase(Ease.OutBack);
+            yield return new WaitForSeconds(0.25f);
+            m_textLevelComplete.transform.DOScale(1f, 0.25f).SetEase(Ease.OutBack);
+            yield return new WaitForSeconds(0.25f);
+            m_progressNewFeatureObject.transform.DOScale(1f, 0.25f).SetEase(Ease.OutBack);
+            yield return new WaitForSeconds(0.35f);
+            UpdateFill();
+            yield return new WaitForSeconds(0.5f);
+            m_buttonClaimX2.transform.DOScale(1f, 0.25f).SetEase(Ease.OutBack);
+            yield return new WaitForSeconds(0.5f);
+            m_buttonClaimX2.transform.DOScale(0.85f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.Linear);
+            m_buttonClaim.transform.DOScale(1f, 0.25f).SetEase(Ease.OutBack);
+
+        }
+
+
         public void UpdateFill()
+        {
+            float lastProgress, progress;
+            var feature = UpdateFillInstant(out lastProgress, out progress);
+
+            // If no feature (disabled UI case), just stop here
+            if (feature == null)
+                return;
+
+            // Animate fill progress
+            StartCoroutine(Fill(lastProgress, progress, 0.5f));
+        }
+
+        public NewFeatureItemData UpdateFillInstant(out float lastProgress, out float progress)
         {
             int featureLevel = -1;
             int featureLevelOld = -1;
@@ -143,8 +179,10 @@ namespace Geckout
                 iconFeatureDisplay.enabled = false;
                 this.progressText.enabled = false;
                 iconFill.enabled = false;
-                return;
+                lastProgress = progress = 0f;
+                return null;
             }
+
             float totalStep = 0;
             if (featureLevelOld != -1)
             {
@@ -156,25 +194,20 @@ namespace Geckout
                 totalStep = featureLevel - 1;
             }
 
-            //var currentFeatureInProgress = NewFeatureManager.Instance.Get
-
-            float progress = (LevelManager.Instance.CurrentLevel + 1 - featureLevelOld) / totalStep;
-            float lastProgress = (LevelManager.Instance.CurrentLevel - featureLevelOld) / totalStep;
+            progress = (LevelManager.Instance.CurrentLevel + 1 - featureLevelOld) / totalStep;
+            lastProgress = (LevelManager.Instance.CurrentLevel - featureLevelOld) / totalStep;
 
             var feature = NewFeatureManager.Instance.FeaturePopupDataDic[featureLevel];
 
-            iconFeatureDisplay.sprite = NewFeatureManager.Instance.FeaturePopupDataDic[featureLevel].icon;
-            iconFill.sprite = NewFeatureManager.Instance.FeaturePopupDataDic[featureLevel].icon;
-            m_imageNewFeatureIcon.sprite = NewFeatureManager.Instance.FeaturePopupDataDic[featureLevel].icon;
-            //iconFeatureDisplay.SetNativeSize();
-            //iconFill.SetNativeSize();
+            iconFeatureDisplay.sprite = feature.icon;
+            iconFill.sprite = feature.icon;
+            m_imageNewFeatureIcon.sprite = feature.icon;
 
-            currentProgressNewFeature = progress;
+            currentProgressNewFeature = lastProgress;
             m_textDes.text = feature.des;
             m_textFeatureName.text = feature.title;
 
-            StartCoroutine(Fill(lastProgress, progress, 1f));
-
+            return feature;
         }
 
         private IEnumerator Fill(float start, float target, float speed = 1)

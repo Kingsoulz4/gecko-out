@@ -14,6 +14,7 @@ namespace Geckout
         [SerializeField] private Text m_textLevel;
         [SerializeField] private ButtonSelectBooster m_buttonSelectBoosterTime;
         [SerializeField] private ButtonSelectBooster m_buttonSelectBoosterScissor;
+        [SerializeField] private GameObject m_notiLock;
 
         [Header("Tutorial")]
         [SerializeField] private GameObject m_tutorialObject;
@@ -117,7 +118,6 @@ namespace Geckout
             ((ScissorBooster)BoosterManager.Instance.ScissorBooster).IsSelectedToUse = m_buttonSelectBoosterScissor.IsSelected;
             LevelManager.Instance.StartCurrentLevel();
             UIManager.Instance.ShowScreen<InGameScreenUI>();
-
         }
     }
 }
