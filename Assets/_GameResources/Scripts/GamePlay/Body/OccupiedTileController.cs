@@ -80,6 +80,10 @@ namespace Geckout
                 Vector3 worldPos = segment.transform.position;
                 Vector2Int gridPos = GameMap.WorldToGridPosition(worldPos);
 
+                if (bodyController.MoveToPortal.IsEnteringPortal)
+                {
+                    return;
+                }
                 UpdateSegmentTile(rawIndex, gridPos, isChangeTileColor);
                 lastGridPositions[rawIndex] = gridPos;
             }
