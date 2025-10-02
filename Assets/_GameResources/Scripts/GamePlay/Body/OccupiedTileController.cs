@@ -60,10 +60,6 @@ namespace Geckout
 
         public void UpdateAllSegmentPositions(bool isChangeTileColor = true)
         {
-            if (!bodyController.CanControl)
-            {
-                return;
-            }
             var orderedSegments = bodyController.GetOrderedSegments();
             var segments = bodyController.Segments;
 
