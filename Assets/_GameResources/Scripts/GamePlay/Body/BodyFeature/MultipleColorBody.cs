@@ -15,6 +15,7 @@ namespace Geckout
 
         private SubColorIndicator subColorIndicator;
 
+
         public void Init()
         {
             if (isInit) return;
@@ -29,6 +30,8 @@ namespace Geckout
             if (!controller || controller != body) return;
 
             SetLastPath(list);
+            subColorIndicator.gameObject.SetActive(false);
+            body.BodyRenderer.ForceUpdateSize();
             SpawnNewBody();
         }
 
