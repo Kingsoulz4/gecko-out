@@ -36,7 +36,8 @@ public class PopupSetting : PopupUI
         {
             m_iconMinusHeart.gameObject.SetActive(LevelManager.Instance.LevelGame.IsFirstClick);
         }
-        //btn_Restore.gameObject.SetActive(ShopManager.Instance.ListPurchasedPacks.Count > 0);
+        btn_Restore.gameObject.SetActive(ShopManager.Instance.ListPurchasedPacks.Count > 0);
+        m_buttonRemoveAds.gameObject.SetActive(!ShopManager.Instance.HasPurchasedNoAdsPack);
     }
 
     private void OnClickRemoveAds()
@@ -66,6 +67,7 @@ public class PopupSetting : PopupUI
     {
         m_buttonExitGame.gameObject.SetActive(type == PopupSettingType.IN_GAME);
         m_buttonRemoveAds.gameObject.SetActive(type == PopupSettingType.HOME);
+        UpdateUI();
     }
 
     public override void Initialize(UIManager manager)

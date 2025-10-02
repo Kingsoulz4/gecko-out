@@ -71,4 +71,14 @@ public class IAPManager : SingletonDontDestroyMono<IAPManager>, IHandleIAP
     {
         IAPHandler.AddProductSubscription(id, idStoreGoogle, idStoreApple, callbackPurchase);
     }
+
+    public float GetLocalizedPrice(string pPackageId)
+    {
+        return IAPHandler.GetLocalizedPrice(pPackageId);
+    }
+
+    public string GetLocalizedPriceString(string pPackageId)
+    {
+        return IAPHandler.GetLocalizedPriceString(pPackageId);
+    }
 }

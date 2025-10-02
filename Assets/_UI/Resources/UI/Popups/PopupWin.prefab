@@ -925,6 +925,7 @@ GameObject:
   - component: {fileID: 1102103323555050398}
   - component: {fileID: 2556509093012638178}
   - component: {fileID: 211662208961746720}
+  - component: {fileID: 7343469027106712400}
   m_Layer: 5
   m_Name: ButtonClaimX2
   m_TagString: Untagged
@@ -1091,6 +1092,27 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!95 &7343469027106712400
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2946786817815611963}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d549081a08211f64782124837d0b3651, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3039697991805274313
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,8 +1148,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.971, y: 1}
-  m_AnchoredPosition: {x: 8.1123, y: 0.28359985}
-  m_SizeDelta: {x: -28.6996, y: -51.4486}
+  m_AnchoredPosition: {x: 6.3635864, y: 0.28359985}
+  m_SizeDelta: {x: -25.2021, y: -51.4486}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3176950219435367919
 CanvasRenderer:

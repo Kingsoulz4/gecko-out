@@ -122,6 +122,7 @@ GameObject:
   - component: {fileID: 2098197229019231650}
   - component: {fileID: 4781676121539573501}
   - component: {fileID: 8142052961143411423}
+  - component: {fileID: 1375488335213565238}
   m_Layer: 5
   m_Name: BGNormal
   m_TagString: Untagged
@@ -186,6 +187,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1375488335213565238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 271109345747708159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d00e97eb87033b44a4622d0cac48497, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 8142052961143411423}
+  blinkColor: {r: 1, g: 0, b: 0, a: 1}
+  halfDuration: 0.5
+  playOnEnable: 0
+  ignoreTimeScale: 1
+  originColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &555721850252079938
 GameObject:
   m_ObjectHideFlags: 0
@@ -502,13 +521,14 @@ GameObject:
   - component: {fileID: 2509680323787178318}
   - component: {fileID: 5161763972362729184}
   - component: {fileID: 1163833003473827208}
+  - component: {fileID: 8394862858281950944}
   m_Layer: 5
   m_Name: BGHard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2509680323787178318
 RectTransform:
   m_ObjectHideFlags: 0
@@ -566,6 +586,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8394862858281950944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719788747409971746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d00e97eb87033b44a4622d0cac48497, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1163833003473827208}
+  blinkColor: {r: 1, g: 0, b: 0, a: 1}
+  halfDuration: 0.5
+  playOnEnable: 0
+  ignoreTimeScale: 1
+  originColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &820400747710520931
 GameObject:
   m_ObjectHideFlags: 0
@@ -1248,13 +1286,14 @@ GameObject:
   - component: {fileID: 8455783459628343166}
   - component: {fileID: 4618287652526172600}
   - component: {fileID: 422572998299076237}
+  - component: {fileID: 4396584047486684126}
   m_Layer: 5
   m_Name: BGSuperHard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8455783459628343166
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1295,7 +1334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9528302, g: 0.9528302, b: 0.9528302, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1312,6 +1351,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4396584047486684126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3431146883748438236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d00e97eb87033b44a4622d0cac48497, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 422572998299076237}
+  blinkColor: {r: 1, g: 0, b: 0, a: 1}
+  halfDuration: 0.5
+  playOnEnable: 0
+  ignoreTimeScale: 1
+  originColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &3916476384811511567
 GameObject:
   m_ObjectHideFlags: 0

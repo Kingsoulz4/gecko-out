@@ -57,6 +57,10 @@ public class InGameScreenUI : ScreenUI
 
     private LevelController LevelController => LevelManager.Instance.LevelGame;
 
+    private GraphicColorBlink timeBarBlinker;
+
+    private bool isStartedWarningTime = false;
+
     private void Update()
     {
         if (LevelController.CanCountdownTime)
@@ -225,6 +229,8 @@ public class InGameScreenUI : ScreenUI
     {
         base.Active();
         currentTopY = rect_Top.anchoredPosition.y;
+        isStartedWarningTime = false;
+        if (timeBarBlinker != null) timeBarBlinker.StopBlink();
         UpdateUI();
         PoupNewFeature();
     }
@@ -243,6 +249,7 @@ public class InGameScreenUI : ScreenUI
             item.Value.SetActive(false);
         }
         m_listTimeBarBackground[LevelController.GameLevelData.type].SetActive(true);
+        timeBarBlinker = m_listTimeBarBackground[LevelController.GameLevelData.type].GetComponent<GraphicColorBlink>();
     }
 
     private void PoupNewFeature()
@@ -279,6 +286,11 @@ public class InGameScreenUI : ScreenUI
     {
         timeLevel = (int)timeLevel;
         txt_Time.text = GetTimeValueToString(timeLevel);
+        if(timeLevel <= 30 && !isStartedWarningTime)
+        {
+            isStartedWarningTime = true;
+            timeBarBlinker.StartBlink();
+        }    
     }
 
   

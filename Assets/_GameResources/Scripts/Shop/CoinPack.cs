@@ -51,6 +51,7 @@ namespace Geckout
             this.shopPack = packData;
             m_textCoinQuantity.text = packData.listReward.Find(x => x.type == ItemType.GOLD).quantity + "";
             //m_iconCoin.sprite = packData.icon;
+            m_textPrice.text = IAPManager.Instance.GetLocalizedPriceString(packData.id);
             m_tagHighlight.gameObject.SetActive(packData.id == packIDHighlight);
 
         }

@@ -33,6 +33,16 @@ namespace Geckout
             
         }
 
+        public virtual float GetLocalizedPrice(string pPackageId)
+        {
+            return 0f;
+        }
+
+        public virtual string GetLocalizedPriceString(string pPackageId)
+        {
+            return "$0.00";
+        }
+
         public virtual void Init()
         {
         }

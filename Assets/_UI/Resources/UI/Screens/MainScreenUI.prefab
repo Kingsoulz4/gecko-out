@@ -409,6 +409,7 @@ MonoBehaviour:
   - {fileID: 7934315837213132242}
   - {fileID: 1955418683473661093}
   - {fileID: 814110327289477486}
+  - {fileID: 4370730043998570423}
   btn_RemoveAds: {fileID: 955547212112828510}
   btn_StarterPackage: {fileID: 0}
   objOtherGame: {fileID: 0}
@@ -1456,6 +1457,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b1c36b91956da845a878baf3785f311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4370730043998570423 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5631016712750905770, guid: f4a97be15c08d6e4f9104783f7595052, type: 3}
+  m_PrefabInstance: {fileID: 8251315851838864925}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &5601292090428485601 stripped

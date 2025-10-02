@@ -311,11 +311,7 @@ MonoBehaviour:
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
-<<<<<<< HEAD
     listColor: 05000000
-=======
-    listColor: 02000000
->>>>>>> dev_dat_flow_game
     listCoordinate:
     - {x: 6, y: 2}
     - {x: 5, y: 2}
@@ -346,11 +342,7 @@ MonoBehaviour:
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
-<<<<<<< HEAD
     listColor: 02000000
-=======
-    listColor: 05000000
->>>>>>> dev_dat_flow_game
     listCoordinate:
     - {x: 0, y: 3}
     - {x: 0, y: 4}

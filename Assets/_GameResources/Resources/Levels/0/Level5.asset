@@ -20,74 +20,41 @@ MonoBehaviour:
   type: 0
   mapTileDatas:
   - coordinate: {x: 0, y: 0}
-<<<<<<< HEAD
     type: 3
     rotation: {x: -90, y: 90, z: -90}
-=======
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
->>>>>>> dev_dat_flow_game
   - coordinate: {x: 1, y: 0}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 0}
-<<<<<<< HEAD
     type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 3, y: 0}
     type: 6
-=======
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 3, y: 0}
-    type: 0
->>>>>>> dev_dat_flow_game
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 4, y: 0}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 0}
-<<<<<<< HEAD
     type: 3
     rotation: {x: 90, y: 90, z: -90}
   - coordinate: {x: 0, y: 1}
     type: 2
     rotation: {x: 180, y: 90, z: -90}
-=======
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 0, y: 1}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
->>>>>>> dev_dat_flow_game
   - coordinate: {x: 1, y: 1}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 1}
-<<<<<<< HEAD
     type: 5
     rotation: {x: 90, y: 90, z: -90}
   - coordinate: {x: 3, y: 1}
     type: 5
     rotation: {x: -90, y: 90, z: -90}
-=======
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 3, y: 1}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
->>>>>>> dev_dat_flow_game
   - coordinate: {x: 4, y: 1}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 1}
-<<<<<<< HEAD
     type: 2
     rotation: {x: 90, y: 90, z: -90}
-=======
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
->>>>>>> dev_dat_flow_game
   - coordinate: {x: 0, y: 2}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
@@ -110,11 +77,7 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 1, y: 3}
-<<<<<<< HEAD
     type: 1
-=======
-    type: 0
->>>>>>> dev_dat_flow_game
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 3}
     type: 0
@@ -141,11 +104,7 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 4, y: 4}
-<<<<<<< HEAD
     type: 1
-=======
-    type: 0
->>>>>>> dev_dat_flow_game
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 4}
     type: 0
@@ -169,35 +128,21 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 0, y: 6}
-<<<<<<< HEAD
     type: 2
     rotation: {x: -90, y: 90, z: -90}
-=======
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
->>>>>>> dev_dat_flow_game
   - coordinate: {x: 1, y: 6}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 6}
-<<<<<<< HEAD
     type: 5
     rotation: {x: 90, y: 90, z: -90}
   - coordinate: {x: 3, y: 6}
     type: 5
     rotation: {x: -90, y: 90, z: -90}
-=======
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 3, y: 6}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
->>>>>>> dev_dat_flow_game
   - coordinate: {x: 4, y: 6}
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 6}
-<<<<<<< HEAD
     type: 2
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 0, y: 7}
@@ -205,15 +150,6 @@ MonoBehaviour:
     rotation: {x: -90, y: 90, z: -90}
   - coordinate: {x: 1, y: 7}
     type: 6
-=======
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 0, y: 7}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 1, y: 7}
-    type: 0
->>>>>>> dev_dat_flow_game
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 7}
     type: 0
@@ -222,7 +158,6 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 4, y: 7}
-<<<<<<< HEAD
     type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 5, y: 7}
@@ -285,15 +220,6 @@ MonoBehaviour:
     Coordinate: {x: 2, y: 0}
     freezeTimeCount: 0
     listColor: 04000000
-=======
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  - coordinate: {x: 5, y: 7}
-    type: 0
-    rotation: {x: 0, y: 90, z: -90}
-  listDogData: []
-  listPortalData: []
->>>>>>> dev_dat_flow_game
   listMovableBoxData: []
   listCrateData: []
   colorAndMaterialData: {fileID: 11400000, guid: bea4b031ece8d284482119e23bace87e, type: 2}

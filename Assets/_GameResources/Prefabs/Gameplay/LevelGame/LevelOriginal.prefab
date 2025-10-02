@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelData: {fileID: 0}
-  tilePrefab: {fileID: 6968164639324100578, guid: 64902bb9b287b9b47b2ffeba74bcd986, type: 3}
+  tilePrefab: {fileID: 6968164639324100578, guid: 40595b7ff6067b248b3e134052988431, type: 3}
   isDebug: 1
   offsetFactor: 1
   m_tileWallEdge: {fileID: 2424358606838639240, guid: 354325ad6c70f52458b5d0f172e2634e, type: 3}
@@ -274,7 +274,7 @@ Transform:
   m_GameObject: {fileID: 6095310145707377625}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.54}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

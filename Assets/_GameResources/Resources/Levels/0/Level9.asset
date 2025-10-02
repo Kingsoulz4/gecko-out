@@ -17,7 +17,7 @@ MonoBehaviour:
   fieldOfView: 20
   mapSize: {x: 8, y: 11}
   time: 110
-  type: 0
+  type: 2
   mapTileDatas:
   - coordinate: {x: 0, y: 0}
     type: 6
@@ -346,7 +346,6 @@ MonoBehaviour:
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
-<<<<<<< HEAD
     listColor: 07000000
     listCoordinate:
     - {x: 2, y: 5}
@@ -356,27 +355,13 @@ MonoBehaviour:
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
-=======
->>>>>>> dev_dat_flow_game
     listColor: 02000000
     listCoordinate:
     - {x: 7, y: 6}
     - {x: 6, y: 6}
     - {x: 5, y: 6}
     - {x: 4, y: 6}
-<<<<<<< HEAD
     - {x: 3, y: 6}
-=======
-    freezeTimeCount: 0
-    hiddenCount: 0
-  - bodyType: 0
-    listColor: 07000000
-    listCoordinate:
-    - {x: 2, y: 5}
-    - {x: 2, y: 6}
-    - {x: 1, y: 6}
-    - {x: 0, y: 6}
->>>>>>> dev_dat_flow_game
     freezeTimeCount: 0
     hiddenCount: 0
   listPortalData:

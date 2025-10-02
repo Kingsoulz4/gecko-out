@@ -107,9 +107,54 @@ public class UnityIAPManger : IAPHandlerBase
 
         }
     }
+
+    public override float GetLocalizedPrice(string pPackageId)
+    {
+        try
+        {
+            if (IsInitialized())
+            {
+                var product = _storeController.GetProductById(pPackageId);
+                if (product != null)
+                    return (float)product.metadata.localizedPrice;
+            }
+               
+            return 0;
+        }
+        catch (System.Exception)
+        {
+            return 0;
+        }
+    }
+
+    public override string GetLocalizedPriceString(string pPackageId)
+    {
+        try
+        {
+            if (IsInitialized())
+            {
+                var product = _storeController.GetProductById(pPackageId);
+                if (product != null)
+                    return product.metadata.localizedPriceString;
+            }
+                   
+            return "$0.00";
+        }
+        catch (System.Exception)
+        {
+            return "$0.00";
+        }
+    }
+
     #endregion
 
     #region Initialization / fetch / events
+
+    public bool IsInitialized()
+    {
+        return _storeController != null;
+    }    
+
     private async Task InitializeAsync()
     {
         if (_storeController != null)

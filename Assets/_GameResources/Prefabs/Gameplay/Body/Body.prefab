@@ -239,7 +239,7 @@ MonoBehaviour:
     size: 0
     percent: 0
   _loopSamples: 0
-  _clipFrom: 0
+  _clipFrom: 0.04983389005064964
   _clipTo: 1
   animClipFrom: 0
   animClipTo: 1
@@ -565,6 +565,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4620819076341440648, guid: 16b78289a1dd6e648b0990603f852fc7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8eda4d68420cbe241a57549861857a39, type: 2}
     - target: {fileID: 7838665600272700627, guid: 16b78289a1dd6e648b0990603f852fc7, type: 3}
       propertyPath: m_Name
       value: TailSegment

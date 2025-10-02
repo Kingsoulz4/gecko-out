@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,6 +36,21 @@ namespace Geckout
             m_removeBannerPack.gameObject.SetActive(!ShopManager.Instance.HasPurchasedRemoveAds);
             m_removeAdsPack.gameObject.SetActive(!ShopManager.Instance.HasPurchasedNoAdsPack);
         }
+
+        public override void Show(Action onClose)
+        {
+            base.Show(onClose);
+            StartCoroutine(IEAnimateAppear());
+        }
+
+
+        private IEnumerator IEAnimateAppear()
+        {
+            m_buttonClose.transform.localScale = Vector3.zero;
+            yield return new WaitForSeconds(0.8f);
+            m_buttonClose.transform.DOScale(1f, 0.5f).SetEase(Ease.OutBack);
+        }
+            
 
         private void OnClickPurchaseInterPack()
         {
