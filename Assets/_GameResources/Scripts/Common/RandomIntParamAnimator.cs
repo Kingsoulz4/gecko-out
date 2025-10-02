@@ -33,7 +33,10 @@ namespace Geckout
                 // Play it
                 animator.SetInteger(paramName, val);
                 yield return null;
-                yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0)[0].clip.length);
+                if (animator.GetCurrentAnimatorClipInfo(0).Length > 0)
+                {
+                    yield return new WaitForSeconds(animator.GetCurrentAnimatorClipInfo(0)[0].clip.length);
+                }
                 animator.SetInteger(paramName, 0);
 
             }

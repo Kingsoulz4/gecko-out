@@ -93,6 +93,7 @@ namespace Geckout
             m_buttonSelectBoosterScissorTut.Init(boosterScissorData.levelUnlock, UserDataManager.CissorBooster);
             if (LevelManager.Instance.CurrentLevel == boosterTimeData.levelUnlock)
             {
+                
                 m_textDesBooster.text = boosterTimeData.description;
                 m_handObject.transform.position = m_buttonSelectBoosterTimeTut.transform.position;
             }

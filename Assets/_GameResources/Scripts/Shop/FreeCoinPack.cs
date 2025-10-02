@@ -62,7 +62,7 @@ namespace Geckout
 
         public void UpdateUI()
         {
-            if (LastTimeReceiveFreeCoin.Date != DateTime.Now.Date)
+            if (LastTimeReceiveFreeCoin.Date != DateTime.Now.Date && CurrentTimeReceiveFreeCoin >= maxTimeReceiveFreeCoin)
             {
                 CurrentTimeReceiveFreeCoin = 0;
             }
@@ -73,11 +73,10 @@ namespace Geckout
             }
             else
             {
-                timeCoolDown = (LastTimeReceiveFreeCoin - DateTime.Now.Date.AddDays(1)).TotalSeconds;
+                timeCoolDown = (DateTime.Now.Date.AddDays(1) - LastTimeReceiveFreeCoin).TotalSeconds;
             }
             m_buttonGet.gameObject.SetActive(timeCoolDown <= 0 && CurrentTimeReceiveFreeCoin < maxTimeReceiveFreeCoin);
             m_buttonDisable.gameObject.SetActive(!m_buttonGet.gameObject.activeInHierarchy);
-            m_textCoolDown.transform.parent.gameObject.SetActive(timeCoolDown > 0);
             StartCoolDownTime();
         }
 

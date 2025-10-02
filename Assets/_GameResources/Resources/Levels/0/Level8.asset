@@ -271,6 +271,18 @@ MonoBehaviour:
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
+<<<<<<< HEAD
+=======
+    listColor: 02000000
+    listCoordinate:
+    - {x: 2, y: 6}
+    - {x: 1, y: 6}
+    - {x: 0, y: 6}
+    - {x: 0, y: 5}
+    freezeTimeCount: 0
+    hiddenCount: 0
+  - bodyType: 0
+>>>>>>> dev_dat_flow_game
     listColor: 00000000
     listCoordinate:
     - {x: 1, y: 2}
@@ -300,6 +312,18 @@ MonoBehaviour:
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
+<<<<<<< HEAD
+=======
+    listColor: 07000000
+    listCoordinate:
+    - {x: 5, y: 5}
+    - {x: 5, y: 6}
+    - {x: 6, y: 6}
+    - {x: 7, y: 6}
+    freezeTimeCount: 0
+    hiddenCount: 0
+  - bodyType: 0
+>>>>>>> dev_dat_flow_game
     listColor: 06000000
     listCoordinate:
     - {x: 6, y: 0}
@@ -317,6 +341,7 @@ MonoBehaviour:
     - {x: 5, y: 0}
     freezeTimeCount: 0
     hiddenCount: 0
+<<<<<<< HEAD
   - bodyType: 0
     listColor: 07000000
     listCoordinate:
@@ -338,6 +363,8 @@ MonoBehaviour:
     - {x: 0, y: 4}
     freezeTimeCount: 0
     hiddenCount: 0
+=======
+>>>>>>> dev_dat_flow_game
   listPortalData:
   - portalType: 0
     Coordinate: {x: 3, y: 7}

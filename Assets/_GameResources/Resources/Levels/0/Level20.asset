@@ -17,7 +17,7 @@ MonoBehaviour:
   fieldOfView: 20
   mapSize: {x: 8, y: 12}
   time: 120
-  type: 3
+  type: 0
   mapTileDatas:
   - coordinate: {x: 0, y: 0}
     type: 6
@@ -432,7 +432,7 @@ MonoBehaviour:
   - portalType: 0
     Coordinate: {x: 0, y: 8}
     freezeTimeCount: 0
-    listColor: 06000000
+    listColor: 05000000
   - portalType: 0
     Coordinate: {x: 2, y: 11}
     freezeTimeCount: 0

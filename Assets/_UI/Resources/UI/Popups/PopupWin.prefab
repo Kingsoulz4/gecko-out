@@ -923,6 +923,8 @@ GameObject:
   - component: {fileID: 4897277736472547910}
   - component: {fileID: 6210391608319102448}
   - component: {fileID: 1102103323555050398}
+  - component: {fileID: 2556509093012638178}
+  - component: {fileID: 211662208961746720}
   m_Layer: 5
   m_Name: ButtonClaimX2
   m_TagString: Untagged
@@ -974,7 +976,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 2d37c4afca8784ce9ab899810e29aa9c, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -1058,6 +1060,37 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+--- !u!114 &2556509093012638178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2946786817815611963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62e4947d070cf41eb87bc6a9968c32a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Location: 0.49
+  m_Width: 0.296
+  m_Softness: 0.666
+  m_Brightness: 0.122
+  m_Rotation: -135
+  m_Highlight: 1
+  m_EffectMaterial: {fileID: 2100000, guid: 2d37c4afca8784ce9ab899810e29aa9c, type: 2}
+--- !u!225 &211662208961746720
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2946786817815611963}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3039697991805274313
 GameObject:
   m_ObjectHideFlags: 0
@@ -4459,6 +4492,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3672120274111080312}
     m_Modifications:
+    - target: {fileID: 1510679515367891283, guid: 7846b545361b70c47956beb4763c6741, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2433723244551155327, guid: 7846b545361b70c47956beb4763c6741, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4558,6 +4595,14 @@ PrefabInstance:
     - target: {fileID: 2880396964356429183, guid: 7846b545361b70c47956beb4763c6741, type: 3}
       propertyPath: m_Name
       value: HighLighGlow
+      objectReference: {fileID: 0}
+    - target: {fileID: 4483189523328822446, guid: 7846b545361b70c47956beb4763c6741, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7606579310927508017, guid: 7846b545361b70c47956beb4763c6741, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
