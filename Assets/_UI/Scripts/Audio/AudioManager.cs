@@ -3,6 +3,17 @@ using System.Collections.Generic;
 using System.Collections;
 using DG.Tweening;
 
+public enum AudioClipNames
+{
+    BACKGROUND_MUSIC_HOME,
+    BACKGROUND_MUSIC_GAMEPLAY,
+    BUTTON_CLICK,
+    WIN_GAME,
+    FAIL_GAME,
+    FIREWORK,
+    COLLECT_COIN
+}
+
 public class AudioManager : SingletonMono<AudioManager>
 {
     public static int MusicSetting
@@ -202,12 +213,4 @@ public class AudioManager : SingletonMono<AudioManager>
         SoundSetting = status ? 1 : 0;
     }
 
-}
-public static class AUDIO_CLIP_NAME
-{
-    public static string CLICK_BUTTON = "SFX_UI_Button_Click";
-    public static string SOUND_COUNTDOWN_CLOCK = "SFX_CountDown_Clock";
-    public static string End_COUNTDOWN_CLOCK = "SFX_End_CountDown";
-    public static string SFX_OPEN_CHEST = "SFX_OpenChest";
-    public static string SFX_CLAIM = "SFX_Claim";
 }

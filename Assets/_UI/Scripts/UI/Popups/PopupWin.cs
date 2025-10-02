@@ -121,6 +121,7 @@ namespace Geckout
 
         private IEnumerator IEAnimateShow()
         {
+            AudioManager.Instance.PlayOneShot(AudioClipNames.FIREWORK.ToString(), 1f);
             m_ribbonObject.transform.localScale = Vector3.zero;
             m_textLevelComplete.transform.localScale = Vector3.zero;
             m_progressNewFeatureObject.transform.localScale = Vector3.zero;
@@ -129,6 +130,9 @@ namespace Geckout
             yield return null;
             m_ribbonObject.transform.DOScale(1f, 0.25f).SetEase(Ease.OutBack);
             yield return new WaitForSeconds(0.25f);
+
+            AudioManager.Instance.PlayOneShot(AudioClipNames.WIN_GAME.ToString(), 1f);
+
             m_textLevelComplete.transform.DOScale(1f, 0.25f).SetEase(Ease.OutBack);
             yield return new WaitForSeconds(0.25f);
             m_progressNewFeatureObject.transform.DOScale(1f, 0.25f).SetEase(Ease.OutBack);

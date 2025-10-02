@@ -104,6 +104,7 @@ namespace Geckout
                        {
                            //AudioManager.Instance.PlayCoinDingFX();
                            //VibrationManager.VibrateWeak();
+                           AudioManager.Instance.PlayOneShot(AudioClipNames.COLLECT_COIN.ToString(), 1f);
                            
                            Destroy(coinObject.gameObject);
 

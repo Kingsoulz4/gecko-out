@@ -233,6 +233,8 @@ public class InGameScreenUI : ScreenUI
         if (timeBarBlinker != null) timeBarBlinker.StopBlink();
         UpdateUI();
         PoupNewFeature();
+        AudioManager.Instance.StopAllMusic();
+        AudioManager.Instance.PlayMusic(AudioClipNames.BACKGROUND_MUSIC_GAMEPLAY.ToString(), 1, true);
     }
 
     public void UpdateUI()

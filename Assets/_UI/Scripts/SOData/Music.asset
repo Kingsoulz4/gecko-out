@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Music
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: db084b41f8797e0429bd1a9abe0e48ad, type: 3}
+  - {fileID: 8300000, guid: 12598affc8d01c84da2f8c8fb8592e78, type: 3}
+  - {fileID: 8300000, guid: 09109c05f33e0214d88d52ac64508d11, type: 3}

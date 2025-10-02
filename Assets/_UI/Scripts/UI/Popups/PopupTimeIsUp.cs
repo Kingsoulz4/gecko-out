@@ -21,6 +21,12 @@ namespace Geckout
             m_buttonKeepPlaying.onClick.AddListener(OnClickKeepPlaying);
         }
 
+        public override void Show(Action onClose)
+        {
+            base.Show(onClose);
+            AudioManager.Instance.PlayOneShot(AudioClipNames.FAIL_GAME.ToString(), 1f);
+        }
+
         private void OnClickKeepPlaying()
         {
             Hide();

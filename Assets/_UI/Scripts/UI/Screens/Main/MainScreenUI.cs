@@ -90,8 +90,8 @@ public class MainScreenUI : ScreenUI
     {
         base.Active();
         UpdateUI();
-        //AudioManager.Instance.StopAllMusic();
-        //this.Wait(0.5f, () => AudioManager.Instance.PlayMusic(soundBG, 0.5f, true));
+        AudioManager.Instance.StopAllMusic();
+        this.Wait(0.5f, () => AudioManager.Instance.PlayMusic(AudioClipNames.BACKGROUND_MUSIC_HOME.ToString(), 1f, true));
     }
 
     private void PlayLevel()
