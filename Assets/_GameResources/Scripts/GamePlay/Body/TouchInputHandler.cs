@@ -508,7 +508,7 @@ namespace Geckout
             Vector2 dragDir = new Vector2(dragDirection.x, dragDirection.y);
 
             float dot = Vector2.Dot(bodyDir.normalized, dragDir.normalized);
-            Debug.Log($"PUSH check - bodyDir: {bodyDir}, dragDir: {dragDir}, " +
+            DebugLog($"PUSH check - bodyDir: {bodyDir}, dragDir: {dragDir}, " +
                 $"currentAchor: {touchAnchor}, dot: {dot}, anchorPos: {anchorPos}, dragTarget: {targetTile}");
             // Push nếu drag ngược hướng với body (dot < -0.5 = góc > 120 độ)
             bool isOppositeDirection = dot < -0.5f;

@@ -60,10 +60,6 @@ namespace Geckout
 
         public void UpdateAllSegmentPositions(bool isChangeTileColor = true)
         {
-            if (!bodyController.CanControl)
-            {
-                return;
-            }
             var orderedSegments = bodyController.GetOrderedSegments();
             var segments = bodyController.Segments;
 
@@ -80,6 +76,10 @@ namespace Geckout
                 Vector3 worldPos = segment.transform.position;
                 Vector2Int gridPos = GameMap.WorldToGridPosition(worldPos);
 
+                if (bodyController.MoveToPortal.IsEnteringPortal)
+                {
+                    return;
+                }
                 UpdateSegmentTile(rawIndex, gridPos, isChangeTileColor);
                 lastGridPositions[rawIndex] = gridPos;
             }

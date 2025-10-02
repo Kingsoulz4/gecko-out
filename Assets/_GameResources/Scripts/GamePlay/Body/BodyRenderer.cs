@@ -77,6 +77,12 @@ namespace Geckout
             ForceUpdate();
         }
 
+        public void ForceUpdateSize()
+        {
+            _tubeGenerator.size = tubeRadius + 0.065f;
+            _tubeGenerator.RebuildImmediate();
+        }
+
         [ContextMenu("Force Update Spline")]
         public void ForceUpdate()
         {
