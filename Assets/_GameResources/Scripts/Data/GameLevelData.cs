@@ -184,7 +184,9 @@ namespace Geckout.Data
         Wall2Side,
         Wall3Side,
         Portal,
-        WallCenter
+        WallCenter,
+        WallCenterDiagonal,
+        WallCornerInsideDiagonal
     }
 
     public enum BodyType

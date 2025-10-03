@@ -449,19 +449,19 @@ namespace Geckout
             var wallCornerPrefab = m_tileWallCorner;
             var wallEdgePrefab = m_tileWallEdge;
 
-            var angleCornerBottomLeft = new Vector3Int(270, -90, 90);
+            var angleCornerBottomLeft = new Vector3Int(90, -90, 90);
             var tile = PlaceWall(wallCornerPrefab, new Vector2Int(-1, -1), cellSize, cubeSize, centerOffset, "Corner_BottomLeft", angleCornerBottomLeft);
             tile.SetCoordinate(0, 0);
 
-            var angleCornerBottomRight = new Vector3Int(0, -90, 90);
+            var angleCornerBottomRight = new Vector3Int(-180, -90, 90);
             tile = PlaceWall(wallCornerPrefab, new Vector2Int(gridSize.x, -1), cellSize, cubeSize, centerOffset, "Corner_BottomRight", angleCornerBottomRight);
             tile.SetCoordinate(gridSize.x - 1, 0);
 
-            var angleCornerTopLeft = new Vector3Int(0, 90, -90);
+            var angleCornerTopLeft = new Vector3Int(0, -90, 90);
             tile = PlaceWall(wallCornerPrefab, new Vector2Int(-1, gridSize.y), cellSize, cubeSize, centerOffset, "Corner_TopLeft", angleCornerTopLeft);
             tile.SetCoordinate(0, gridSize.y - 1);
 
-            var angleCornerTopRight = new Vector3Int(90, -90, 90);
+            var angleCornerTopRight = new Vector3Int(-90, -90, 90);
             tile = PlaceWall(wallCornerPrefab, new Vector2Int(gridSize.x, gridSize.y), cellSize, cubeSize, centerOffset, "Corner_TopRight", angleCornerTopRight);
             tile.SetCoordinate(gridSize.x - 1, gridSize.y - 1);
 

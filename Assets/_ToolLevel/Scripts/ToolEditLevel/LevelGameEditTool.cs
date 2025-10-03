@@ -347,6 +347,20 @@ namespace Geckout
                 bool right = !(tileRight == null || (tileRight.MapTileData.type != MapTileType.Normal && tileRight.MapTileData.type != MapTileType.Portal)
                     || listCoordTileSelected.Contains(tileRight));
 
+                GameMap.TryGetTileAtCoord(tile.Coordinate + Vector2Int.one * -1, out var tileBottomLeft);
+                bool bottomLeft = !(tileBottomLeft == null || (tileBottomLeft.MapTileData.type != MapTileType.Normal && tileBottomLeft.MapTileData.type != MapTileType.Portal)
+                    || listCoordTileSelected.Contains(tileBottomLeft));
+                GameMap.TryGetTileAtCoord(tile.Coordinate + new Vector2Int(1, -1), out var tileBottomRight);
+                bool bottomRight = !(tileBottomRight == null || (tileBottomRight.MapTileData.type != MapTileType.Normal && tileBottomRight.MapTileData.type != MapTileType.Portal)
+                    || listCoordTileSelected.Contains(tileBottomRight));
+                GameMap.TryGetTileAtCoord(tile.Coordinate + new Vector2Int(-1, 1), out var tileUpLeft);
+                bool upLeft = !(tileUpLeft == null || (tileUpLeft.MapTileData.type != MapTileType.Normal && tileUpLeft.MapTileData.type != MapTileType.Portal)
+                    || listCoordTileSelected.Contains(tileUpLeft));
+                GameMap.TryGetTileAtCoord(tile.Coordinate + new Vector2Int(-1, 1), out var tileUpRight);
+                bool upRight = !(tileUpRight == null || (tileUpRight.MapTileData.type != MapTileType.Normal && tileUpRight.MapTileData.type != MapTileType.Portal)
+                    || listCoordTileSelected.Contains(tileUpRight));
+
+
                 var rot = Vector3Int.zero;
 
                 // Example logic: you need to replace these rules with your 6 types
@@ -377,6 +391,11 @@ namespace Geckout
                     if (right && down) rot = new Vector3Int(-90, 90, -90);
                     if (down && left) rot = new Vector3Int(0, 90, -90);
                     if (left && up) rot = new Vector3Int(90, 90, -90);
+
+                    //if ((upLeft && !right && !down) || (upRight && !left && !down) || (bottomRight && !up && !left) || (bottomLeft && !up && !right))
+                    //{
+                    //    tile.SetTileType(MapTileType.WallCornerInsideDiagonal);
+                    //}
                 }
                 else if (up || down || left || right)
                 {
@@ -390,6 +409,28 @@ namespace Geckout
                 {
                     tile.SetTileType(MapTileType.WallCenter); // single block
                     rot = new Vector3Int(0, 90, -90);
+
+                    //if (upLeft)
+                    //{
+                    //    tile.SetTileType(MapTileType.WallCenterDiagonal);
+                    //    rot = new Vector3Int(0, 90, -90);
+                    //}   
+                    //else if(upRight)
+                    //{
+                    //    tile.SetTileType(MapTileType.WallCenterDiagonal);
+                    //    rot = new Vector3Int(0, 90, -90);
+                    //}
+                    //else if(bottomLeft)
+                    //{
+                    //    tile.SetTileType(MapTileType.WallCenterDiagonal);
+                    //    rot = new Vector3Int(0, 90, -90);
+                    //}
+                    //else if(bottomRight)
+                    //{
+                    //    tile.SetTileType(MapTileType.WallCenterDiagonal);
+                    //    rot = new Vector3Int(0, 90, -90);
+                    //}
+                    
                 }
 
                 tile.RotateTo(rot);
