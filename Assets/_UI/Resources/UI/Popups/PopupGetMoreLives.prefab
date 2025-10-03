@@ -2096,6 +2096,7 @@ MonoBehaviour:
   m_textHeartQuantity: {fileID: 6905091224485675706}
   m_textCountDown: {fileID: 5498113790156742770}
   m_textPriceCoinRefill: {fileID: 6802359113475702385}
+  m_heartBar: {fileID: 1453463772264086941}
 --- !u!1 &8595617369257331529
 GameObject:
   m_ObjectHideFlags: 0
@@ -2277,6 +2278,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 444a5f25d06df0a4fbe8c0e166b85688, type: 3}
+--- !u!114 &1453463772264086941 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5441740178853990592, guid: 444a5f25d06df0a4fbe8c0e166b85688, type: 3}
+  m_PrefabInstance: {fileID: 6894813417776033117}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f796f500a90b18145b03c840a4da82ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &6666989078459475825 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 228183278889159212, guid: 444a5f25d06df0a4fbe8c0e166b85688, type: 3}

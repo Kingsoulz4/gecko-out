@@ -14,9 +14,16 @@ namespace Geckout
         [SerializeField] private Button m_button;
         [SerializeField] private GameObject m_normalHeart;
         [SerializeField] private GameObject m_infinityHeart;
+        [SerializeField] private GameObject m_iconHeart;
+        [SerializeField] public bool isUpadate = true;
 
-        public bool Sync { get; internal set; }
-        public GameObject ImgCoinIcon { get; internal set; }
+        public bool Sync
+        {
+            get => isUpadate;
+            set => isUpadate = value;
+        }
+
+        public GameObject ImgIcon => m_iconHeart;
 
         private void Awake()
         {
@@ -61,6 +68,8 @@ namespace Geckout
 
         private void UpdateQuantity(int oldVal, int newVal, bool hasAnim)
         {
+            if (!Sync) return;
+
             UpdateUI();
             if(hasAnim)
             {
@@ -74,7 +83,7 @@ namespace Geckout
 
         internal void SetText(int v)
         {
-            throw new NotImplementedException();
+            m_textQuantity.text = v.ToString();
         }
     }
 }

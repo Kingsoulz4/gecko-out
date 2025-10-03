@@ -20,7 +20,7 @@ namespace Geckout
             [SerializeField] private Text _txtQuantity;
             [SerializeField] private Transform _coinContainer;
             [SerializeField] private Transform _startPos;
-            [SerializeField] private HeartDisplay _goldCounter;
+            [SerializeField] private HeartDisplay _heartBar;
             [SerializeField] private ParticleSystem m_targetPointFx;
             [SerializeField] private GameObject m_coinPrefab;
 
@@ -39,7 +39,7 @@ namespace Geckout
                 int count = _coinContainer.childCount;
                 _initialPos = new Vector3[count];
                 _initialRot = new Quaternion[count];
-                _goldCounter.Sync = false;
+                _heartBar.Sync = false;
 
                 for (int i = 0; i < count; i++)
                 {
@@ -48,10 +48,10 @@ namespace Geckout
                     _initialRot[i] = rect.localRotation;
                 }
 
-                _originScale = _goldCounter.transform.localScale.x;
+                _originScale = _heartBar.transform.localScale.x;
             }
 
-            public void PlayCoinFX(Vector3 coinBarPosition, Vector3 textBonusStartPos, int coinCount, UnityAction onFinish = null)
+            public void PlayCollectFx(Vector3 coinBarPosition, Vector3 textBonusStartPos, int coinCount, UnityAction onFinish = null)
             {
                 gameObject.SetActive(true);
                 transform.parent.SetAsLastSibling();
@@ -62,20 +62,20 @@ namespace Geckout
                 StartCoroutine(CoinFXRoutine(coinBarPosition, coinCount, onFinish));
             }
 
-            private IEnumerator CoinFXRoutine(Vector3 coinBarPosition, int coinCount, UnityAction onFinish)
+            private IEnumerator CoinFXRoutine(Vector3 coinBarPosition, int heartCount, UnityAction onFinish)
             {
-                _goldCounter.transform.position = coinBarPosition;
-                _goldCounter.Sync = false;
-                _goldCounter.SetText(UserDataManager.Gold - coinCount);
+                _heartBar.transform.position = coinBarPosition;
+                _heartBar.Sync = false;
+                _heartBar.SetText(UserDataManager.Gold - heartCount);
 
-                PlayTextFx(coinCount);
+                PlayTextFx(heartCount);
 
                 //AudioManager.Instance.PlayAudioFX(AudioType.CoinCollecting);
 
                 float delayCount = 0f;
-                for (int i = 0; i < _coinContainer.childCount; i++)
+                for (int i = 0; i < Mathf.Min(_coinContainer.childCount, heartCount); i++)
                 {
-                    _goldCounter.SetText(UserDataManager.Gold - coinCount);
+                    _heartBar.SetText(UserDataManager.Gold - heartCount);
                     Transform coin = _coinContainer.GetChild(i);
 
                     Transform coinObject = Instantiate(m_coinPrefab, coin).transform;
@@ -93,19 +93,19 @@ namespace Geckout
                                 .SetEase(Ease.Linear)
                                 /*.SetLoops(-1, LoopType.Restart)*/)
                            .AppendInterval(_moveOutDelay)
-                           .Append(coin.DOMove(_goldCounter.ImgCoinIcon.transform.position + Vector3.forward * 5, _moveToTargetDuration).SetEase(Ease.InBack))
+                           .Append(coin.DOMove(_heartBar.ImgIcon.transform.position + Vector3.forward * 5, _moveToTargetDuration).SetEase(Ease.InBack))
                            .Join(coin.DOScale(0.8f, _moveToTargetDuration * 0.8f).OnComplete(() =>
                            {
                                coin.DOScale(0f, _moveToTargetDuration * 0.2f).SetEase(Ease.InBack);
                            }))
                            .Join(coinObject.DORotate(coinObject.localRotation.eulerAngles + Vector3.forward * 360, _moveToTargetDuration * 2, RotateMode.FastBeyond360).SetEase(Ease.Linear))
                            //.Append(coin.DOScale(0f, 0.25f).SetEase(Ease.InBack))
-                           .Join(_goldCounter.transform.DOScale(_originScale * 1.1f, 0.05f).SetEase(Ease.InOutSine)
+                           .Join(_heartBar.transform.DOScale(_originScale * 1.1f, 0.05f).SetEase(Ease.InOutSine)
                                 .SetDelay(_moveToTargetDuration)
                                 .OnComplete(() =>
                                 {
-                                    _goldCounter.SetText(UserDataManager.Gold - coinCount + coinCount / _coinContainer.childCount * (index + 1));
-                                    _goldCounter.transform.DOScale(_originScale, 0.05f);
+                                    _heartBar.SetText(UserDataManager.Heart - heartCount + heartCount / _coinContainer.childCount * (index + 1));
+                                    _heartBar.transform.DOScale(_originScale, 0.05f);
                                 }))
                            .SetDelay(delayCount)
                            .OnComplete(() =>
@@ -119,9 +119,9 @@ namespace Geckout
                                if (index == _coinContainer.childCount - 1)
                                {
                                    // Final sync
-                                   _goldCounter.SetText(UserDataManager.Gold);
+                                   _heartBar.SetText(UserDataManager.Gold);
                                    //_goldCounter.Sync = true;
-                                   _goldCounter.gameObject.SetActive(false);
+                                   _heartBar.gameObject.SetActive(false);
 
                                    //m_targetPointFx?.Play();
                                    onFinish?.Invoke();
@@ -154,7 +154,7 @@ namespace Geckout
 
             private void ResetCoins()
             {
-                _goldCounter.gameObject.SetActive(true);
+                _heartBar.gameObject.SetActive(true);
                 for (int i = 0; i < _coinContainer.childCount; i++)
                 {
                     Transform coin = _coinContainer.GetChild(i);
@@ -167,7 +167,7 @@ namespace Geckout
             private void OnDisable()
             {
                 DOTween.Kill(_txtQuantity.transform);
-                DOTween.Kill(_goldCounter.transform);
+                DOTween.Kill(_heartBar.transform);
                 foreach (Transform coin in _coinContainer)
                     DOTween.Kill(coin);
             }
@@ -176,7 +176,7 @@ namespace Geckout
             [ContextMenu("TestReceiveCoinFx")]
             public void TestReceiveCoinFx()
             {
-                PlayCoinFX(_goldCounter.transform.position, Vector3.zero, 182);
+                PlayCollectFx(_heartBar.transform.position, Vector3.zero, 182);
             }
 #endif
         }

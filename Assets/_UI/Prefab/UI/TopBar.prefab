@@ -931,6 +931,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!114 &7109138871272467761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1352,6 +1353,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!114 &2448704663700035092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1526,6 +1528,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!114 &5441740178853990592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1543,6 +1546,8 @@ MonoBehaviour:
   m_button: {fileID: 1549111147248870175}
   m_normalHeart: {fileID: 2447196585717227229}
   m_infinityHeart: {fileID: 7354181662526398216}
+  m_iconHeart: {fileID: 2447196585717227229}
+  isUpadate: 1
 --- !u!1 &8615608762177979758
 GameObject:
   m_ObjectHideFlags: 0
