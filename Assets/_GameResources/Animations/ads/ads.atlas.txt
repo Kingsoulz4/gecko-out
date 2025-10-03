@@ -1,0 +1,25 @@
+ads.png
+	size: 580, 160
+	filter: Linear, Linear
+	pma: true
+	scale: 0.5
+Ellipse
+	bounds: 351, 25, 14, 14
+anten
+	bounds: 337, 7, 12, 32
+bl
+	bounds: 307, 41, 112, 115
+circle
+	bounds: 157, 8, 148, 148
+circle_drop
+	bounds: 2, 2, 154, 153
+	rotate: 90
+head
+	bounds: 307, 6, 33, 28
+	rotate: 90
+text
+	bounds: 502, 33, 123, 76
+	rotate: 90
+text_drop
+	bounds: 421, 28, 128, 79
+	rotate: 90

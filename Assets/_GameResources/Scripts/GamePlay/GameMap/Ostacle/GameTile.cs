@@ -67,7 +67,10 @@ namespace Geckout
                     tileCollider = boxCollider;
                 }
             }
-            tileRenderer.enabled = true;
+            if (tileRenderer != null)
+            {
+                tileRenderer.enabled = true;
+            }
             SetSelected(false);
 
             SetMaterialImmediate(defaultMaterial);

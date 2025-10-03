@@ -185,7 +185,7 @@ GameObject:
   - component: {fileID: 6802359113475702385}
   - component: {fileID: 3983940140635935389}
   m_Layer: 5
-  m_Name: TextPlay
+  m_Name: TextPrice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -251,7 +251,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 900
+  m_Text: 1200
 --- !u!114 &3983940140635935389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,6 +413,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &2368415099619257714
 GameObject:
   m_ObjectHideFlags: 0
@@ -1208,6 +1209,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &6924961781733585365
 GameObject:
   m_ObjectHideFlags: 0
@@ -1673,6 +1675,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &7981891765586250036
 GameObject:
   m_ObjectHideFlags: 0
@@ -1827,7 +1830,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: x5
+  m_Text: x1
 --- !u!114 &378554712267603717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2092,6 +2095,7 @@ MonoBehaviour:
   m_buttonClose: {fileID: 4725981238346490363}
   m_textHeartQuantity: {fileID: 6905091224485675706}
   m_textCountDown: {fileID: 5498113790156742770}
+  m_textPriceCoinRefill: {fileID: 6802359113475702385}
 --- !u!1 &8595617369257331529
 GameObject:
   m_ObjectHideFlags: 0
@@ -2258,7 +2262,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6958644156656860539, guid: 444a5f25d06df0a4fbe8c0e166b85688, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7443735791085015656, guid: 444a5f25d06df0a4fbe8c0e166b85688, type: 3}
       propertyPath: m_Name

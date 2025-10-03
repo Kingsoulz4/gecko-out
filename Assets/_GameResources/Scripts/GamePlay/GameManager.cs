@@ -28,6 +28,12 @@ namespace Geckout
             set => PlayerPrefs.SetInt("CoinRewardWinGame", value);
         }
 
+        public int CoinPriceRefillHeart
+        {
+            get => PlayerPrefs.GetInt("CoinPriceRefillHeart", 1200);
+            set => PlayerPrefs.SetInt("CoinPriceRefillHeart", value);
+        }
+
         private void Start()
         {
             InitAllManager();
@@ -37,7 +43,7 @@ namespace Geckout
         private void Init()
         {
             HeartManager.CF_EnableHeart = 1;
-            HeartManager.CF_RecoverTimeHeart = 60 * 20;
+            HeartManager.CF_RecoverTimeHeart = 60 * 30;
             SetGameState(GameState.MainMenu);
 
             var loading = UIManager.Instance.ShowScreen<LoadingScreen>();

@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Geckout;
+using Spine.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,6 @@ public class MainScreenUI : ScreenUI
     [Space, Header("UI")]
     [SerializeField] Button btn_Play;
     [SerializeField] Text txt_Level;
-    //[SerializeField] ChangeThemeButtonPlay changeThemeButtonPlay;
     [SerializeField] AudioClip soundBG;
     [SerializeField] ScrollScreenHorizontal horizontal;
     [SerializeField] MenuTabSystem menuTab;
@@ -34,6 +34,9 @@ public class MainScreenUI : ScreenUI
     [SerializeField] Text txt_Gold;
     [SerializeField] Text txt_GoldShop;
     [SerializeField] GoldDisplay m_goldBar;
+
+    [Header("Anims")]
+    [SerializeField] private List<SkeletonGraphic> m_listButtonAnim;
 
 
     public float timeMoveCoinBack = 0.5f;
@@ -92,6 +95,27 @@ public class MainScreenUI : ScreenUI
         UpdateUI();
         AudioManager.Instance.StopAllMusic();
         this.Wait(0.5f, () => AudioManager.Instance.PlayMusic(AudioClipNames.BACKGROUND_MUSIC_HOME.ToString(), 1f, true));
+        StartButtonHomeAnims();
+    }
+
+    private void StartButtonHomeAnims()
+    {
+        StartCoroutine(IEAnimateButtonHomes());
+    }
+
+    private IEnumerator IEAnimateButtonHomes()
+    {
+        while(true)
+        {
+            for(int i=0; i<m_listButtonAnim.Count; i++)
+            {
+                m_listButtonAnim[i].AnimationState.SetAnimation(0, "animation", false);
+                yield return null;
+                yield return new WaitForSeconds(m_listButtonAnim[i].AnimationState.GetCurrent(0).Animation.Duration);
+                yield return new WaitForSeconds(0.1f);
+            }
+            yield return new WaitForSeconds(5f);
+        }
     }
 
     private void PlayLevel()

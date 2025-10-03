@@ -114,11 +114,33 @@ namespace Geckout
 
         private void OnClickPlay()
         {
-            Hide();
-            ((TimePreBooster)BoosterManager.Instance.TimePreBooster).IsSelectedToUse = m_buttonSelectBoosterTime.IsSelected;
-            ((ScissorBooster)BoosterManager.Instance.ScissorBooster).IsSelectedToUse = m_buttonSelectBoosterScissor.IsSelected;
-            LevelManager.Instance.StartCurrentLevel();
-            UIManager.Instance.ShowScreen<InGameScreenUI>();
+            if (UserDataManager.Heart > 0)
+            {
+                Hide();
+                ((TimePreBooster)BoosterManager.Instance.TimePreBooster).IsSelectedToUse = m_buttonSelectBoosterTime.IsSelected;
+                ((ScissorBooster)BoosterManager.Instance.ScissorBooster).IsSelectedToUse = m_buttonSelectBoosterScissor.IsSelected;
+                LevelManager.Instance.StartCurrentLevel();
+                UIManager.Instance.ShowScreen<InGameScreenUI>();
+            }
+            else
+            {
+                var popupGetMoreLives = UIManager.Instance.ShowPopup<PopupGetMoreLives>(null);
+                popupGetMoreLives.OnRefilled = () =>
+                {
+                    Hide();
+                    ((TimePreBooster)BoosterManager.Instance.TimePreBooster).IsSelectedToUse = m_buttonSelectBoosterTime.IsSelected;
+                    ((ScissorBooster)BoosterManager.Instance.ScissorBooster).IsSelectedToUse = m_buttonSelectBoosterScissor.IsSelected;
+                    LevelManager.Instance.StartCurrentLevel();
+                    UIManager.Instance.ShowScreen<InGameScreenUI>();
+                };
+                popupGetMoreLives.OnClose = () =>
+                {
+                    Hide();
+                    UIManager.Instance.ShowScreen<MainScreenUI>();
+                };
+            }
+
+            
         }
     }
 }

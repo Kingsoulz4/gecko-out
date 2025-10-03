@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 using UnityEngine.Events;
+using Spine.Unity;
 
 public class ButtonClickAnimate : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
@@ -14,6 +15,9 @@ public class ButtonClickAnimate : MonoBehaviour, IPointerDownHandler, IPointerUp
     [Header("Audio")]
     [SerializeField] AudioClip soundClick;
 
+    [Header("Anims")]
+    [SerializeField] SkeletonGraphic anim;
+
     private void Awake()
     {
         if(targetTF == null)
@@ -24,6 +28,12 @@ public class ButtonClickAnimate : MonoBehaviour, IPointerDownHandler, IPointerUp
     public void OnPointerDown(PointerEventData eventData)
     {
         targetTF.DOScale(targetScale, 0.1f).SetEase(Ease.Linear).SetUpdate(true).SetId(this);
+
+        if(anim != null)
+        {
+            anim.AnimationState.SetAnimation(0, "animation", false);
+        }
+
         if (eventOnPointDown != null)
         {
             eventOnPointDown.Invoke();

@@ -88,6 +88,7 @@ namespace Geckout
             {
                 timeCoolDown = (DateTime.Now.Date.AddDays(1) - LastTimeReceiveFreeCoin).TotalSeconds;
             }
+
             m_buttonGet.gameObject.SetActive(timeCoolDown <= 0 && CurrentTimeReceiveFreeCoin < maxTimeReceiveFreeCoin);
             m_buttonOutOfTurns.gameObject.SetActive(CurrentTimeReceiveFreeCoin >= maxTimeReceiveFreeCoin);
             m_buttonDisable.gameObject.SetActive(!m_buttonGet.gameObject.activeInHierarchy && !m_buttonOutOfTurns.gameObject.activeInHierarchy);
@@ -105,9 +106,17 @@ namespace Geckout
 
         private IEnumerator IEStartCoolDown()
         {
+
             while (timeCoolDown > 0)
             {
-                timeCoolDown -= Time.deltaTime;
+                if (CurrentTimeReceiveFreeCoin < maxTimeReceiveFreeCoin)
+                {
+                    timeCoolDown = (LastTimeReceiveFreeCoin.AddSeconds(intervalReceiveFreeCoin) - DateTime.Now).TotalSeconds;
+                }
+                else
+                {
+                    timeCoolDown = (DateTime.Now.Date.AddDays(1) - LastTimeReceiveFreeCoin).TotalSeconds;
+                }
                 m_textCoolDown.text = $"{MyUlti.Int2TimeString((int)timeCoolDown)}";
 
                 if(LastTimeReceiveFreeCoin.Date != DateTime.Now.Date)
@@ -115,7 +124,7 @@ namespace Geckout
                     UpdateUI();
                 }    
 
-                yield return null;
+                yield return new WaitForSeconds(1f);
             }
 
         }

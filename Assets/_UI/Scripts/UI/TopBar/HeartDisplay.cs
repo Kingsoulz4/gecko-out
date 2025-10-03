@@ -15,6 +15,9 @@ namespace Geckout
         [SerializeField] private GameObject m_normalHeart;
         [SerializeField] private GameObject m_infinityHeart;
 
+        public bool Sync { get; internal set; }
+        public GameObject ImgCoinIcon { get; internal set; }
+
         private void Awake()
         {
             m_button.onClick.AddListener(OnClickHeartBar);
@@ -67,6 +70,11 @@ namespace Geckout
             {
                 m_textQuantity.text = UserDataManager.Heart.ToString();
             }
+        }
+
+        internal void SetText(int v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Geckout
 
         [SerializeField] private Text m_textHeartQuantity;
         [SerializeField] private Text m_textCountDown;
+        [SerializeField] private Text m_textPriceCoinRefill;
 
         public Action OnClose { get; set; }
 
@@ -29,6 +30,7 @@ namespace Geckout
         private void OnEnable()
         {
             m_textHeartQuantity.text = UserDataManager.Heart.ToString();
+            m_textPriceCoinRefill.text = GameManager.Instance.CoinPriceRefillHeart.ToString();
         }
 
         private void Update()
@@ -43,14 +45,24 @@ namespace Geckout
 
         private void OnClickClaimByCoin()
         {
-            Hide();
-            UserDataManager.AddHeart(5, "Refill Heart", false);
+            //Hide();
+            if (UserDataManager.Gold >= GameManager.Instance.CoinPriceRefillHeart)
+            {
+                UserDataManager.AddHeart(5, "Refill Heart", false);
+                Hide();
+                OnRefilled?.Invoke();
+            }
+            else
+            {
+                OnClose?.Invoke();
+                UIManager.Instance.ShowPopup<PopupShop>(null);
+            }
         }
 
         private void OnClickClaimByAds()
         {
             Hide();
-            UserDataManager.AddHeart(5, "Refill Heart", false);
+            UserDataManager.AddHeart(1, "Refill Heart", false);
         }
     }
 }

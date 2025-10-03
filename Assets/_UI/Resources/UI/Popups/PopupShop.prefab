@@ -582,6 +582,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &658692786115495354
 GameObject:
   m_ObjectHideFlags: 0
@@ -1069,6 +1070,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &1866160971438202491
 GameObject:
   m_ObjectHideFlags: 0
@@ -1742,6 +1744,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &3822839735761888645
 GameObject:
   m_ObjectHideFlags: 0
@@ -1936,6 +1939,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!114 &1981218617541620744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3162,6 +3166,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &6795921924395719595
 GameObject:
   m_ObjectHideFlags: 0
@@ -3306,6 +3311,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &6841410743784062807
 GameObject:
   m_ObjectHideFlags: 0
@@ -4299,6 +4305,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &8229968830187833453
 GameObject:
   m_ObjectHideFlags: 0
@@ -4411,7 +4418,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 268.5, y: -1553.118}
+  m_AnchoredPosition: {x: 349.5, y: -904.2019}
   m_SizeDelta: {x: 872.61, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8757998871684223136
