@@ -58,6 +58,8 @@ namespace Geckout
         {
             if (isLockClick) return;
 
+            isLockClick = true;
+
             UserDataManager.AddGold(GameManager.Instance.CoinRewardWinGame * 2, "WinX2");
 
             if (currentProgressNewFeature < 1)
@@ -74,6 +76,8 @@ namespace Geckout
         private void OnClickClaim()
         {
             if (isLockClick) return;
+
+            isLockClick = true;
 
             UserDataManager.AddGold(GameManager.Instance.CoinRewardWinGame , "Win");
 
@@ -121,6 +125,7 @@ namespace Geckout
 
         private IEnumerator IEAnimateShow()
         {
+            isLockClick = true;
             AudioManager.Instance.PlayOneShot(AudioClipNames.FIREWORK.ToString(), 1f);
             m_ribbonObject.transform.localScale = Vector3.zero;
             m_textLevelComplete.transform.localScale = Vector3.zero;
@@ -154,7 +159,10 @@ namespace Geckout
 
             // If no feature (disabled UI case), just stop here
             if (feature == null)
+            {
+                isLockClick = false;
                 return;
+            }
 
             // Animate fill progress
             StartCoroutine(Fill(lastProgress, progress, 0.5f));

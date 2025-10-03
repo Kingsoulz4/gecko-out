@@ -26,7 +26,7 @@ namespace Geckout
         public override void Show(Action onClose)
         {
             base.Show(onClose);
-            DOVirtual.DelayedCall(2f, () =>
+            DOVirtual.DelayedCall(1f, () =>
             {
                 Hide();
             });

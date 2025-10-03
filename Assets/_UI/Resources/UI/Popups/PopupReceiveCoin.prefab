@@ -1342,6 +1342,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7109138871272467761, guid: 444a5f25d06df0a4fbe8c0e166b85688, type: 3}
+      propertyPath: isUpadate
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7443735791085015656, guid: 444a5f25d06df0a4fbe8c0e166b85688, type: 3}
       propertyPath: m_Name
       value: TopBar

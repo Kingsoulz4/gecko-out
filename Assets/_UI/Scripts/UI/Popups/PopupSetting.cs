@@ -53,6 +53,7 @@ public class PopupSetting : PopupUI
             var popupConfirmLeave = UIManager.Instance.ShowPopup<PopupConfirmLeave>(null);
             popupConfirmLeave.OnConfirm = () =>
             {
+                HeartManager.UseHeart(1);
                 UIManager.Instance.ShowScreen<MainScreenUI>();
             };
         }

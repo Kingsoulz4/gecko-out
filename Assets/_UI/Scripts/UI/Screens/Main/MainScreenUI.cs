@@ -108,6 +108,7 @@ public class MainScreenUI : ScreenUI
     public void ShowClaimReward(int quantity)
     {
         m_goldBar.Sync = false;
+        m_goldBar.SetText(UserDataManager.Gold - quantity);
         var popupReceiveCoin = UIManager.Instance.ShowPopup<PopupReceiveCoin>(null);
         popupReceiveCoin.PlayCoinFX(m_goldBar.transform.position, Vector3.zero, quantity, () =>
         {

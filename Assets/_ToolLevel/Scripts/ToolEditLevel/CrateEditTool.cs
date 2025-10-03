@@ -29,6 +29,21 @@ namespace Geckout
             return true;
         }
 
+        public override bool CheckCanPlace()
+        {
+            foreach (var tileMove in spawnedTiles)
+            {
+                //GameMap.TryGetCrateAtCoord(tileMove.Coordinate, out var crate);
+                if (GameMap.TryGetCratesAtCoord(tileMove.Coordinate, out var crates) && crates.Count > 1)
+                {
+                    Debug.LogError("Cannot place tile");
+                    return false;
+                }
+
+            }
+            return true;
+        }
+
         #endregion
     }
 }

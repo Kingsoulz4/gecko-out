@@ -33,6 +33,7 @@ namespace Geckout
             int count = _coinContainer.childCount;
             _initialPos = new Vector3[count];
             _initialRot = new Quaternion[count];
+            _goldCounter.Sync = false;
 
             for (int i = 0; i < count; i++)
             {
@@ -58,8 +59,8 @@ namespace Geckout
         private IEnumerator CoinFXRoutine(Vector3 coinBarPosition, int coinCount, UnityAction onFinish)
         {
             _goldCounter.transform.position = coinBarPosition;
-            _goldCounter.SetText(UserDataManager.Gold - coinCount);
             _goldCounter.Sync = false;
+            _goldCounter.SetText(UserDataManager.Gold - coinCount);
 
             PlayTextFx(coinCount);
 
@@ -68,6 +69,7 @@ namespace Geckout
             float delayCount = 0f;
             for (int i = 0; i < _coinContainer.childCount; i++)
             {
+                _goldCounter.SetText(UserDataManager.Gold - coinCount);
                 Transform coin = _coinContainer.GetChild(i);
 
                 Transform coinObject = Instantiate(m_coinPrefab, coin).transform;
@@ -112,7 +114,7 @@ namespace Geckout
                            {
                                // Final sync
                                _goldCounter.SetText(UserDataManager.Gold);
-                               _goldCounter.Sync = true;
+                               //_goldCounter.Sync = true;
                                _goldCounter.gameObject.SetActive(false);
 
                                //m_targetPointFx?.Play();

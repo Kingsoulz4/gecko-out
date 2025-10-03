@@ -66,7 +66,7 @@ namespace Geckout
             UpdateVisual();
         }
 
-        public bool CheckCanPlace()
+        public virtual bool CheckCanPlace()
         {
             foreach (var tileMove in spawnedTiles)
             {

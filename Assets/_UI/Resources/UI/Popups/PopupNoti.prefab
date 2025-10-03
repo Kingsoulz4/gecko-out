@@ -129,7 +129,7 @@ MonoBehaviour:
   isCache: 0
   isCloseAnim: 0
   duration: 0.2
-  animType: 2
+  animType: 3
   mainPopUp: {fileID: 8072881654168675821}
   m_background: {fileID: 2657555906601100056}
   m_canvasGroup: {fileID: 0}

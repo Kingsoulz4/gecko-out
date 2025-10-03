@@ -124,6 +124,33 @@ namespace Geckout
             return result != null;
         }
 
+        public static bool TryGetCratesAtCoord(Vector2Int coordinate, out List<Crate> result)
+        {
+            var x = coordinate.x;
+            var y = coordinate.y;
+            if (x < 0 || y < 0 || x >= _instance.levelData.mapSize.x || y >= _instance.levelData.mapSize.y)
+            {
+                result = null;
+                return false;
+            }
+
+            //var index = x + y * levelData.mapSize.x;
+            //result = tiles[index];
+
+            result = _instance.listCrate.ToList().FindAll(x =>
+            {
+                var crateMaxCoord = x.Data.rootCoordinate + x.Data.boxSize;
+                var crateRootCoord = x.Data.rootCoordinate;
+                if(coordinate.x >= crateRootCoord.x && coordinate.x <= crateMaxCoord.x && coordinate.y >= crateRootCoord.y && coordinate.y <= crateMaxCoord.y)
+                {
+                    return true;
+                }
+                return false;
+            });
+
+            return result != null;
+        }    
+
         public bool TryGetPortalAtCoord(Vector2Int coordinate, out Portal result)
         {
             var x = coordinate.x;

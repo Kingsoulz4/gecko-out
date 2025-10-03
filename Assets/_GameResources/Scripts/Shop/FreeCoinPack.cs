@@ -10,6 +10,7 @@ namespace Geckout
     {
         [SerializeField] private Button m_buttonGet;
         [SerializeField] private Button m_buttonDisable;
+        [SerializeField] private Button m_buttonOutOfTurns;
         [SerializeField] private Text m_textCoinQuantity;
         [SerializeField] private Text m_textCoolDown;
 
@@ -44,6 +45,18 @@ namespace Geckout
         private void Awake()
         {
             m_buttonGet.onClick.AddListener(OnClickGet);
+            m_buttonDisable.onClick.AddListener(OnClickDisable);
+            m_buttonOutOfTurns.onClick.AddListener(OnClickOutOfTurn);
+        }
+
+        private void OnClickOutOfTurn()
+        {
+            UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show("Out of turns");
+        }
+
+        private void OnClickDisable()
+        {
+            UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show($"Next free in: {MyUlti.Int2TimeString((int)timeCoolDown)}");
         }
 
         private void OnEnable()
@@ -76,7 +89,9 @@ namespace Geckout
                 timeCoolDown = (DateTime.Now.Date.AddDays(1) - LastTimeReceiveFreeCoin).TotalSeconds;
             }
             m_buttonGet.gameObject.SetActive(timeCoolDown <= 0 && CurrentTimeReceiveFreeCoin < maxTimeReceiveFreeCoin);
-            m_buttonDisable.gameObject.SetActive(!m_buttonGet.gameObject.activeInHierarchy);
+            m_buttonOutOfTurns.gameObject.SetActive(CurrentTimeReceiveFreeCoin >= maxTimeReceiveFreeCoin);
+            m_buttonDisable.gameObject.SetActive(!m_buttonGet.gameObject.activeInHierarchy && !m_buttonOutOfTurns.gameObject.activeInHierarchy);
+
             StartCoolDownTime();
         }
 
@@ -93,7 +108,7 @@ namespace Geckout
             while (timeCoolDown > 0)
             {
                 timeCoolDown -= Time.deltaTime;
-                m_textCoolDown.text = $"{MyUlti.Int2TimeString((int)TimeSpan.FromSeconds(timeCoolDown).TotalSeconds)}";
+                m_textCoolDown.text = $"{MyUlti.Int2TimeString((int)timeCoolDown)}";
 
                 if(LastTimeReceiveFreeCoin.Date != DateTime.Now.Date)
                 {

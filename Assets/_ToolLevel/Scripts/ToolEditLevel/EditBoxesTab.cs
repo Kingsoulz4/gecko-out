@@ -109,7 +109,9 @@ namespace Geckout
         {
             if(LevelGame.SelectedCrate != null && BoxBaseData != null)
             {
-                ((CrateData)BoxBaseData).difusionCount = int.Parse(arg0);
+                var crateData = ((CrateData)BoxBaseData);
+                crateData.difusionCount = int.Parse(arg0);
+                LevelGame.SelectedCrate.Init(crateData);
             }
         }
 
