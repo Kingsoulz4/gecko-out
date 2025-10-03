@@ -66,7 +66,7 @@ namespace Geckout
         private void OnClickClaimByAds()
         {
             Hide();
-            UIManager.Instance.ShowPopup<PopupReceiveHeart>(null).PlayCollectFx(m_heartBar.transform.position, Vector3.zero, 5);
+            UIManager.Instance.ShowPopup<PopupReceiveHeart>(null).PlayCollectFx(m_heartBar.transform.position, Vector3.zero, 1);
             UserDataManager.AddHeart(1, "Refill Heart", false);
         }
     }

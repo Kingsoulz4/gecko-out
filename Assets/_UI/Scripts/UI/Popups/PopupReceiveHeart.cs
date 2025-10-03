@@ -72,11 +72,18 @@ namespace Geckout
 
                 //AudioManager.Instance.PlayAudioFX(AudioType.CoinCollecting);
 
+                for(int i=0; i<_coinContainer.childCount; i++)
+                {
+                    _coinContainer.GetChild(i).gameObject.SetActive(false);
+                }
+
                 float delayCount = 0f;
-                for (int i = 0; i < Mathf.Min(_coinContainer.childCount, heartCount); i++)
+                var countPart = Mathf.Min(_coinContainer.childCount, heartCount);
+                for (int i = 0; i < countPart; i++)
                 {
                     _heartBar.SetText(UserDataManager.Gold - heartCount);
                     Transform coin = _coinContainer.GetChild(i);
+                    coin.gameObject.SetActive(true);
 
                     Transform coinObject = Instantiate(m_coinPrefab, coin).transform;
                     coinObject.localPosition = Vector3.zero + Vector3.forward * Random.Range(-100f, -120f);
@@ -104,7 +111,7 @@ namespace Geckout
                                 .SetDelay(_moveToTargetDuration)
                                 .OnComplete(() =>
                                 {
-                                    _heartBar.SetText(UserDataManager.Heart - heartCount + heartCount / _coinContainer.childCount * (index + 1));
+                                    _heartBar.SetText(UserDataManager.Heart - heartCount + heartCount / countPart * (index + 1));
                                     _heartBar.transform.DOScale(_originScale, 0.05f);
                                 }))
                            .SetDelay(delayCount)
@@ -116,7 +123,7 @@ namespace Geckout
 
                                Destroy(coinObject.gameObject);
 
-                               if (index == _coinContainer.childCount - 1)
+                               if (index == countPart - 1)
                                {
                                    // Final sync
                                    _heartBar.SetText(UserDataManager.Gold);
