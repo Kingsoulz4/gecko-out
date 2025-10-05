@@ -23,7 +23,7 @@ MonoBehaviour:
     type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 1, y: 0}
-    type: 0
+    type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 2, y: 0}
     type: 0
@@ -245,7 +245,7 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 3, y: 9}
-    type: 0
+    type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 4, y: 9}
     type: 0
@@ -310,6 +310,16 @@ MonoBehaviour:
     - {x: 2, y: 0}
     freezeTimeCount: 0
     hiddenCount: 0
+  - bodyType: 0
+    listColor: 0000000003000000
+    listCoordinate:
+    - {x: 2, y: 2}
+    - {x: 2, y: 3}
+    - {x: 2, y: 4}
+    - {x: 1, y: 4}
+    - {x: 0, y: 4}
+    freezeTimeCount: 0
+    hiddenCount: 0
   listPortalData:
   - portalType: 0
     Coordinate: {x: 7, y: 1}
@@ -326,7 +336,7 @@ MonoBehaviour:
   - portalType: 0
     Coordinate: {x: 7, y: 9}
     freezeTimeCount: 0
-    listColor: 0a000000
+    listColor: 00000000
   - portalType: 0
     Coordinate: {x: 5, y: 8}
     freezeTimeCount: 0
@@ -346,11 +356,19 @@ MonoBehaviour:
   - portalType: 0
     Coordinate: {x: 0, y: 9}
     freezeTimeCount: 0
-    listColor: 0c000000
+    listColor: 03000000
   - portalType: 0
     Coordinate: {x: 0, y: 2}
     freezeTimeCount: 0
     listColor: 04000000
+  - portalType: 0
+    Coordinate: {x: 1, y: 0}
+    freezeTimeCount: 0
+    listColor: 0a000000
+  - portalType: 0
+    Coordinate: {x: 3, y: 9}
+    freezeTimeCount: 0
+    listColor: 0c000000
   listMovableBoxData: []
   listCrateData: []
   colorAndMaterialData: {fileID: 11400000, guid: bea4b031ece8d284482119e23bace87e, type: 2}

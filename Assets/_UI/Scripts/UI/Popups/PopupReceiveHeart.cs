@@ -66,7 +66,7 @@ namespace Geckout
             {
                 _heartBar.transform.position = coinBarPosition;
                 _heartBar.Sync = false;
-                _heartBar.SetText(UserDataManager.Gold - heartCount);
+                _heartBar.SetText(UserDataManager.Heart - heartCount);
 
                 PlayTextFx(heartCount);
 
@@ -81,7 +81,6 @@ namespace Geckout
                 var countPart = Mathf.Min(_coinContainer.childCount, heartCount);
                 for (int i = 0; i < countPart; i++)
                 {
-                    _heartBar.SetText(UserDataManager.Gold - heartCount);
                     Transform coin = _coinContainer.GetChild(i);
                     coin.gameObject.SetActive(true);
 

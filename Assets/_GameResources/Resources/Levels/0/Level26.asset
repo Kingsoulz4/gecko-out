@@ -41,7 +41,7 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 7, y: 0}
-    type: 0
+    type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 0, y: 1}
     type: 6
@@ -65,7 +65,7 @@ MonoBehaviour:
     type: 0
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 7, y: 1}
-    type: 0
+    type: 6
     rotation: {x: 0, y: 90, z: -90}
   - coordinate: {x: 0, y: 2}
     type: 6
@@ -309,17 +309,6 @@ MonoBehaviour:
     rotation: {x: 0, y: 90, z: -90}
   listDogData:
   - bodyType: 0
-    listColor: 0000000004000000
-    listCoordinate:
-    - {x: 6, y: 0}
-    - {x: 7, y: 0}
-    - {x: 7, y: 1}
-    - {x: 6, y: 1}
-    - {x: 5, y: 1}
-    - {x: 4, y: 1}
-    freezeTimeCount: 0
-    hiddenCount: 0
-  - bodyType: 0
     listColor: 0d00000002000000
     listCoordinate:
     - {x: 1, y: 9}
@@ -331,7 +320,7 @@ MonoBehaviour:
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
-    listColor: 03000000
+    listColor: 0300000009000000
     listCoordinate:
     - {x: 7, y: 11}
     - {x: 6, y: 11}
@@ -350,7 +339,7 @@ MonoBehaviour:
     freezeTimeCount: 10
     hiddenCount: 0
   - bodyType: 0
-    listColor: 04000000
+    listColor: 0400000008000000
     listCoordinate:
     - {x: 2, y: 6}
     - {x: 1, y: 6}
@@ -395,6 +384,16 @@ MonoBehaviour:
     - {x: 4, y: 7}
     - {x: 4, y: 6}
     - {x: 4, y: 5}
+    freezeTimeCount: 0
+    hiddenCount: 0
+  - bodyType: 0
+    listColor: 0000000004000000
+    listCoordinate:
+    - {x: 3, y: 1}
+    - {x: 4, y: 1}
+    - {x: 5, y: 1}
+    - {x: 6, y: 1}
+    - {x: 6, y: 0}
     freezeTimeCount: 0
     hiddenCount: 0
   listPortalData:
@@ -450,6 +449,14 @@ MonoBehaviour:
     Coordinate: {x: 0, y: 8}
     freezeTimeCount: 0
     listColor: 0a000000
+  - portalType: 0
+    Coordinate: {x: 7, y: 1}
+    freezeTimeCount: 0
+    listColor: 09000000
+  - portalType: 0
+    Coordinate: {x: 7, y: 0}
+    freezeTimeCount: 0
+    listColor: 08000000
   listMovableBoxData: []
   listCrateData: []
   colorAndMaterialData: {fileID: 11400000, guid: bea4b031ece8d284482119e23bace87e, type: 2}

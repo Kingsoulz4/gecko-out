@@ -291,7 +291,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 90, z: -90}
   listDogData:
   - bodyType: 0
-    listColor: 00000000
+    listColor: 07000000
     listCoordinate:
     - {x: 4, y: 9}
     - {x: 5, y: 9}
@@ -352,7 +352,7 @@ MonoBehaviour:
     freezeTimeCount: 0
     hiddenCount: 0
   - bodyType: 0
-    listColor: 07000000
+    listColor: 00000000
     listCoordinate:
     - {x: 3, y: 1}
     - {x: 2, y: 1}

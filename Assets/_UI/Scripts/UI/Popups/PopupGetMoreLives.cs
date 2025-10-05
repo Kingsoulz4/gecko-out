@@ -51,9 +51,10 @@ namespace Geckout
             //Hide();
             if (UserDataManager.Gold >= GameManager.Instance.CoinPriceRefillHeart)
             {
-                UIManager.Instance.ShowPopup<PopupReceiveHeart>(null).PlayCollectFx(m_heartBar.transform.position, Vector3.zero, 5);
                 UserDataManager.AddHeart(5, "Refill Heart", false);
-                Hide();
+                UIManager.Instance.ShowPopup<PopupReceiveHeart>(() => {
+                    Hide();
+                }).PlayCollectFx(m_heartBar.transform.position, Vector3.zero, 5);
                 OnRefilled?.Invoke();
             }
             else
@@ -65,9 +66,11 @@ namespace Geckout
 
         private void OnClickClaimByAds()
         {
-            Hide();
-            UIManager.Instance.ShowPopup<PopupReceiveHeart>(null).PlayCollectFx(m_heartBar.transform.position, Vector3.zero, 1);
             UserDataManager.AddHeart(1, "Refill Heart", false);
+            UIManager.Instance.ShowPopup<PopupReceiveHeart>(() =>
+            {
+                Hide();
+            }).PlayCollectFx(m_heartBar.transform.position, Vector3.zero, 1);
         }
     }
 }
