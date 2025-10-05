@@ -650,7 +650,7 @@ namespace Geckout
 
             if (BodyData.hiddenCount > 0)
             {
-                hiddenBody.Init(BodyData.hiddenCount);
+                hiddenBody.Init(BodyData.hiddenCount, SplineComputer);
             }
 
             doubleColorBody.gameObject.SetActive(BodyData.listColor.Count > 1);

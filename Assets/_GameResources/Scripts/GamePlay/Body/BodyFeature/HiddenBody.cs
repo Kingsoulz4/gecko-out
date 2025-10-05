@@ -1,3 +1,4 @@
+using Dreamteck.Splines;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Geckout
         private HiddenRenderer hiddenRenderer;
         public int CurrentCount { get => currentCount; }
 
-        public void Init(int count)
+        public void Init(int count, SplineComputer splineComputer)
         {
             if (isInit) return;
 
@@ -22,7 +23,7 @@ namespace Geckout
 
             var prefabRenderFreeze = body.MechanicReferences.listMechanicRenderer[MechanicNames.Hidden];
             hiddenRenderer = (HiddenRenderer)Instantiate(prefabRenderFreeze, body.BodyRenderer.Segments.Last().transform);
-            hiddenRenderer.Init(body.BodyRenderer.ListBodyPartChanger, count);
+            hiddenRenderer.Init(body.BodyRenderer.ListBodyPartChanger, count, splineComputer);
             body.ListMechanicRender.Add(hiddenRenderer);
 
             LevelEvent.OnMoveToPortalDone -= OnBodyMoveToPortalDone;

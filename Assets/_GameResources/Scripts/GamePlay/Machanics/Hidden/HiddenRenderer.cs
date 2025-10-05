@@ -1,3 +1,4 @@
+using Dreamteck.Splines;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,13 +10,15 @@ namespace Geckout
     {
         [SerializeField] private Material m_hiddenMat;
         [SerializeField] private TextMeshPro m_textCount;
+        [SerializeField] private SplineFollower m_splineFollower;
 
         private List<BodyPartColorChanger> listBodyChanger = new();
         private Material instanceMat;
 
-        public void Init(List<BodyPartColorChanger> listBodyChanger, int count)
+        public void Init(List<BodyPartColorChanger> listBodyChanger, int count, SplineComputer splineComputer)
         {
             this.listBodyChanger = listBodyChanger;
+            m_splineFollower.spline = splineComputer;
             instanceMat = new Material(m_hiddenMat);
             foreach (var bodyPart in listBodyChanger)
             {
