@@ -58,7 +58,7 @@ namespace Geckout
             });
         }
 
-        public void UpdateAllSegmentPositions(bool isChangeTileColor = true)
+        public void UpdateAllSegmentPositions(bool isChangeTileColor = true, bool forceUpdate = true)
         {
             var orderedSegments = bodyController.GetOrderedSegments();
             var segments = bodyController.Segments;
@@ -80,7 +80,7 @@ namespace Geckout
                 {
                     return;
                 }
-                UpdateSegmentTile(rawIndex, gridPos, isChangeTileColor);
+                UpdateSegmentTile(rawIndex, gridPos, isChangeTileColor, forceUpdate);
                 lastGridPositions[rawIndex] = gridPos;
             }
         }
@@ -102,13 +102,13 @@ namespace Geckout
             }
         }
 
-        void UpdateSegmentTile(int segmentIndex, Vector2Int gridPos, bool changeTileColor)
+        void UpdateSegmentTile(int segmentIndex, Vector2Int gridPos, bool changeTileColor, bool forceUpdate = false)
         {
             var segment = bodyController.Segments[segmentIndex];
             GameTile previousTile = currentOccupiedTiles[segmentIndex];
 
             // Check if position actually changed to avoid unnecessary updates
-            if (lastGridPositions[segmentIndex] == gridPos)
+            if (lastGridPositions[segmentIndex] == gridPos && !forceUpdate)
             {
                 return; // No change, skip update
             }

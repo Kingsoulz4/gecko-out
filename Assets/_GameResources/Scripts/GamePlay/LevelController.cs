@@ -165,6 +165,11 @@ namespace Geckout
             return newBody;
         }
 
+        public void UpdateAllBodyState()
+        {
+            listBody.ForEach(x => x.OccupiedTileController.UpdateAllSegmentPositions(isChangeTileColor:false,forceUpdate: true));
+        }    
+
         #region Boosters
 
         public void AddTime(float time)

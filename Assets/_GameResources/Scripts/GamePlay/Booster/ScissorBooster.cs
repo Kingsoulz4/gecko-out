@@ -12,6 +12,7 @@ namespace Geckout
     {
         [SerializeField] private GameObject m_scissorPrefab;
         [SerializeField] private Transform m_spawnPoint;
+        protected override int CurrentCount { get => UserDataManager.CissorBooster; set => UserDataManager.CissorBooster = value; }
 
         public bool IsSelectedToUse { get; set; }
 
@@ -24,7 +25,7 @@ namespace Geckout
             //IsSelectedToUse = true;
 
             base.ActiveBooster();
-            UserDataManager.TimeIngameBooster = CurrentCount;
+            UserDataManager.CissorBooster = CurrentCount;
             OnStartUseBooster?.Invoke(this, CurrentCount);
         }
 

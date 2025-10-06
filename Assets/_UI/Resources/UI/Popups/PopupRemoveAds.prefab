@@ -3240,6 +3240,9 @@ MonoBehaviour:
   m_removeInterPack: {fileID: 4561521468725257196}
   m_removeBannerPack: {fileID: 3151039828017302359}
   m_removeAdsPack: {fileID: 523771231612528687}
+  m_textPriceInterPack: {fileID: 1772562825911602186}
+  m_textPriceRemoveAdsPack: {fileID: 2283057763840035051}
+  m_textPriceNoAdsPack: {fileID: 6360145793265464787}
 --- !u!1 &7707348196706337650
 GameObject:
   m_ObjectHideFlags: 0

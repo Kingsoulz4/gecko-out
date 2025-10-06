@@ -52,6 +52,7 @@ namespace Geckout
             if (UserDataManager.Gold >= GameManager.Instance.CoinPriceRefillHeart)
             {
                 UserDataManager.AddHeart(5, "Refill Heart", false);
+                UserDataManager.AddGold(-GameManager.Instance.CoinPriceRefillHeart, "Refill Heart");
                 UIManager.Instance.ShowPopup<PopupReceiveHeart>(() => {
                     Hide();
                 }).PlayCollectFx(m_heartBar.transform.position, Vector3.zero, 5);

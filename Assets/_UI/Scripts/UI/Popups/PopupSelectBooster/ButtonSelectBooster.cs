@@ -46,7 +46,7 @@ namespace Geckout
         {
             if (!IsUnLocked)
             {
-                UIManager.Instance.ShowPopup<PopupMiniNoti>(null).ShowNotiLock();
+                UIManager.Instance.ShowPopup<PopupMiniNoti>(null).Show($"Unlock At Level {levelUnlock}");
                 return;
             } 
 

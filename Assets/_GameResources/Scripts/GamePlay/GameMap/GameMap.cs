@@ -139,7 +139,7 @@ namespace Geckout
 
             result = _instance.listCrate.ToList().FindAll(x =>
             {
-                var crateMaxCoord = x.Data.rootCoordinate + x.Data.boxSize;
+                var crateMaxCoord = x.Data.rootCoordinate + x.Data.boxSize - Vector2Int.one;
                 var crateRootCoord = x.Data.rootCoordinate;
                 if(coordinate.x >= crateRootCoord.x && coordinate.x <= crateMaxCoord.x && coordinate.y >= crateRootCoord.y && coordinate.y <= crateMaxCoord.y)
                 {
@@ -228,11 +228,11 @@ namespace Geckout
 
             //GetAllTilesTest(levelData);
 
-            SpawnPortals();
-
             SpawnMovableBoxes();
 
             SpawnCrates();
+
+            SpawnPortals();
         }
 
         [ContextMenu("Test SpawnTiles")]
@@ -633,7 +633,10 @@ namespace Geckout
             {
                 if (TryGetTileAtCoord(coord, out GameTile tile))
                 {
-                    tile.IsOccupied = false;
+                    if (tile.MapTileData.type == MapTileType.Normal)
+                    {
+                        tile.IsOccupied = false;
+                    }
                 }
                 else
                 {

@@ -237,6 +237,7 @@ public class InGameScreenUI : ScreenUI
     public void UpdateUI()
     {
         txt_Level.text = $"{LevelManager.Instance.CurrentLevel}";
+        btn_Replay.interactable = LevelController.IsFirstClick;
         UpdateTimeText(LevelController.CurrentTimeLevelRemaining);
         UpdateTimeBar();
     }

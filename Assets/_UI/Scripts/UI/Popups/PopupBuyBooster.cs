@@ -47,10 +47,11 @@ namespace Geckout
         private void OnClickBuy()
         {
             Hide();
-            
-            if (UserDataManager.Gold >= BoosterManager.Instance.BoosterData.GetBoosterItemData(boosterType).price)
+            var boosterData = BoosterManager.Instance.BoosterData.GetBoosterItemData(boosterType);
+            if (UserDataManager.Gold >= boosterData.price)
             {
                 UserDataManager.AddBooster(boosterType, 3);
+                UserDataManager.AddGold(-boosterData.price, "Buy Booster");
                 OnBought?.Invoke();
             }
             else

@@ -78,6 +78,7 @@ namespace Geckout
             if (GameManager.GameState == GameState.Playing && !LevelManager.Instance.LevelGame.IsFirstClick)
             {
                 LevelManager.Instance.LevelGame.IsFirstClick = true;
+                UIManager.Instance.GetScreenActive<InGameScreenUI>().UpdateUI();
             }
 
             // Kiểm tra xem có click trực tiếp lên segment không
@@ -563,7 +564,7 @@ namespace Geckout
                 bodyController.Segments[bodyController.Segments.Count - 1].Coordinate;
 
             Vector2Int pushDistance = lastTargetTile - touchAnchorPos;
-            Debug.LogError($"PUSH lastTargetTile: {lastTargetTile}, originalAnchorPos: {touchAnchorPos}, pushDistance: {pushDistance}");
+            //Debug.LogError($"PUSH lastTargetTile: {lastTargetTile}, originalAnchorPos: {touchAnchorPos}, pushDistance: {pushDistance}");
             int pushMagnitude = (Mathf.Abs(pushDistance.x) + Mathf.Abs(pushDistance.y));
 
             // Switch to opposite anchor

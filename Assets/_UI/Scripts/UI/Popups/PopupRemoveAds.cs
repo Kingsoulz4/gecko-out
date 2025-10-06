@@ -21,6 +21,12 @@ namespace Geckout
         [SerializeField] private GameObject m_removeBannerPack;
         [SerializeField] private GameObject m_removeAdsPack;
 
+        [SerializeField] private Text m_textPriceInterPack;
+        [SerializeField] private Text m_textPriceRemoveAdsPack;
+        [SerializeField] private Text m_textPriceNoAdsPack;
+
+
+
         private void Awake()
         {
             m_buttonClose.onClick.AddListener(OnClickClose);
@@ -35,6 +41,17 @@ namespace Geckout
             m_removeInterPack.gameObject.SetActive(!ShopManager.Instance.HasPurchasedRemoveInterAds && !ShopManager.Instance.HasPurchasedRemoveAds);
             m_removeBannerPack.gameObject.SetActive(!ShopManager.Instance.HasPurchasedRemoveAds);
             m_removeAdsPack.gameObject.SetActive(!ShopManager.Instance.HasPurchasedNoAdsPack);
+
+            var packInter = m_listRemoveAdsPacks.listShopPack.Find(
+                x => x.listReward.FirstOrDefault(y => y.type == ItemType.REMOVE_INTER_ADS) != null);
+            var packBanner = m_listRemoveAdsPacks.listShopPack.Find(
+                x => x.listReward.FirstOrDefault(y => y.type == ItemType.REMOVE_ADS) != null);
+            var packNoAds = m_listRemoveAdsPacks.listShopPack.Find(
+               x => x.listReward.FirstOrDefault(y => y.type == ItemType.REMOVE_ADS) != null && x.listReward.Count > 1);
+
+            m_textPriceInterPack.text = IAPManager.Instance.GetLocalizedPriceString(packInter.id);
+            m_textPriceRemoveAdsPack.text = IAPManager.Instance.GetLocalizedPriceString(packBanner.id);
+            m_textPriceNoAdsPack.text = IAPManager.Instance.GetLocalizedPriceString(packNoAds.id);
         }
 
         public override void Show(Action onClose)
@@ -78,7 +95,7 @@ namespace Geckout
         private void OnClickPurchaseRemoveBannerPack()
         {
             var packBanner = m_listRemoveAdsPacks.listShopPack.Find(
-                x => x.listReward.FirstOrDefault(y => y.type == ItemType.REMOVE_BANNER_ADS) != null);
+                x => x.listReward.FirstOrDefault(y => y.type == ItemType.REMOVE_ADS) != null);
             if (packBanner == null) return;
 
             IAPManager.Instance.BuyProductID(packBanner.id, (success) =>
@@ -100,7 +117,7 @@ namespace Geckout
         private void OnClickPurchaseNoAdsPack()
         {
             var packNoAds = m_listRemoveAdsPacks.listShopPack.Find(
-               x => x.listReward.FirstOrDefault(y => y.type == ItemType.REMOVE_ADS) != null);
+               x => x.listReward.FirstOrDefault(y => y.type == ItemType.REMOVE_ADS) != null && x.listReward.Count > 1);
             if (packNoAds == null) return;
 
             IAPManager.Instance.BuyProductID(packNoAds.id, (success) =>

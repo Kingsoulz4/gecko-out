@@ -41,7 +41,7 @@ namespace Geckout
 
                 if (scissorBooster.IsSelectedToUse)
                 {
-                    scissorBooster.ActiveBooster(LevelGame.ListBody.Find(x => x.Length > 3));
+                    scissorBooster.ActiveBooster(LevelGame.ListBody.Find(x => x.Length > 3 && x.BodyData.freezeTimeCount <= 0));
                 }
 
                 if (timeBeginBooster.IsSelectedToUse)

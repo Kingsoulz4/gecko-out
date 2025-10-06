@@ -19,14 +19,17 @@ namespace Geckout
         private List<MechanicRendererBase> listMechanicRender = new();
         private bool isMovingToPortal = false;
         private bool isEnablePortal = true;
+        private Crate crateContainer;
+
         public PortalData PortalData { get; private set; }
         public MechanicsReferences MechanicReferences { get => m_mechanicReferences; }
-        public List<MechanicRendererBase> ListMechanicRender { get => listMechanicRender; }
+        public List<MechanicRendererBase> ListMechanicRender { get => listMechanicRender; }  
+
         public bool IsEnablePortal
         {
             get
             {
-                return isEnablePortal && icePortal.CurrentCount <= 0;
+                return isEnablePortal && icePortal.CurrentCount <= 0 && (crateContainer == null || !crateContainer.gameObject.activeInHierarchy);
             }
         }
 
@@ -38,6 +41,11 @@ namespace Geckout
             PortalData = portalData;
             InitMechanic();
             UpdateVisual();
+
+            if(GameMap.TryGetCratesAtCoord(PortalData.Coordinate, out var listCrate))
+            {
+                crateContainer = listCrate.FirstOrDefault();
+            }
         }
 
         private void OnTriggerEnter(Collider other)

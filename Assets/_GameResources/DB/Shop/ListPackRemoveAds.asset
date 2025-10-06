@@ -22,14 +22,14 @@ MonoBehaviour:
     listReward:
     - type: 8
       quantity: 1
-  - id: remove_banner_ads
-    googleID: remove_banner_ads
-    appleID: remove_banner_ads
-    title: Remove Banner Ads
-    description: Remove Banner Ads
+  - id: remove_ads
+    googleID: remove_ads
+    appleID: remove_ads
+    title: Remove Ads
+    description: Remove Ads
     icon: {fileID: 21300000, guid: 903af6fd7206c2e4084ef64cd6762203, type: 3}
     listReward:
-    - type: 9
+    - type: 10
       quantity: 1
   - id: no_ads
     googleID: no_ads
@@ -38,15 +38,15 @@ MonoBehaviour:
     description: No Ads
     icon: {fileID: 21300000, guid: 903af6fd7206c2e4084ef64cd6762203, type: 3}
     listReward:
+    - type: 10
+      quantity: 1
     - type: 0
       quantity: 16000
+    - type: 1
+      quantity: 21600
     - type: 4
       quantity: 6
     - type: 5
       quantity: 6
     - type: 6
       quantity: 6
-    - type: 1
-      quantity: 21600
-    - type: 10
-      quantity: 1

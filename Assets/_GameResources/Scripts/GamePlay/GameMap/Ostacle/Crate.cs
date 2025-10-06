@@ -55,6 +55,7 @@ namespace Geckout
         private void Break()
         {
             GameMap.SetTilesUnoccupied(spawnedTiles.Select(tile => tile.Coordinate).ToList());
+            LevelManager.Instance.LevelGame.UpdateAllBodyState();
             gameObject.SetActive(false);
 
             //vfx
