@@ -58,6 +58,8 @@ namespace Geckout
         private bool canMovePortal = true;
         private List<MechanicRendererBase> listMechanicRender = new();
         private bool isMoving;
+        private Crate crateContainer;
+
         public List<Segment> Segments { private set; get; }
         public OccupiedTileController OccupiedTileController { get => occupiedTileController; set => occupiedTileController = value; }
         public bool IsMoving
@@ -75,7 +77,7 @@ namespace Geckout
         {
             get
             {
-                return canControl && iceBody.CurrentCount <= 0;
+                return canControl && iceBody.CurrentCount <= 0 && (crateContainer == null || !crateContainer.gameObject.activeInHierarchy);
             }
 
             set => canControl = value;
@@ -233,6 +235,7 @@ namespace Geckout
             InitMechanic();
             occupiedTileController?.Init();
             canControl = true;
+
             Debug.Log($"Body initialized: length={length}, subLength={SubLength}, totalSegments={totalSegments}, totalBodyLength={totalBodyLength}");
         }
 
@@ -658,6 +661,11 @@ namespace Geckout
             {
                 hiddenBody.Init(BodyData.hiddenCount, SplineComputer);
                 doubleColorBody.gameObject.SetActive(false);
+            }
+
+            if (GameMap.TryGetCratesAtCoord(BodyData.listCoordinate.FirstOrDefault(), out var listCrate))
+            {
+                crateContainer = listCrate.FirstOrDefault();
             }
         }
 

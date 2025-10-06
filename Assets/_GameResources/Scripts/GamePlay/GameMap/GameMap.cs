@@ -251,6 +251,7 @@ namespace Geckout
             TryGetTileAtCoord(portalData.Coordinate, out var tile);
             portal.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y, portal.transform.position.z);
             portal.Initialize(portalData);
+            tile.SetOccupied(true);
             listPortal.Add(portal);
         }
 
