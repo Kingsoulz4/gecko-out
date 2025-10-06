@@ -12,6 +12,7 @@ namespace Geckout
         [SerializeField] private GameObject m_lockObject;
         [SerializeField] private GameObject m_selectedObject;
         [SerializeField] private GameObject m_quantityObj;
+        [SerializeField] private GameObject m_plusObject;
         [SerializeField] private Text m_textLevelUnlock;
         [SerializeField] private Text m_textQuantity;
 
@@ -37,7 +38,8 @@ namespace Geckout
             m_selectedObject.SetActive(false);
             m_textLevelUnlock.text = $"Lv.{levelUnlock}";
             m_textQuantity.text = quantity.ToString();
-            m_quantityObj.gameObject.SetActive(!IsSelected && IsUnLocked);
+            m_quantityObj.gameObject.SetActive(!IsSelected && IsUnLocked && quantity > 0);
+            m_plusObject.gameObject.SetActive(IsUnLocked && quantity <= 0);
         }
 
         public void OnClickButton()
@@ -52,7 +54,8 @@ namespace Geckout
             
             IsSelected = quantity > 0? !IsSelected: false;
             m_selectedObject.gameObject.SetActive(IsSelected);
-            m_quantityObj.gameObject.SetActive(!IsSelected && IsUnLocked);
+            m_quantityObj.gameObject.SetActive(!IsSelected && IsUnLocked && quantity > 0);
+            m_plusObject.gameObject.SetActive(IsUnLocked && quantity <= 0);
         }
     }
 }

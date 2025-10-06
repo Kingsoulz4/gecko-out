@@ -324,8 +324,20 @@ public class InGameScreenUI : ScreenUI
         popupConfirmLeave.SetTextButtonConfirm("Retry");
         popupConfirmLeave.OnConfirm = () =>
         {
-            HeartManager.UseHeart(1);
-            LevelManager.Instance.OnRetryGame();
+            if (UserDataManager.Heart > 1)
+            {
+                HeartManager.UseHeart(1);
+                LevelManager.Instance.OnRetryGame();
+            }
+            else
+            {
+                var popupGetMoreLives = UIManager.Instance.ShowPopup<PopupGetMoreLives>(null);
+                popupGetMoreLives.OnRefilled = () =>
+                {
+                    HeartManager.UseHeart(1);
+                    LevelManager.Instance.OnRetryGame();
+                };
+            }
         };
         popupConfirmLeave.OnClose = () =>
         {

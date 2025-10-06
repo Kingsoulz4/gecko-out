@@ -1946,6 +1946,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &5422741937930996829
 GameObject:
   m_ObjectHideFlags: 0
@@ -2025,7 +2026,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: VIP No ADS
+  m_Text: VIP NO ADS
 --- !u!114 &1022320236664162076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2598,6 +2599,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &6239605510568639144
 GameObject:
   m_ObjectHideFlags: 0
@@ -3536,6 +3538,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &9143765737594632574
 GameObject:
   m_ObjectHideFlags: 0
@@ -3775,3 +3778,4 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
