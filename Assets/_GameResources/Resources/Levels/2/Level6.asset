@@ -165,7 +165,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 90, z: -90}
   listDogData:
   - bodyType: 0
-    listColor: 01000000
+    listColor: 05000000
     listCoordinate:
     - {x: 2, y: 2}
     - {x: 2, y: 1}
@@ -219,7 +219,7 @@ MonoBehaviour:
   - portalType: 0
     Coordinate: {x: 5, y: 7}
     freezeTimeCount: 0
-    listColor: 01000000
+    listColor: 05000000
   - portalType: 0
     Coordinate: {x: 2, y: 0}
     freezeTimeCount: 0
