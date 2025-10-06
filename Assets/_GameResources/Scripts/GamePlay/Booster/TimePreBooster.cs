@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public class TimePreBooster : BoosterBase
 {
-    public float bonusTime = 15;
+    public float bonusTime = 20;
     public float timePlayAnim = 2;
     [SerializeField] private GameObject m_clockPrefab;
     [SerializeField] private Transform m_spawnPoint;

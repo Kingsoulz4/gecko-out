@@ -18,9 +18,9 @@ namespace Geckout
     {
         [SerializeField] UIManager uiManager;
 
-        private static GameState gameState = GameState.MainMenu;
+        private GameState gameState = GameState.MainMenu;
         Action<GameState> OnGameStateChange;
-        public static GameState GameState { get => gameState; }
+        public static GameState GameState { get => Instance.gameState; }
 
         public int CoinRewardWinGame
         {

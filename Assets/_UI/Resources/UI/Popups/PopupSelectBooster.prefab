@@ -1349,6 +1349,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &6246732620534351854
 GameObject:
   m_ObjectHideFlags: 0
@@ -1816,6 +1817,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &8902983901875409711
 GameObject:
   m_ObjectHideFlags: 0

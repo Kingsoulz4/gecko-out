@@ -211,10 +211,7 @@ public class InGameScreenUI : ScreenUI
 
     private void OnPauseClick()
     {
-        var popupSetting = UIManager.Instance.ShowPopup<PopupSetting>(() =>
-        {
-            GameManager.Instance.SetGameState(GameState.Playing);
-        });
+        var popupSetting = UIManager.Instance.ShowPopup<PopupSetting>(null);
         popupSetting.SetType(PopupSettingType.IN_GAME);
         GameManager.Instance.SetGameState(GameState.Paused);
     }
@@ -222,7 +219,7 @@ public class InGameScreenUI : ScreenUI
     public void OnReplayClick()
     {
         ShowConfirmLeave();
-        GameManager.Instance.SetGameState(GameState.Playing);
+        GameManager.Instance.SetGameState(GameState.Paused);
     }
 
     public override void Active()
@@ -341,7 +338,7 @@ public class InGameScreenUI : ScreenUI
         };
         popupConfirmLeave.OnClose = () =>
         {
-
+            GameManager.Instance.SetGameState(GameState.Playing);
         };
     }
     #region Booster Add Time

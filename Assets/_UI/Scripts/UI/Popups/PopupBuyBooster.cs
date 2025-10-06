@@ -58,7 +58,10 @@ namespace Geckout
                 OnClose?.Invoke();
                 UIManager.Instance.ShowPopup<PopupShop>(() =>
                 {
-                    GameManager.Instance.SetGameState(GameState.Playing);
+                    if (boosterType != BoosterType.TIME_PRE && boosterType != BoosterType.CISSOR)
+                    {
+                        GameManager.Instance.SetGameState(GameState.Playing);
+                    }
                 });
                 GameManager.Instance.SetGameState(GameState.Paused);
             }

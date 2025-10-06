@@ -39,7 +39,7 @@ MonoBehaviour:
     levelUnlock: 15
   - boosterType: 1
     title: Add Time
-    description: Use "Add Time" booster to get +5 second at the start of the level
+    description: Use "Add Time" booster to get +{0} second at the start of the level
     icon: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     iconBig: {fileID: 21300000, guid: ccc5e75c55346574aa410bcc5f010966, type: 3}
     price: 900

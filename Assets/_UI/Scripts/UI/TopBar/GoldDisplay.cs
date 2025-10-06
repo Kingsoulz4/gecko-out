@@ -35,6 +35,12 @@ namespace Geckout
         private void OnEnable()
         {
             UserDataManager.OnUpdateGold += UpdateTextGold;
+            UpdateUI();
+        }
+
+        public void UpdateUI()
+        {
+            SetText(UserDataManager.Gold);
         }
 
         public void SetText(int quatity)

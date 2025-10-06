@@ -94,7 +94,7 @@ namespace Geckout
             if (LevelManager.Instance.CurrentLevel == boosterTimeData.levelUnlock)
             {
                 
-                m_textDesBooster.text = boosterTimeData.description;
+                m_textDesBooster.text = string.Format(boosterTimeData.description, ((TimePreBooster)BoosterManager.Instance.TimePreBooster).bonusTime);
                 m_handObject.transform.position = m_buttonSelectBoosterTimeTut.transform.position;
             }
             else if(LevelManager.Instance.CurrentLevel == boosterScissorData.levelUnlock)

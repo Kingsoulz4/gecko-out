@@ -47,18 +47,20 @@ public class PopupSetting : PopupUI
 
     private void OnClickExitGame()
     {
-        Hide();
+        
         if (LevelManager.Instance.LevelGame.IsFirstClick)
         {
             var popupConfirmLeave = UIManager.Instance.ShowPopup<PopupConfirmLeave>(null);
             popupConfirmLeave.OnConfirm = () =>
             {
+                Hide();
                 HeartManager.UseHeart(1);
                 UIManager.Instance.ShowScreen<MainScreenUI>();
             };
         }
         else
         {
+            Hide();
             UIManager.Instance.ShowScreen<MainScreenUI>();
         }    
     }
@@ -73,8 +75,17 @@ public class PopupSetting : PopupUI
     public override void Initialize(UIManager manager)
     {
         base.Initialize(manager);
-        btn_Close.onClick.AddListener(Hide);
+        btn_Close.onClick.AddListener(OnCloseClick);
         btn_Restore.onClick.AddListener(Resrote);
+    }
+
+    private void OnCloseClick()
+    {
+        if(GameManager.GameState == GameState.Paused)
+        {
+            GameManager.Instance.SetGameState(GameState.Playing);
+        }
+        Hide();
     }
 
     public void Resrote()
