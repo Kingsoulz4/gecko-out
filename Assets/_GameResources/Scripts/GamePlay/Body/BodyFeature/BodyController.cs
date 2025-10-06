@@ -648,19 +648,24 @@ namespace Geckout
                 iceBody.Init(BodyData.freezeTimeCount);
             }
 
-            if (BodyData.hiddenCount > 0)
-            {
-                hiddenBody.Init(BodyData.hiddenCount, SplineComputer);
-            }
-
             doubleColorBody.gameObject.SetActive(BodyData.listColor.Count > 1);
             if (BodyData.listColor.Count > 1)
             {
                 doubleColorBody.Init();
             }
 
-
+            if (BodyData.hiddenCount > 0)
+            {
+                hiddenBody.Init(BodyData.hiddenCount, SplineComputer);
+                doubleColorBody.gameObject.SetActive(false);
+            }
         }
+
+        public void ShowMultiSubColorColor()
+        {
+            doubleColorBody.gameObject.SetActive(true);
+        }
+
         #endregion
 
         #region Booster

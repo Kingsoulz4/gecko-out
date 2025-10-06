@@ -138,6 +138,7 @@ namespace Geckout
             }
 
             m_inputFreezeCount.text = BodyData.freezeTimeCount.ToString();
+            m_inputHiddenCount.text = BodyData.hiddenCount.ToString();
         }
 
         private void RefreshBody()

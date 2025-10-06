@@ -62,6 +62,7 @@ namespace Geckout
                 }
             }
             hiddenRenderer.Break();
+            body.ShowMultiSubColorColor();
             body.BodyRenderer.UpdateBodyColor();
         }
     }

@@ -22,7 +22,6 @@ namespace Geckout
             isInit = true;
             SpawnSubColorIndicators();
             colorTypes = new List<ColorType>(body.BodyData.listColor);
-            LevelEvent.OnGetLastPath += OnGetLastPath;
         }
 
         private void OnGetLastPath(BodyController controller, List<Vector2Int> list)
@@ -59,6 +58,11 @@ namespace Geckout
             subColorIndicator = Instantiate(m_subColorIndicatorPrefab, transform);
             subColorIndicator.Init(body.SplineComputer, body.BodyData.listColor);
             
+        }
+
+        private void OnEnable()
+        {
+            LevelEvent.OnGetLastPath += OnGetLastPath;
         }
 
         private void OnDisable()
