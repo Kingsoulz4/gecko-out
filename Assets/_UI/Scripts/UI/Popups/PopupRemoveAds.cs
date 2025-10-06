@@ -66,7 +66,7 @@ namespace Geckout
             m_buttonClose.transform.localScale = Vector3.zero;
             yield return new WaitForSeconds(0.8f);
             m_buttonClose.transform.localScale = Vector3.one * 0.7f;
-            m_buttonClose.transform.DOScale(1f, 0.5f).SetEase(Ease.OutBack);
+            m_buttonClose.transform.DOScale(1f, 0.25f).SetEase(Ease.OutBack);
         }
             
 
