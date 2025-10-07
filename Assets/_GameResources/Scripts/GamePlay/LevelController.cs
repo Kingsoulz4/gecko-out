@@ -33,7 +33,11 @@ namespace Geckout
 
         public List<BodyController> ListBody { get => listBody; }
 
-        public float CurrentTimeLevelRemaining => currentTimeRemaining;
+        public float CurrentTimeLevelRemaining
+        {
+            get => currentTimeRemaining;
+            set => currentTimeRemaining = value;
+        }
 
         public bool IsFirstClick { get; set; }
 

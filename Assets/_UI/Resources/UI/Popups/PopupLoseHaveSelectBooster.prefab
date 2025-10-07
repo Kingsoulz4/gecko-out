@@ -858,6 +858,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &6415127584763814306
 GameObject:
   m_ObjectHideFlags: 0
@@ -1097,6 +1098,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   soundClick: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &7614736093573456081
 GameObject:
   m_ObjectHideFlags: 0
@@ -1757,7 +1759,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6958644156656860539, guid: 444a5f25d06df0a4fbe8c0e166b85688, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7443735791085015656, guid: 444a5f25d06df0a4fbe8c0e166b85688, type: 3}
       propertyPath: m_Name

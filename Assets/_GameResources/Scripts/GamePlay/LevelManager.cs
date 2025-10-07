@@ -132,12 +132,16 @@ namespace Geckout
             }
             else
             {
+                HeartManager.UseHeart(1);
                 var popupLose = UIManager.Instance.ShowPopup<PopupLoseHaveSelectBooster>(null);
                 popupLose.OnClose = () =>
                 {
                     UIManager.Instance.ShowScreen<MainScreenUI>();
                 };
-                popupLose.OnRetry = OnRetryGame;
+                popupLose.OnRetry = () =>
+                {
+                    OnRetryGame();
+                };
 
             }
         }
@@ -155,6 +159,7 @@ namespace Geckout
                 popupGetMoreLives.OnRefilled = () =>
                 {
                     StartCurrentLevel();
+                    UIManager.Instance.ShowScreen<InGameScreenUI>();
                 };
                 popupGetMoreLives.OnClose = () =>
                 {
@@ -257,7 +262,7 @@ namespace Geckout
         public void DoneFlowStartGame()
         {
             GameManager.Instance.SetGameState(GameState.Playing);
-
+            TouchInputHandler.Instance.CanClick = true;
         }
 
         #endregion

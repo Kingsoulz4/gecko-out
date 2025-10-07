@@ -88,7 +88,7 @@ namespace Geckout
         public void ClearAllOccupied()
         {
             var segments = bodyController.Segments;
-            if (segments == null || segments.Count <= 0) return;
+            if (segments == null || segments.Count <= 0 || currentOccupiedTiles == null || currentOccupiedTiles.Length <= 0) return;
 
             for (int i = 0; i < segments.Count; i++)
             {

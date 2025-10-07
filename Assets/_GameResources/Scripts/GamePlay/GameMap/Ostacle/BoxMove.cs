@@ -287,6 +287,8 @@ namespace Geckout
 
         private bool CanMoveRootTo(Vector2Int targetRootPos)
         {
+            if(targetRootPos.x != Data.rootCoordinate.x && targetRootPos.y != Data.rootCoordinate.y) return false;  
+
             // Bounds check toàn khối
             for (int x = 0; x < Data.boxSize.x; x++)
             {
