@@ -127,6 +127,7 @@ namespace Geckout
                     var popupReceiveRewards = UIManager.Instance.ShowPopup<PopupReceiveReward>(null);
                     popupReceiveRewards.SetData(packNoAds.listReward);
                     ShopManager.Instance.HasPurchasedNoAdsPack = true;
+                    packNoAds.listReward.ForEach(x => x.Claim());
                     UIManager.Instance.OnRefeshBannerAndAds?.Invoke();
                     Hide();
                 }
