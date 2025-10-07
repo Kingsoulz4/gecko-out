@@ -263,6 +263,9 @@ namespace Geckout
         {
             GameManager.Instance.SetGameState(GameState.Playing);
             TouchInputHandler.Instance.CanClick = true;
+            BoosterManager.Instance.HammerBooster.CancelBooster();
+            BoosterManager.Instance.HandMoveBooster.CancelBooster();
+            BoosterManager.Instance.TimeIngameBooster.CancelBooster();
         }
 
         #endregion
