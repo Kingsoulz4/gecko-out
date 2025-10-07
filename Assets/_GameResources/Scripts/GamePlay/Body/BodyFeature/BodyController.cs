@@ -686,7 +686,7 @@ namespace Geckout
 
         public bool CanBeAffectedByBoosterMagicWand()
         {
-            return BodyData.listCoordinate.Count > 3 && BodyData.freezeTimeCount <= 0 && BodyData.hiddenCount <= 0 && CanControl;
+            return BodyData.listCoordinate.Count >= 3 && BodyData.freezeTimeCount <= 0 && BodyData.hiddenCount <= 0 && CanControl;
         }
             
 

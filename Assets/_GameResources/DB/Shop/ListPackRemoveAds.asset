@@ -41,12 +41,10 @@ MonoBehaviour:
     - type: 10
       quantity: 1
     - type: 0
-      quantity: 16000
-    - type: 1
-      quantity: 21600
+      quantity: 2000
     - type: 4
-      quantity: 6
+      quantity: 3
     - type: 5
-      quantity: 6
+      quantity: 3
     - type: 6
-      quantity: 6
+      quantity: 3
