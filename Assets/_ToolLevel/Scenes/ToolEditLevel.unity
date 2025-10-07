@@ -11501,7 +11501,7 @@ MonoBehaviour:
   m_designDogTab: {fileID: 42538977}
   m_editPortalTab: {fileID: 1082537682}
   m_editBoxesTab: {fileID: 147159846}
-  m_levelRootPrefab: {fileID: -1383312017683571834, guid: dabdc1350a7351f49bbb8fb249480546, type: 3}
+  m_levelRootPrefab: {fileID: 8945860169092605814, guid: dabdc1350a7351f49bbb8fb249480546, type: 3}
 --- !u!114 &802180015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18643,7 +18643,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dccba2e78beffd94eb5eb0f5bb0f6fa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_levelGameOriginal: {fileID: 1332654166868463317, guid: dabdc1350a7351f49bbb8fb249480546, type: 3}
+  m_levelGameOriginal: {fileID: 8945860169092605814, guid: dabdc1350a7351f49bbb8fb249480546, type: 3}
   levelTest: 0
 --- !u!1 &1381423152
 GameObject:
