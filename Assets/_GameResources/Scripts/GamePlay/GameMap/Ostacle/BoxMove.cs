@@ -177,13 +177,51 @@ namespace Geckout
                     }
                     if (axisLocked)
                     {
-                        if (lockHorizontal) constrainedForSelected.y = baseSelectedTileCoord.y;
-                        else constrainedForSelected.x = baseSelectedTileCoord.x;
+                        if (lockHorizontal)
+                        {
+                            constrainedForSelected.y = baseSelectedTileCoord.y;
+                        }
+                        else
+                        {
+                            constrainedForSelected.x = baseSelectedTileCoord.x;
+                        }
                     }
                     break;
             }
 
             Vector2Int rootTarget = constrainedForSelected - selectedTileOffset;
+
+            if(rootTarget == Data.rootCoordinate)
+            {
+
+            }
+            else if(rootTarget.x == Data.rootCoordinate.x)
+            {
+                var delta = rootTarget.y - Data.rootCoordinate.y;
+                var step = delta / Mathf.Abs(delta);
+                var newRootTarget = Data.rootCoordinate + Vector2Int.up * step;
+                rootTarget = Data.rootCoordinate;
+                while (delta != 0 && CanMoveRootTo(newRootTarget))
+                {
+                    rootTarget = newRootTarget;
+                    newRootTarget += Vector2Int.up * step;
+                    delta -= step;
+                }
+            }
+            else if(rootTarget.y == Data.rootCoordinate.y)
+            {
+                var delta = rootTarget.x - Data.rootCoordinate.x;
+                var step = delta / Mathf.Abs(delta);
+                var newRootTarget = Data.rootCoordinate + Vector2Int.right * step;
+                rootTarget = Data.rootCoordinate;
+                while (delta != 0 && CanMoveRootTo(newRootTarget))
+                {
+                    rootTarget = newRootTarget;
+                    newRootTarget += Vector2Int.right * step;
+                    delta -= step;
+                }
+            }
+                
 
             // Validation và set target
             Debug.Log($"1 {rootTarget != Data.rootCoordinate}"  );
@@ -287,17 +325,23 @@ namespace Geckout
 
         private bool CanMoveRootTo(Vector2Int targetRootPos)
         {
-            if(targetRootPos.x != Data.rootCoordinate.x && targetRootPos.y != Data.rootCoordinate.y) return false;  
+            if (targetRootPos == Data.rootCoordinate) return false;
+
+            if(targetRootPos.x != Data.rootCoordinate.x && targetRootPos.y != Data.rootCoordinate.y) return false;
+
+            Vector2Int check = targetRootPos + Data.boxSize - Vector2Int.one;
+            if (!IsWithinMapBounds(check))
+                return false;
 
             // Bounds check toàn khối
             for (int x = 0; x < Data.boxSize.x; x++)
             {
                 for (int y = 0; y < Data.boxSize.y; y++)
                 {
-                    Vector2Int check = targetRootPos + new Vector2Int(x, y);
-                    if (!IsWithinMapBounds(check)) 
-                        return false;
-                    if (IsTileOccupiedByOther(check)) 
+                    check = targetRootPos + new Vector2Int(x, y);
+                    //if (!IsWithinMapBounds(check))
+                    //    return false;
+                    if (IsTileOccupiedByOther(check))
                         return false;
                 }
             }
