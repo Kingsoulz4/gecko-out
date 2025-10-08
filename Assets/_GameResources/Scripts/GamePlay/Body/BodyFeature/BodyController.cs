@@ -221,6 +221,7 @@ namespace Geckout
                     var nextCoord = previosCoord + 1;
                     GameMap.TryGetTileAtCoord(listDefaultCoordinate[previosCoord], out var tilePreviosCoord);
                     GameMap.TryGetTileAtCoord(listDefaultCoordinate[nextCoord], out var tileNextCoord);
+                    Segments[i].Coordinate = coordinate;
                     Segments[i].transform.position = Vector3.Lerp(tilePreviosCoord.transform.position, tileNextCoord.transform.position, (float)temp / SubLength);
                 }
             }

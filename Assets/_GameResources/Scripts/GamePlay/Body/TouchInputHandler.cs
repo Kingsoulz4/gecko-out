@@ -291,27 +291,29 @@ namespace Geckout
             if (!isDragging) return;
             Vector2Int? tileCoord = GetTileCoordinateFromScreen(screenPosition);
 
+            if (!tileCoord.HasValue) return;
+            lastTargetTile = tileCoord.Value;
 
             //RectTransformUtility.ScreenPointToWorldPointInRectangle(UIManager.Instance.canvas.GetComponent<RectTransform>(), screenPosition, gameCamera, out var worldPoint);
             var worldPoint = screenPosition;
-            Debug.Log($"Screen Point: {screenPosition}");
-            Debug.Log($"Old Point: {lastDragPoint}");
-            Debug.Log($"New Point: {worldPoint}");
-            Debug.Log($"Delta Drag X {Mathf.Abs(worldPoint.x - lastDragPoint.x)}");
-            Debug.Log($"Delta Drag Y {Mathf.Abs(worldPoint.y - lastDragPoint.y)}");
+            //Debug.Log($"Screen Point: {screenPosition}");
+            //Debug.Log($"Old Point: {lastDragPoint}");
+            //Debug.Log($"New Point: {worldPoint}");
+            //Debug.Log($"Delta Drag X {Mathf.Abs(worldPoint.x - lastDragPoint.x)}");
+            //Debug.Log($"Delta Drag Y {Mathf.Abs(worldPoint.y - lastDragPoint.y)}");
             if (Mathf.Abs(worldPoint.x - lastDragPoint.x) < offsetDrag
                 && Mathf.Abs(worldPoint.x - lastDragPoint.x) > Mathf.Abs(worldPoint.y - lastDragPoint.y))
             {
                 var amplitude = Mathf.Abs(worldPoint.x - lastDragPoint.x) * factorShortDrag;
                 Debug.Log($"Move Short Distance X Here {Mathf.Abs(worldPoint.x - lastDragPoint.x)}");
-                bodyController.MoveShortDistance(amplitude, worldPoint.x > lastDragPoint.x ? Vector3.right : Vector3.left);
+                bodyController.MoveShortDistance(amplitude, worldPoint.x > lastDragPoint.x ? Vector2Int.right : Vector2Int.left, lastTargetTile);
             }
             else if (Mathf.Abs(worldPoint.y - lastDragPoint.y) < offsetDrag
                 && Mathf.Abs(worldPoint.x - lastDragPoint.x) < Mathf.Abs(worldPoint.y - lastDragPoint.y))
             {
                 var amplitude = Mathf.Abs(worldPoint.y - lastDragPoint.y) * factorShortDrag;
                 Debug.Log($"Move Short Distance Y Here {Mathf.Abs(worldPoint.y - lastDragPoint.y)}");
-                bodyController.MoveShortDistance(amplitude, worldPoint.y > lastDragPoint.y ? Vector3.up : Vector3.down);
+                bodyController.MoveShortDistance(amplitude, worldPoint.y > lastDragPoint.y ? Vector2Int.up : Vector2Int.down, lastTargetTile);
             }
             else if (tileCoord.HasValue && tileCoord.Value != lastTargetTile)
             {
@@ -359,6 +361,9 @@ namespace Geckout
             {
                 bodyController.OnEndMove -= OnBodyEndMove;
             }
+
+            //FindAndSetSmoothPath(lastTargetTile);
+
             bodyController = null;
             currentPath?.Clear();
             smoothPath.Clear();

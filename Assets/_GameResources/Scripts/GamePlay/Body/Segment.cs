@@ -18,7 +18,7 @@ namespace Geckout
         public bool IsPortalAnimating { get; set; }
         public Segment PrevSegment { private set; get; }
         public Segment NextSegment { private set; get; }
-        public Vector2Int Coordinate { private set; get; }
+        public Vector2Int Coordinate { set; get; }
         public Vector2Int MoveDirection { private set; get; }
         public BodyController Controller { get; private set; }
         public GameTile CurrentTile { get => _currentTile; set => _currentTile = value; }
