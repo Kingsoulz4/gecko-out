@@ -313,7 +313,7 @@ namespace Geckout
         {
             if (enableDebugLogs)
             {
-                Debug.Log($"[GridHeadClamper] {message}");
+                //Debug.Log($"[GridHeadClamper] {message}");
             }
         }
     }

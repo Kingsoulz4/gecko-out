@@ -17,6 +17,8 @@ namespace Geckout
         [SerializeField] private LayerMask segmentLayer = 7;
         [SerializeField] private bool enableDebugLogs = false;
         [SerializeField] private float pathUpdateInterval = 0.02f;
+        [SerializeField] private float offsetDrag = 0.2f;
+        [SerializeField] private float factorShortDrag = 0.02f;
 
         private BodyController bodyController;
         private bool canClick = true;
@@ -32,6 +34,8 @@ namespace Geckout
 
         public bool IsDragging { get => isDragging; }
         public bool CanClick { get => canClick; set => canClick = value; }
+
+        private Vector3 lastDragPoint = Vector3.zero;
 
         void Start()
         {
@@ -286,22 +290,61 @@ namespace Geckout
         {
             if (!isDragging) return;
             Vector2Int? tileCoord = GetTileCoordinateFromScreen(screenPosition);
-            if (!tileCoord.HasValue) return;
 
-            if (tileCoord.Value == lastTargetTile) return;
 
-            // Throttle path updates
-            if (Time.time - lastPathUpdateTime < pathUpdateInterval)
+            //RectTransformUtility.ScreenPointToWorldPointInRectangle(UIManager.Instance.canvas.GetComponent<RectTransform>(), screenPosition, gameCamera, out var worldPoint);
+            var worldPoint = screenPosition;
+            Debug.Log($"Screen Point: {screenPosition}");
+            Debug.Log($"Old Point: {lastDragPoint}");
+            Debug.Log($"New Point: {worldPoint}");
+            Debug.Log($"Delta Drag X {Mathf.Abs(worldPoint.x - lastDragPoint.x)}");
+            Debug.Log($"Delta Drag Y {Mathf.Abs(worldPoint.y - lastDragPoint.y)}");
+            if (Mathf.Abs(worldPoint.x - lastDragPoint.x) < offsetDrag
+                && Mathf.Abs(worldPoint.x - lastDragPoint.x) > Mathf.Abs(worldPoint.y - lastDragPoint.y))
             {
-                return;
+                var amplitude = Mathf.Abs(worldPoint.x - lastDragPoint.x) * factorShortDrag;
+                Debug.Log($"Move Short Distance X Here {Mathf.Abs(worldPoint.x - lastDragPoint.x)}");
+                bodyController.MoveShortDistance(amplitude, worldPoint.x > lastDragPoint.x ? Vector3.right : Vector3.left);
+            }
+            else if (Mathf.Abs(worldPoint.y - lastDragPoint.y) < offsetDrag
+                && Mathf.Abs(worldPoint.x - lastDragPoint.x) < Mathf.Abs(worldPoint.y - lastDragPoint.y))
+            {
+                var amplitude = Mathf.Abs(worldPoint.y - lastDragPoint.y) * factorShortDrag;
+                Debug.Log($"Move Short Distance Y Here {Mathf.Abs(worldPoint.y - lastDragPoint.y)}");
+                bodyController.MoveShortDistance(amplitude, worldPoint.y > lastDragPoint.y ? Vector3.up : Vector3.down);
+            }
+            else if (tileCoord.HasValue && tileCoord.Value != lastTargetTile)
+            {
+                if (Time.time - lastPathUpdateTime < pathUpdateInterval)
+                {
+                    return;
+                }
+
+                lastTargetTile = tileCoord.Value;
+
+                DebugLog($"OnTouchDrag to NEW target tile: {tileCoord.Value}");
+
+                FindAndSetSmoothPath(tileCoord.Value);
             }
 
-            lastTargetTile = tileCoord.Value;
-            lastPathUpdateTime = Time.time;
+            lastDragPoint = worldPoint;
 
-            DebugLog($"OnTouchDrag to NEW target tile: {tileCoord.Value}");
+            //if (!tileCoord.HasValue) return;
 
-            FindAndSetSmoothPath(tileCoord.Value);
+            //if (tileCoord.Value == lastTargetTile) return;
+
+            //// Throttle path updates
+            //if (Time.time - lastPathUpdateTime < pathUpdateInterval)
+            //{
+            //    return;
+            //}
+
+            //lastTargetTile = tileCoord.Value;
+            //lastPathUpdateTime = Time.time;
+
+            //DebugLog($"OnTouchDrag to NEW target tile: {tileCoord.Value}");
+
+            //FindAndSetSmoothPath(tileCoord.Value);
         }
 
         void OnTouchEnd()
@@ -328,6 +371,7 @@ namespace Geckout
             SetBody(body);
             isDragging = true;
             isDraggingFromHead = fromHead;
+
             // Set control anchor based on drag source
             bodyController.SetControlAnchor(fromHead ? BodyController.ControlAnchor.Head : BodyController.ControlAnchor.Tail);
             DebugLog($"StartDragging from {(fromHead ? "HEAD" : "TAIL")}");
