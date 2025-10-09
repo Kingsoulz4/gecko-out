@@ -40,10 +40,10 @@ public class IAPManager : SingletonDontDestroyMono<IAPManager>, IHandleIAP
 
     public void BuyProductID(string internalProductId, UnityAction<bool> callback = null)
     {
-#if CHEAT_IAP
-        callback?.Invoke(true);
-        return;
-#endif
+//#if CHEAT_IAP
+//        callback?.Invoke(true);
+//        return;
+//#endif
         IAPHandler.BuyProductID(internalProductId, callback);
     }
 

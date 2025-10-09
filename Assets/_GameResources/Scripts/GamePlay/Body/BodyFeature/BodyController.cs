@@ -206,7 +206,8 @@ namespace Geckout
             for (int i = 0; i < Segments.Count; i++)
             {
                 // unitIndex = segment thuộc về tile nào
-                int unitIndex = Mathf.CeilToInt((float)i / SubLength);
+                //int unitIndex = Mathf.CeilToInt((float)i / SubLength);
+                int unitIndex = i/subLength;
 
                 var coordinate = listDefaultCoordinate[Mathf.Clamp(unitIndex, 0, listDefaultCoordinate.Count - 1)];
 

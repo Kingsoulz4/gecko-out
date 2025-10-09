@@ -25,6 +25,7 @@ namespace Geckout
             m_splineMesh.spline = splineComputer;
             m_splineFollowEnd.spline = splineComputer;
             var channel = m_splineMesh.GetChannel(0);
+            //m_splineMesh.ad
             channel.clipFrom = m_clipFrom;
             channel.clipTo = m_clipTo - m_clipToOffet * index;
             channel.spacing = m_spacing;

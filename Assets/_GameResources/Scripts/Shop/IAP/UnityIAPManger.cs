@@ -104,7 +104,7 @@ public class UnityIAPManger : IAPHandlerBase
     {
         if(arg1)
         {
-
+            
         }
     }
 
@@ -179,12 +179,13 @@ public class UnityIAPManger : IAPHandlerBase
             {
                 var storeIds = new StoreSpecificIds();
                 if (!string.IsNullOrEmpty(meta.googleStoreId))
-                    storeIds.Add(GooglePlay.Name, meta.googleStoreId);
+                    storeIds.Add(meta.googleStoreId, GooglePlay.Name);
                 if (!string.IsNullOrEmpty(meta.appleStoreId))
-                    storeIds.Add(AppleAppStore.Name, meta.appleStoreId);
+                    storeIds.Add(meta.appleStoreId, AppleAppStore.Name);
 
                 //var pd = new ProductDefinition( );
                 catalogProvider.AddProduct(meta.internalId, meta.productType, storeIds);
+                ProductDefinition pd;
                 
                 //productDefinitions.Add(catalogProvider);
             }
@@ -195,9 +196,9 @@ public class UnityIAPManger : IAPHandlerBase
                 
             }
 
-            catalogProvider.FetchProducts((pds) => {
-                _storeController.FetchProducts(pds);
-            });
+            catalogProvider.FetchProducts((pds) => _storeController.FetchProductsWithNoRetries(pds));
+            //_storeController.
+            
         }
         catch (Exception ex)
         {
@@ -209,6 +210,10 @@ public class UnityIAPManger : IAPHandlerBase
     {
         Debug.Log("Purchase Confirmed");
         _storeController.FetchPurchases();
+        if (order is ConfirmedOrder completed)
+        {
+            GrantRewardsForStoreId(completed.Info.PurchasedProductInfo.First().productId);
+        }
     }
 
     private void OnProductsFetched(List<Product> products)
@@ -244,6 +249,7 @@ public class UnityIAPManger : IAPHandlerBase
                 GrantRewardsForStoreId(completed.Info.PurchasedProductInfo.First().productId);
             }
         }
+
     }
 
     private void OnPurchasePending(PendingOrder pending)

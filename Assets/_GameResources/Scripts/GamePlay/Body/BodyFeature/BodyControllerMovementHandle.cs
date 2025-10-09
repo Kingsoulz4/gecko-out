@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Geckout
@@ -8,7 +9,7 @@ namespace Geckout
     {
         private Coroutine moveShortDistanceCoroutine;
 
-        public void MoveShortDistance(float amplitude, Vector2Int direction, Vector2Int newHeadCoord, bool moveForward = true)
+        public void MoveShortDistance(float amplitude, Vector2Int direction, Vector2Int newHeadCoord, ControlAnchor controlAnchor)
         {
             if (moveShortDistanceCoroutine != null)
             {
@@ -16,63 +17,153 @@ namespace Geckout
                 moveShortDistanceCoroutine = null;
             }
 
-            if (newHeadCoord != Segments[0].Coordinate)
+            bool moveForward = true;
+
+            if (controlAnchor == ControlAnchor.Head)
             {
-                var oldHeadCoord = Segments[0].Coordinate;
-                Segments[0].Coordinate = newHeadCoord;
-                for (int i = 1; i < Segments.Count; i++)
+                var currentBackwardDir = BodyData.listCoordinate[1] - BodyData.listCoordinate[0];
+                moveForward = currentBackwardDir != direction;
+
+                if (BodyData.listCoordinate.First() != newHeadCoord)
                 {
-                    var currentCoord = Segments[i].Coordinate;
-                    Segments[i].Coordinate = oldHeadCoord;
-                    oldHeadCoord = currentCoord;
+                    if (moveForward)
+                    {
+                        BodyData.listCoordinate.Insert(0, newHeadCoord);
+                        BodyData.listCoordinate.RemoveAt(BodyData.listCoordinate.Count - 1);
+                        Segments[0].Coordinate = newHeadCoord;
+                    }
+                    else
+                    {
+                        BodyData.listCoordinate.Add(newHeadCoord);
+                        BodyData.listCoordinate.RemoveAt(0);
+                        Segments[0].Coordinate = BodyData.listCoordinate.First();
+                    }
+                }
+            }
+            else if(controlAnchor == ControlAnchor.Tail)
+            {
+                var currentBackwardDir = BodyData.listCoordinate[^2] - BodyData.listCoordinate[^1];
+                moveForward = currentBackwardDir != direction;
+
+                if (BodyData.listCoordinate.First() != newHeadCoord)
+                {
+                    if (moveForward)
+                    {
+                        BodyData.listCoordinate.Add(newHeadCoord);
+                        BodyData.listCoordinate.RemoveAt(0);
+                        Segments[^1].Coordinate = newHeadCoord;
+                    }
+                    else
+                    {
+                        BodyData.listCoordinate.Insert(0, newHeadCoord);
+                        BodyData.listCoordinate.RemoveAt(BodyData.listCoordinate.Count - 1);
+                        Segments[^1].Coordinate = BodyData.listCoordinate.Last();
+                    }
                 }
             }
 
-            moveShortDistanceCoroutine = StartCoroutine(IEMoveShortDistance(amplitude,new Vector3(direction.x, direction.y), moveForward));
+            moveShortDistanceCoroutine = StartCoroutine(IEMoveShortDistance(amplitude,new Vector3(direction.x, direction.y), controlAnchor,moveForward));
         }
 
-        IEnumerator IEMoveShortDistance(float amplitude, Vector3 direction, bool moveForward = true)
+        IEnumerator IEMoveShortDistance(float amplitude, Vector3 direction, ControlAnchor controlAnchor, bool moveForward = true)
         {
             List<Vector3> dirs = new List<Vector3>() { Vector3.up, Vector3.down, Vector3.left, Vector3.right };
-            if (moveForward)
-            {
-                Debug.Log($"Init Dir point short distance: {direction}");
-                var lastPartPoint = Segments[0].transform.position;
-                Segments[0].transform.position += amplitude * direction;
+            Debug.Log($"Init Dir point short distance: {direction}");
 
-                for (int i = 1; i < Segments.Count; i++)
+            if (controlAnchor == ControlAnchor.Head)
+            {
+                if (moveForward)
                 {
-                    var temp = (Segments[i - 1].Coordinate - Segments[i].Coordinate);
-                    Vector3 dir = new Vector3(temp.x, temp.y);
-                    Debug.Log($"Dir: {dir}");
-                    if (dir == Vector3.zero)
+                    Segments[0].transform.position += direction * amplitude;
+                }
+                else
+                {
+                    Segments[^1].transform.position += direction * amplitude;
+                }
+
+            }
+            else if (controlAnchor == ControlAnchor.Tail)
+            {
+                if (moveForward)
+                {
+                    Segments[0].transform.position += direction * amplitude;
+                }
+                else
+                {
+                    Segments[^1].transform.position += direction * amplitude;
+                }
+            }
+
+            for (int i = 1; i < Segments.Count; i++)
+            {
+                var currentCoord = Segments[i].Coordinate;
+                var indexOfCoord = BodyData.listCoordinate.IndexOf(currentCoord);
+                var nexCoord = BodyData.listCoordinate[Mathf.Clamp(indexOfCoord - 1, 0, BodyData.listCoordinate.Count - 1)];
+                if (GameMap.TryGetTileAtCoord(Segments[i].Coordinate, out var tile))
+                {
+                    if (Vector3.Distance(Segments[i].transform.position, tile.transform.position) <= 0.01f)
                     {
-                        Debug.Log("Dir Zero Here");
-                        dir = Segments[i - 1].transform.position - Segments[i].transform.position;
-                        if(Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+                        Segments[i].transform.position = tile.transform.position;
+                        Segments[i].Coordinate = nexCoord;
+                    }
+                }
+
+                if (GameMap.TryGetTileAtCoord(Segments[i].Coordinate, out tile))
+                {
+                    var dir = tile.transform.position - Segments[i].transform.position;
+                    if (dir != Vector3.zero)
+                    {
+                        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
                         {
-                            dir = Vector3.right * (dir.x/ Mathf.Abs(dir.x));
+                            dir = Vector3.right * (dir.x / Mathf.Abs(dir.x));
                         }
                         else
                         {
                             dir = Vector3.up * (dir.y / Mathf.Abs(dir.y));
                         }
-                            
-                            
-                        Debug.Log($"New Dir: {dir}");
+
+                        Segments[i].transform.position += dir * amplitude;
                     }
-                    Debug.Log($"Dir point short distance: {dir}");
-                    lastPartPoint = new Vector3(lastPartPoint.x, lastPartPoint.y, lastPartPoint.z);
-                    Segments[i].transform.position = lastPartPoint;
                 }
-                yield return new WaitForSeconds(0.1f);
             }
+
+
+            yield return new WaitForSeconds(0.1f);
 
             occupiedTileController?.UpdateAllSegmentPositions();
 
         }
 
-        //public void 
+        public void UpdateAllSegmentPos()
+        {
+            for (int i = 0; i < Segments.Count; i++)
+            {
+                var listDefaultCoordinate = BodyData.listCoordinate;
+
+                int unitIndex = i / subLength;
+
+                var coordinate = listDefaultCoordinate[Mathf.Clamp(unitIndex, 0, listDefaultCoordinate.Count - 1)];
+
+                if (i % SubLength == 0)
+                {
+                    if (GameMap.TryGetTileAtCoord(coordinate, out var tile))
+                    {
+                        Segments[i].Coordinate = coordinate;
+                        Segments[i].transform.position = tile.transform.position;
+                    }
+                }
+                else
+                {
+                    var temp = i % SubLength;
+                    var previosCoord = i / SubLength;
+                    var nextCoord = previosCoord + 1;
+                    GameMap.TryGetTileAtCoord(listDefaultCoordinate[previosCoord], out var tilePreviosCoord);
+                    GameMap.TryGetTileAtCoord(listDefaultCoordinate[nextCoord], out var tileNextCoord);
+                    Segments[i].Coordinate = coordinate;
+                    Segments[i].transform.position = Vector3.Lerp(tilePreviosCoord.transform.position, tileNextCoord.transform.position, (float)temp / SubLength);
+                }
+            }
+        }
 
     }
 }

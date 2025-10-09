@@ -289,6 +289,12 @@ namespace Geckout
         void OnTouchDrag(Vector2 screenPosition)
         {
             if (!isDragging) return;
+
+            if (Time.time - lastPathUpdateTime < pathUpdateInterval)
+            {
+                return;
+            }
+
             Vector2Int? tileCoord = GetTileCoordinateFromScreen(screenPosition);
 
             if (!tileCoord.HasValue) return;
@@ -306,22 +312,18 @@ namespace Geckout
             {
                 var amplitude = Mathf.Abs(worldPoint.x - lastDragPoint.x) * factorShortDrag;
                 Debug.Log($"Move Short Distance X Here {Mathf.Abs(worldPoint.x - lastDragPoint.x)}");
-                bodyController.MoveShortDistance(amplitude, worldPoint.x > lastDragPoint.x ? Vector2Int.right : Vector2Int.left, lastTargetTile);
+                bodyController.MoveShortDistance(amplitude, worldPoint.x > lastDragPoint.x ? Vector2Int.right : Vector2Int.left, lastTargetTile, touchAnchor);
             }
             else if (Mathf.Abs(worldPoint.y - lastDragPoint.y) < offsetDrag
                 && Mathf.Abs(worldPoint.x - lastDragPoint.x) < Mathf.Abs(worldPoint.y - lastDragPoint.y))
             {
                 var amplitude = Mathf.Abs(worldPoint.y - lastDragPoint.y) * factorShortDrag;
                 Debug.Log($"Move Short Distance Y Here {Mathf.Abs(worldPoint.y - lastDragPoint.y)}");
-                bodyController.MoveShortDistance(amplitude, worldPoint.y > lastDragPoint.y ? Vector2Int.up : Vector2Int.down, lastTargetTile);
+                bodyController.MoveShortDistance(amplitude, worldPoint.y > lastDragPoint.y ? Vector2Int.up : Vector2Int.down, lastTargetTile, touchAnchor);
             }
             else if (tileCoord.HasValue && tileCoord.Value != lastTargetTile)
             {
-                if (Time.time - lastPathUpdateTime < pathUpdateInterval)
-                {
-                    return;
-                }
-
+   
                 lastTargetTile = tileCoord.Value;
 
                 DebugLog($"OnTouchDrag to NEW target tile: {tileCoord.Value}");
@@ -342,7 +344,7 @@ namespace Geckout
             //}
 
             //lastTargetTile = tileCoord.Value;
-            //lastPathUpdateTime = Time.time;
+            lastPathUpdateTime = Time.time;
 
             //DebugLog($"OnTouchDrag to NEW target tile: {tileCoord.Value}");
 
@@ -360,10 +362,11 @@ namespace Geckout
             if (bodyController)
             {
                 bodyController.OnEndMove -= OnBodyEndMove;
+                bodyController.UpdateAllSegmentPos();
+
             }
 
             //FindAndSetSmoothPath(lastTargetTile);
-
             bodyController = null;
             currentPath?.Clear();
             smoothPath.Clear();
