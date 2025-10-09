@@ -8,14 +8,27 @@ namespace Geckout
     {
         private Coroutine moveShortDistanceCoroutine;
 
-        public void MoveShortDistance(float amplitude, Vector3 direction, bool moveForward = true)
+        public void MoveShortDistance(float amplitude, Vector2Int direction, Vector2Int newHeadCoord, bool moveForward = true)
         {
             if (moveShortDistanceCoroutine != null)
             {
                 StopCoroutine(moveShortDistanceCoroutine);
                 moveShortDistanceCoroutine = null;
             }
-            moveShortDistanceCoroutine = StartCoroutine(IEMoveShortDistance(amplitude, direction, moveForward));
+
+            if (newHeadCoord != Segments[0].Coordinate)
+            {
+                var oldHeadCoord = Segments[0].Coordinate;
+                Segments[0].Coordinate = newHeadCoord;
+                for (int i = 1; i < Segments.Count; i++)
+                {
+                    var currentCoord = Segments[i].Coordinate;
+                    Segments[i].Coordinate = oldHeadCoord;
+                    oldHeadCoord = currentCoord;
+                }
+            }
+
+            moveShortDistanceCoroutine = StartCoroutine(IEMoveShortDistance(amplitude,new Vector3(direction.x, direction.y), moveForward));
         }
 
         IEnumerator IEMoveShortDistance(float amplitude, Vector3 direction, bool moveForward = true)
@@ -25,27 +38,32 @@ namespace Geckout
             {
                 Debug.Log($"Init Dir point short distance: {direction}");
                 var lastPartPoint = Segments[0].transform.position;
-                //lastPartPoint = new Vector3(lastPartPoint.x, lastPartPoint.y, lastPartPoint.z);
                 Segments[0].transform.position += amplitude * direction;
 
                 for (int i = 1; i < Segments.Count; i++)
                 {
-                    var dir = (lastPartPoint - Segments[i].transform.position).normalized;
-                    if (!dirs.Contains(dir))
+                    var temp = (Segments[i - 1].Coordinate - Segments[i].Coordinate);
+                    Vector3 dir = new Vector3(temp.x, temp.y);
+                    Debug.Log($"Dir: {dir}");
+                    if (dir == Vector3.zero)
                     {
-                        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+                        Debug.Log("Dir Zero Here");
+                        dir = Segments[i - 1].transform.position - Segments[i].transform.position;
+                        if(Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
                         {
-                            dir = new Vector3(dir.x, 0, 0);
+                            dir = Vector3.right * (dir.x/ Mathf.Abs(dir.x));
                         }
                         else
                         {
-                            dir = new Vector3(0, dir.y, 0);
+                            dir = Vector3.up * (dir.y / Mathf.Abs(dir.y));
                         }
+                            
+                            
+                        Debug.Log($"New Dir: {dir}");
                     }
                     Debug.Log($"Dir point short distance: {dir}");
-                    lastPartPoint = Segments[i].transform.position;
-                    //lastPartPoint = new Vector3(lastPartPoint.x, lastPartPoint.y, lastPartPoint.z);
-                    Segments[i].transform.position += dir * amplitude;
+                    lastPartPoint = new Vector3(lastPartPoint.x, lastPartPoint.y, lastPartPoint.z);
+                    Segments[i].transform.position = lastPartPoint;
                 }
                 yield return new WaitForSeconds(0.1f);
             }
@@ -53,6 +71,8 @@ namespace Geckout
             occupiedTileController?.UpdateAllSegmentPositions();
 
         }
+
+        //public void 
 
     }
 }

@@ -844,7 +844,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7184660481898082024, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
       propertyPath: offsetDrag
-      value: 0.1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7235591930544182692, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
       propertyPath: uiManager
