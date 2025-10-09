@@ -41,7 +41,7 @@ namespace Geckout
 
                 int segmentCount = bodyController.Segments.Count;
                 lastGridPositions = new Vector2Int[segmentCount];
-                currentOccupiedTiles = new GameTile[segmentCount];
+                currentOccupiedTiles = new GameTile[bodyController.BodyData.listCoordinate.Count];
 
                 Vector2Int mapSize = GameMap.MapSize;
                 gridOffset = new Vector2(mapSize.x - 1, mapSize.y - 1) * 0.5f;
@@ -60,29 +60,46 @@ namespace Geckout
 
         public void UpdateAllSegmentPositions(bool isChangeTileColor = true, bool forceUpdate = true)
         {
-            var orderedSegments = bodyController.GetOrderedSegments();
-            var segments = bodyController.Segments;
+            //var orderedSegments = bodyController.GetOrderedSegments();
+            //var segments = bodyController.Segments;
 
-            for (int i = 0; i < orderedSegments.Count; i++)
+            //for (int i = 0; i < orderedSegments.Count; i++)
+            //{
+            //    if (i % bodyController.SubLength != 0 && i != 0 && i != segments.Count - 1)
+            //    {
+            //        continue;
+            //    }
+
+            //    var segment = orderedSegments[i];
+            //    int rawIndex = segments.IndexOf(segment);
+
+            //    Vector3 worldPos = segment.transform.position;
+            //    Vector2Int gridPos = GameMap.WorldToGridPosition(worldPos);
+
+            //    if (bodyController.MoveToPortal.IsEnteringPortal)
+            //    {
+            //        return;
+            //    }
+            //    UpdateSegmentTile(rawIndex, gridPos, isChangeTileColor, forceUpdate);
+            //    lastGridPositions[rawIndex] = gridPos;
+            //}
+
+            ClearAllOccupied();
+
+            for (int i = 0; i < bodyController.BodyData.listCoordinate.Count; i++)
             {
-                if (i % bodyController.SubLength != 0 && i != 0 && i != segments.Count - 1)
+                var gridPos = bodyController.BodyData.listCoordinate[i];
+                if (GameMap.TryGetTileAtCoord(gridPos, out GameTile newTile))
                 {
-                    continue;
+                    newTile.SetOccupied(true);
+                    if (!bodyController.MoveToPortal.IsEnteringPortal)
+                    {
+                        newTile.AddOccupant(isChangeTileColor);
+                    }
                 }
-
-                var segment = orderedSegments[i];
-                int rawIndex = segments.IndexOf(segment);
-
-                Vector3 worldPos = segment.transform.position;
-                Vector2Int gridPos = GameMap.WorldToGridPosition(worldPos);
-
-                if (bodyController.MoveToPortal.IsEnteringPortal)
-                {
-                    return;
-                }
-                UpdateSegmentTile(rawIndex, gridPos, isChangeTileColor, forceUpdate);
-                lastGridPositions[rawIndex] = gridPos;
             }
+
+
         }
 
         public void ClearAllOccupied()
@@ -90,7 +107,7 @@ namespace Geckout
             var segments = bodyController.Segments;
             if (segments == null || segments.Count <= 0 || currentOccupiedTiles == null || currentOccupiedTiles.Length <= 0) return;
 
-            for (int i = 0; i < segments.Count; i++)
+            for (int i = 0; i < currentOccupiedTiles.Length; i++)
             {
                 if (currentOccupiedTiles[i] != null && currentOccupiedTiles[i].isActiveAndEnabled)
                 {

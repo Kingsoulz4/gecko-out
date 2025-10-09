@@ -128,7 +128,7 @@ namespace Geckout
             }
 
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.01f);
 
             occupiedTileController?.UpdateAllSegmentPositions();
 
@@ -136,6 +136,7 @@ namespace Geckout
 
         public void UpdateAllSegmentPos()
         {
+            Debug.Log("Update All Segments Pos here");
             for (int i = 0; i < Segments.Count; i++)
             {
                 var listDefaultCoordinate = BodyData.listCoordinate;
@@ -164,6 +165,30 @@ namespace Geckout
                 }
             }
         }
+
+        public void AddCoordinate(Vector2Int coord)
+        {
+            Vector2Int removedCoord; 
+            if (controlAnchor == ControlAnchor.Head)
+            {
+                BodyData.listCoordinate.Insert(0, coord);
+                removedCoord = BodyData.listCoordinate[^1];
+                BodyData.listCoordinate.Remove(removedCoord);
+            }
+            else
+            {
+                BodyData.listCoordinate.Add(coord);
+                removedCoord = BodyData.listCoordinate[0];
+                BodyData.listCoordinate.Remove(removedCoord);
+            }
+
+            if(GameMap.TryGetTileAtCoord(removedCoord, out var tile))
+            {
+                tile.SetOccupied(false);
+                tile.AddOccupant(true);
+            }
+        }
+            
 
     }
 }

@@ -237,7 +237,10 @@ namespace Geckout
 
         private void OnBodyEndMove()
         {
-            bodyController.SetControlAnchor(touchAnchor);
+            if (bodyController != null)
+            {
+                bodyController.SetControlAnchor(touchAnchor);
+            }
             Debug.Log("OnBodyEndMove");
         }
 
@@ -307,29 +310,29 @@ namespace Geckout
             //Debug.Log($"New Point: {worldPoint}");
             //Debug.Log($"Delta Drag X {Mathf.Abs(worldPoint.x - lastDragPoint.x)}");
             //Debug.Log($"Delta Drag Y {Mathf.Abs(worldPoint.y - lastDragPoint.y)}");
-            if (Mathf.Abs(worldPoint.x - lastDragPoint.x) < offsetDrag
-                && Mathf.Abs(worldPoint.x - lastDragPoint.x) > Mathf.Abs(worldPoint.y - lastDragPoint.y))
-            {
-                var amplitude = Mathf.Abs(worldPoint.x - lastDragPoint.x) * factorShortDrag;
-                Debug.Log($"Move Short Distance X Here {Mathf.Abs(worldPoint.x - lastDragPoint.x)}");
-                bodyController.MoveShortDistance(amplitude, worldPoint.x > lastDragPoint.x ? Vector2Int.right : Vector2Int.left, lastTargetTile, touchAnchor);
-            }
-            else if (Mathf.Abs(worldPoint.y - lastDragPoint.y) < offsetDrag
-                && Mathf.Abs(worldPoint.x - lastDragPoint.x) < Mathf.Abs(worldPoint.y - lastDragPoint.y))
-            {
-                var amplitude = Mathf.Abs(worldPoint.y - lastDragPoint.y) * factorShortDrag;
-                Debug.Log($"Move Short Distance Y Here {Mathf.Abs(worldPoint.y - lastDragPoint.y)}");
-                bodyController.MoveShortDistance(amplitude, worldPoint.y > lastDragPoint.y ? Vector2Int.up : Vector2Int.down, lastTargetTile, touchAnchor);
-            }
-            else if (tileCoord.HasValue && tileCoord.Value != lastTargetTile)
-            {
+            //if (Mathf.Abs(worldPoint.x - lastDragPoint.x) < offsetDrag
+            //    && Mathf.Abs(worldPoint.x - lastDragPoint.x) > Mathf.Abs(worldPoint.y - lastDragPoint.y))
+            //{
+            //    var amplitude = Mathf.Abs(worldPoint.x - lastDragPoint.x) * factorShortDrag;
+            //    Debug.Log($"Move Short Distance X Here {Mathf.Abs(worldPoint.x - lastDragPoint.x)}");
+            //    bodyController.MoveShortDistance(amplitude, worldPoint.x > lastDragPoint.x ? Vector2Int.right : Vector2Int.left, lastTargetTile, touchAnchor);
+            //}
+            //else if (Mathf.Abs(worldPoint.y - lastDragPoint.y) < offsetDrag
+            //    && Mathf.Abs(worldPoint.x - lastDragPoint.x) < Mathf.Abs(worldPoint.y - lastDragPoint.y))
+            //{
+            //    var amplitude = Mathf.Abs(worldPoint.y - lastDragPoint.y) * factorShortDrag;
+            //    Debug.Log($"Move Short Distance Y Here {Mathf.Abs(worldPoint.y - lastDragPoint.y)}");
+            //    bodyController.MoveShortDistance(amplitude, worldPoint.y > lastDragPoint.y ? Vector2Int.up : Vector2Int.down, lastTargetTile, touchAnchor);
+            //}
+            //else /*if (tileCoord.HasValue && tileCoord.Value != lastTargetTile)*/
+            //{
    
                 lastTargetTile = tileCoord.Value;
 
                 DebugLog($"OnTouchDrag to NEW target tile: {tileCoord.Value}");
 
                 FindAndSetSmoothPath(tileCoord.Value);
-            }
+            //}
 
             lastDragPoint = worldPoint;
 

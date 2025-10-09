@@ -289,6 +289,7 @@ namespace Geckout
                 StopCoroutine(moveCoroutine);
                 moveCoroutine = null;
             }
+            UpdateAllSegmentPos();
         }
 
         public void SetControlAnchor(ControlAnchor anchor)
@@ -321,20 +322,28 @@ namespace Geckout
             var orderedSegments = GetOrderedSegments();
             worldPath.Add(orderedSegments[0].transform.position);
 
+            Debug.Log($"Control Anchor: {controlAnchor} Move Along Path:" + String.Join(';', currentPath.Select(x => x.ToString())));
+
             foreach (var coord in currentPath)
             {
                 if (GameMap.TryGetTileAtCoord(coord, out var tile))
                     worldPath.Add(tile.transform.position);
+
+                AddCoordinate(coord);
+
+                UpdateAllSegmentPos();
+     
             }
 
-            yield return MovePath(worldPath, isMovingPortal);
+            //yield return MovePath(worldPath, isMovingPortal);
 
             moveCoroutine = null;
-
             isMoving = false;
             Debug.Log("endMove");
             OnEndMove?.Invoke();
             currentPath.Clear();
+
+            UpdateAllSegmentPos();
         }
 
         IEnumerator MovePath(List<Vector3> worldPath, bool isMovingToPortal = false)
