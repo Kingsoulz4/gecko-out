@@ -335,12 +335,25 @@ namespace Geckout
         private void ReverseSubSegments()
         {
             UpStraightSubSegments();
-            var listCoordInverse = Segments.Select(x => x.Coordinate).Reverse().ToList();
-            for (int i = 0; i < Segments.Count; i++)
+
+            for (int i = Segments.Count -1; i >= 0; i--)
             {
-                if (i % SubLength != 0)
+                var listDefaultCoordinate = BodyData.listCoordinate;
+
+                int unitIndex = Mathf.CeilToInt((float)i / subLength);
+
+                var coordinate = listDefaultCoordinate[Mathf.Clamp(unitIndex, 0, listDefaultCoordinate.Count - 1)];
+
+                if (i % SubLength == 0)
                 {
-                    Segments[i].Coordinate = listCoordInverse[i];
+                    if (GameMap.TryGetTileAtCoord(coordinate, out var tile))
+                    {
+                        Segments[i].Coordinate = coordinate;
+                    }
+                }
+                else
+                {
+                    Segments[i].Coordinate = coordinate;
                 }
             }
         }
