@@ -279,6 +279,8 @@ namespace Geckout
                 gridClamper.SetPath(path);
             }
 
+            Debug.Log($"Current Path After Clamp: {string.Join(';',  currentPath.Select(x => x.ToString()))}");
+
             moveCoroutine = StartCoroutine(StartMovePathIE(isMovingPortal));
         }
 
@@ -308,6 +310,7 @@ namespace Geckout
         {
             StopMoveCoroutine();
             currentPath.Clear();
+            UpdateAllSegmentPos();
         }
 
         IEnumerator StartMovePathIE(bool isMovingPortal = false)
@@ -329,13 +332,16 @@ namespace Geckout
                 if (GameMap.TryGetTileAtCoord(coord, out var tile))
                     worldPath.Add(tile.transform.position);
 
-                AddCoordinate(coord);
+                AddCoordinate(coord, controlAnchor);
 
-                UpdateAllSegmentPos();
+                //UpdateAllSegmentPos();
+                yield return IEUpdateSegmentsPos();
      
             }
 
             //yield return MovePath(worldPath, isMovingPortal);
+
+            yield return null;
 
             moveCoroutine = null;
             isMoving = false;
