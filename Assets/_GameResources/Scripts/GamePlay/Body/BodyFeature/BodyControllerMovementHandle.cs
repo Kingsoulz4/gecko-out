@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +14,27 @@ namespace Geckout
 
         private Vector2Int lastDirectionShortMove;
 
+        private ControlAnchor lastControllerAnchor;
+
         public void MoveShortDistance(float amplitude, Vector2Int direction, Vector2Int newHeadCoord, ControlAnchor controlAnchor)
         {
             if (moveShortDistanceCoroutine != null)
             {
                 StopCoroutine(moveShortDistanceCoroutine);
                 moveShortDistanceCoroutine = null;
+            }
+            if ((controlAnchor == ControlAnchor.Head && newHeadCoord != BodyData.listCoordinate[0]) 
+                || (controlAnchor == ControlAnchor.Tail && newHeadCoord != BodyData.listCoordinate[^1]))
+            {
+                if (GameMap.TryGetTileAtCoord(newHeadCoord, out var nextTile))
+                {
+                    //if(nextTile.MapTileData.type != Data.MapTileType.Normal && nextTile.MapTileData.type != Data.MapTileType.Portal)
+
+                    if (nextTile.IsOccupied)
+                    {
+                        return;
+                    }
+                }
             }
 
             bool moveForward = true;
@@ -96,198 +111,149 @@ namespace Geckout
                 }
             }
 
-            moveShortDistanceCoroutine = StartCoroutine(IEMoveShortDistance(amplitude, direction, controlAnchor,moveForward));
+            moveShortDistanceCoroutine = StartCoroutine(IEMoveShortDistance(amplitude, newHeadCoord, direction, controlAnchor,moveForward));
         }
 
-        IEnumerator IEMoveShortDistance(float amplitude, Vector2Int direct, ControlAnchor controlAnchor, bool moveForward = true)
+        IEnumerator IEMoveShortDistance(float amplitude, Vector2Int newHeadCoord, Vector2Int direct, ControlAnchor controlAnchor, bool moveForward = true)
         {
-            if (lastDirectionShortMove != direct)
+            bool isHead = controlAnchor == ControlAnchor.Head;
+            bool isForward = moveForward;
+
+            if ((lastDirectionShortMove != direct || lastControllerAnchor != controlAnchor))
             {
-                yield return IEUpdateSegmentsPos();
+                //if ((isHead && Segments[0].Coordinate != newHeadCoord) || (!isHead && Segments[^1].Coordinate != newHeadCoord))
+                {
+                    yield return IEUpdateSegmentsPos();
+                }
                 lastDirectionShortMove = direct;
+                lastControllerAnchor = controlAnchor;
+                if (isHead)
+                {
+                    if (isForward) UpStraightSubSegments();
+                    else ReverseSubSegments();
+                }
+                else
+                {
+                    if (isForward) ReverseSubSegments();
+                    else UpStraightSubSegments();
+                }
             }
 
             Vector3 direction = new Vector3(direct.x, direct.y);
-
-            List<Vector3> dirs = new List<Vector3>() { Vector3.up, Vector3.down, Vector3.left, Vector3.right };
             Debug.Log($"Init Dir point short distance: {direction}");
 
-            if (controlAnchor == ControlAnchor.Head)
+
+            // 1️⃣ Move the anchor segment (head or tail)
+            MoveAnchorSegment(amplitude, direction, isHead);
+
+            // 3️⃣ Process movement propagation
+            if (isHead)
             {
-                if (moveForward)
-                {
-                    Debug.Log("Move Short Forward Head");
-                    Segments[0].transform.position += direction * amplitude;
-                    //UpStraightSubSegments();
-
-                    for (int i = 1; i < Segments.Count; i++)
-                    {
-                        var currentCoord = Segments[i].Coordinate;
-                        var indexOfCoord = BodyData.listCoordinate.IndexOf(currentCoord);
-                        var nexCoord = BodyData.listCoordinate[Mathf.Clamp(indexOfCoord - 1, 0, BodyData.listCoordinate.Count - 1)];
-                        if (GameMap.TryGetTileAtCoord(Segments[i].Coordinate, out var tile))
-                        {
-                            if (Vector3.Distance(Segments[i].transform.position, tile.transform.position) <= 0.01f)
-                            {
-                                Segments[i].transform.position = tile.transform.position;
-                                Segments[i].Coordinate = nexCoord;
-                            }
-                        }
-
-                        if (GameMap.TryGetTileAtCoord(Segments[i].Coordinate, out tile))
-                        {
-                            var dir = tile.transform.position - Segments[i].transform.position;
-                            if (dir != Vector3.zero)
-                            {
-                                if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
-                                {
-                                    dir = Vector3.right * (dir.x / Mathf.Abs(dir.x));
-                                }
-                                else
-                                {
-                                    dir = Vector3.up * (dir.y / Mathf.Abs(dir.y));
-                                }
-
-                                Segments[i].transform.position += dir * amplitude;
-                            }
-                        }
-                    }
-                }
+                if (isForward)
+                    yield return MoveSegmentsFromHeadForward(amplitude, direction);
                 else
-                {
-                    Debug.Log("Move Short Backward Head");
-                    Segments[0].transform.position += direction * amplitude;
-                    ReverseSubSegments();
-
-                    for (int i = Segments.Count -2; i >= 0; i--)
-                    {
-                        var currentCoord = Segments[i].Coordinate;
-                        var indexOfCoord = BodyData.listCoordinate.IndexOf(currentCoord);
-                        var nexCoord = BodyData.listCoordinate[Mathf.Clamp(indexOfCoord + 1, 0, BodyData.listCoordinate.Count - 1)];
-                        if (GameMap.TryGetTileAtCoord(Segments[i].Coordinate, out var tile))
-                        {
-                            if (Vector3.Distance(Segments[i].transform.position, tile.transform.position) <= 0.01f)
-                            {
-                                Segments[i].transform.position = tile.transform.position;
-                                Segments[i].Coordinate = nexCoord;
-                            }
-                        }
-
-                        if (GameMap.TryGetTileAtCoord(Segments[i].Coordinate, out tile))
-                        {
-                            var dir = tile.transform.position - Segments[i].transform.position;
-                            if (dir != Vector3.zero)
-                            {
-                                if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
-                                {
-                                    dir = Vector3.right * (dir.x / Mathf.Abs(dir.x));
-                                }
-                                else
-                                {
-                                    dir = Vector3.up * (dir.y / Mathf.Abs(dir.y));
-                                }
-
-                                Segments[i].transform.position += dir * amplitude;
-                            }
-                        }
-                    }
-                }
-
+                    yield return MoveSegmentsFromHeadBackward(amplitude, direction);
             }
-            else if (controlAnchor == ControlAnchor.Tail)
+            else
             {
-                if (moveForward)
-                {
-                    Debug.Log("Move Short Forward Tail");
-                    Segments[^1].transform.position += direction * amplitude;
-                    ReverseSubSegments();
-
-                    for (int i = Segments.Count - 2; i >= 0; i--)
-                    {
-                        var currentCoord = Segments[i].Coordinate;
-                        var indexOfCoord = BodyData.listCoordinate.IndexOf(currentCoord);
-                        var nexCoord = BodyData.listCoordinate[Mathf.Clamp(indexOfCoord + 1, 0, BodyData.listCoordinate.Count - 1)];
-                        if (GameMap.TryGetTileAtCoord(Segments[i].Coordinate, out var tile))
-                        {
-                            if (Vector3.Distance(Segments[i].transform.position, tile.transform.position) <= 0.01f)
-                            {
-                                Segments[i].transform.position = tile.transform.position;
-                                Segments[i].Coordinate = nexCoord;
-                            }
-                        }
-
-                        if (GameMap.TryGetTileAtCoord(Segments[i].Coordinate, out tile))
-                        {
-                            var dir = tile.transform.position - Segments[i].transform.position;
-                            if (dir != Vector3.zero)
-                            {
-                                if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
-                                {
-                                    dir = Vector3.right * (dir.x / Mathf.Abs(dir.x));
-                                }
-                                else
-                                {
-                                    dir = Vector3.up * (dir.y / Mathf.Abs(dir.y));
-                                }
-
-                                Segments[i].transform.position += dir * amplitude;
-                            }
-                        }
-                    }
-                }
+                if (isForward)
+                    yield return MoveSegmentsFromTailForward(amplitude, direction);
                 else
-                {
-                    Debug.Log("Move Short Backward Tail");
-                    Segments[^1].transform.position += direction * amplitude;
-                    //UpdateAllSegmentPos();
-
-                    for (int i = 1; i < Segments.Count; i++)
-                    {
-                        var currentCoord = Segments[i].Coordinate;
-                        var indexOfCoord = BodyData.listCoordinate.IndexOf(currentCoord);
-                        var nexCoord = BodyData.listCoordinate[Mathf.Clamp(indexOfCoord - 1, 0, BodyData.listCoordinate.Count - 1)];
-                        if (GameMap.TryGetTileAtCoord(Segments[i].Coordinate, out var tile))
-                        {
-                            if (Vector3.Distance(Segments[i].transform.position, tile.transform.position) <= 0.01f)
-                            {
-                                Segments[i].transform.position = tile.transform.position;
-                                Segments[i].Coordinate = nexCoord;
-                            }
-                        }
-
-                        if (GameMap.TryGetTileAtCoord(Segments[i].Coordinate, out tile))
-                        {
-                            var dir = tile.transform.position - Segments[i].transform.position;
-                            if (dir != Vector3.zero)
-                            {
-                                if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
-                                {
-                                    dir = Vector3.right * (dir.x / Mathf.Abs(dir.x));
-                                }
-                                else
-                                {
-                                    dir = Vector3.up * (dir.y / Mathf.Abs(dir.y));
-                                }
-
-                                Segments[i].transform.position += dir * amplitude;
-                            }
-                        }
-                    }
-                }
+                    yield return MoveSegmentsFromTailBackward(amplitude, direction);
             }
 
-            
             yield return new WaitForSeconds(0.01f);
-
             occupiedTileController?.UpdateAllSegmentPositions();
-
         }
+
+        private void MoveAnchorSegment(float amplitude, Vector3 direction, bool isHead)
+        {
+            int index = isHead ? 0 : Segments.Count - 1;
+            Segments[index].transform.position = Vector3.Lerp(Segments[index].transform.position, Segments[index].transform.position + direction * amplitude, 50f * Time.deltaTime);
+        }
+
+        private IEnumerator MoveSegmentsFromHeadForward(float amplitude, Vector3 direction)
+        {
+            Debug.Log("Move Short Forward Head");
+            for (int i = 1; i < Segments.Count; i++)
+                MoveSegmentWithAmplitude(i, -1, amplitude, direction);
+            yield break;
+        }
+
+        private IEnumerator MoveSegmentsFromHeadBackward(float amplitude, Vector3 direction)
+        {
+            Debug.Log("Move Short Backward Head");
+            for (int i = Segments.Count - 2; i >= 0; i--)
+                MoveSegmentWithAmplitude(i, +1, amplitude, direction);
+            yield break;
+        }
+
+        private IEnumerator MoveSegmentsFromTailForward(float amplitude, Vector3 direction)
+        {
+            Debug.Log("Move Short Forward Tail");
+            for (int i = Segments.Count - 2; i >= 0; i--)
+                MoveSegmentWithAmplitude(i, +1, amplitude, direction);
+            yield break;
+        }
+
+        private IEnumerator MoveSegmentsFromTailBackward(float amplitude, Vector3 direction)
+        {
+            Debug.Log("Move Short Backward Tail");
+            for (int i = 1; i < Segments.Count; i++)
+                MoveSegmentWithAmplitude(i, -1, amplitude, direction);
+            yield break;
+        }
+
+        private void MoveSegmentWithAmplitude(int i, int coordOffset, float amplitude, Vector3 direction)
+        {
+            var segment = Segments[i];
+            var currentCoord = segment.Coordinate;
+
+            int indexOfCoord = BodyData.listCoordinate.IndexOf(currentCoord);
+            int nextIndex = Mathf.Clamp(indexOfCoord + coordOffset, 0, BodyData.listCoordinate.Count - 1);
+            var nextCoord = BodyData.listCoordinate[nextIndex];
+
+            if(nextCoord == currentCoord)
+            {
+                Debug.Log("Current Coord Same");
+                var nextCoordX = (int)Mathf.Clamp(currentCoord.x + direction.x,0, GameMap.MapSize.x -1);
+                var nextCoordY = (int)Mathf.Clamp(currentCoord.y + direction.y, 0, GameMap.MapSize.y -1);
+                nextCoord = new Vector2Int(nextCoordX, nextCoordY);
+                Debug.Log($"New Coord {nextCoord}");
+            }    
+
+            if (GameMap.TryGetTileAtCoord(segment.Coordinate, out var tile))
+            {
+                if (Vector3.Distance(segment.transform.position, tile.transform.position) <= 0.05f)
+                {
+                    segment.transform.position = tile.transform.position;
+                    segment.Coordinate = nextCoord;
+                    Debug.Log($"Changed To New Coord {nextCoord}");
+                }
+            }
+
+            if (GameMap.TryGetTileAtCoord(segment.Coordinate, out tile))
+            {
+                var dir = tile.transform.position - segment.transform.position;
+                if (dir != Vector3.zero)
+                {
+                    dir = Mathf.Abs(dir.x) > Mathf.Abs(dir.y)
+                        ? Vector3.right * Mathf.Sign(dir.x)
+                        : Vector3.up * Mathf.Sign(dir.y);
+
+                    //segment.transform.position = Vector3.Lerp(segment.transform.position, segment.transform.position + dir * amplitude, 50f* Time.deltaTime);
+                    segment.transform.position += dir * amplitude;
+
+                }
+            }
+        }
+
 
         public void UpdateAllSegmentPos()
         {
-            Debug.Log("Update All Segments Pos here");
-            
-            if(coroutineUpdateAllSegmentsPos != null)
+            if (MoveToPortal.IsEnteringPortal) return;
+
+            if (coroutineUpdateAllSegmentsPos != null)
             {
                 StopCoroutine(coroutineUpdateAllSegmentsPos);
                 coroutineUpdateAllSegmentsPos = null;
@@ -298,6 +264,9 @@ namespace Geckout
 
         private IEnumerator IEUpdateSegmentsPos()
         {
+            if (MoveToPortal.IsEnteringPortal) yield break;
+
+            Debug.Log("Update All Segments Pos here");
             for (int i = 0; i < Segments.Count; i++)
             {
                 var listDefaultCoordinate = BodyData.listCoordinate;
@@ -327,9 +296,13 @@ namespace Geckout
                     targetPos = Vector3.Lerp(tilePreviosCoord.transform.position, tileNextCoord.transform.position, (float)temp / SubLength);
                 }
 
-                Segments[i].transform.DOMove(targetPos, 0.05f).SetEase(Ease.Linear);
+                Segments[i].transform.DOMove(targetPos, 0.08f).SetEase(Ease.Linear);
             }
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.06f);
+
+            //AddAnchorSample(GetOrderedSegments()[0].transform.position);
+
+            lastDirectionShortMove = Vector2Int.zero;
         }
 
         private void ReverseSubSegments()
@@ -386,33 +359,34 @@ namespace Geckout
         {
             if (BodyData.listCoordinate.Contains(coord)) return;
 
-
             Vector2Int removedCoord = Vector2Int.one * -1; 
             if (cAnchor == ControlAnchor.Head && IsAdjacent(coord, BodyData.listCoordinate[0]))
             {
                 BodyData.listCoordinate.Insert(0, coord);
                 removedCoord = BodyData.listCoordinate[^1];
                 BodyData.listCoordinate.Remove(removedCoord);
+                Segments[0].Coordinate = coord;
             }
             else if(cAnchor == ControlAnchor.Tail && IsAdjacent(coord, BodyData.listCoordinate[^1]))
             {
                 BodyData.listCoordinate.Add(coord);
                 removedCoord = BodyData.listCoordinate[0];
                 BodyData.listCoordinate.Remove(removedCoord);
+                Segments[^1].Coordinate = coord;
             }
 
-            if(GameMap.TryGetTileAtCoord(removedCoord, out var tile))
+            if (GameMap.TryGetTileAtCoord(removedCoord, out var tile))
             {
                 tile.SetOccupied(false);
                 tile.RemoveOccupant();
 
-                if(GameMap.TryGetTileAtCoord(coord, out var newTile))
+                if (GameMap.TryGetTileAtCoord(coord, out var newTile))
                 {
                     newTile.SetOccupied(true);
                     newTile.AddOccupant(true);
                 }
             }
-            
+
         }
             
         bool IsAdjacent(Vector2Int coord1, Vector2Int coord2)
@@ -424,6 +398,13 @@ namespace Geckout
             }
             return false;
         }
+
+        //private IEnumerator IEMoveToPortal()
+        //{
+        //    var orderedSegments = GetOrderedSegments();
+        //    GameMap.TryGetTileAtCoord(orderedSegments[0].Coordinate, out var tileNearPortal);
+        //    var pos
+        //}
 
     }
 }

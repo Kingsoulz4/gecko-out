@@ -29,7 +29,7 @@ namespace Geckout
             channel.clipFrom = m_clipFrom;
             channel.clipTo = m_clipTo - m_clipToOffet * index;
             channel.spacing = m_spacing;
-            channel.minOffset = new Vector2(0, -0.3f - index * 0.01f);
+            channel.minOffset = new Vector2(0, -0.4f - index * 0.01f);
             m_splineFollowEnd.clipTo = channel.clipTo;
         }
     }

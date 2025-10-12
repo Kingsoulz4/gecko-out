@@ -171,10 +171,10 @@ namespace Geckout
                 Segment seg = Instantiate(this.segment, transform);
                 seg.name = "Segment " + i;
                 seg.transform.localPosition = new Vector3(0, -i * unitSpacing, 0);
-                if (i % SubLength == 0)
-                {
-                    seg.gameObject.AddComponent<BoxCollider>();
-                }
+                //if (i % SubLength == 0)
+                //{
+                //    seg.gameObject.AddComponent<BoxCollider>();
+                //}
                 Segments.Add(seg);
             }
 
@@ -291,7 +291,7 @@ namespace Geckout
                 StopCoroutine(moveCoroutine);
                 moveCoroutine = null;
             }
-            UpdateAllSegmentPos();
+            //UpdateAllSegmentPos();
         }
 
         public void SetControlAnchor(ControlAnchor anchor)
@@ -310,7 +310,7 @@ namespace Geckout
         {
             StopMoveCoroutine();
             currentPath.Clear();
-            UpdateAllSegmentPos();
+            //UpdateAllSegmentPos();
         }
 
         IEnumerator StartMovePathIE(bool isMovingPortal = false)
@@ -327,19 +327,29 @@ namespace Geckout
 
             Debug.Log($"Control Anchor: {controlAnchor} Move Along Path:" + String.Join(';', currentPath.Select(x => x.ToString())));
 
-            foreach (var coord in currentPath)
+            if (!isMovingPortal)
             {
-                if (GameMap.TryGetTileAtCoord(coord, out var tile))
-                    worldPath.Add(tile.transform.position);
+                foreach (var coord in currentPath)
+                {
+                    if (GameMap.TryGetTileAtCoord(coord, out var tile))
+                        worldPath.Add(tile.transform.position);
 
-                AddCoordinate(coord, controlAnchor);
+                    AddCoordinate(coord, controlAnchor);
 
-                //UpdateAllSegmentPos();
-                yield return IEUpdateSegmentsPos();
-     
+                    //UpdateAllSegmentPos();
+                    yield return IEUpdateSegmentsPos();
+
+                }
             }
-
-            //yield return MovePath(worldPath, isMovingPortal);
+            else
+            {
+                foreach (var coord in currentPath)
+                {
+                    if (GameMap.TryGetTileAtCoord(coord, out var tile))
+                        worldPath.Add(tile.transform.position);
+                    yield return MovePath(worldPath, isMovingPortal);
+                }
+            }
 
             yield return null;
 
@@ -349,7 +359,7 @@ namespace Geckout
             OnEndMove?.Invoke();
             currentPath.Clear();
 
-            UpdateAllSegmentPos();
+            //UpdateAllSegmentPos();
         }
 
         IEnumerator MovePath(List<Vector3> worldPath, bool isMovingToPortal = false)

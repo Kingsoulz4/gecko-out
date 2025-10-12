@@ -84,18 +84,26 @@ namespace Geckout
             //    lastGridPositions[rawIndex] = gridPos;
             //}
 
-            ClearAllOccupied();
 
             for (int i = 0; i < bodyController.BodyData.listCoordinate.Count; i++)
             {
                 var gridPos = bodyController.BodyData.listCoordinate[i];
                 if (GameMap.TryGetTileAtCoord(gridPos, out GameTile newTile))
                 {
-                    newTile.SetOccupied(true);
-                    if (!bodyController.MoveToPortal.IsEnteringPortal)
+                    if (bodyController.MoveToPortal.IsEnteringPortal)
                     {
-                        newTile.AddOccupant(isChangeTileColor);
+                        return;
                     }
+
+                    //newTile.SetOccupied(true);
+                    //if (!bodyController.MoveToPortal.IsEnteringPortal)
+                    //{
+                    //    newTile.AddOccupant(isChangeTileColor);
+                    //}
+
+
+                    UpdateSegmentTile(i, gridPos, isChangeTileColor, forceUpdate);
+                    //lastGridPositions[rawIndex] = gridPos;
                 }
             }
 
@@ -148,7 +156,7 @@ namespace Geckout
                 {
                     newTile.AddOccupant(changeTileColor);
                 }
-                segment.UpdateCoordinateOnly(gridPos);
+                //segment.UpdateCoordinateOnly(gridPos);
             }
             else
             {

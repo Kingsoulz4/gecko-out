@@ -567,7 +567,7 @@ MonoBehaviour:
     _minRotation: {x: 0, y: 0, z: 0}
     _maxRotation: {x: 0, y: 0, z: 0}
     _randomOffset: 0
-    _minOffset: {x: 0, y: -0.3}
+    _minOffset: {x: 0, y: -0.4}
     _maxOffset: {x: 0, y: 0}
     _randomScale: 0
     _uniformRandomScale: 0

@@ -96,17 +96,19 @@ namespace Geckout
 
         public void GetLastPath(BodyController bodyController)
         {
-            var list = bodyController.OccupiedTileController.LastGridPositions.ToList();
-            var lastpath = new List<Vector2Int>();
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (i % 3 != 0 && i != 0 && i != list.Count - 1)
-                {
-                    continue;
-                }
-                lastpath.Add(list[i]);
-            }
-            LevelEvent.OnGetLastPath?.Invoke(bodyController, lastpath);
+            //var list = bodyController.OccupiedTileController.LastGridPositions.ToList();
+            //var lastpath = new List<Vector2Int>();
+            //for (int i = 0; i < list.Count; i++)
+            //{
+            //    if (i % 3 != 0 && i != 0 && i != list.Count - 1)
+            //    {
+            //        continue;
+            //    }
+            //    lastpath.Add(list[i]);
+            //}
+            //LevelEvent.OnGetLastPath?.Invoke(bodyController, lastpath);
+
+            LevelEvent.OnGetLastPath?.Invoke(bodyController, bodyController.BodyData.listCoordinate);
         }
 
         public virtual void UpdateVisual()

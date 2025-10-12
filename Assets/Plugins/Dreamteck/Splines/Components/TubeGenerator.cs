@@ -94,7 +94,7 @@ namespace Dreamteck.Splines
 
         [SerializeField]
         [HideInInspector]
-        private int _sides = 12;
+        protected int _sides = 12;
         [SerializeField]
         [HideInInspector]
         private int _roundCapLatitude = 6;
@@ -104,13 +104,13 @@ namespace Dreamteck.Splines
         [SerializeField]
         [HideInInspector]
         [Range(0f, 360f)]
-        private float _revolve = 360f;
+        protected float _revolve = 360f;
         [SerializeField]
         [HideInInspector]
         private float _capUVScale = 1f;
         [SerializeField]
         [HideInInspector]
-        private float _uvTwist = 0f;
+        protected float _uvTwist = 0f;
 
         private bool useCap
         {
@@ -169,7 +169,7 @@ namespace Dreamteck.Splines
             }
         }
 
-        void Generate()
+        protected virtual void Generate()
         {
             int vertexIndex = 0;
             ResetUVDistance();

@@ -44,7 +44,7 @@ namespace Geckout
 
         private static Vector2 gridOffset;
 
-        public static Vector2Int MapSize => _instance._mapSize;
+        public static Vector2Int MapSize => _instance.levelData.mapSize;
         public List<Portal> ListPortal { get => listPortal; }
         public bool IsDebug { get => isDebug; }
         public List<GameTile> TilesWall { get => tileInGame; set => tileInGame = value; }
@@ -116,10 +116,10 @@ namespace Geckout
                 return false;
             }
 
-            //var index = x + y * levelData.mapSize.x;
-            //result = tiles[index];
+            var index = x + y * MapSize.x;
+            result = _instance.tiles[index];
 
-            result = _instance.tiles.ToList().Find(x => x.Coordinate == coordinate);
+            //result = _instance.tiles.ToList().Find(x => x.Coordinate == coordinate);
 
             return result != null;
         }
@@ -572,7 +572,10 @@ namespace Geckout
             Vector2Int currentTile = new Vector2Int(Mathf.RoundToInt(gridX), Mathf.RoundToInt(gridY));
             var movementDirection = bodyController.GridClamper.CurrentDirection;
             if (movementDirection == Vector2Int.zero)
+            {
+                currentTile = new Vector2Int(Mathf.Clamp(currentTile.x, 0, MapSize.x - 1), Mathf.Clamp(currentTile.y, 0, MapSize.y - 1));
                 return currentTile;
+            }
 
             Vector3 currentTileCenter = new Vector3(
                 currentTile.x - gridOffset.x,
@@ -601,8 +604,10 @@ namespace Geckout
 
             if (crossedCenter)
             {
-                return currentTile + movementDirection;
+                currentTile += movementDirection;
             }
+
+            currentTile = new Vector2Int(Mathf.Clamp(currentTile.x, 0, MapSize.x -1), Mathf.Clamp(currentTile.y, 0, MapSize.y - 1));
 
             return currentTile;
         }

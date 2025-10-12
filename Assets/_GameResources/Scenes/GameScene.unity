@@ -847,7 +847,27 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7184660481898082024, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
+      propertyPath: smallRadius
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184660481898082024, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
+      propertyPath: mediumRadius
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184660481898082024, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
+      propertyPath: offsetDragMax
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184660481898082024, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
+      propertyPath: offsetDragMin
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184660481898082024, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
       propertyPath: enableDebugLogs
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7184660481898082024, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}
+      propertyPath: factorShortDrag
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7235591930544182692, guid: b4acca19de40bf348bb4d78bcee8297b, type: 3}

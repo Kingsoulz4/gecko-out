@@ -17,8 +17,11 @@ namespace Geckout
         [SerializeField] private LayerMask segmentLayer = 7;
         [SerializeField] private bool enableDebugLogs = false;
         [SerializeField] private float pathUpdateInterval = 0.02f;
-        [SerializeField] private float offsetDrag = 0.2f;
+        [SerializeField] private float offsetDragMax = 5f;
+        [SerializeField] private float offsetDragMin = 1f;
         [SerializeField] private float factorShortDrag = 0.02f;
+        [SerializeField] private float smallRadius = 0.3f;
+        [SerializeField] private float mediumRadius = 2f;
 
         private BodyController bodyController;
         private bool canClick = true;
@@ -304,20 +307,28 @@ namespace Geckout
             //lastTargetTile = tileCoord.Value;
 
             //RectTransformUtility.ScreenPointToWorldPointInRectangle(UIManager.Instance.canvas.GetComponent<RectTransform>(), screenPosition, gameCamera, out var worldPoint);
+            //var worldPoint = gameCamera.ScreenToWorldPoint(screenPosition);
             var worldPoint = screenPosition;
+
+            var ray =  gameCamera.ScreenPointToRay(screenPosition);
+            Physics.Raycast(ray, out var hit, 1000, tileLayerMask);
+            worldPoint = hit.point;
+
             Debug.Log($"Screen Point: {screenPosition}");
             Debug.Log($"Old Point: {lastDragPoint}");
             Debug.Log($"New Point: {worldPoint}");
-            Debug.Log($"Delta Drag X {Mathf.Abs(worldPoint.x - lastDragPoint.x)}");
-            Debug.Log($"Delta Drag Y {Mathf.Abs(worldPoint.y - lastDragPoint.y)}");
-            if (Mathf.Abs(worldPoint.x - lastDragPoint.x) < offsetDrag
+            //Debug.Log($"Delta Drag X {Mathf.Abs(worldPoint.x - lastDragPoint.x)}");
+            //Debug.Log($"Delta Drag Y {Mathf.Abs(worldPoint.y - lastDragPoint.y)}");
+            if (Mathf.Abs(worldPoint.x - lastDragPoint.x) < offsetDragMax
+                && Mathf.Abs(worldPoint.x - lastDragPoint.x) >= offsetDragMin
                 && Mathf.Abs(worldPoint.x - lastDragPoint.x) > Mathf.Abs(worldPoint.y - lastDragPoint.y))
             {
                 var amplitude = Mathf.Abs(worldPoint.x - lastDragPoint.x) * factorShortDrag;
                 Debug.Log($"Move Short Distance X Here {Mathf.Abs(worldPoint.x - lastDragPoint.x)}");
                 bodyController.MoveShortDistance(amplitude, worldPoint.x > lastDragPoint.x ? Vector2Int.right : Vector2Int.left, (Vector2Int)tileCoord, touchAnchor);
             }
-            else if (Mathf.Abs(worldPoint.y - lastDragPoint.y) < offsetDrag
+            else if (Mathf.Abs(worldPoint.y - lastDragPoint.y) < offsetDragMax
+                && Mathf.Abs(worldPoint.y - lastDragPoint.y) >= offsetDragMin
                 && Mathf.Abs(worldPoint.x - lastDragPoint.x) < Mathf.Abs(worldPoint.y - lastDragPoint.y))
             {
                 var amplitude = Mathf.Abs(worldPoint.y - lastDragPoint.y) * factorShortDrag;
@@ -326,7 +337,6 @@ namespace Geckout
             }
             else if (tileCoord.HasValue && tileCoord.Value != lastTargetTile)
             {
-
                 lastTargetTile = tileCoord.Value;
 
                 DebugLog($"OnTouchDrag to NEW target tile: {tileCoord.Value}");
@@ -528,17 +538,12 @@ namespace Geckout
         public BodyController GetBodyControllerByMouse(Vector2 screenPosition)
         {
             Ray ray = gameCamera.ScreenPointToRay(screenPosition);
+
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, segmentLayer))
             {
-                // Try direct component on hit object
                 Segment segment = hit.collider.GetComponent<Segment>();
                 var segments = segment.Controller.Segments;
 
-                //if (segment != null
-                //    && (segment.CurrentTile.Coordinate == segments[3].Coordinate
-                //    || segment.CurrentTile.Coordinate == segments[segments.Count - 4].Coordinate
-                //    || segment.CurrentTile.Coordinate == segments[segments.Count - 1].Coordinate
-                //    || segment.CurrentTile.Coordinate == segments[0].Coordinate))
                 if (segment != null && (segment == segments[0] || segment == segments[^1]))
                 {
                     DebugLog($"Found segment: {segment.name}, Controller: {segment.Controller?.name}");
@@ -548,11 +553,41 @@ namespace Geckout
                 {
                     DebugLog("No Segment component found in hit object hierarchy");
                 }
+
             }
-            else
+            else if (Physics.SphereCast(ray, smallRadius, out var hitSmallPhere, 1000, segmentLayer))
             {
-                DebugLog($"No raycast hit on segmentLayer ({segmentLayer})");
+                Segment segment = hitSmallPhere.collider.GetComponent<Segment>();
+                var segments = segment.Controller.Segments;
+
+                if (segment != null && (segment == segments[0] || segment == segments[^1]))
+                {
+                    DebugLog($"Found segment: {segment.name}, Controller: {segment.Controller?.name}");
+                    return segment.Controller;
+                }
+                else
+                {
+                    DebugLog("No Segment component found in hit object hierarchy");
+                }
+
             }
+            else if (Physics.SphereCast(ray, mediumRadius, out var hitMediumPhere, 1000, segmentLayer))
+            {
+                Segment segment = hitMediumPhere.collider.GetComponent<Segment>();
+                var segments = segment.Controller.Segments;
+
+                if (segment != null && (segment == segments[0] || segment == segments[^1]))
+                {
+                    DebugLog($"Found segment: {segment.name}, Controller: {segment.Controller?.name}");
+                    return segment.Controller;
+                }
+                else
+                {
+                    DebugLog("No Segment component found in hit object hierarchy");
+                }
+
+            }
+
             return null;
         }
 
