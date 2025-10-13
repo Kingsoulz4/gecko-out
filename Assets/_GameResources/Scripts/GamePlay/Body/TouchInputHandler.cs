@@ -296,10 +296,10 @@ namespace Geckout
         {
             if (!isDragging) return;
 
-            if (Time.time - lastPathUpdateTime < pathUpdateInterval)
-            {
-                return;
-            }
+            //if (Time.time - lastPathUpdateTime < pathUpdateInterval)
+            //{
+            //    return;
+            //}
 
             Vector2Int? tileCoord = GetTileCoordinateFromScreen(screenPosition);
 
