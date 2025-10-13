@@ -314,9 +314,9 @@ namespace Geckout
             Physics.Raycast(ray, out var hit, 1000, tileLayerMask);
             worldPoint = hit.point;
 
-            Debug.Log($"Screen Point: {screenPosition}");
-            Debug.Log($"Old Point: {lastDragPoint}");
-            Debug.Log($"New Point: {worldPoint}");
+            //Debug.Log($"Screen Point: {screenPosition}");
+            //Debug.Log($"Old Point: {lastDragPoint}");
+            //Debug.Log($"New Point: {worldPoint}");
             //Debug.Log($"Delta Drag X {Mathf.Abs(worldPoint.x - lastDragPoint.x)}");
             //Debug.Log($"Delta Drag Y {Mathf.Abs(worldPoint.y - lastDragPoint.y)}");
             if (Mathf.Abs(worldPoint.x - lastDragPoint.x) < offsetDragMax
