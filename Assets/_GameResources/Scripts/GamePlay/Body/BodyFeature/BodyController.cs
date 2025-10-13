@@ -274,10 +274,10 @@ namespace Geckout
             currentPath = new List<Vector2Int>(path);
 
             // Set path for GridHeadClamper if present and controlling head
-            if (gridClamper != null)
-            {
-                gridClamper.SetPath(path);
-            }
+            //if (gridClamper != null)
+            //{
+            //    gridClamper.SetPath(path);
+            //}
 
             Debug.Log($"Current Path After Clamp: {string.Join(';',  currentPath.Select(x => x.ToString()))}");
 
@@ -321,7 +321,7 @@ namespace Geckout
             worldPath.Clear();
             isMoving = true;
 
-            yield return IEUpdateSegmentsPos();
+            //yield return IEUpdateSegmentsPos();
 
             Debug.Log($"Control Anchor: {controlAnchor} Move Along Path:" + String.Join(';', currentPath.Select(x => x.ToString())));
 

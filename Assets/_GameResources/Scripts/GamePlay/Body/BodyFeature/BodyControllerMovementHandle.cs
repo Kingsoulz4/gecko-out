@@ -20,6 +20,8 @@ namespace Geckout
         {
             if (!CanControl) return;
 
+            if (IsMoving) return;
+
             if (moveShortDistanceCoroutine != null)
             {
                 StopCoroutine(moveShortDistanceCoroutine);
@@ -235,7 +237,11 @@ namespace Geckout
                 {
                     foreach(var dir in directions)
                     {
-                        if (GameMap.TryGetTileAtCoord(Segments[lastIndex].Coordinate + dir, out var newTile) && !tile.IsOccupied)
+                        var newCoord = Segments[lastIndex].Coordinate + dir;
+                        var newCoordX = (int)Mathf.Clamp(newCoord.x, 0, GameMap.MapSize.x - 1);
+                        var newCoordY = (int)Mathf.Clamp(newCoord.y, 0, GameMap.MapSize.x - 1);
+                        newCoord = new Vector2Int(newCoordX, newCoordY);
+                        if (GameMap.TryGetTileAtCoord(newCoord, out var newTile) && !newTile.IsOccupied)
                         {
                             Segments[lastIndex].transform.position += new Vector3(dir.x, dir.y) * amplitude;
                             break;
