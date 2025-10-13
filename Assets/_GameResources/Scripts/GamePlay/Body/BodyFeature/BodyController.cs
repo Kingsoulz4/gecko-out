@@ -321,9 +321,7 @@ namespace Geckout
             worldPath.Clear();
             isMoving = true;
 
-            // Get current anchor position (always the leading segment in ordered view)
-            var orderedSegments = GetOrderedSegments();
-            worldPath.Add(orderedSegments[0].transform.position);
+            yield return IEUpdateSegmentsPos();
 
             Debug.Log($"Control Anchor: {controlAnchor} Move Along Path:" + String.Join(';', currentPath.Select(x => x.ToString())));
 
@@ -331,35 +329,21 @@ namespace Geckout
             {
                 foreach (var coord in currentPath)
                 {
-                    if (GameMap.TryGetTileAtCoord(coord, out var tile))
-                        worldPath.Add(tile.transform.position);
-
                     AddCoordinate(coord, controlAnchor);
-
-                    //UpdateAllSegmentPos();
                     yield return IEUpdateSegmentsPos();
-
                 }
+
             }
             else
             {
-                foreach (var coord in currentPath)
-                {
-                    if (GameMap.TryGetTileAtCoord(coord, out var tile))
-                        worldPath.Add(tile.transform.position);
-                    yield return MovePath(worldPath, isMovingPortal);
-                }
+                yield return IEMoveToPortal(MoveToPortal.TargetPortal);
             }
-
-            yield return null;
 
             moveCoroutine = null;
             isMoving = false;
             Debug.Log("endMove");
             OnEndMove?.Invoke();
             currentPath.Clear();
-
-            //UpdateAllSegmentPos();
         }
 
         IEnumerator MovePath(List<Vector3> worldPath, bool isMovingToPortal = false)

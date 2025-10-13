@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Geckout.Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -123,6 +124,16 @@ namespace Geckout
                     currentOccupiedTiles[i].RemoveOccupant();
                     currentOccupiedTiles[i].SetOccupied(false);
                     currentOccupiedTiles[i] = null;
+                }
+            }
+
+            for (int i = 0; i < bodyController.BodyData.listCoordinate.Count; i++)
+            {
+                if (GameMap.TryGetTileAtCoord(bodyController.BodyData.listCoordinate[i], out var tile))
+                {
+                    // Remove occupant từ tile - tile sẽ tự restore color
+                    tile.RemoveOccupant();
+                    tile.SetOccupied(false);
                 }
             }
         }

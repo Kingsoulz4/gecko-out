@@ -296,10 +296,10 @@ namespace Geckout
         {
             if (!isDragging) return;
 
-            //if (Time.time - lastPathUpdateTime < pathUpdateInterval)
-            //{
-            //    return;
-            //}
+            if (Time.time - lastPathUpdateTime < pathUpdateInterval)
+            {
+                return;
+            }
 
             Vector2Int? tileCoord = GetTileCoordinateFromScreen(screenPosition);
 
@@ -338,6 +338,8 @@ namespace Geckout
             else if (tileCoord.HasValue && tileCoord.Value != lastTargetTile)
             {
                 lastTargetTile = tileCoord.Value;
+
+                lastDragPoint = Vector3.positiveInfinity;
 
                 DebugLog($"OnTouchDrag to NEW target tile: {tileCoord.Value}");
 

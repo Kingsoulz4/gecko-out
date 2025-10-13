@@ -212,7 +212,8 @@ public class UnityIAPManger : IAPHandlerBase
         _storeController.FetchPurchases();
         if (order is ConfirmedOrder completed)
         {
-            GrantRewardsForStoreId(completed.Info.PurchasedProductInfo.First().productId);
+            var pd = _storeController.GetProductById(completed.Info.PurchasedProductInfo.First().productId);
+            GrantRewardsForStoreId(pd.definition.id);
         }
     }
 
